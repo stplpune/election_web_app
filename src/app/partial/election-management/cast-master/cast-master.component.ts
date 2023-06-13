@@ -49,7 +49,7 @@ export class CastMasterComponent implements OnInit {
   ngOnInit(): void {
     this.castMasterForm = new FormGroup({
       ReligionName: new FormControl('', Validators.required),
-      CastName: ('', [Validators.required, Validators.pattern('^[A-Za-z]+[A-Za-z ()-]*$')])
+      CastName: new FormControl ('', [Validators.required, Validators.pattern('^[A-Za-z]+[A-Za-z ()-]*$')])
     })
 
     this.addRelisionForm = this.fb.group({
