@@ -1,0 +1,1377 @@
+<div class="container-fluid">
+    <div class="row mx-0 px-0" id="pageheader">
+        <div class="col-sm-auto">
+            <span class="page-name">CRM History
+            </span>
+        </div>
+    </div>
+    <div class="row chartbox">
+        <div class="col-sm-12">
+            <div class="card card-body">
+                <div class="row chartbox gx-2">
+                    <div class="col-sm-12">
+                        <div class="row form-container gx-2">
+                            <div class="col-sm-8">
+                                <div class="card shadow-none border mb-3">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <span class="votername">{{voterProfileData?.marathiName}}</span>
+                                        <div>
+                                            <span *ngIf="disableDiv == false">(Edit Mode)</span>
+                                            <button type="button" class="btn btn-light btn-sm text-main" (click)="disableDiv = false">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="card-body pt-1 position-relative bg-transparent" style="z-index:0">
+                                        <img *ngIf="voterProfileData?.doNotCall == 1 || voterProfileData?.isNotCall == 1" src="assets/images/do-not-call.jpg" class="donotcall">
+                                        <div class="d-block d-lg-flex">
+                                            <div class="flex-shrink-0 text-center" *ngIf="voterProfileData?.voterPhoto">
+                                                <img src="{{voterProfileData?.voterPhoto}}" alt="Profile"
+                                                    class="profile-pic">
+                                            </div>
+                                            <div class="flex-shrink-0 text-center" *ngIf="!voterProfileData?.voterPhoto">
+                                                <img src="assets/images/Profile-Photo.jpg" alt="Profile" class="profile-pic">
+
+                                                <div class="mt-3" *ngIf="voterProfileData?.isVerified == 1">
+                                                    <span class="small bg-light-success d-flex align-items-center text-success px-2 py-1 rounded mx-auto">
+                                                        <span class="fa-stack me-2">
+                                                            <i class="fas fa-certificate fa-stack-2x text-info"></i>
+                                                            <i class="fas fa-check fa-stack-1x fa-inverse"></i>
+                                                        </span>
+                                                        Verified
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-lg-3 ms-0">
+                                                <div class="row mb-2 g-2">
+                                                    <div class="col-sm-2 col-6">
+                                                        <label class="form-label">Age</label>
+                                                        <div class="form-data">{{voterProfileData?.age ?
+                                                            voterProfileData?.age : '-'}}</div>
+                                                    </div>
+                                                    <div class="col-sm-2 col-6">
+                                                        <label class="form-label">Gender</label>
+                                                        <div class="form-data">{{voterProfileData?.gender == 'M' ?
+                                                            'Male' : voterProfileData?.gender == 'T' ? 'Other' : 'Female'}}</div>
+                                                    </div>
+                                                    <div class="col-sm-2 col-6">
+                                                        <label class="form-label">House No.</label>
+                                                        <div class="form-data">{{voterProfileData?.houseNo ?
+                                                            voterProfileData?.houseNo : '-'}}</div>
+                                                    </div>
+                                                    <div class="col-sm-2 col-6">
+                                                        <label class="form-label">Voter No</label>
+                                                        <div class="form-data">{{voterProfileData?.voterNo}}</div>
+                                                    </div>
+                                                    <div class="col-sm-2 col-6">
+                                                        <label class="form-label">Booth Name</label>
+                                                        <div class="form-data">{{voterProfileData?.boothName}}</div>
+                                                    </div>
+                                                    <div class="col-sm-2 col-6">
+                                                        <label class="form-label">Family Head</label>
+                                                        <div class="form-data"> {{voterProfileData?.head == 'yes' ?
+                                                            'Yes' : 'No'}} ({{voterProfileData?.head == 'yes' && voterProfileData?.familySize == 0 ? 1 : voterProfileData?.familySize}} Members)
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <label class="form-label">Area</label>
+                                                        <div class="form-data"> {{voterProfileData?.area}} </div>
+                                                    </div>
+                                                    <div class="col-sm-2" *ngIf="voterProfileData?.partyIconImage || voterProfileData?.leaderImportance">
+                                                        <label class="form-label">Party Supported</label>
+                                                        <div class="form-data">
+                                                            <img [src]="voterProfileData?.partyIconImage"
+                                                                class="party-logo me-2">
+                                                            <span *ngIf="voterProfileData?.leaderImportance">({{voterProfileData?.leaderImportance}} 
+                                                            <i class='fa fa-star' style='color: #f3da35'></i>)</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3" *ngIf="posNegativeInfData?.length != 0">
+                                                        <label class="form-label">Party/Person Favouring</label>
+                                                        <div class="form-data"
+                                                            *ngFor="let posNegInf of posNegativeInfData">
+                                                            <span
+                                                                *ngIf="posNegInf.supportToid == 1">{{posNegInf.support}}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3" *ngIf="posNegativeInfData?.length != 0">
+                                                        <label class="form-label">Party/Person Opposing</label>
+                                                        <div class="form-data"
+                                                            *ngFor="let posNegInf of posNegativeInfData">
+                                                            <span
+                                                                *ngIf="posNegInf.supportToid == 2">{{posNegInf.support}}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <label class="form-label">Agent Name</label>
+                                                        <div class="form-data"> {{voterProfileData?.agentName}} </div>
+                                                    </div>
+                                                    <div class="col-sm-4" *ngIf="voterProfileData?.address">
+                                                        <label class="form-label">Address</label>
+                                                        <div class="form-data">
+                                                            {{voterProfileData?.address}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <label class="form-label">Migrated</label>
+                                                        <div class="form-data">
+                                                            {{voterProfileData?.migrated == 'yes' ? 'Yes' : 'No'}}
+                                                            <span *ngIf="voterProfileData?.migratedArea">({{voterProfileData?.migratedArea ?
+                                                            voterProfileData?.migratedArea : ''}})</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card mb-3 border shadow-none">
+                                    <div class="card-header">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Please Tick Wrong Mobile No.(s)</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <span class="d-flex mb-3 small">
+                                            <span class="text-success me-1"><i class="fas fa-square-full"></i> Agent Entered no.</span>
+                                            <span class="text-danger"><i class="fas fa-square-full"></i> Other Entered no.</span>
+                                            <span class="text-success">
+                                                <span class="fa-stack"> <i class="fas fa-certificate fa-stack-2x text-info"></i><i class="fas fa-check fa-stack-1x fa-inverse"></i></span>
+                                                Verified no.</span>
+                                        </span>
+                                        <div class="d-flex flex-wrap mb-3">
+                                            <div class="form-check form-check-inline"
+                                                *ngFor="let contactlist of contactlistArray?.othercontacts; let i = index">
+                                                <div *ngIf="contactlistArray?.othercontacts">
+                                                    <input class="form-check-input" type="radio" id="inlineCheckbox3{{i}}" name="aaa"
+                                                        (change)="onCheckWrongContactNumber(contactlist?.otherMobileNo,contactlist?.isVerified)">
+
+                                                    <label *ngIf="contactlist?.isVerified == 1 || contactlist?.checkFlagMobile == 1" class="form-check-label text-success" for="inlineCheckbox3{{i}}">
+                                                        <span class="fa-stack" *ngIf="contactlist?.isVerified == 1"><i class="fas fa-certificate fa-stack-2x text-info"></i><i class="fas fa-check fa-stack-1x fa-inverse"></i></span>
+                                                        {{contactlist?.otherMobileNo}}
+                                                    </label>
+                                                    <!-- <label *ngIf="contactlist?.isVerified == 1 && contactlist?.checkFlagMobile == 1" class="form-check-label text-success" for="inlineCheckbox3{{i}}">
+                                                        {{contactlist?.otherMobileNo}}
+                                                    </label> -->
+                                                    <label *ngIf="contactlist?.isVerified == 0 && commonService.checkDataType(contactlist?.checkFlagMobile) == false" class="form-check-label text-danger" for="inlineCheckbox3{{i}}">
+                                                       {{contactlist?.otherMobileNo}}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row justify-content-between" *ngIf="contactlistArray?.othercontacts?.length > 0">
+                                            <div class="col-sm-6">
+                                                <button type="button" class="btn btn-success"
+                                                    (click)="updateVerifiedMobileNo()">{{btnTextVerify}}</button>
+                                            </div>
+                                            <div class="col-sm-6 text-end">
+                                            <button type="button" class="btn btn-danger"
+                                                (click)="deleteConfirmModelContact()">Remove</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-container">
+                            <div class="card shadow-none border">
+
+                                <!-- ...................... voterProfileForm code start here ...............    -->
+
+                                <div [ngClass]="{'divDisabled':disableDiv}">
+                                    <form [formGroup]="voterProfileForm">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <div class="form-check" [ngClass]="{'divDisabled1':expiredDisableDiv}">
+                                                <input class="form-check-input" type="checkbox"
+                                                    formControlName="isNameChange"
+                                                    (change)="nameCorrectionCheckBox($event ,'noEdit')"
+                                                    id="flexCheckDefault4">
+                                                <label class="form-check-label" for="flexCheckDefault4">Name Correction</label>
+                                            </div>
+                                            <div class="form-check float-end">
+                                                <input class="form-check-input" type="checkbox" id="flexCheckDefault01"
+                                                    (change)="isExpiredCheckBox($event)" [formControl]="isExpiredVoter"
+                                                    [checked]="voterProfileData?.isExpired == 1 ? true : false">
+                                                <label class="form-check-label" for="flexCheckDefault01">Is Expired</label>
+                                            </div>
+                                        </div>
+
+                                        <div [ngClass]="{'divDisabled1':expiredDisableDiv}">
+                                            <div class="card-body" *ngIf="nameCorrectionDivHide">
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-1">
+                                                        <label class="form-label">English Name:</label>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <p>{{voterProfileData?.englishName}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-1">
+                                                        <label class="form-label">मराठी</label>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <input class="form-control" type="text" placeholder="आडनाव"
+                                                            formControlName="mlName" (keypress)="commonService.letterOnly($event)" 
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.mlName.errors }">
+                                                            <div *ngIf="submittedVP && v.mlName.errors" class="invalid-feedback">
+                                                                <span *ngIf="v.mlName.errors.required">Last Name is Required</span>
+                                                                <span *ngIf="v.mlName.errors.pattern">Enter Valid Last Name</span>
+                                                                <span *ngIf="v.mlName.errors?.maxlength">Please enter only 50 Characters.</span>
+                                                            </div>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <input class="form-control" type="text" placeholder="नाव"
+                                                            formControlName="mfName" (keypress)="commonService.letterOnly($event)" 
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.mfName.errors }">
+                                                            <div *ngIf="submittedVP && v.mfName.errors" class="invalid-feedback">
+                                                                <span *ngIf="v.mfName.errors.required">First Name is Required</span>
+                                                                <span *ngIf="v.mfName.errors.pattern">Enter Valid First Name</span>
+                                                                <span *ngIf="v.mfName.errors?.maxlength">Please enter only 50 Characters.</span>
+                                                            </div>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <input class="form-control" type="text" placeholder="मधले नाव"
+                                                            formControlName="mmName" (keypress)="commonService.letterOnly($event)" 
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.mmName.errors }">
+                                                            <div *ngIf="submittedVP && v.mmName.errors" class="invalid-feedback">
+                                                                <span *ngIf="v.mmName.errors.pattern">Enter Valid Middle Name</span>
+                                                                <span *ngIf="v.mmName.errors?.maxlength">Please enter only 50 Characters.</span>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <div class="col-sm-1">
+                                                        <label class="form-label">English</label>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <input class="form-control" type="text" placeholder="Last Name"
+                                                            formControlName="elName"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.elName.errors }">
+                                                            <div *ngIf="submittedVP && v.elName.errors" class="invalid-feedback">
+                                                                <span *ngIf="v.elName.errors.required">Last Name is Required</span>
+                                                                <span *ngIf="v.elName.errors.pattern">Enter Valid Last Name</span>
+                                                                <span *ngIf="v.elName.errors?.maxlength">Please enter only 50 Characters.</span>
+                                                            </div>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <input class="form-control" type="text" placeholder="First Name"
+                                                            formControlName="efName"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.efName.errors }">
+                                                            <div *ngIf="submittedVP && v.efName.errors" class="invalid-feedback">
+                                                                <span *ngIf="v.efName.errors.required">First Name is Required</span>
+                                                                <span *ngIf="v.efName.errors.pattern">Enter Valid First Name</span>
+                                                                <span *ngIf="v.efName.errors?.maxlength">Please enter only 50 Characters.</span>
+                                                            </div>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <input class="form-control" type="text"
+                                                            placeholder="Middle Name" formControlName="emName"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.emName.errors }">
+                                                            <div *ngIf="submittedVP && v.emName.errors" class="invalid-feedback">
+                                                                <span *ngIf="v.emName.errors.pattern">Enter Valid Middle Name</span>
+                                                                <span *ngIf="v.emName.errors?.maxlength">Please enter only 50 Characters.</span>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-header">
+                                                Contact Information
+                                            </div>
+                                            <div class="card-body pt-1">
+                                                <div class="row align-items-end g-2">
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Mobile No. 1</label>
+                                                        <input class="form-control" type="text"
+                                                            placeholder="Mobile No. 1" formControlName="mobileNo1"
+                                                            (keypress)="commonService.acceptedOnlyNumbers($event)"
+                                                            maxlength="10"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.mobileNo1.errors }">
+                                                            <div *ngIf="submittedVP && v.mobileNo1.errors" class="invalid-feedback">Please Enter Valid Mobile No.</div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-check"
+                                                            *ngIf="voterProfileForm.value.mobileNo1?.length > 9">
+                                                            <input class="form-check-input" type="checkbox" value=""
+                                                                formControlName="watsApp1" id="flexCheckDefault6">
+                                                            <label class="form-check-label" for="flexCheckDefault6">WhatsApp</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Mobile No. 2</label>
+                                                        <input class="form-control" type="text"
+                                                            placeholder="Mobile No. 2" formControlName="mobileNo2"
+                                                            (keypress)="commonService.acceptedOnlyNumbers($event)"
+                                                            maxlength="10"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.mobileNo2.errors }">
+                                                            <div *ngIf="submittedVP && v.mobileNo2.errors" class="invalid-feedback">Please Enter Valid Mobile No.</div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-check"
+                                                            *ngIf="voterProfileForm.value.mobileNo2?.length > 9">
+                                                            <input class="form-check-input" type="checkbox" value=""
+                                                                formControlName="watsApp2" id="flexCheckDefault7">
+                                                            <label class="form-check-label" for="flexCheckDefault7"> WhatsApp</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row align-items-end g-2 mt-1">
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Nick Name</label>
+                                                        <input class="form-control" type="text" placeholder="Nick Name" formControlName="nickName"
+                                                        [ngClass]="{ 'is-invalid': submittedVP && v.nickName.errors }">
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Email</label>
+                                                        <input class="form-control" type="text" placeholder="Email"
+                                                            formControlName="email"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.email.errors }">
+                                                            <div *ngIf="submittedVP && v.email.errors" class="invalid-feedback">Please Enter Valid Email</div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Date of birth</label>
+                                                        <input [owlDateTime]="dt2" formControlName="dateOfBirth" [readOnly]="true"
+                                                        [min]="min"  [max]="max" class="form-control" [owlDateTimeTrigger]="dt2"
+                                                            placeholder="dd/mm/yyyy">
+                                                        <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value=""
+                                                                formControlName="isNotCall" id="flexCheckDefault8">
+                                                            <label class="form-check-label" for="flexCheckDefault8">Do Not Call</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row align-items-end g-2 mt-1">
+                                                    <label class="form-label">Address</label>
+                                                    <div class="row gx-1">
+                                                        <div class="col-sm">
+                                                            <input class="form-control" type="text" autocapitalize="off" placeholder="Address" spellcheck="off"
+                                                                formControlName="area" [ngClass]="{ 'is-invalid': submittedVP && v.area.errors }">
+                                                            <div *ngIf="submittedVP && v.area.errors" class="invalid-feedback">Please Enter Valid Address</div>
+                                                        </div>
+                                                        <div class="col-sm-auto">
+                                                            <button type="button" class="btn btn-light text-main" data-bs-toggle="modal"
+                                                                data-bs-target="#MapSelectModalForAddress" (click)="openAddressModel()">
+                                                                <i class="fas fa-map"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="card-header">
+                                                General Information
+                                            </div>
+                                            <div class="card-body pt-1">
+                                                <div class="row align-items-end mb-2 g-2">
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Religion</label>
+                                                        <ngx-select [allowClear]="true" [items]="religionListArray"
+                                                            formControlName="religionId"
+                                                            (remove)="clearReligion()"
+                                                            (select)="getVoterCastList(this.voterProfileForm.value.religionId)"
+                                                            optionValueField="reliogionId"
+                                                            optionTextField="religionName"
+                                                            placeholder="Religion">
+                                                        </ngx-select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Caste</label>
+                                                        <ngx-select [allowClear]="true" [items]="VoterCastListArray"
+                                                            formControlName="castId"
+                                                            [disabled]="!voterProfileForm.value.religionId"
+                                                            optionValueField="castId" optionTextField="castName"
+                                                            placeholder="Caste"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.castId.errors }">
+                                                        </ngx-select>
+                                                        <div *ngIf="submittedVP && v.castId.errors" class="invalid-feedback">Caste is required</div>
+                                                    </div>
+                                                    <div class="col-sm-3"
+                                                        *ngIf="voterListData.AgentId == 0 || voterProfileData?.head == 'yes'
+                                                        || (voterListData.AgentId > 0 && voterProfileData?.head == 'no' && getLengthVoterProfileFamilyData <= 1)">
+                                                        <!-- || (voterListData.AgentId > 0 && voterProfileData?.head == 'no' && getLengthVoterProfileFamilyData <= 1) -->
+                                                        <label class="form-label">Family Head</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let head of headCheckArray ; let i=index">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="head"
+                                                                    (change)="familyHeadRadiobtn()"
+                                                                    [checked]="head == voterProfileData?.head"
+                                                                    name="head" id="inlineRadio1{{i}}" value="{{head}}">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio1{{i}}">{{head == 'yes' ? 'Yes' : 'No'}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <!-- <div class="d-block" *ngIf="voterProfileData?.head == 'no'">
+                                                <div><small>{{familyHeadName}}</small></div>
+                                            </div> -->
+                                                    </div>
+                                                    <div class="col-sm-auto" *ngIf="headhideDiv">
+                                                        <label class="form-label">Add Family Member</label>
+                                                        <div class="d-block">
+                                                            <button type="button" class="btn btn-light btn-sm text-main"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#SelectFamilyModal"
+                                                                (click)="getVoterListforFamilyChild()">
+                                                                <i class="fas fa-user-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-12" *ngIf="voterProfileForm.value.head == 'yes' || (getLengthVoterProfileFamilyData > 1 && voterProfileData?.head == 'no')">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover mb-0 mt-2">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Voter No</th>
+                                                                        <th>Name</th>
+                                                                        <th>Mobile No</th>
+                                                                        <th>Occupation</th>
+                                                                        <th>House No</th>
+                                                                        <th>Migration</th>
+                                                                        <!-- <th>Action</th>   -->
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr *ngFor="let familyMember of voterProfileFamilyData;let i=index"
+                                                                        [class.active]="familyMember.voterId == HighlightRow">
+                                                                        <td>{{familyMember?.voterNo}}</td>
+                                                                        <td *ngIf="familyMember?.voterId != this.voterListData.VoterId">
+                                                                            <a (click)="editFamilyMemberData(familyMember)" class="text-main">{{familyMember?.englishName}}
+                                                                                <span *ngIf="familyMember?.familyHead == 1">(Head)</span>
+                                                                                <span class="fa-stack mr-1" *ngIf="(familyMember?.isVerifiedMobile1 == 1) || (familyMember?.isExtraContctsVerified == 1) || (familyMember?.isVerifiedMobile2 == 1)">
+                                                                                    <i class="fas fa-certificate fa-stack-2x text-info"></i>
+                                                                                    <i class="fas fa-check fa-stack-1x fa-inverse"></i>
+                                                                                  </span>
+                                                                            </a>
+                                                                        </td>
+                                                                        <td *ngIf="familyMember?.voterId == this.voterListData.VoterId">
+                                                                             <span>{{familyMember?.englishName}}
+                                                                                <span *ngIf="familyMember?.familyHead == 1">(Head)</span>
+                                                                                <span class="fa-stack mr-1" *ngIf="(familyMember?.isVerifiedMobile1 == 1) || (familyMember?.isExtraContctsVerified == 1) || (familyMember?.isVerifiedMobile2 == 1)">
+                                                                                    <i class="fas fa-certificate fa-stack-2x text-info"></i>
+                                                                                    <i class="fas fa-check fa-stack-1x fa-inverse"></i>
+                                                                                  </span>
+                                                                            </span>
+                                                                        </td>
+                                                                       <!-- Verifed Contact Number Show with condition Start Code-->
+                                                                        <td *ngIf="familyMember?.isVerifiedMobile1 == 1 || familyMember?.isVerifiedMobile2 == 1 || familyMember?.isExtraContctsVerified == 1">
+                                                                            <div *ngIf="familyMember?.isVerifiedMobile1 == 1">
+                                                                            <a class="text-main"
+                                                                              href="tel:{{familyMember?.mobileNo1}}">{{familyMember?.mobileNo1}}</a>
+                                                                          </div>
+                                                                          <div *ngIf="(familyMember?.isVerifiedMobile1 != 1) && familyMember?.isVerifiedMobile2 == 1">
+                                                                            <a class="text-main"
+                                                                              href="tel:{{familyMember?.mobileNo2}}">{{familyMember?.mobileNo2}}</a>
+                                                                          </div>
+                                                                          <div *ngIf="familyMember?.isVerifiedMobile1 != 1 && familyMember?.isVerifiedMobile2 != 1 && familyMember?.isExtraContctsVerified == 1">
+                                                                            <a class="text-main"
+                                                                              href="tel:{{familyMember?.extraContcts.split(',')[0]}}">{{familyMember?.extraContcts.split(',')[0]}}</a>
+                                                                          </div>
+                                                                        </td>
+                                                                        <!-- Verifed Contact Number Show with condition End Code-->
+                                                                        <!-- No Verifed Contact Number Show with condition Start Code-->
+                                                                        <td *ngIf="familyMember?.isVerifiedMobile1 != 1 && familyMember?.isVerifiedMobile2 != 1 && familyMember?.isExtraContctsVerified != 1">
+                                                                            <div *ngIf="commonService.checkDataType(familyMember?.mobileNo1) == true">
+                                                                            <a class="text-main"
+                                                                              href="tel:{{familyMember?.mobileNo1}}">{{familyMember?.mobileNo1}}</a>
+                                                                          </div>
+                                                                          <div *ngIf="(commonService.checkDataType(familyMember?.mobileNo1) != true) && commonService.checkDataType(familyMember?.mobileNo2) == true">
+                                                                            <a class="text-main"
+                                                                              href="tel:{{familyMember?.mobileNo2}}">{{familyMember?.mobileNo2}}</a>
+                                                                          </div>
+                                                                          <div *ngIf="(commonService.checkDataType(familyMember?.mobileNo1) == false) && (commonService.checkDataType(familyMember?.mobileNo2) == false) && familyMember?.extraContcts">
+                                                                            <a class="text-main"
+                                                                              href="tel:{{familyMember?.extraContcts.split(',')[0]}}">{{familyMember?.extraContcts.split(',')[0]}}</a>
+                                                                          </div>
+                                                                          <div *ngIf="(commonService.checkDataType(familyMember?.mobileNo1) != true) && (commonService.checkDataType(familyMember?.mobileNo2) != true) && !familyMember?.extraContcts">
+                                                                            -</div>
+                                                                        </td>
+                                                                        <!-- No Verifed Contact Number Show with condition End Code-->
+
+                                                                        <td>{{familyMember?.occupation ?
+                                                                            familyMember?.occupation : '-'}}</td>
+                                                                        <td>{{familyMember?.houseNo ? familyMember?.houseNo
+                                                                            : '-'}}</td>
+                                                                        <td>{{familyMember?.migrated == 'yes' ? 'Yes' :
+                                                                            'No'}}</td>
+                                                                        <!-- <td>
+                                                                <button type="submit" class="btn btn-light btn-sm text-main"
+                                                                    data-bs-toggle="modal" ;
+                                                                    data-bs-target="#MigrationDetailsModal">
+                                                                    <i class="fas fa-suitcase-rolling"></i>
+                                                                </button>
+                                                            </td> -->
+                                                                        <!-- <td>
+                                                                <button type="button" class="btn btn-light btn-sm text-main">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+                                                            </td> -->
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row align-items-center g-2">
+                                                    <div class="col-sm-2">
+                                                        <label class="form-label">Blood Group</label>
+                                                        <ngx-select [allowClear]="true" [items]="bloodGroupArray"
+                                                            formControlName="bloodgroup" optionValueField="name"
+                                                            optionTextField="name" placeholder="Blood Group">
+                                                        </ngx-select>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <label class="form-label">Qualification</label>
+                                                        <input class="form-control" type="text"
+                                                            placeholder="Qualification" formControlName="qualification">
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <label class="form-label">Occupation</label>
+                                                        <input class="form-control" type="text" placeholder="Occupation"
+                                                            formControlName="occupation">
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <label class="form-label">Local Area</label>
+                                                        <ngx-select [allowClear]="true" [items]="localAreaArray"
+                                                        formControlName="localAreaId" optionValueField="id"
+                                                        optionTextField="localAreaName" placeholder="Select Local Area">
+                                                    </ngx-select>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <label class="form-label">Graduate</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let padvidhar of padvidharArray; let i=index">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="isPadvidhar" id="inlineRadio15{{i}}"
+                                                                    [checked]="padvidhar.id == voterProfileData?.isPadvidhar"
+                                                                    name="isPadvidhar" [value]="padvidhar?.id">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio15{{i}}">{{padvidhar.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-header">
+                                                Political Information
+                                            </div>
+                                            <div class="card-body pt-1">
+                                                <div class="row align-items-center g-2">
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Party</label>
+                                                        <ngx-select [allowClear]="true" [items]="politicalPartyArray"
+                                                            formControlName="partyId" optionValueField="partyId"
+                                                            optionTextField="partyName" placeholder="Party">
+                                                        </ngx-select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Leader</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let leader of leaderCheckArray; let i= index">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="leader" (change)="leaderRadiobtn()"
+                                                                    [checked]="leader == voterProfileData?.leader"
+                                                                    name="leader" id="inlineRadio2{{i}}" value="{{leader}}">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio2{{i}}">{{leader == 'yes' ? 'Yes' :
+                                                                    'No'}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-auto" *ngIf="leaderhideDiv">
+                                                        <label class="form-label">Rating</label>
+                                                        <star-rating name="leaderImportance" [value]="starvalue" [totalstars]="totalstar" size="25px" [checkedcolor]="gold"
+                                                            uncheckedcolor="gray" (rate)="onRate($event)"></star-rating>
+                                                        <div *ngIf="submittedVP && v.leaderImportance.errors" class="invalid-feedback">Select Rating is required</div>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <label class="form-label">Associate Local Leader</label>
+                                                        <ngx-select [allowClear]="true" [items]="prominentleaderArray"
+                                                            formControlName="prominentLeaderId"
+                                                            optionValueField="prominentleaderId"
+                                                            optionTextField="leaderName"
+                                                            placeholder="Local leader">
+                                                        </ngx-select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-header">
+                                                Migration Information
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Migrated</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let migrated of migratedCheckArray; let i=index">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="migrated"
+                                                                    (change)="migratedRadiobtn()"
+                                                                    [checked]="migrated == voterProfileData?.migrated"
+                                                                    name="migrated" id="inlineRadio3{{i}}"
+                                                                    value="{{migrated}}">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio3{{i}}">{{migrated == 'yes' ? 'Yes' :
+                                                                    'No'}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <ng-container *ngIf="migratedhideDiv">
+
+                                                        <div class="col-sm-9">
+                                                            <label class="form-label">Migrated City</label>
+                                                            <div class="row gx-1">
+                                                               <div class="col-sm">
+                                                                <input class="form-control" type="text"
+                                                                [readOnly]="true" autocapitalize="off"
+                                                                placeholder="Migrated City" spellcheck="off"
+                                                                formControlName="migratedCity"
+                                                                [ngClass]="{ 'is-invalid': submittedVP && v.migratedCity.errors }">
+                                                                <div *ngIf="submittedVP && v.migratedCity.errors" class="invalid-feedback">Migrated City is required</div>
+                                                               </div>
+                                                                <div class="col-sm-auto">
+                                                                    <button type="button" (click)="migratedZoomSize = 6"
+                                                                    class="btn btn-light text-main"
+                                                                    data-bs-toggle="modal" (click)="openMigratedAddressModel()"
+                                                                    data-bs-target="#MapSelectModal">
+                                                                    <i class="fas fa-map"></i>
+                                                                </button>
+                                                                </div>
+                                                            
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-12 mb-2">
+                                                            <label class="form-label">Migrated Area</label>
+                                                            <input class="form-control" type="text" [readOnly]="true"
+                                                                placeholder="Migrated Area"
+                                                                formControlName="migratedArea"
+                                                                [ngClass]="{ 'is-invalid': submittedVP && v.migratedArea.errors }">
+                                                                <div *ngIf="submittedVP && v.migratedArea.errors" class="invalid-feedback">Migrated Area is required</div>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                                <div class="row mb-2 align-items-end">
+                                                    <div class="col-sm-3">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                formControlName="postalFlag" id="flexCheckDefault08"
+                                                                [checked]="voterProfileData?.postalFlag == 1 ? true : false"
+                                                                (click)="postalVotingCheckBox($event , 'noEdit')">
+                                                            <label class="form-check-label" for="flexCheckDefault08">Postal Voting</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-9" *ngIf="postalVotingDivHide">
+                                                        <label class="form-label">Postal Voting Reason</label>
+                                                        <input class="form-control" type="text"
+                                                            placeholder="Postal Voting Reason"
+                                                            formControlName="whyIsPostal"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.whyIsPostal.errors }">
+                                                            <div *ngIf="submittedVP && v.whyIsPostal.errors" class="invalid-feedback">
+                                                                <span *ngIf="submittedVP && v.whyIsPostal.errors.required">Postal Voting Reason is required</span>
+                                                                <span *ngIf="submittedVP && v.whyIsPostal.errors.pattern">Please Enter Valid Postal Voting Reason</span>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                                <div class="row mb-2 align-items-end">
+                                                    <div class="col-sm-3">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value=""
+                                                                formControlName="needSupportFlag" id="flexCheckDefault02"
+                                                                [checked]="voterProfileData?.needSupportFlag == 1 ? true : false"
+                                                                (click)="needSupportCheckBox($event, 'noEdit')">
+                                                            <label class="form-check-label" for="flexCheckDefault02"> Need Support?</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-9" *ngIf="needSupportDivHide">
+                                                        <label class="form-label">Support Details</label>
+                                                        <input class="form-control" type="text"
+                                                            placeholder="Support Details"
+                                                            formControlName="needSupportText"
+                                                            [ngClass]="{ 'is-invalid': submittedVP && v.needSupportText.errors }">
+                                                            <div *ngIf="submittedVP && v.needSupportText.errors" class="invalid-feedback">
+                                                                <span *ngIf="v.whyIsPostal.errors.required">Support Details is required</span>
+                                                                <span *ngIf="v.whyIsPostal.errors.pattern">Please Enter Valid Support Details</span>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-header">
+                                                Other Information
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row mb-2 gx-1">
+                                                    <div class="col-sm-2">
+                                                        <label class="form-label">Dairy Farmer</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let dairyFarmer of dairyFarmerArray; let i=index">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="isDairyFarmer" name="isDairyFarmer"
+                                                                    [checked]="dairyFarmer?.id == voterProfileData?.isDairyFarmer"
+                                                                    id="inlineRadio4{{i}}" [value]="dairyFarmer?.id">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio4{{i}}">{{dairyFarmer?.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Goat/Sheep Farmer</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let goatSheepFarmer of goatSheepFarmerArray; let i=index">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="isGoatSheepFarmer"
+                                                                    name="isGoatSheepFarmer"
+                                                                    [checked]="goatSheepFarmer.id == voterProfileData?.isGoatSheepFarmer"
+                                                                    id="inlineRadio5{{i}}" [value]="goatSheepFarmer.id">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio5{{i}}">{{goatSheepFarmer.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <label class="form-label">Sugarcane Cutter Worker</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let sugarCaneCutter of sugarCaneCutterArray; let i=index">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="isSugarCaneCutter"
+                                                                    name="isSugarCaneCutter"
+                                                                    [checked]="sugarCaneCutter.id == voterProfileData?.isSugarCaneCutter"
+                                                                    id="inlineRadio6{{i}}" [value]="sugarCaneCutter.id">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio6{{i}}">{{sugarCaneCutter.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Farmer</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let farmer of farmerArray; let i=index">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="isFarmer" name="isFarmer"
+                                                                    [checked]="farmer.id == voterProfileData?.isFarmer"
+                                                                    id="inlineRadio7{{i}}" [value]="farmer.id">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio7{{i}}">{{farmer.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <label class="form-label">Business</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let business of businessArray; let i=index">
+                                                                <input class="form-check-input" type="radio"
+                                                                    (change)="businesDetRadiobtn()"
+                                                                    formControlName="haveBusiness" name="haveBusiness"
+                                                                    [checked]="business.id == voterProfileData?.haveBusiness"
+                                                                    id="inlineRadio8{{i}}" [value]="business.id">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio8{{i}}">{{business.name}}</label>
+                                                            </div>
+                                                        </div>                                                        
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Yuvak</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let yuvak of yuvakArray; let i=index">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="isYuvak" name="isYuvak"
+                                                                    [checked]="yuvak.id == voterProfileData?.isYuvak"
+                                                                    id="inlineRadio9{{i}}" [value]="yuvak.id">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio9{{i}}">{{yuvak.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <label class="form-label">Vehicle</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let vehicle of vehicleArray; let i=index">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="haveVehicle" id="inlineRadio10{{i}}"
+                                                                    [checked]="vehicle.id == voterProfileData?.haveVehicle"
+                                                                    name="haveVehicle" [value]="vehicle.id">
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio10{{i}}">{{vehicle.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="form-label">Income Group</label>
+                                                        <div class="d-block">
+                                                            <div class="form-check form-check-inline"
+                                                                *ngFor="let financialCon of financialConditionArray ; let i = index">
+                                                                <input class="form-check-input" type="radio"
+                                                                    formControlName="financialCondition" name="financialCondition"
+                                                                    [checked]="financialCon.id == voterProfileData?.financialCondition"
+                                                                    id="inlineRadio11{{i}}" [value]="financialCon.id">
+                                                                <label class="form-check-label" for="inlineRadio11{{i}}">{{financialCon.name}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6" *ngIf="businessDethideDiv">
+                                                            <label class="form-label">Business Details</label>
+                                                            <input class="form-control" type="text"
+                                                                placeholder="Business Details"
+                                                                formControlName="businnessDetails"
+                                                                [ngClass]="{ 'is-invalid': submittedVP && v.businnessDetails.errors }">
+                                                                <div *ngIf="submittedVP && v.businnessDetails.errors" class="invalid-feedback">
+                                                                    <span *ngIf="submittedVP && v.businnessDetails.errors.required">Business Details is required </span>
+                                                                    <span *ngIf="submittedVP && v.businnessDetails.errors.pattern">Please Enter Valid Business
+                                                                        Details</span>
+                                                                </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row gx-1">
+                                                    <div class="col-sm-6">
+                                                        <label class="form-label">Previous Comments</label>
+                                                        <div class="form-data">
+                                                            <ul *ngFor="let VPComments of VPCommentData"
+                                                                class="list-group list-group-flush mb-0">
+                                                                <li class="list-group-item ps-0"
+                                                                    *ngIf="VPComments?.commentDetails">
+                                                                    <i class="fas fa-check me-2"></i>
+                                                                    {{VPComments?.commentDetails}}
+                                                                </li>
+                                                            </ul>
+                                                            <span class="text-danger"
+                                                                *ngIf="VPCommentData?.length == 0">No Comments</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label class="form-label">Comment</label>
+                                                        <textarea class="form-control" rows="3"
+                                                            formControlName="comment"
+                                                            placeholder="Comment (If Any)"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-between px-3 pb-3">
+                                            <button type="button" class="btn btn-secondary"
+                                                (click)="getVoterProfileData()">Cancel</button>
+                                            <button type="submit" class="btn btn-main"
+                                                (click)="onSubmitVoterProfile()">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card shadow-none border">
+                            <div class="card-header">Enter New Feedback</div>
+                            <form [formGroup]="enterNewFeedbackForm" (ngSubmit)="onSubmitFeedbackForm()">
+                                <div class="card-body pt-1">
+                                    <div class="form-container">
+                                        <div class="row gy-3 align-items-center">
+                                            <div class="col-sm-auto">
+                                                <label class="form-label required-field">Feedback Type</label><br>
+                                                <div class="form-check form-check-inline"
+                                                    *ngFor="let feedbackTy of feedbackTypeArray; let i=index">
+                                                    <input class="form-check-input" formControlName="FeedBackType"
+                                                       id="chkIsMultipleYes{{i}}" type="radio" [value]="feedbackTy?.id">
+                                                    <label class="form-check-label"
+                                                        for="chkIsMultipleYes{{i}}">{{feedbackTy?.name}}</label>
+                                                </div>
+                                                <div *ngIf="submitted && f.FeedBackType.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="f.FeedBackType.errors.required">Feedback Type is
+                                                        required</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-auto">
+                                                <label class="form-label">Do Not Call</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" (change)="doNotCallCheckBox($event,'feedback')"
+                                                        id="chkDoNotCall11" formControlName="NotToCall">
+                                                    <label class="form-check-label" for="chkDoNotCall11">Do Not Call</label>
+                                                </div>
+                                            </div>
+                                            <div class="mb-0">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault44" formControlName="needToCall">
+                                                    <label class="form-check-label" for="flexCheckDefault44">
+                                                      Direct Call to Candidate
+                                                    </label>
+                                                  </div>
+                                            </div>
+
+                                            <div class="col-sm-12" *ngIf="!doNotCallHideDiv">
+                                                <label class="form-label required-field">Follow-up Date-Time</label>
+                                                <div class="input-group">
+
+                                                    <input [owlDateTime]="dt3" formControlName="FollowupDate" [readOnly]="true"
+                                                        [min]="maxFeedBack" class="form-control" [owlDateTimeTrigger]="dt3"
+                                                        placeholder="dd/mm/yyyy hh:mm:ss">
+                                                </div>
+                                                <owl-date-time #dt3></owl-date-time>
+                                                <div *ngIf="submitted && f.FollowupDate.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="f.FollowupDate.errors.required">Follow-Up Date is
+                                                        required</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-2 mt-2">
+                                            <label class="form-label">Feedback</label>
+                                            <textarea class="form-control" rows="3" placeholder="Enter Feedback"
+                                                formControlName="Description"></textarea>
+                                        </div>
+                                        <div class="mb-0 row">
+                                            <div class="col-sm-6">
+                                                <button type="button" class="btn btn-secondary btn-sm me-2"
+                                                    (click)="clearForm()">Cancel</button>
+                                            </div>
+                                            <div class="col-sm-6 text-end">
+                                                <!-- [mat-dialog-close]="true" -->
+                                                <button type="submit" class="btn btn-sm btn-main">Submit
+                                                    Feedback</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <p class="mb-1 fw-bold small mt-3">Feedbacks</p>
+                            <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Sr. No.</th>
+                                        <th>Feedback Details</th>
+                                        <th>Need</th>
+                                        <th>Feedback TakenBy / Followup Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        *ngFor="let feedbacksList  of getFeedbacksList | paginate: { itemsPerPage: 10, currentPage: feedbacksPaginationNo, totalItems:getFeedbacksListTotal}; let i = index">
+                                        <td>{{((feedbacksPaginationNo + 1) * 10 + i + 1)-20}}</td>
+                                        <td>
+                                            <div class="row align-items-center">
+                                                <div class="col-sm-auto col-auto mb-2">
+                                                    <small class="text-muted">{{feedbacksList?.feedBackDate | date:"dd/MM/yyyy hh:mm a"}}</small>
+                                                </div>
+                                                <div class="col-sm col text-end mb-2">
+                                                    <span class="badge rounded-pill bg-success fw-normal"
+                                                        *ngIf="feedbacksList?.feedBackTypeId == 1">
+                                                        {{feedbacksList?.feedBackType |
+                                                        titlecase}}</span>
+                                                    <span class="badge rounded-pill bg-danger fw-normal"
+                                                        *ngIf="feedbacksList?.feedBackTypeId == 2">
+                                                        {{feedbacksList?.feedBackType |
+                                                        titlecase}}</span>
+                                                    <span class="badge rounded-pill bg-warning fw-normal text-dark"
+                                                        *ngIf="feedbacksList?.feedBackTypeId == 3">
+                                                        {{feedbacksList?.feedBackType |
+                                                        titlecase}}</span>
+                                                </div>
+                                                <div class="col-sm-12 text-break">
+                                                    {{feedbacksList?.description ? (feedbacksList?.description |
+                                                    titlecase) : '-'}}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>{{feedbacksList?.needToCall == 1 ? 'Need To Call' : '-'}}</td>
+                                        <td>
+                                            <div class="col-sm-12">{{feedbacksList?.feedbackTakenBy}}</div>
+                                            <div class="col-sm-12"><small>{{feedbacksList?.followupDate ? (feedbacksList?.followupDate | date:"dd/MM/yyyy hh:mm a") : ''}}</small></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                            <div class="mt-2 text-end" *ngIf="getFeedbacksList?.length == 0">
+                                <div class="alert alert-danger text-center py-2">No Results Found!</div>
+                            </div>
+                            <div class="mt-2 text-end" *ngIf="getFeedbacksList?.length != 0">
+                                <pagination-controls previousLabel="" nextLabel=""
+                                    (pageChange)="onClickPagintion(feedBackPageSize = $event)">
+                                </pagination-controls>
+                            </div>
+
+                        <div class="card shadow-none border" *ngIf="isConflictCheckFlag == 1 && commonService.checkDataType(conflictDataArray) == true">
+                            <div class="card-header text-danger">Conflicted Data</div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered dashboard-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Parameter</th>
+                                                <th *ngFor="let conflictData of conflictDataArray">
+                                                    {{conflictData?.agentName}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th>Mobile No. 1</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">
+                                                    {{conflictData?.mobileNo1 ? conflictData?.mobileNo1 : '-'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Mobile No. 2</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">
+                                                    {{conflictData?.mobileNo2 ? conflictData?.mobileNo2 : '-'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Religion</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">
+                                                    {{conflictData?.religionName ? conflictData?.religionName : '-'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Caste</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">
+                                                    {{conflictData?.castname ? conflictData?.castname : '-'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Family Head</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">{{conflictData?.head
+                                                    == 'yes' ? 'Yes' : 'No'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Family Size</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">
+                                                    {{conflictData?.familysize ? conflictData?.familysize : '-'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Migrated</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">
+                                                    {{conflictData?.migrated == 'yes' ? 'Yes' : 'No'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Leader</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">
+                                                    {{conflictData?.leader == 'yes' ? 'Yes' : 'No'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Expired</th>
+                                                <td *ngFor="let conflictData of conflictDataArray">
+                                                    {{conflictData?.isexpired == 1 ? 'Yes' : 'No'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th></th>
+                                                <td *ngFor="let conflictData of conflictDataArray"><button
+                                                        class="btn btn-main btn-sm"
+                                                        (click)="deleteConfirmModel(conflictData)">Delete</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal to select voters for family  -->
+<div class="modal fade" id="SelectFamilyModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="SelectFamilyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="modal-title" id="SelectFamilyModalLabel">Select Family Members</p>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="clearFamilyTree()"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6 border-end chartbox">
+                        <div class="form-container p-1">
+                            <div class="input-group mb-3">
+                                <input class="form-control" type="text" placeholder="Search By Voter Name" [formControl]="searchFamilyMember"
+                                    (keyup)="onKeyUpFMemberSearchData()" />
+                                <button type="button" class="btn btn-light border btn-sm" (click)="clearSearchFamilyMember()"
+                                    *ngIf="searchFamilyMember.value"><i class="fas fa-times"></i></button>
+                                <button type="button" *ngIf="!searchFamilyMember.value" class="btn btn-sm border btn-light"><i
+                                        class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <div class="table-height">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Voter No.</th>
+                                            <th>Voter Name (Age)</th>
+                                            <th>House No</th>
+                                            <th>Booth Name</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            <tr *ngFor="let familyChild  of voterListforFamilyChildArray | paginate: {id: 'familyMemberId',itemsPerPage: pageSize, 
+                                                currentPage: paginationNo, totalItems:getTotal}; let i = index" [class.active]="familyChild.voterNo == HighlightRow">
+                                            <td>{{familyChild?.voterNo}}</td>
+                                            <td>{{familyChild?.englishName}} ({{familyChild?.age}})</td>
+                                            <td>{{familyChild?.houseNo ? familyChild?.houseNo : '-'}}</td>
+                                            <td>{{familyChild?.boothName ? familyChild?.boothName : '-'}}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-light text-main rounded fw-bold mx-1" 
+                                                title="Add Family Member" (click)="AddFamilyMember(familyChild)">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="mt-2 text-end" *ngIf="voterListforFamilyChildArray?.length == 0">
+                                    <div class="alert alert-danger text-center py-2">No Results Found!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <pagination-controls id="familyMemberId" *ngIf="voterListforFamilyChildArray?.length != 0" previousLabel="" nextLabel=""
+                            (pageChange)="onClickPagintionFMember($event)">
+                        </pagination-controls>
+                    </div>
+                    <div class="col-sm-6 chartbox">
+                        <h6 class="mb-4 mt-2">Added Family Members</h6>
+                        <div class="card bg-light">
+                            <div class="card-header">{{familyHeadName ? familyHeadName : ''}} <small *ngIf="familyHeadName">(Head)</small></div>
+                            <div class="card-body p-2">
+                                <div class="table-height border ">
+                                    <table class="table table-hover mb-0 bg-white">
+                                        <thead>
+                                            <tr>
+                                                <th>Voter No.</th>
+                                                <th>Voter Name (Age)</th>
+                                                <th>Booth Name</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr *ngFor="let familyMember  of getFamilyChildArray;let i= index">
+                                                <td>{{familyMember?.voterNo}}</td>
+                                                <td>{{familyMember?.englishName}} ({{familyMember?.age}})</td>
+                                                <td>{{familyMember?.boothName ? familyMember?.boothName : '-'}}</td>
+                                                <td>
+                                                    <button type="button" title="Delete Member" (click)="deleteFamilyMember(i)" class="btn btn-sm btn-light text-danger rounded">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="mt-2 text-end" *ngIf="getFamilyChildArray?.length == 0">
+                                        <div class="alert alert-danger text-center py-2">No Family Member Available..!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>  
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <!-- d-flex w-100 justify-content-between -->
+                <!-- <button type="button" class="btn btn-secondary" (click)="clearFamilyTree()">Cancel</button> -->
+                <button type="submit" class="btn btn-main float-end" data-bs-dismiss="modal"
+                    (click)="submitFamilyTree()">Add Member</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal to select voters for family  -->
+<div class="modal fade" id="MigrationDetailsModal" tabindex="-1" aria-labelledby="MigrationDetailsModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="modal-title" id="MigrationDetailsModalLabel">Migration Details</p>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-container">
+                    <div class="mb-2">
+                        <label class="form-label">Voter Name</label>
+                        <div class="form-data">Vasant Namdev Gharge</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <label class="form-label">Mobile No. 1</label>
+                            <input class="form-control" type="text" placeholder="Mobile No. 1">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Mobile No. 2</label>
+                            <input class="form-control" type="text" placeholder="Mobile No. 2">
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault13">
+                            <label class="form-check-label" for="flexCheckDefault13"> Is Expired </label>
+                        </div>
+                    </div>
+                    <p class="fw-bold mb-2">Migration Information</p>
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <label class="form-label">Migrated</label>
+                            <div class="d-block">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                        id="inlineRadio1" value="Yes">
+                                    <label class="form-check-label" for="inlineRadio1">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                        id="inlineRadio2" value="No">
+                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Migrated City</label>
+                            <input class="form-control" type="text" placeholder="Migrated City">
+                        </div>
+                        <div class="col-sm-12">
+                            <label class="form-label">Migrated Reason</label>
+                            <input class="form-control" type="text" placeholder="Migrated Reason">
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault14">
+                            <label class="form-check-label" for="flexCheckDefault14"> Postal Voting </label>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Postal Voting Reason</label>
+                        <input class="form-control" type="text" placeholder="Postal Voting Reason">
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <label class="form-label">Youth Leader</label>
+                            <div class="d-block">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                        id="inlineRadio1" value="Yes">
+                                    <label class="form-check-label" for="inlineRadio1">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                        id="inlineRadio2" value="No">
+                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Leader Rating</label>
+                            <select class="form-select">
+                                <option value="">Rating</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label">Comment</label>
+                        <textarea class="form-control" rows="4" placeholder="Comment"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex w-100 justify-content-between">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-main">Save Details</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal to select Map Address   -->
+<div class="modal fade" id="MapSelectModalForAddress" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="MapSelectModalLabel1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="modal-title" id="MapSelectModalLabel1">Address Details</p>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" #searchAddressModel aria-label="Close"></button>
+            </div>
+            <div class="modal-body mt-20 py-2">
+                <div class="form-container mb-2 input-group">
+                    <input class="form-control" type="text" autocapitalize="off" [formControl]="searchAdd" spellcheck="off" #searchAddress>
+                    <button type="button" class="btn btn-light btn-sm" (click)="searchAdd.setValue('')"
+                     *ngIf="searchAdd.value"><i class="fas fa-times"></i></button>
+                </div>
+
+                <agm-map [latitude]="addLatitude || 19.0898177" [longitude]="addLongitude || 76.5240298" [zoom]="addressZoomSize" (mapClick)="markerAddressDragEnd($event)">
+                    <div *ngIf="this.commonService.checkDataType(voterProfileData?.latitude) == true || addLatitude">
+                        <agm-marker *ngIf="addressMarkerShow == true" [latitude]="addLatitude" [longitude]="addLongitude" (dragEnd)="markerAddressDragEnd($event)"
+                            [markerDraggable]="true" (markerClick)="clickedAddressMarker(infowindow)">
+                            <agm-info-window #infowindow>
+                                <strong>Address - {{addressNameforAddress}}</strong>
+                            </agm-info-window>
+                        </agm-marker>
+                    </div>
+                </agm-map>
+            </div>
+            <div class="modal-footer py-1">
+                <div  class="d-flex justify-content-between align-items-center float-end">
+                    <button type="button" class="btn btn-secondary" (click)="clearAddress()">Clear</button>
+                    <button type="button" class="btn btn-main ms-2" (click)="addAddress()">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal to select Map Migrated Address   -->
+<div class="modal fade" id="MapSelectModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="MapSelectModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="modal-title" id="MapSelectModalLabel">Migrated Address Details</p>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" #searchMigratedAddressModel aria-label="Close"></button>
+            </div>
+            <div class="modal-body mt-20">
+                <div class="form-container mb-2 input-group">
+                    <input class="form-control" type="text" autocapitalize="off" [formControl]="searchMigratedAdd" spellcheck="off" #searchMigrated>
+                    <button type="button" class="btn btn-light btn-sm" (click)="searchMigratedAdd.setValue('')"
+                     *ngIf="searchMigratedAdd.value"><i class="fas fa-times"></i></button>
+                </div>
+                <agm-map [latitude]="latitude || 19.0898177" [longitude]="longitude || 76.5240298" [zoom]="migratedZoomSize" (mapClick)="markerMigratedDragEnd($event)">
+                    <div *ngIf="latitude">
+                        <agm-marker *ngIf="addressMigratedMarkerShow == true" [latitude]="latitude" [longitude]="longitude" (dragEnd)="markerMigratedDragEnd($event)"
+                            [markerDraggable]="true" (markerClick)="clickedMigratedMarker(infowindow)">
+                            <agm-info-window #infowindow>
+                                <strong>Address - {{searchMigratedAdd.value}}</strong>
+                            </agm-info-window>
+                        </agm-marker>
+                    </div>
+                </agm-map>
+            </div>
+            <div class="modal-footer py-1">
+                <div  class="d-flex justify-content-between align-items-center float-end">
+                    <button type="button" class="btn btn-secondary" (click)="clearMigratedAddress()">Clear</button>
+                    <button type="button" class="btn btn-main ms-2" (click)="addMigratedAddress()">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

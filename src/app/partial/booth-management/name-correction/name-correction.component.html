@@ -1,0 +1,187 @@
+<div class="container-fluid">
+    <form [formGroup]="filterForm">
+    <div class="row mx-0 px-0" id="pageheader">
+        <div class="col-sm-auto">
+            <span class="page-name">
+                Name Correction
+            </span>
+        </div>
+        <div class="col-sm">
+           
+            <div class="row g-2">
+                <div class="col-sm">
+                    <ngx-select [allowClear]="clientIdFlag" [items]="clientNameArray" formControlName="ClientId"
+                                (remove)="clearFilter('clientId')" (select)="clearFilter('electionId');getElectionName()"
+                                optionValueField="id" optionTextField="Fullname"
+                                placeholder="Select Leader">
+                    </ngx-select>
+                  </div>
+                  <div class="col-sm">
+                    <ngx-select [allowClear]="electionFlag" [items]="electionNameArray" (remove)="clearFilter('electionId')"
+                                (select)="clearFilter('constituencyId');getConstituencyName()" formControlName="ElectionId"
+                                optionValueField="ElectionId" optionTextField="ElectionName"
+                                [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
+                                placeholder="Select Election">
+                    </ngx-select>
+                  </div>
+                  <div class="col-sm">
+                    <!-- [allowClear]="constituencyFlag"  -->
+                    <ngx-select [allowClear]="true" [items]="constituencyNameArray"
+                                (remove)="clearFilter('constituencyId')" (select)="clearFilter('VillageId');getVillageName()"
+                                formControlName="ConstituencyId" optionValueField="ConstituencyId" optionTextField="ConstituencyName"
+                                [disabled]="!this.filterForm.value.ElectionId" placeholder="Select Constituency">
+                    </ngx-select>
+                  </div>
+                  <div class="col-sm">
+                    <!-- [allowClear]="villageFlag" -->
+                    <ngx-select [allowClear]="true" [items]="villageNameArray" (remove)="clearFilter('BoothId');clearFilter('VillageId')"
+                                formControlName="VillageId" (select)="ClientWiseBoothList()"
+                                optionValueField="VillageId" optionTextField="VillageName"
+                                [disabled]="!this.filterForm.value.ConstituencyId" placeholder="Select Village">
+                    </ngx-select>
+                  </div>
+                  <div class="col-sm">
+                    <!-- [allowClear]="boothFlag" -->
+                    <ngx-select [allowClear]="true" [items]="clientWiseBoothListArray" (remove)="clearFilter('BoothId')"
+                                formControlName="BoothId" 
+                                optionValueField="BoothId" optionTextField="BoothNickName" (select)="getClientHaveSubEleOrNonSubEle()" [disabled]="!this.filterForm.value.VillageId"
+                                placeholder="Select Booth">
+                    </ngx-select>
+                  </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row chartbox mb-3" *ngIf="clientHaveSubEOrNonSubEArray">
+        <div class="col-sm-12">
+            <div class="card shadow-none border">
+                <div class="card-header">
+                    <div class="row form-container g-2">
+                        <div class="col-sm-4">
+                            Name Change Requests
+                        </div>
+                        <div class="col-sm-3">
+                            <ngx-select [items]="NameChangeTypeArray" [allowClear]="nameChangeFlag"
+                            formControlName="NameChangeType"  optionValueField="id" (select)="paginationNo = 1; getClientHaveSubEleOrNonSubEle()"
+                             optionTextField="name"
+                            placeholder="Select Correction Type" (remove)="clearFilter('NameChangeType')">
+                        </ngx-select>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <ngx-select [items]="allAgentLists" [allowClear]="agentFlag"
+                                formControlName="AgentId"  optionValueField="AgentId"
+                                [disabled]="allAgentLists?.length == 0 || !this.filterForm.value.ClientId"
+                                 optionTextField="FullName" (select)="paginationNo = 1; getClientHaveSubEleOrNonSubEle()"
+                                placeholder="Select Agent" (remove)="clearFilter('AgentId')">
+                            </ngx-select>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control" formControlName="Search"
+                                    placeholder="Search..." (keyup)="onKeyUpFilter()" />
+                                <button type="button" class="btn btn-light border btn-sm"
+                                    (click)="clearFilter('search')" *ngIf="filterForm.value.Search"><i
+                                        _ngcontent-tbl-c102="" class="fas fa-times"></i></button>
+                                <button type="button" *ngIf="!filterForm.value.Search"
+                                    class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                      
+                    </div>
+                </div>
+                <div class="card-body pt-1">
+                       <div class="table-responsive">
+                    <table class="table table-hover mb-0 caption-top">
+                        <caption>
+                            <!-- <span class="text-main me-4">
+                                <i class="fas fa-square me-1"></i>
+                                Todays Followups
+                            </span> -->
+                            <span class="text-success me-4">
+                                <i class="fas fa-square me-1"></i>
+                               Changed
+                            </span>
+                            <span class="text-dark me-4">
+                                <i class="fas fa-square me-1"></i>
+                                From VoterList
+                            </span>
+                            <span class="text-danger me-4">
+                                <i class="fas fa-square me-1"></i>
+                                Requested
+                            </span>
+                            <!-- <span class="text-info">
+                                <i class="fas fa-square me-1"></i>
+                                New
+                            </span> -->
+                        </caption>
+                        <thead>
+                            <tr>
+                                <!-- <th>Sr. No.</th> -->
+                                <th>Voter No.</th>
+                                <th>Voters Old Name</th>
+                                <th>Voters New Name</th>
+                                <!-- <th>Constituency</th> -->
+                                <th>Booth</th>
+                                <th>Area</th>
+                                <th>Agent Name</th>
+                                <!-- <th>Correction Type</th> -->
+                                <th>Change Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+                            <tr *ngFor="let CHaveSubEOrNonSubE of clientHaveSubEOrNonSubEArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index"
+                           >
+                                <!-- [class.active]="constituency.Id == highlightedRow" -->
+                                <!-- <td>{{CHaveSubEOrNonSubE.SrNo}}</td> -->
+                                <td>{{CHaveSubEOrNonSubE.VoterNo}}</td>
+                                <td>
+                                    <a>
+                                        <p class="mb-0" >{{CHaveSubEOrNonSubE.OldEnglishName}}</p>
+                                        <p class="mb-0">{{CHaveSubEOrNonSubE.OldMarathiName}}</p>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a  [ngClass]="{'text-success' : CHaveSubEOrNonSubE.NameChanged == 1, 'text-dark' : CHaveSubEOrNonSubE.NameChanged == 3 ,'text-danger' : CHaveSubEOrNonSubE.NameChanged == 2}">
+                                        <p class="mb-0">{{CHaveSubEOrNonSubE.NewEnglishName}}</p>
+                                        <p class="mb-0">{{CHaveSubEOrNonSubE.NewMarathiName}}</p>
+                                    </a>
+                                </td>
+                                <!-- <td>{{CHaveSubEOrNonSubE.NewMarathiName}}</td> -->
+                                <td>{{CHaveSubEOrNonSubE.boothnickname}}</td>
+                                <td>{{CHaveSubEOrNonSubE.AreaName}}</td>
+                                <td>
+                                {{CHaveSubEOrNonSubE.AgentName}}
+                                </td>
+                                <!-- <td>
+                                    <h6 class="mb-0"><span class="badge rounded-pill bg-primary fw-normal">Requested</span></h6>
+                                </td> -->
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" (click)="openDialogNameCorrection(CHaveSubEOrNonSubE)" class="btn btn-light btn-sm text-dark me-1 rounded">
+                                            <i class="fas fa-user-edit"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                       </div>
+                    <div class="mt-2 text-end" *ngIf="clientHaveSubEOrNonSubEArray?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Results Found!</div>
+                    </div>
+                    <div class="mt-2 text-end" *ngIf="clientHaveSubEOrNonSubEArray?.length != 0">
+                        <pagination-controls previousLabel="" nextLabel=""
+                            (pageChange)="onClickPagintion(pageSize = $event)"> </pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+

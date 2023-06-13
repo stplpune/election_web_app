@@ -1,0 +1,123 @@
+<div class="container-fluid">
+    <div class="row mx-0 px-0" id="pageheader">
+        <div class="col-sm-4">
+            <span class="page-name">
+                Restricted Mobile Numbers
+            </span>
+        </div>
+    </div>
+
+    <div class="row chartbox mb-3">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="card shadow-none border mb-3">
+                        <div class="card-header pb-0">Restrict Mobile</div>
+                        <div class="card-body pt-1">
+                            <form [formGroup]="restrictedMobileForm" (ngSubmit)="onSubmit()">
+                            <div class="form-container">
+                                <div class="mb-3">
+                                    <label class="form-label required-field">Person Name</label>
+                                    <input type="text" formControlName="CallerName" class="form-control" placeholder="Person Name"
+                                    [ngClass]="{ 'is-invalid': submitted && f.CallerName.errors }">
+                                    <div *ngIf="submitted && f.CallerName.errors" class="invalid-feedback">
+                                        <div *ngIf="f.CallerName.errors.required">Person Name is required</div>
+                                        <div *ngIf="f.CallerName.errors?.pattern">Please Enter Valid Person Name</div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label required-field">Mobile No.</label>
+                                    <input type="text" formControlName="MobileNo" (keypress)="acceptedOnlyNumbers($event)" class="form-control" placeholder="Mobile No."
+                                    maxlength="10" [ngClass]="{ 'is-invalid': submitted && f.MobileNo.errors }">
+                                    <div *ngIf="submitted && f.MobileNo.errors" class="invalid-feedback">
+                                        <div *ngIf="f.MobileNo.errors.required">Mobile No. is required</div>
+                                        <div *ngIf="f.MobileNo.errors.pattern">Please, Enter 10 digit Valid Number
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="mb-3">
+                                    <label class="form-label">Alternate Mobile No</label>
+                                    <input class="form-control" type="number" placeholder="Alternate Mobile No">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Landline No</label>
+                                    <input class="form-control" type="number" placeholder="Landline No">
+                                </div> -->
+                                <div class="mb-0">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-6">
+                                            <button type="button" (click)="clearForm()" class="btn btn-secondary btn-sm">Cancel</button>
+                                        </div>
+                                        <div class="col-sm-6 col-6 text-end">
+                                            <button type="submit" class="btn btn-main btn-sm">{{btnText}}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="card shadow-none border">
+                        <div class="card-header pb-0">
+                            <div class="row justify-content-between form-container mb-3">
+                                <div class="col-sm-4">
+                                    Restrict Mobile Numbers
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" [formControl]="Search"
+                                            placeholder="Search...." (keyup)="onKeyUpFilter()" />
+                                        <button type="button" class="btn btn-light border btn-sm" (click)="clearTopFilter('search')"
+                                            *ngIf="Search.value"><i _ngcontent-tbl-c102="" class="fas fa-times"></i></button>
+                                        <button type="button" *ngIf="!Search.value"
+                                            class="btn btn-sm border btn-light"><i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="card-body pt-1">                            
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Sr. No.</th>
+                                        <th>Person Name</th>
+                                        <th>Mobile No.</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let clientAlertNumberlist of clientAlertNumberlistArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index" [class.active]="clientAlertNumberlist.SrNo == HighlightRow">
+                                        <td>{{clientAlertNumberlist.SrNo}}</td>
+                                        <td>{{clientAlertNumberlist.ContactName}}</td>
+                                       <td>{{clientAlertNumberlist.MobileNo}}</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button" (click)="patchClientAlertNumberlistData(clientAlertNumberlist)" class="btn btn-light btn-sm text-dark me-1 rounded">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button type="button" (click)="delConfirmation(clientAlertNumberlist)" class="btn btn-light btn-sm text-danger rounded">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="mt-2 text-end" *ngIf="clientAlertNumberlistArray?.length == 0">
+                                <div class="alert alert-danger text-center py-2">No Results Found!</div>
+                            </div>
+                            <div class="mt-2 text-end" *ngIf="clientAlertNumberlistArray?.length != 0">
+                                <pagination-controls previousLabel="" nextLabel="" (pageChange)="onClickPagintion(pageSize = $event)"> </pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

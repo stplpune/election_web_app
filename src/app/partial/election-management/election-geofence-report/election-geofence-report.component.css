@@ -1,0 +1,11 @@
+agm-map {
+    height: 80vh !important;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+#filters{
+    position: absolute;
+    top:10px;
+    left:10px;
+    width: 100%;
+}

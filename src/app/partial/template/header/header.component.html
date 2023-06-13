@@ -1,0 +1,347 @@
+<!-- <header class="header">
+    <div class="header__container">
+        <img src="assets/images/dashboard-images/ncplogo.png" alt="" class="header__img"> sdf
+        <div class="header__toggle">
+            <i class='fas fa-bars' id="header-toggle" [class.fa-times]="isShowMenu" (click)="showMenu()"></i>
+        </div>
+    </div>
+</header> -->
+
+<header class="header">
+    <div class="header__container">
+        <h5 class="mb-0 d-none d-lg-block d-sm-none">
+            Election Management
+        </h5>
+        <div class="rightmenu">
+            <div class="dropdown">
+                <button class="btn text-white dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="{{pic == '' || pic == null ? 'assets/images/Profile-Photo.jpg' : pic}}" class="header__img"> 
+                  {{fullName | titlecase}}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="text-primary dropdown-item" *ngIf="committeename.CommiteeName" (click)="redirectOrgDetails(committeename.CommiteeId,committeename.CommiteeName)">{{committeename.CommiteeName | titlecase}}</a></li>
+                  <li><a class="dropdown-item" routerLink="my-profile"><i class="fas fa-user-alt me-2"></i>My Profile</a></li>
+                  <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#LogoutModal"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                </ul>
+              </div>
+            <!-- <div class="me-3">
+                <span class="fw-bold">
+                    {{fullName | titlecase}}
+                </span>
+            </div>
+            <div class="ms-2">
+                <a class="btn btn-sm btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#LogoutModal"><i
+                        class="fas fa-sign-out-alt me-2"></i>Logout</a>
+            </div> -->
+
+        </div>
+        <div class="header__toggle">
+            <i class='fas fa-bars' id="header-toggle" [class.fa-times]="isShowMenu" (click)="showMenu()"></i>
+        </div>
+    </div>
+</header>
+
+<!-- Logout Confirmation modal pop up -->
+<div class="modal fade" id="LogoutModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="LogoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- <div class="modal-header bg-transparent border-bottom-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div> -->
+            <div class="modal-body text-center py-5">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                    <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10"
+                        cx="65.1" cy="65.1" r="62.1" />
+                    <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round"
+                        stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
+                </svg>
+                <h3 class="my-4">Are You Sure?</h3>
+                <button class="btn btn-secondary me-2 px-5 py-2" data-bs-dismiss="modal" type="button">NO</button>
+                <button class="btn btn-main px-5 py-2" type="button" (click)="logOut()" data-bs-dismiss="modal"
+                    aria-label="Close">YES</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit profile  Confirmation modal pop up -->
+
+<div class="modal fade" id="editProfileModal" *ngIf="defaultModalHIde" tabindex="-1"
+    aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="modal-title mb-0" id="editProfileModalLabel">Edit Profile</p>
+
+                <span class="edit-button">
+                    <button class="badge bg-light rounded-pill text-secondary border" [disabled]="!disabledEditForm"
+                        (click)="this.disabledEditForm = false">Edit Profile</button>
+                </span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="DisabledAllForm()" #closeModal></button>
+            </div>
+            <div class="modal-body">
+                <!--  -->
+
+                <form [formGroup]="editProfileForm" enctype="multipart/form-data" (ngSubmit)="updateProfile()">
+                    <fieldset [disabled]="disabledEditForm">
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <a class="update-photo" (click)="choosePhoto()">
+                                    <i class="fas fa-camera"></i>
+                                </a>
+                                <a class="update-photo" *ngIf="ImgUrl" (click)="removePhoto();">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                                <input type="file" id="my_file" #myInput class="d-none" (change)="readUrl($event)">
+                                <img src="assets/images/dashboard-images/ncp-default.png" *ngIf="!ImgUrl"
+                                    class="img-fluid">
+                                <img *ngIf="ImgUrl" src="{{ImgUrl}}" class="img-fluid">
+
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="form-container">
+                                    <div class="mb-3 row">
+                                        <div class="col-sm-4">
+                                            <label for="txtFullName" class="form-label required-field">First
+                                                Name</label>
+                                            <input type="text" class="form-control" id="txtFullName"
+                                                formControlName="FName" placeholder="First Name"
+                                                [ngClass]="{ 'is-invalid': submitted && f.FName.errors }">
+                                            <div *ngIf="submitted && f.FName.errors" class="invalid-feedback">
+                                                <div *ngIf="f.FName.errors.required">First name is required</div>
+                                                <div *ngIf="f.FName.errors.pattern">First name can not contain space
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label for="txtFullName" class="form-label required-field">Middle
+                                                Name</label>
+                                            <input type="text" class="form-control" id="txtFullName"
+                                                formControlName="MName" placeholder="Middle Name"
+                                                [ngClass]="{ 'is-invalid': submitted && f.MName.errors }">
+                                            <div *ngIf="submitted && f.MName.errors" class="invalid-feedback">
+                                                <div *ngIf="f.MName.errors.required">Middle name is required</div>
+                                                <div *ngIf="f.MName.errors.pattern">Middle name can not contain space
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label for="txtFullName" class="form-label required-field">Last Name</label>
+                                            <input type="text" class="form-control" id="txtFullName"
+                                                formControlName="LName" placeholder="Last Name"
+                                                [ngClass]="{ 'is-invalid': submitted && f.LName.errors }">
+                                            <div *ngIf="submitted && f.LName.errors" class="invalid-feedback">
+                                                <div *ngIf="f.LName.errors.required">Last name is required</div>
+                                                <div *ngIf="f.LName.errors.pattern">Last name can not contain space
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <div class="col-sm-6">
+                                            <label for="txtEmailID" class="form-label required-field">Email ID</label>
+                                            <input type="email" class="form-control" id="txtEmailID"
+                                                placeholder="Email ID" formControlName="EmailId"
+                                                [ngClass]="{ 'is-invalid': submitted && f.EmailId.errors }">
+                                            <div *ngIf="submitted && f.EmailId.errors" class="invalid-feedback">
+                                                <div *ngIf="f.EmailId.errors.required">Email is required</div>
+                                                <div *ngIf="f.EmailId.errors.email">Enter Valid email id</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="txtContactNo" class="form-label required-field">Contact
+                                                No</label>
+                                            <input type="text" class="form-control" id="txtContactNo"
+                                                placeholder="Contact No" disabled value="{{showingMobileNo}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2 row">
+                                        <div class="col-sm-6">
+                                            <label for="txtContactNo" class="form-label required-field">User
+                                                Name</label>
+                                            <input type="text" class="form-control" placeholder="User Name" disabled
+                                                value="{{showingUserName}}">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="txtEmailID" class="form-label required-field">Gender</label>
+                                            <div class="d-block">
+                                                <!-- [checked]="defultCategory == category.name" -->
+                                                <div class="form-check form-check-inline"
+                                                    *ngFor="let gender of GenderArray">
+                                                    <input class="form-check-input" type="radio"
+                                                        formControlName="Gender" [checked]="selGender == gender.id"
+                                                        [value]="gender.id" name="Gender" id="rgender">
+                                                    <label class="form-check-label"
+                                                        for="rgender">{{gender.name}}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="txtAddress" class="form-label">Address</label>
+                                        <textarea class="form-control" id="txtAddress" placeholder="Address"
+                                            formControlName="Address"
+                                            [ngClass]="{ 'is-invalid': submitted && f.Address.errors }"></textarea>
+                                        <div *ngIf="submitted && f.Address.errors" class="invalid-feedback">
+                                            <div *ngIf="f.Address.errors.required">Address is required</div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-2">
+                                        <!-- [checked]="defultCategory == category.name"GenderArray -->
+                                        <div class="form-check form-check-inline"
+                                            *ngFor="let category of categoryArray">
+                                            <input class="form-check-input" type="radio" formControlName="IsRural"
+                                                [value]="category.id" name="IsRural" id="rblRural"
+                                                (change)='onRadioChangeCategory(category.name)'>
+                                            <label class="form-check-label" for="rblRural">{{category.name}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <div class="col-sm-4">
+                                            <label for="ddlDistrict" class="form-label required-field">District</label>
+                                            <ngx-select [allowClear]="true" (remove)="districtClear('district')"
+                                                [items]="allDistrict" formControlName="DistrictId"
+                                                (select)="getTaluka(this.editProfileForm.value.DistrictId)"
+                                                optionValueField="DistrictId" optionTextField="DistrictName"
+                                                placeholder="Select District"
+                                                [ngClass]="{ 'is-invalid': submitted && f.DistrictId.errors }">
+                                            </ngx-select>
+                                            <div *ngIf="submitted && f.DistrictId.errors" class="invalid-feedback">
+                                                <div *ngIf="f.DistrictId.errors.required">District is required</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4" *ngIf="this.editProfileForm.value.IsRural == 1">
+                                            <label for="ddlTaluka" class="form-label required-field">Taluka</label>
+                                            <ngx-select [allowClear]="true" (remove)="districtClear('taluka')"
+                                                [items]="getTalkaByDistrict"
+                                                [disabled]="!this.editProfileForm.value.DistrictId"
+                                                formControlName="TalukaId" optionValueField="TalukaId"
+                                                optionTextField="TalukaName" placeholder="Select Taluka"
+                                                (select)="getVillageOrCity(this.editProfileForm.value.TalukaId, villageCityLabel)"
+                                                [ngClass]="{ 'is-invalid': submitted && f.TalukaId.errors }">
+                                            </ngx-select>
+                                            <div *ngIf="submitted && f.TalukaId.errors" class="invalid-feedback">
+                                                <div *ngIf="f.TalukaId.errors.required">Taluka is required</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label for="ddlCityVillage" (remove)="districtClear('village')"
+                                                class="form-label required-field">{{villageCityLabel}}</label>
+                                            <ngx-select [allowClear]="true" [items]="resultVillageOrCity"
+                                                placeholder="Select {{villageCityLabel}}"
+                                                [optionValueField]="setVillOrCityId" formControlName="VillageId"
+                                                [optionTextField]="setVillOrcityName"
+                                                [disabled]="!this.editProfileForm.value.TalukaId"
+                                                [ngClass]="{ 'is-invalid': submitted && f.VillageId.errors }">
+                                            </ngx-select>
+                                            <div *ngIf="submitted && f.VillageId.errors" class="invalid-feedback">
+                                                <div *ngIf="f.VillageId.errors.required">{{villageCityLabel}} is
+                                                    required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="text-end">
+                                        <button type="submit" class="btn btn-main btn-sm"
+                                            [disabled]="disabledEditForm">Update Profile</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- change Password modal  -->
+
+<div class="modal fade" *ngIf="defaultModalHIdeCP" id="changePasswordModal" tabindex="-1"
+    aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="modal-title mb-0" id="changePasswordModalLabel">Change Password </p>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    #closeChangePasswordModal></button>
+            </div>
+            <div class="modal-body form-container">
+                <form [formGroup]="changePasswordForm" (ngSubmit)="onSubmit()" autocomplete="off">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label" for="txtUserName">UserName</label>
+                            <input type="email" class="form-control" [readonly]="true" formControlName="userName"
+                                id="txtUserName" placeholder="UserName">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="txtOldPassword">Old Password<span
+                                    class="text-center text-danger">*</span></label>
+                            <input [type]="show_button ? 'text' : 'password'" class="form-control"
+                                placeholder="Old password" formControlName="oldPassword"
+                                [ngClass]="{ 'is-invalid': submittedChangePassword && cp.oldPassword.errors }">
+                            <i class="eye-icon-pos" [class]="show_eye ? 'fa fa-eye' : 'fa fa-eye-slash'"
+                                (click)="showPassword('old')"> </i>
+                            <div *ngIf="submittedChangePassword && cp.oldPassword.errors" class="invalid-feedback">
+                                <div *ngIf="cp.oldPassword.errors.required">Old Password is requird </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="txtNewPassword">New Password<span
+                                    class="text-center text-danger">*</span></label>
+                            <input [type]="show_button1 ? 'text' : 'password'" class="form-control"
+                                placeholder="New password" formControlName="newPassword"
+                                [ngClass]="{ 'is-invalid': submittedChangePassword && cp.newPassword.errors }">
+                            <i class="eye-icon-pos" [class]="show_eye1 ? 'fa fa-eye' : 'fa fa-eye-slash'"
+                                (click)="showPassword('new')"> </i>
+                            <div *ngIf="submittedChangePassword && cp.newPassword.errors" class="invalid-feedback">
+                                <div *ngIf="cp.newPassword.errors.passwordValid"> New Password is invalid format
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="txtRePassword">Confirm Password<span
+                                    class="text-center text-danger">*</span></label>
+                            <input [type]="show_button2 ? 'text' : 'password'" class="form-control"
+                                placeholder="Confirm password" formControlName="ConfirmPassword"
+                                [ngClass]="{ 'is-invalid': submittedChangePassword && cp.ConfirmPassword.errors }">
+                            <i class="eye-icon-pos" [class]="show_eye2 ? 'fa fa-eye' : 'fa fa-eye-slash'"
+                                (click)="showPassword('confirm')"> </i>
+                            <div *ngIf="submittedChangePassword && cp.ConfirmPassword.errors" class="invalid-feedback">
+                                <div *ngIf="cp.ConfirmPassword.errors.passwordValid"> Confirm Password is invalid format
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-2 mt-4">
+                            <button type="button" class="btn btn-secondary float-lg-start"
+                                (click)="clearForm()">Clear</button>
+                            <button type="submit" class="btn btn-main float-lg-end">Update</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="clearfix"></div>
+                <div class="chartbox mt-3">
+                    <div class="card border">
+                        <div class="card-header">Note :</div>
+                        <div class="card-body">
+                            <ul class="small">
+                                <li>Have at least one Lower Case character</li>
+                                <li>Have at lease one Upper Case character</li>
+                                <li>Have at least one Number</li>
+                                <li>Have at least one Special Character</li>
+                                <li>Password must be between 8 and 20 characters</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

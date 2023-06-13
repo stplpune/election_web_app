@@ -1,0 +1,12 @@
+.media-img {
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 4px;
+    border: solid 1px #fefefe;
+    object-fit: contain;
+    object-position:center;
+}
+
+.highlightDiv.active {
+    background: whitesmoke;
+}

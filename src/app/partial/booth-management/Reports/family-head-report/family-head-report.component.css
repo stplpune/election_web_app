@@ -1,0 +1,13 @@
+.list-group .active{
+    background-color:var(--main-color);
+    color: #fff;
+    border: 1px solid var(--main-color);
+}
+.table-height{
+    max-height: 500px;
+    overflow-y: auto;
+}
+.table-height thead {
+    position: sticky;
+    top: -1px;
+}

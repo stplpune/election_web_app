@@ -1,0 +1,10 @@
+.ChekBox{
+    height: 200px;
+    overflow: scroll;
+}
+
+/* My css navin */
+#booth-form-data{
+    max-height: 8.875rem !important;
+    overflow: auto !important;
+}

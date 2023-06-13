@@ -1,0 +1,13 @@
+.checkBox{
+    height: 200px;
+    overflow: scroll;
+}
+
+
+.disabledNoOfCasesDiv{ pointer-events: none; opacity: 2.0;}
+
+
+.chartbox .table th, .chartbox .table td {
+    cursor: auto;
+    vertical-align: middle;
+}

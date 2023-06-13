@@ -1,0 +1,1192 @@
+<div class="container-fluid">
+    <div class="row mx-0 px-0" id="pageheader">
+        <div class="col-sm-auto">
+            <span class="page-name">BoothWise Voters
+            </span>
+        </div>
+        <div class="col-sm text-end">
+            <form [formGroup]="filterForm">
+                <div class="row g-2">
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="clientNameArray" formControlName="ClientId"
+                            optionValueField="clientId" optionTextField="clientName"
+                            (select)="clearTopFilter('electionId'); getElectionName(); dataNotFound = false;"
+                            (selectionChanges)="onSelectionObj($event,'client')" (remove)="clearTopFilter('clientId')"
+                            placeholder="Select Leader">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="electionNameArray" formControlName="ElectionId"
+                            optionValueField="electionId" (select)="getConstituencyName(); dataNotFound = false;"
+                            optionTextField="electionName" (remove)="clearTopFilter('electionId')"
+                            [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
+                            (selectionChanges)="onSelectionObj($event,'election')" placeholder="Select Election">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="constituencyNameArray" formControlName="ConstituencyId"
+                            (select)="getVillageData();dataNotFound = true;clearBoothVotersFilterForm()"
+                            optionValueField="constituencyId" optionTextField="constituencyName"
+                            (remove)="clearTopFilter('constituencyId')"
+                            (selectionChanges)="onSelectionObj($event,'constituency')" placeholder="Select Constituency"
+                            [disabled]="!this.filterForm.value.ElectionId">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="villageDropdown" formControlName="village"
+                            optionValueField="villageId"
+                            (select)="this.filterForm.value.getBoothId = 0;boothWiseSummaryCount(); ClientWiseBoothList();clearBoothVotersFilterForm()"
+                            (remove)="clearTopFilter('village')" optionTextField="villageName"
+                            [disabled]="!this.filterForm.value.ConstituencyId" placeholder="Select Village">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="clientWiseBoothListArray" formControlName="getBoothId"
+                            optionValueField="boothId" optionTextField="boothNickName"
+                            [disabled]="!this.filterForm.value.ConstituencyId" (remove)="clearTopFilter('boothId')"
+                            (select)="boothWiseSummaryCount();clearBoothVotersFilterForm()"
+                            (selectionChanges)="onSelectionObj($event,'boothname')" placeholder="Select Booth">
+                        </ngx-select>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <ng-container *ngIf="dataNotFound">
+        <div class="row g-2" id="dash-stats">
+            <div class="col-lg">
+                <div class="card card-body bg-cyan">
+                    <i class="fas fa-person-booth"></i>
+                    <p>Booths</p>
+                    <h3>{{cardData?.totalBooths}}</h3>
+                </div>
+            </div>
+            <div class="col-lg">
+                <div class="card card-body bg-green">
+                    <i class="fas fa-users"></i>
+                    <p>Voters</p>
+                    <h3>{{cardData?.totalVoters}}</h3>
+                </div>
+            </div>
+            <div class="col-lg">
+                <div class="card card-body bg-blue">
+                    <i class="fas fa-house-user"></i>
+                    <p>Families</p>
+                    <h3>{{cardData?.totalFamilies}}</h3>
+                </div>
+            </div>
+            <div class="col-lg">
+                <div class="card card-body bg-gold">
+                    <i class="fas fa-plane-departure"></i>
+                    <p>Migrated</p>
+                    <h3>{{cardData?.totalMigrated}}</h3>
+                </div>
+            </div>
+            <div class="col-lg">
+                <div class="card card-body bg-pink">
+                    <i class="fas fa-fist-raised"></i>
+                    <p>Leaders</p>
+                    <h3>{{cardData?.totalLeaders}}</h3>
+                </div>
+            </div>
+            <div class="col-lg">
+                <div class="card card-body bg-red">
+                    <i class="fas fa-star-half-alt"></i>
+                    <p>Fill / Pending</p>
+                    <h3>{{cardData?.totalFilled}}/{{cardData?.totalPending}}</h3>
+                </div>
+            </div>
+            <div class="col-lg">
+                <div class="card card-body bg-olive">
+                    <i class="fas fa-user-cog"></i>
+                    <p>Agents</p>
+                    <h3>{{cardData?.totalAgents}}</h3>
+                </div>
+            </div>
+            <div class="col-lg">
+                <div class="card card-body bg-voilet">
+                    <i class="fas fa-user-alt-slash"></i>
+                    <p>Expired</p>
+                    <h3>{{cardData?.totalExpired}}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="row chartbox mb-3">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-start">
+                            <div class="col-sm-12" id="boothdetails">
+                                <div class="card shadow-none border">
+                                    <div class="card-header bg-light border-bottom border-dark">
+                                        <div class="row align-items-center mb-2">
+                                            <div class="col-sm-4 col-4">
+                                                <h6 class="mb-0 fw-bold text-main">{{topBoothName? topBoothName : 'All Booths'}}</h6>
+                                            </div>
+                                            <div class="col-sm-8 col-8 text-end">
+                                                <div class="row justify-content-end g-2">
+                                                    <div class="col-sm-auto">
+                                                        <button type="button" *ngIf="filterSidebarFlag != 'AgentFlag'"
+                                                            (click)="getVoterListDownloadExcel()"
+                                                            class="btn btn-main btn-sm me-2">Export to Excel</button>
+                                                        <button type="button" *ngIf="filterSidebarFlag != 'AgentFlag'"
+                                                            class="btn btn-sm" data-bs-toggle="offcanvas"
+                                                            data-bs-target="#offcanvasRight"
+                                                            [ngClass]="{'btn-secondary' : filteredValueNameArray1?.length > 0 ,'btn-outline-secondary' : filteredValueNameArray1?.length == 0}"
+                                                            (click)="globalFilterOnInitData()"
+                                                            aria-controls="offcanvasRight"><i class="fas fa-filter"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- ////......... Chieped Filter Code Start Here  /////............. -->
+
+                                        <div class="row" id="filter-alerts" *ngIf="filterSidebarFlag != 'AgentFlag'">
+                                            <div class="col-sm-12">
+                                                <span class="alert alert-secondary alert-dismissible fade show"
+                                                    role="alert"
+                                                    *ngFor="let filteredValueName of filteredValueNameArray1; let i=index">
+                                                    <span
+                                                        *ngIf="filteredValueName.flag == 'HaveMobileNo'">{{filteredValueName?.name
+                                                        == 'Yes' ? 'Mobile Number : Yes' : filteredValueName?.name ==
+                                                        'No' ? 'Mobile Number : No' : '-'}}</span>
+                                                    <span
+                                                        *ngIf="filteredValueName.flag == 'HaveBussiness'">{{filteredValueName?.name
+                                                        == 'Yes' ? 'Business : Yes' : filteredValueName?.name == 'No' ?
+                                                        'Business : No' : '-'}}</span>
+                                                    <span
+                                                        *ngIf="filteredValueName.flag == 'IsYuvak'">{{filteredValueName?.name
+                                                        == 'Yes' ? 'Yuvak : Yes' : filteredValueName?.name == 'No' ?
+                                                        'Yuvak : No' : '-'}}</span>
+                                                    <span
+                                                        *ngIf="filteredValueName.flag != 'HaveMobileNo' && filteredValueName.flag != 'HaveBussiness' && filteredValueName.flag != 'IsYuvak'">{{filteredValueName.name}}</span>
+                                                    <button type="button" class="btn-close"
+                                                        (click)="clearGlobalFilterForm(i,filteredValueName,'chipFlag')"
+                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- ////........... Chieped Filter Code End Here  /////............. -->
+
+                                    <!-- Voter SummaryBoothwise Count Click -->
+                                    <div class="card-header p-0">
+                                        <ul class="nav nav-pills nav-fill active" id="pills-tab" role="tablist">
+                                            <li class="nav-item" role="presentation" (click)="filterSidebarFlag = 'VotersFlag';fillDataId = 2;ShowFlagType = 0; votersPaginationNo = 1;
+                                            isVerifiedContact.setValue(false); this.searchVoters.setValue(''); boothVoterList();">
+                                                <button class="nav-link" id="pills-voters-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-voters" type="button" role="tab"
+                                                    aria-controls="pills-voters" aria-selected="false">
+                                                    <h5 class="mb-0">{{boothWiseSummaryCountArray?.totalVoters}}</h5>
+                                                    Voters
+                                                </button>
+                                            </li>
+
+                                            <li class="nav-item" role="presentation" (click)="filterSidebarFlag = 'VotersFlag';fillDataId = 1; ShowFlagType = 0;votersPaginationNo = 1;
+                                            isVerifiedContact.setValue(false); this.searchVoters.setValue(''); boothVoterList()">
+                                                <button class="nav-link" id="pills-totalFilled-tab"
+                                                    data-bs-toggle="pill" data-bs-target="#pills-voters" type="button"
+                                                    role="tab" aria-controls="pills-voters" aria-selected="false">
+                                                    <h5 class="mb-0">{{boothWiseSummaryCountArray?.totalFilled}}</h5>
+                                                    Filled
+                                                </button>
+                                            </li>
+
+                                            <li class="nav-item" role="presentation" (click)="filterSidebarFlag = 'VotersFlag';fillDataId = 2; ShowFlagType = 3;
+                                            isVerifiedContact.setValue(false); this.searchVoters.setValue(''); votersPaginationNo = 1; boothVoterList()">
+                                                <button class="nav-link" id="pills-family-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-family" type="button" role="tab"
+                                                    aria-controls="pills-family" aria-selected="false">
+                                                    <h5 class="mb-0">{{boothWiseSummaryCountArray?.totalFamilies}}</h5>
+                                                    Families
+                                                </button>
+                                            </li>
+
+                                            <li class="nav-item" role="presentation" (click)="filterSidebarFlag = 'VotersFlag'; fillDataId = 2; ShowFlagType = 4;
+                                            isVerifiedContact.setValue(false); this.searchVoters.setValue(''); votersPaginationNo = 1; boothVoterList()">
+                                                <button class="nav-link" id="pills-migrated-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-voters" type="button" role="tab"
+                                                    aria-controls="pills-migrated" aria-selected="true">
+                                                    <h5 class="mb-0">{{boothWiseSummaryCountArray?.totalMigrated}}</h5>
+                                                    Migrated
+                                                </button>
+                                            </li>
+
+                                            <li class="nav-item" role="presentation" (click)="filterSidebarFlag = 'VotersFlag'; fillDataId = 2; ShowFlagType = 7;
+                                            isVerifiedContact.setValue(false); this.searchVoters.setValue(''); votersPaginationNo = 1; boothVoterList()">
+                                                <button class="nav-link" id="pills-migrated-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-voters" type="button" role="tab"
+                                                    aria-controls="pills-migrated" aria-selected="true">
+                                                    <h5 class="mb-0">{{boothWiseSummaryCountArray?.totalPostal}}</h5>
+                                                    Postal
+                                                </button>
+                                            </li>
+
+                                            <li class="nav-item" role="presentation" (click)="filterSidebarFlag = 'VotersFlag';fillDataId = 2; ShowFlagType = 5;
+                                            isVerifiedContact.setValue(false); this.searchVoters.setValue(''); votersPaginationNo = 1; boothVoterList()">
+                                                <button class="nav-link" id="pills-Leaders-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-voters" type="button" role="tab"
+                                                    aria-controls="pills-Leaders" aria-selected="false">
+                                                    <h5 class="mb-0">{{boothWiseSummaryCountArray?.totalLeaders}}</h5>
+                                                    Leaders
+                                                </button>
+                                            </li>
+
+                                            <li class="nav-item" role="presentation" (click)="filterSidebarFlag = 'VotersFlag';fillDataId = 2; ShowFlagType = 6;
+                                            isVerifiedContact.setValue(false); this.searchVoters.setValue(''); votersPaginationNo = 1; boothVoterList()">
+                                                <button class="nav-link" id="pills-Expired-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-voters" type="button" role="tab"
+                                                    aria-controls="pills-Expired" aria-selected="false">
+                                                    <h5 class="mb-0">{{boothWiseSummaryCountArray?.totalExpired}}</h5>
+                                                    Expired
+                                                </button>
+                                            </li>
+
+                                            <li class="nav-item" role="presentation" (click)="filterSidebarFlag = 'VotersFlag';fillDataId = 0; ShowFlagType = 0;
+                                            isVerifiedContact.setValue(false); this.searchVoters.setValue(''); votersPaginationNo = 1; boothVoterList()">
+                                                <button class="nav-link" id="pills-pending-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-voters" type="button" role="tab"
+                                                    aria-controls="pills-pending" aria-selected="false">
+                                                    <h5 class="mb-0">{{boothWiseSummaryCountArray?.totalPending}}</h5>
+                                                    Pending
+                                                </button>
+                                            </li>
+
+                                            <li class="nav-item" role="presentation"
+                                                (click)="filterSidebarFlag = 'AgentFlag'; this.searchAgent.setValue('');boothAgentList()">
+                                                <button class="nav-link" id="pills-agents-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-agents" type="button" role="tab"
+                                                    aria-controls="pills-agents" aria-selected="false">
+                                                    <h5 class="mb-0">{{boothWiseSummaryCountArray?.totalAgents}}</h5>
+                                                    Agents
+                                                </button>
+                                            </li>
+                                            <li class="nav-item" role="presentation"
+                                                (click)="filterSidebarFlag = 'CRMFlag'; fillDataId = 2; isVerifiedContact.setValue(false);
+                                            crmPaginationNo = 1; crmAndCrmHistorySearchClear('crm'); getCrmTableData();">
+                                                <button class="nav-link" id="pills-crm-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#pills-crm" type="button" role="tab"
+                                                    aria-controls="pills-crm" aria-selected="false">
+                                                    <h5 class="mb-0">{{boothWiseSummaryCountArray?.totalCRMVoters}}</h5>
+                                                    CRM
+                                                </button>
+                                            </li>
+
+                                            <li class="nav-item" role="presentation" (click)="filterSidebarFlag = 'CRMHistoryFlag'; fillDataId = 2; isVerifiedContact.setValue(false);
+                                             crmHistoryPaginationNo = 1; crmAndCrmHistorySearchClear('crmHistory'); deafultCrmHistoryFilterForm(); getCrmHistoryTableData();">
+                                                <button class="nav-link" id="pills-crm-history-tab"
+                                                    data-bs-toggle="pill" data-bs-target="#pills-crm-history"
+                                                    type="button" role="tab" aria-controls="pills-crm-history"
+                                                    aria-selected="false">
+                                                    <h5 class="mb-0">{{boothWiseSummaryCountArray?.totalCRMHistory}}
+                                                    </h5>
+                                                    CRM History
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="tab-content" id="pills-tabContent">
+
+                                            <!-- Voters tab start here   -->
+                                            <div class="tab-pane fade show active" id="pills-voters" role="tabpanel"
+                                                aria-labelledby="pills-voters-tab">
+                                                <div class="row justify-content-end mb-3 g-2">
+                                                    <div class="col-sm d-flex justify-content-center align-items-center">
+                                                        <span class="text-success">{{rowTotalCountVoter}} Results
+                                                            Found</span>
+                                                    </div>
+                                                    <div class="col-sm-auto d-flex justify-content-end align-items-center">
+                                                        <small for="verifiedContact" class="p-2"> Verified Contact </small>
+                                                         <input type="checkbox" id="verifiedContact" [formControl]="isVerifiedContact" name="verifiedContact">
+                                                        </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-container">
+                                                            <div class="input-group">
+                                                                <input class="form-control" type="text"
+                                                                    placeholder="Search..." [formControl]="searchVoters">
+                                                                <button type="button"
+                                                                    class="btn btn-light border btn-sm"
+                                                                    (click)="clearFiltersBooth('clearSearchVoters')"
+                                                                    *ngIf="searchVoters.value"><i
+                                                                        class="fas fa-times"></i></button>
+                                                                <button type="button" *ngIf="!searchVoters.value"
+                                                                    class="btn btn-sm border btn-light"><i
+                                                                        class="fas fa-search"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-auto">
+                                                        <div class="form-container">
+                                                            <button type="button" class="btn btn-main btn-sm me-2" (click)="votersPaginationNo = 1;boothVoterList()">Apply</button>
+                                                      </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Voter No.</th>
+                                                                <th>Voters Name</th>
+                                                                <th>Gender</th>
+                                                                <th>Age</th>
+                                                                <th>Contact No</th>
+                                                                <th>Qualification</th>
+                                                                <th>Occupation</th>
+                                                                <th>Religion/Cast</th>
+                                                                <th *ngIf="ShowFlagType == 7">Why Is Postal</th>
+                                                                <th *ngIf="!topBoothName">Booth Name</th>
+                                                                <th>Area</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr
+                                                                *ngFor="let boothVoterList of boothVoterListArray  | paginate: {id: 'voterPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal};">
+                                                                <td>{{boothVoterList?.voterNo}}</td>
+                                                                <td>
+                                                                    <p class="mb-0">
+                                                                        <a (click)="redirectToVoterPrfile(boothVoterList)"
+                                                                            class="text-main">{{boothVoterList?.englishName}}</a>
+                                                                        <small
+                                                                            *ngIf="boothVoterList?.familyHead == 'yes'">
+                                                                            (Head) </small>
+                                                                    </p>
+                                                                    <small class="text-muted"
+                                                                        *ngIf="!boothVoterList?.localLeader">{{boothVoterList?.partyShortCode}}</small>
+                                                                    <small class="text-muted"
+                                                                        *ngIf="boothVoterList?.partyShortCode && boothVoterList?.localLeader">{{boothVoterList?.localLeader}}</small>
+                                                                    <small class="text-muted"
+                                                                        *ngIf="boothVoterList?.leader == 'yes'">
+                                                                        {{boothVoterList?.leaderImportance}} <i
+                                                                            class='fa fa-star'
+                                                                            style='color: #f3da35'></i></small>
+
+                                                                    <span class="fa-stack mr-1"
+                                                                        *ngIf="boothVoterList?.isContactVerified == 1">
+                                                                        <i
+                                                                            class="fas fa-certificate fa-stack-2x text-info"></i>
+                                                                        <i
+                                                                            class="fas fa-check fa-stack-1x fa-inverse"></i>
+                                                                    </span>
+                                                                    <span
+                                                                        *ngIf="boothVoterList?.isContactVerified == 0"></span>
+                                                                </td>
+                                                                <td>
+                                                                    <div *ngIf="boothVoterList?.gender == 'F'">Female
+                                                                    </div>
+                                                                    <div *ngIf="boothVoterList?.gender == 'M'">Male
+                                                                    </div>
+                                                                </td>
+                                                                <td>{{boothVoterList?.age ? boothVoterList?.age : '-'}}
+                                                                </td>
+
+                                                                <td>
+                                                                    <div
+                                                                        *ngIf="boothVoterList?.isWrongMobileNo == 0 && commonService.checkDataType(boothVoterList?.mobileNo1) == true">
+                                                                        <a class="text-main"
+                                                                            href="tel:{{boothVoterList?.mobileNo1}}">{{boothVoterList?.mobileNo1}}</a>
+                                                                    </div>
+                                                                    <div
+                                                                        *ngIf="(boothVoterList?.isWrongMobileNo == 1 || (commonService.checkDataType(boothVoterList?.mobileNo1) != true && boothVoterList?.isWrongMobileNo == 0)) && boothVoterList?.isWrongMobileNo2 == 0 && commonService.checkDataType(boothVoterList?.mobileNo2) == true">
+                                                                        <a class="text-main"
+                                                                            href="tel:{{boothVoterList?.mobileNo2}}">{{boothVoterList?.mobileNo2}}</a>
+                                                                    </div>
+                                                                    <div *ngIf="(commonService.checkDataType(boothVoterList?.mobileNo1) == false || boothVoterList?.isWrongMobileNo == 1) && (commonService.checkDataType(boothVoterList?.mobileNo2) == false || boothVoterList?.isWrongMobileNo2 == 1) && boothVoterList?.extraContcts">
+                                                                        <a class="text-main"
+                                                                            href="tel:{{boothVoterList?.extraContcts.split(',')[0]}}">{{boothVoterList?.extraContcts.split(',')[0]}}</a>
+                                                                    </div>
+                                                                    <div
+                                                                        *ngIf="(commonService.checkDataType(boothVoterList?.mobileNo1) != true || boothVoterList?.isWrongMobileNo == 1) && (commonService.checkDataType(boothVoterList?.mobileNo2) != true || boothVoterList?.isWrongMobileNo2 == 1) && !boothVoterList?.extraContcts">
+                                                                        -</div>
+                                                                </td>
+                                                                <td>{{boothVoterList?.qualification ?
+                                                                    boothVoterList?.qualification : '-'}}</td>
+                                                                <td>{{boothVoterList?.occupation ?
+                                                                    boothVoterList?.occupation : '-'}}</td>
+                                                                <td>{{boothVoterList?.religionName ?
+                                                                    boothVoterList?.religionName : '-'}}
+                                                                    <span
+                                                                        *ngIf="boothVoterList?.castName">/{{boothVoterList?.castName
+                                                                        ? boothVoterList?.castName : '-'}}</span>
+                                                                </td>
+                                                                <td *ngIf="ShowFlagType == 7">
+                                                                    {{boothVoterList?.whyIsPostal ?
+                                                                    boothVoterList?.whyIsPostal : '-'}}</td>
+                                                                <td *ngIf="!topBoothName">
+                                                                    {{boothVoterList?.boothNickName ?
+                                                                    boothVoterList?.boothNickName : '-'}}</td>
+                                                                <td>{{boothVoterList?.areaName ?
+                                                                    boothVoterList?.areaName :'-'}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="mt-2 text-end" *ngIf="boothVoterListArray?.length == 0">
+                                                    <div class="alert alert-danger text-center py-2">No Results Found!
+                                                    </div>
+                                                </div>
+                                                <pagination-controls id="voterPagination"
+                                                    *ngIf="boothVoterListArray?.length != 0" previousLabel=""
+                                                    nextLabel="" (pageChange)="onClickPagintionVoters($event)">
+                                                </pagination-controls>
+                                            </div>
+
+                                            <!-- Voters table end here  -->
+
+
+                                            <!-- family table start here   -->
+
+                                            <div class="tab-pane fade" id="pills-family" role="tabpanel"
+                                                aria-labelledby="pills-family-tab">
+                                                <ng-container>
+                                                    <div class="row justify-content-end mb-3 g-2">
+                                                        <div class="col-sm-4 offset-2">
+                                                            <span class="text-success">{{rowTotalCountVoter}} Results
+                                                                Found</span>
+                                                        </div>
+                                                        <div class="col-sm-auto d-flex justify-content-end align-items-center">
+                                                            <small for="verifiedContact" class="p-2"> Verified Contact </small>
+                                                             <input type="checkbox" id="verifiedContact" [formControl]="isVerifiedContact" name="verifiedContact">
+                                                            </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-container">
+                                                                <div class="input-group">
+                                                                    <input class="form-control" type="text"
+                                                                        placeholder="Search..."
+                                                                        [formControl]="searchVoters"/>
+                                                                    <button type="button"
+                                                                        class="btn btn-light border btn-sm"
+                                                                        (click)="clearFiltersBooth('clearSearchVoters')"
+                                                                        *ngIf="searchVoters.value"><i
+                                                                            class="fas fa-times"></i></button>
+                                                                    <button type="button" *ngIf="!searchVoters.value"
+                                                                        class="btn btn-sm border btn-light"><i
+                                                                            class="fas fa-search"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-auto">
+                                                            <div class="form-container">
+                                                                <button type="button" class="btn btn-main btn-sm me-2" (click)="votersPaginationNo = 1;boothVoterList()">Apply</button>
+                                                          </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="accordion accordion-flush" id="familytreeaccordion">
+                                                        <div class="table-responsive">
+                                                            <div class="row familytree-header">
+                                                                <div class="col-sm-1 col-1">Voter No.</div>
+                                                                <div class="col-sm-2 col-2">Voter Name</div>
+                                                                <div class="col-sm-1 col-1">Gender</div>
+                                                                <div class="col-sm-1 col-1">Age</div>
+                                                                <div class="col-sm-2 col-2">Contact No</div>
+                                                                <div class="col-sm-1 col-1">Occupation</div>
+                                                                <div class="col-sm-1 col-1">Qualification</div>
+                                                                <div class="col-sm-2 col-2">Area Name</div>
+                                                                <div class="col-sm col"></div>
+                                                            </div>
+                                                            <div class="accordion-item"
+                                                                *ngFor="let boothFamilyList of boothVoterListArray  | paginate: {id: 'voterPagination', itemsPerPage: 10, currentPage: votersPaginationNo, totalItems:votersTotal}; let i = index">
+
+                                                                <div class="accordion-header familytree-row">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-1 col-1">
+                                                                            {{boothFamilyList.voterNo}}
+                                                                        </div>
+                                                                        <div class="col-sm-2 col-2">
+                                                                            <a (click)="redirectToVoterPrfile(boothFamilyList)"
+                                                                                class="text-main">{{boothFamilyList?.englishName}}({{boothFamilyList?.familySize}})</a>
+                                                                            <span class="fa-stack mr-1" *ngIf="boothFamilyList?.isContactVerified == 1">
+                                                                                <i class="fas fa-certificate fa-stack-2x text-info"></i>
+                                                                                <i class="fas fa-check fa-stack-1x fa-inverse"></i>
+                                                                            </span>
+                                                                            <span
+                                                                                *ngIf="boothFamilyList?.isContactVerified == 0"></span>
+                                                                        </div>
+                                                                        <div class="col-sm-1 col-1">
+                                                                            <div *ngIf="boothFamilyList?.gender == 'F'">
+                                                                                Female</div>
+                                                                            <div *ngIf="boothFamilyList?.gender == 'M'">
+                                                                                Male
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-1 col-1">
+                                                                            {{boothFamilyList?.age ?
+                                                                            boothFamilyList?.age : '-'}}</div>
+                                                                        <div class="col-sm-2 col-2">
+                                                                            <div *ngIf="boothFamilyList?.mobileNo1"><a
+                                                                                    class="text-main"
+                                                                                    href="tel:{{boothFamilyList?.mobileNo1}}">{{boothFamilyList?.mobileNo1}}</a>
+                                                                            </div>
+                                                                            <div *ngIf="!boothFamilyList?.mobileNo1">-
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-1 col-1">
+                                                                            {{boothFamilyList.occupation ?
+                                                                            (boothFamilyList.occupation | titlecase) :
+                                                                            '-'}}
+                                                                        </div>
+                                                                        <div class="col-sm-1 col-1">
+                                                                            {{boothFamilyList?.qualification ?
+                                                                            boothFamilyList.qualification : "-"}}</div>
+                                                                        <div class="col-sm-2 col-2">
+                                                                            <div>{{boothFamilyList.areaName ?
+                                                                                (boothFamilyList.areaName | titlecase) :
+                                                                                '-'}} </div>
+                                                                        </div>
+                                                                        <div class="col-sm col">
+                                                                            <a class="accordion-button collapsed"
+                                                                                data-bs-toggle="collapse"
+                                                                                [attr.data-bs-target]="'#flush-collapseOne'+i"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="flush-collapseOne"
+                                                                                (click)="boothFamilyList.expanded = !boothFamilyList.expanded; familyDetails(boothFamilyList.voterId,boothFamilyList.agentId,boothFamilyList.clientId)">
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div id="flush-collapseOne{{i}}"
+                                                                    class="accordion-collapse collapse"
+                                                                    aria-labelledby="family-1"
+                                                                    data-bs-parent="#familytreeaccordion">
+                                                                    <div class="accordion-body p-0">
+                                                                        <!-- *ngIf="boothFamilyList.expanded" -->
+                                                                        <ng-container>
+                                                                            <div class="row familytree-details"
+                                                                                *ngFor="let boothFamilyDetails of boothFamilyDetailsArray">
+                                                                                <div class="col-sm-1">
+                                                                                    {{boothFamilyDetails?.voterNo}}
+                                                                                </div>
+                                                                                <div class="col-sm-2">
+                                                                                    {{boothFamilyDetails?.englishName}}
+                                                                                </div>
+                                                                                <div class="col-sm-1">
+                                                                                    <div
+                                                                                        *ngIf="boothFamilyDetails?.gender == 'F'">
+                                                                                        Female</div>
+                                                                                    <div
+                                                                                        *ngIf="boothFamilyDetails?.gender == 'M'">
+                                                                                        Male</div>
+                                                                                </div>
+                                                                                <div class="col-sm-1">
+                                                                                    {{boothFamilyDetails?.age ?
+                                                                                    boothFamilyDetails?.age : '-'}}
+                                                                                </div>
+                                                                                <div class="col-sm-2">
+                                                                                    <span *ngIf="commonService.checkDataType(boothFamilyDetails?.mobileNo1) == true"><a
+                                                                                            class="calltomember"
+                                                                                            href="tel:{{boothFamilyDetails?.mobileNo1}}">{{boothFamilyDetails?.mobileNo1}}</a>
+                                                                                    </span>
+                                                                                    <span *ngIf="commonService.checkDataType(boothFamilyDetails?.mobileNo1) == false">-</span>
+                                                                                </div>
+                                                                                <div class="col-sm-1">
+                                                                                    {{boothFamilyDetails?.occupation ?
+                                                                                    (boothFamilyDetails?.occupation |
+                                                                                    titlecase) : '-'}}</div>
+                                                                                <div class="col-sm-1">
+                                                                                    {{boothFamilyDetails?.qualification
+                                                                                    ?
+                                                                                    (boothFamilyDetails?.qualification |
+                                                                                    titlecase) : '-'}}</div>
+
+                                                                                <div class="col-sm-2">
+                                                                                    {{boothFamilyDetails?.areaName ?
+                                                                                    boothFamilyDetails?.areaName : '-'}}
+                                                                                </div>
+                                                                                <div class="col-sm-1"></div>
+                                                                            </div>
+                                                                            <div class="mt-2 text-end"
+                                                                                *ngIf="boothFamilyDetailsArray?.length == 0">
+                                                                                <div
+                                                                                    class="alert alert-danger text-center py-2">
+                                                                                    No Results Found!
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </ng-container>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                                <div class="mt-2 text-end" *ngIf="boothVoterListArray?.length == 0">
+                                                    <div class="alert alert-danger text-center py-2">No Results Found!
+                                                    </div>
+                                                </div>
+                                                <pagination-controls id="voterPagination"
+                                                    *ngIf="boothVoterListArray?.length != 0" previousLabel=""
+                                                    nextLabel="" (pageChange)="onClickPagintionVoters($event)">
+                                                </pagination-controls>
+                                            </div>
+
+                                            <!-- // ------------------------------------------  family table End here  ------------------------------------------// -->
+
+
+                                            <!-- Agents tab start here   -->
+                                            <div class="tab-pane fade" id="pills-agents" role="tabpanel"
+                                                aria-labelledby="pills-agents-tab">
+                                                <div class="row justify-content-end mb-3 g-2">
+                                                    <div class="col-sm-3">
+                                                        <div class="form-container">
+                                                            <div class="input-group">
+                                                                <input class="form-control" type="text"
+                                                                    placeholder="Search..." [formControl]="searchAgent" />
+                                                                <button type="button"
+                                                                    class="btn btn-light border btn-sm"
+                                                                    (click)="clearFiltersBooth('clearFiltersAgent')"
+                                                                    *ngIf="searchAgent.value"><i
+                                                                        class="fas fa-times"></i></button>
+                                                                <button type="button" *ngIf="!searchAgent.value"
+                                                                    class="btn btn-sm border btn-light"><i
+                                                                        class="fas fa-search"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-auto">
+                                                        <div class="form-container">
+                                                            <button type="button" class="btn btn-main btn-sm me-2" (click)="boothAgentList()">Apply</button>
+                                                      </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Agents table start here  -->
+                                                <div class="table-responsive">
+                                                <table class="table table-hover mb-0 caption-top">
+                                                    <caption>
+                                                        <span class="text-main me-3">
+                                                            <i class="fas fa-star me-1"></i> Indicates Booth Agent
+                                                        </span>
+                                                        <span class="text-dark">
+                                                            <i class="far fa-star me-1"></i> Indicates Area Agent
+                                                        </span>
+                                                    </caption>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Sr. No.</th>
+                                                            <th>Agents Name</th>
+                                                            <th>Contact No</th>
+                                                            <th *ngIf="!topBoothName" style="width:400px">Booth Name
+                                                            </th>
+                                                            <th>Area</th>
+                                                            <th>Voters</th>
+                                                            <th>Filled</th>
+                                                            <th>Migrated</th>
+                                                            <th>Families</th>
+                                                            <th>Pending</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let agentList of boothAgentListArray">
+                                                            <td>{{agentList?.srNo}}</td>
+                                                            <td>
+                                                                <a (click)="redirectToBoothAgentDetails(agentList)">
+                                                                    <span *ngIf="agentList?.subUserTypeId==3"
+                                                                        class="text-main" style=" cursor: pointer;">
+                                                                        <i class="fas fa-star me-1"></i>
+                                                                        {{agentList?.fullName}}
+                                                                    </span>
+                                                                </a>
+                                                                <a (click)="redirectToAreaAgentDetails(agentList)">
+                                                                    <span *ngIf="agentList?.subUserTypeId==4"
+                                                                        class="text-main" style=" cursor: pointer;">
+                                                                        <i class="far fa-star me-1"></i>
+                                                                        {{agentList?.fullName}}
+                                                                    </span>
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <div *ngIf="agentList?.mobileNo"><a class="text-main"
+                                                                        href="tel:{{agentList?.mobileNo}}">{{agentList?.mobileNo}}</a>
+                                                                </div>
+                                                                <div *ngIf="!agentList?.mobileNo">-</div>
+                                                            </td>
+                                                            <td *ngIf="!topBoothName">{{agentList?.boothNickName}}</td>
+                                                            <td>
+                                                                <div *ngIf="agentList?.area">{{agentList?.area}}</div>
+                                                                <div *ngIf="!agentList?.area">-</div>
+                                                            </td>
+                                                            <td>{{agentList?.totalVoter}}</td>
+                                                            <td>{{agentList?.totalFilled}}</td>
+                                                            <td>{{agentList?.totalMigrated}}</td>
+                                                            <td>{{agentList?.totalFamily}}</td>
+                                                            <td>{{agentList?.pending}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                                <div class="mt-2 text-end" *ngIf="boothAgentListArray?.length == 0">
+                                                    <div class="alert alert-danger text-center py-2">No Results Found!
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Agents table End here  -->
+
+                                            <!-- CRM tab start here   -->
+
+                                            <div class="tab-pane fade" id="pills-crm" role="tabpanel"
+                                                aria-labelledby="pills-crm-tab">
+                                                <div class="form-container">
+                                                    <form [formGroup]="crmFilterForm">
+                                                        <div class="row justify-content-end mb-3 g-2">
+                                                            <div class="col-sm d-flex justify-content-center align-items-center">
+                                                                <span class="text-success">{{rowTotalCountCRM}} Results
+                                                                  Found</span>
+                                                              </div>
+                                                              <div class="col-sm-auto d-flex justify-content-center align-items-center">
+                                                                <small for="verifiedContact" class="p-2"> Verified Contact </small>
+                                                                <input type="checkbox" id="verifiedContact" [formControl]="isVerifiedContact" name="verifiedContact">
+                                                              </div>
+                                                            <div class="col-sm-3">
+                                                                <ngx-select [allowClear]="true"
+                                                                    (remove)="clearCrmFilter('Followupstatus')"
+                                                                    [items]="followupStatusDropDownData"
+                                                                    optionTextField="name" optionValueField="id"
+                                                                    formControlName="Followupstatusid"
+                                                                    placeholder="Select Followup Status">
+                                                                </ngx-select>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-container">
+                                                                    <div class="input-group">
+                                                                        <input class="form-control" type="text"
+                                                                            placeholder="Search..."
+                                                                            formControlName="SearchText" />
+                                                                        <button type="button"
+                                                                            class="btn btn-light border btn-sm"
+                                                                            (click)="crmAndCrmHistorySearchClear('crm1')"
+                                                                            *ngIf="crmFilterForm.value.SearchText"><i
+                                                                                class="fas fa-times"></i></button>
+                                                                        <button type="button"
+                                                                            *ngIf="!crmFilterForm.value.SearchText"
+                                                                            class="btn btn-sm border btn-light"><i
+                                                                                class="fas fa-search"></i></button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-auto">
+                                                                <div class="form-container">
+                                                                    <button type="button" class="btn btn-main btn-sm me-2" (click)="crmPaginationNo = 1;getCrmTableData()">Apply</button>
+                                                              </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <!-- CRM table start here  -->
+                                                <div class="row gx-1 mb-2">
+                                                    <div class="col-md-2 col-6" *ngFor="let dropDownData of followupStatusDropDownData">
+                                                        <span 
+                                                            class="small {{dropDownData.class}}">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            {{dropDownData?.name}}
+                                                        </span>
+                                                    </div>
+                                                </div> 
+                                                <div class="table-responsive">
+                                                <table class="table table-hover mb-0 caption-top">
+                                                    <!-- <caption>
+                                                        <span class="text-success offset-1"
+                                                            [ngStyle]="{'font-size.px':15}">{{rowTotalCountCRM}} Results
+                                                            Found</span>
+                                                    </caption> -->
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Voter No.</th>
+                                                            <th>Voter Name</th>
+                                                            <th>Contact No</th>
+                                                            <th>Gender</th>
+                                                            <th>Area</th>
+                                                            <th>Followup Date-Time</th>
+                                                            <th>Last Feedback</th>
+                                                            <th>CRM</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr
+                                                            *ngFor="let crmTableList of getCrmTableList | paginate: {id: 'crmPagination', itemsPerPage: 10, currentPage: crmPaginationNo, totalItems:getCrmTableListrTotal};">
+                                                            <td>{{crmTableList.voterNo}}</td>
+                                                            <td><span
+                                                                [ngClass]="{'text-main' : crmTableList.followupstatus == 'Todays Followup','text-success' : crmTableList.followupstatus == 'Upcomming Followup','text-danger' : crmTableList.followupstatus == 'Not To Call','text-info' : crmTableList.followupstatus == 'New', 'text-dark' : crmTableList.followupstatus == 'Missed Followup'}">{{crmTableList.englishName}}</span>
+                                                                <span class="fa-stack mr-1" *ngIf="crmTableList?.isContactVerified == 1">
+                                                                    <i class="fas fa-certificate fa-stack-2x text-info"></i>
+                                                                    <i class="fas fa-check fa-stack-1x fa-inverse"></i>
+                                                                </span>
+                                                                <span *ngIf="crmTableList?.isContactVerified == 0"></span>
+                                                            </td>
+                                                            <td>
+                                                                <div
+                                                                    *ngIf="crmTableList?.isWrongMobileNo == 0 && commonService.checkDataType(crmTableList?.mobileNo1) == true">
+                                                                    <a class="text-main"
+                                                                        href="tel:{{crmTableList?.mobileNo1}}">{{crmTableList?.mobileNo1}}</a>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="(crmTableList?.isWrongMobileNo == 1 || (commonService.checkDataType(crmTableList?.mobileNo1) != true && crmTableList?.isWrongMobileNo == 0)) && crmTableList?.isWrongMobileNo2 == 0 && commonService.checkDataType(crmTableList?.mobileNo2) == true">
+                                                                    <a class="text-main"
+                                                                        href="tel:{{crmTableList?.mobileNo2}}">{{crmTableList?.mobileNo2}}</a>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="(commonService.checkDataType(crmTableList?.mobileNo1) == false || crmTableList?.isWrongMobileNo == 1) && (commonService.checkDataType(crmTableList?.mobileNo2) == false || crmTableList?.isWrongMobileNo2 == 1) && crmTableList?.extraContcts">
+                                                                    <a class="text-main"
+                                                                        href="tel:{{crmTableList?.extraContcts.split(',')[0]}}">{{crmTableList?.extraContcts.split(',')[0]}}</a>
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="(commonService.checkDataType(crmTableList?.mobileNo1) != true || crmTableList?.isWrongMobileNo == 1) && (commonService.checkDataType(crmTableList?.mobileNo2) != true || crmTableList?.isWrongMobileNo2 == 1) && !crmTableList?.extraContcts">
+                                                                    -</div>
+                                                            </td>
+
+                                                            <td>{{crmTableList?.gender == 'F' ? 'Female' : 'Male'}}</td>
+                                                            <td>{{crmTableList.areaName}}</td>
+                                                            <td>{{crmTableList.followupDate ? (commonService.dateTimeTransform(crmTableList.followupDate) | date:"dd/MM/yyyy hh:mm a") : '-'}}</td>
+                                                            <td>{{crmTableList.lastFeedback ? crmTableList.lastFeedback
+                                                                : '-'}}</td>
+                                                            <td>
+                                                                <button class="btn btn-light btn-sm text-main"
+                                                                    (click)="openDialogVoterCallEntries(crmTableList)">
+                                                                    <i class="fas fa-phone-alt"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                                <div class="mt-2 text-end" *ngIf="getCrmTableList?.length == 0">
+                                                    <div class="alert alert-danger text-center py-2">No Results Found!
+                                                    </div>
+                                                </div>
+                                                <pagination-controls id="crmPagination"
+                                                    *ngIf="getCrmTableList?.length != 0" previousLabel="" nextLabel=""
+                                                    (pageChange)="onClickPagintionCrm($event)">
+                                                </pagination-controls>
+                                            </div>
+
+                                            <!-- .....................CRM tab End here............................... -->
+
+
+                                            <!--........................ CRM History start here   .........................-->
+
+                                            <div class="tab-pane fade" id="pills-crm-history" role="tabpanel"
+                                                aria-labelledby="pills-crm-history-tab">
+                                                <div class="form-container">
+                                                    <form [formGroup]="crmHistoryFilterForm">
+                                                        <div class="row justify-content-end mb-3 g-2">
+                                                            <div class="col-sm d-flex justify-content-center align-items-center">
+                                                                <span class="text-success">{{rowTotalCountCRMHistory}} Results
+                                                                  Found</span>
+                                                              </div>
+                                                              <div class="col-sm-auto d-flex align-items-center">
+                                                                <small for="verifiedContact" class="p-2"> Verified Contact </small>
+                                                                 <input type="checkbox" id="verifiedContact" [formControl]="isVerifiedContact" name="verifiedContact">
+                                                                </div>
+                                                            <div class="col-sm-2">
+                                                                <ngx-select [allowClear]="true"
+                                                                    (remove)="clearCrmHistoryFilter('feedbackstatus')"
+                                                                    [items]="feedbackTypeArray"
+                                                                    formControlName="feedbackstatus"
+                                                                    optionValueField="id" optionTextField="name"
+                                                                    placeholder="Select Feedback Type">
+                                                                </ngx-select>
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <ngx-select [allowClear]="true"
+                                                                    (remove)="clearCrmHistoryFilter('Followupstatus')"
+                                                                    [items]="followupStatusDropDownData"
+                                                                    optionTextField="name" optionValueField="id"
+                                                                    formControlName="Followupstatusid"
+                                                                    placeholder="Select Followup Status">
+                                                                </ngx-select>
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <div class="input-group">
+                                                                    <input [owlDateTime]="dt3" formControlName="date"
+                                                                        class="form-control" [owlDateTimeTrigger]="dt3"
+                                                                        placeholder="Select Date">
+                                                                    <button class="btn btn-light border btn-sm"
+                                                                        type="button" [owlDateTimeTrigger]="dt3"
+                                                                        *ngIf="!crmHistoryFilterForm.value.date">
+                                                                        <i class="fas fa-calendar-alt"></i></button>
+                                                                    <button class="btn btn-light border btn-sm"
+                                                                        type="button" *ngIf="crmHistoryFilterForm.value.date"
+                                                                        (click)="clearCrmHistoryFilter('dateRangePIcker')">
+                                                                        <i class="fas fa-times"></i></button>
+                                                                </div>
+                                                                <owl-date-time #dt3 [pickerType]="'calendar'">
+                                                                </owl-date-time>
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <div class="form-container">
+                                                                    <div class="input-group">
+                                                                        <input class="form-control" type="text"
+                                                                            placeholder="Search..."
+                                                                            formControlName="SearchText" />
+                                                                        <button type="button"
+                                                                            (click)="crmAndCrmHistorySearchClear('crmHistory1')"
+                                                                            class="btn btn-light border btn-sm"
+                                                                            *ngIf="crmHistoryFilterForm.value.SearchText"><i
+                                                                                class="fas fa-times"></i></button>
+                                                                        <button type="button"
+                                                                            *ngIf="!crmHistoryFilterForm.value.SearchText"
+                                                                            class="btn btn-sm border btn-light"><i
+                                                                                class="fas fa-search"></i></button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-auto">
+                                                                <div class="form-container">
+                                                                    <button type="button" class="btn btn-main btn-sm me-2" (click)="crmHistoryPaginationNo = 1;getCrmHistoryTableData()">Apply</button>
+                                                              </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <!-- CRM History table start here  -->
+                                                <div class="row gx-1 mb-2">
+                                                    <div class="col-md-2 col-6" *ngFor="let dropDownData of followupStatusDropDownData">
+                                                        <span 
+                                                            class="small {{dropDownData.class}}">
+                                                            <i class="fas fa-square me-1"></i>
+                                                            {{dropDownData?.name}}
+                                                        </span>
+                                                    </div>
+                                                </div> 
+                                                <div class="table-responsive">
+                                                <table class="table table-hover mb-0 caption-top">
+                                                    <!-- <caption>  
+                                                        <span class="text-success offset-1 col-sm col-6"
+                                                        [ngStyle]="{'font-size.px':15}">{{rowTotalCountCRMHistory}}
+                                                        Results Found</span>
+                                                    </caption> -->
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Voter No.</th>
+                                                            <th>Voter Name</th>
+                                                            <th>Contact No</th>
+                                                            <th>Gender</th>
+                                                            <th>Followup Date-Time</th>
+                                                            <th>Last Feedback</th>
+                                                            <th>CRM</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr
+                                                            *ngFor="let CrmHistoryTableList of getCrmHistoryTableList | paginate: {id: 'crmHistoryPagination', itemsPerPage: 10, currentPage: crmHistoryPaginationNo, totalItems:getCrmHistoryTableListrTotal};">
+                                                            <td>{{CrmHistoryTableList.voterNo}}</td>
+                                                            <td
+                                                            [ngClass]="{'text-primary' : CrmHistoryTableList?.followupstatus == 'Todays Followup','text-success' : CrmHistoryTableList?.followupstatus == 'Upcomming Followup','text-danger' : CrmHistoryTableList?.followupstatus == 'Not To Call','text-info' : CrmHistoryTableList?.followupstatus == 'New', 'text-dark' : CrmHistoryTableList?.followupstatus == 'Missed Followup'}">
+                                                                {{CrmHistoryTableList.englishName}}
+                                                                <span class="fa-stack mr-1" *ngIf="CrmHistoryTableList?.isContactVerified == 1">
+                                                                    <i class="fas fa-certificate fa-stack-2x text-info"></i>
+                                                                    <i class="fas fa-check fa-stack-1x fa-inverse"></i>
+                                                                </span>
+                                                            </td>
+                                                                <td>
+                                                                    <div
+                                                                        *ngIf="CrmHistoryTableList?.isWrongMobileNo == 0 && commonService.checkDataType(CrmHistoryTableList?.mobileNo1) == true">
+                                                                        <a class="text-main"
+                                                                            href="tel:{{CrmHistoryTableList?.mobileNo1}}">{{CrmHistoryTableList?.mobileNo1}}</a>
+                                                                    </div>
+                                                                    <div
+                                                                        *ngIf="(CrmHistoryTableList?.isWrongMobileNo == 1 || (commonService.checkDataType(CrmHistoryTableList?.mobileNo1) != true && CrmHistoryTableList?.isWrongMobileNo == 0)) && CrmHistoryTableList?.isWrongMobileNo2 == 0 && commonService.checkDataType(CrmHistoryTableList?.mobileNo2) == true">
+                                                                        <a class="text-main"
+                                                                            href="tel:{{CrmHistoryTableList?.mobileNo2}}">{{CrmHistoryTableList?.mobileNo2}}</a>
+                                                                    </div>
+                                                                    <div *ngIf="(commonService.checkDataType(CrmHistoryTableList?.mobileNo1) == false || CrmHistoryTableList?.isWrongMobileNo == 1) && (commonService.checkDataType(CrmHistoryTableList?.mobileNo2) == false || CrmHistoryTableList?.isWrongMobileNo2 == 1) && CrmHistoryTableList?.extraContcts">
+                                                                        <a class="text-main"
+                                                                            href="tel:{{CrmHistoryTableList?.extraContcts.split(',')[0]}}">{{CrmHistoryTableList?.extraContcts.split(',')[0]}}</a>
+                                                                    </div>
+                                                                    <div
+                                                                        *ngIf="(commonService.checkDataType(CrmHistoryTableList?.mobileNo1) != true || CrmHistoryTableList?.isWrongMobileNo == 1) && (commonService.checkDataType(CrmHistoryTableList?.mobileNo2) != true || CrmHistoryTableList?.isWrongMobileNo2 == 1) && !CrmHistoryTableList?.extraContcts">
+                                                                        -</div>
+                                                                </td>
+
+                                                            <td>{{CrmHistoryTableList?.gender == 'F' ? 'Female' :
+                                                                'Male'}}</td>
+                                                            <td>{{CrmHistoryTableList.followupDate?
+                                                                (commonService.dateTimeTransform(CrmHistoryTableList.followupDate) | date:'dd/MM/yyyy hh:mm a') : '-'}}</td>
+                                                            <td>{{CrmHistoryTableList.lastFeedback?
+                                                                CrmHistoryTableList.lastFeedback : '-'}}</td>
+                                                            <td>
+                                                                <button class="btn btn-light btn-sm text-main"
+                                                                    (click)="openDialogVoterCallEntries(CrmHistoryTableList)">
+                                                                    <i class="fas fa-phone-alt"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                                <div class="mt-2 text-end" *ngIf="getCrmHistoryTableList?.length == 0">
+                                                    <div class="alert alert-danger text-center py-2">No Results Found!
+                                                    </div>
+                                                </div>
+                                                <pagination-controls id="crmHistoryPagination"
+                                                    *ngIf="getCrmHistoryTableList?.length != 0" previousLabel=""
+                                                    nextLabel="" (pageChange)="onClickPagintionCrmHistory($event)">
+                                                </pagination-controls>
+                                            </div>
+
+                                            <!--......................... CRM History End Here .................................-->
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!dataNotFound">
+        <div class="alert alert-danger text-center py-2 mb-0">Select above filters to show Data....!</div>
+    </ng-container>
+</div>
+
+<!-- Off canvas for filters -->
+<!-- data-bs-backdrop="false" data-bs-keyboard="false" -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <h6 id="offcanvasRightLabel" class="mb-0">Filters</h6>
+        <!-- <button type="button" class="btn-close text-reset" (click)="offCanvasSidebarCheck = true" data-bs-dismiss="offcanvas" aria-label="Close"></button> -->
+    </div>
+    <div class="offcanvas-body">
+        <form [formGroup]="globalFilterForm">
+            <div class="form-container">
+                <div class="mb-3">
+                    <ngx-select [allowClear]="true" [items]="voterAreaArray" [disabled]="!topBoothName"
+                        formControlName="AreaId" (remove)="FiltereDataRemove('AreaId')"
+                        (selectionChanges)="changedFilterData($event ,'AreaId')" optionValueField="areaId"
+                        optionTextField="areaName" placeholder="Select Area">
+                    </ngx-select>
+                </div>
+                <div class="row mb-3 g-2">
+                    <div class="col-sm-6">
+                        <ngx-select [allowClear]="true" [items]="genderArray" formControlName="Gender"
+                            (remove)="FiltereDataRemove('Gender')"
+                            (selectionChanges)="changedFilterData($event,'Gender')" optionValueField="id"
+                            optionTextField="name" placeholder="Select Gender">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm-6">
+                        <ngx-select [allowClear]="true" [items]="mobileNoAvailableArray" formControlName="HaveMobileNo"
+                            (remove)="FiltereDataRemove('HaveMobileNo')"
+                            (selectionChanges)="changedFilterData($event,'HaveMobileNo')" optionValueField="id"
+                            optionTextField="name" placeholder="Mobile No. Available">
+                        </ngx-select>
+                    </div>
+                </div>
+                <div class="mb-3 row g-2">
+                    <div class="col-sm-6">
+                        <ngx-select [allowClear]="true" [items]="bussinessArray" formControlName="HaveBussiness"
+                            (remove)="FiltereDataRemove('HaveBussiness')"
+                            (selectionChanges)="changedFilterData($event ,'HaveBussiness')" optionValueField="id"
+                            optionTextField="name" placeholder="Select Business">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm-6">
+                        <ngx-select [allowClear]="true" [items]="professionArray" formControlName="ProfessionId"
+                            (remove)="FiltereDataRemove('ProfessionId')"
+                            (selectionChanges)="changedFilterData($event ,'ProfessionId')" optionValueField="id"
+                            optionTextField="name" placeholder="Select Profession">
+                        </ngx-select>
+                    </div>
+                </div>
+                <div class="mb-3 row g-2">
+                    <div class="col-sm-6">
+                        <ngx-select [allowClear]="true" [items]="politicalPartyArray" formControlName="PartyId"
+                            (remove)="FiltereDataRemove('PartyId')"
+                            (selectionChanges)="changedFilterData($event ,'PartyId')" optionValueField="partyId"
+                            optionTextField="partyName" placeholder="Political Party">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm-6">
+                        <ngx-select [allowClear]="true" [items]="prominentleaderArray" formControlName="LocalLeaderId"
+                            (remove)="FiltereDataRemove('LocalLeaderId')"
+                            (selectionChanges)="changedFilterData($event ,'LocalLeaderId')"
+                            optionValueField="prominentleaderId" optionTextField="leaderName"
+                            placeholder="Select Local leader">
+                        </ngx-select>
+                    </div>
+                </div>
+                <div class="mb-3 row g-2">
+                    <div class="col-sm-6">
+                        <ngx-select [allowClear]="true" [items]="ratingStarArray" formControlName="LeadeImp"
+                            (remove)="FiltereDataRemove('LeadeImp')"
+                            (selectionChanges)="changedFilterData($event ,'LeadeImp')" optionValueField="id"
+                            optionTextField="name" placeholder="Select Stars">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm-6">
+                        <ngx-select [allowClear]="true" [items]="yuvakArray" formControlName="IsYuvak"
+                            (remove)="FiltereDataRemove('IsYuvak')"
+                            (selectionChanges)="changedFilterData($event ,'IsYuvak')" optionValueField="id"
+                            optionTextField="name" placeholder="Select Yuvak">
+                        </ngx-select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <ngx-select [allowClear]="true" [items]="favourofListArray" formControlName="InFavourofId"
+                        (remove)="FiltereDataRemove('InFavourofId')"
+                        (selectionChanges)="changedFilterData($event ,'InFavourofId')" optionValueField="supporterOfId"
+                        optionTextField="supporterName" placeholder="In Favour Of">
+                    </ngx-select>
+                </div>
+                <div class="mb-3">
+                    <ngx-select [allowClear]="true" [items]="opposeOfListArray" formControlName="InOpposeOfId"
+                        (remove)="FiltereDataRemove('InOpposeOfId')"
+                        (selectionChanges)="changedFilterData($event ,'InOpposeOfId')" optionValueField="supporterOfId"
+                        optionTextField="supporterName" placeholder="In Oppose Of">
+                    </ngx-select>
+                </div>
+
+                <div class="row mb-3 g-2">
+                    <div class="col-sm-6">
+                        <ngx-select [allowClear]="true" [items]="ageArray" formControlName="AgegroupId"
+                            (remove)="FiltereDataRemove('AgegroupId')"
+                            (selectionChanges)="changedFilterData($event ,'AgegroupId')" optionValueField="id"
+                            optionTextField="name" placeholder="Select Age">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm-6">
+                        <ngx-select [allowClear]="true" [items]="familySizeArray" formControlName="FamilySize"
+                            (remove)="FiltereDataRemove('FamilySize')"
+                            (selectionChanges)="changedFilterData($event ,'FamilySize')" optionValueField="id"
+                            optionTextField="name" placeholder="Family Size">
+                        </ngx-select>
+                    </div>
+                </div>
+                <div class="row mb-3 g-2">
+                    <div class="col-sm-6">
+                        <ngx-select [allowClear]="true" [items]="religionListArray" formControlName="ReligionId"
+                            (remove)="FiltereDataRemove('ReligionId');FiltereDataRemove('CastId')"
+                            (select)="getVoterCastList()" (selectionChanges)="changedFilterData($event ,'ReligionId')"
+                            optionValueField="reliogionId" optionTextField="religionName" placeholder="Select Religion">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm-6">
+                        <ngx-select [allowClear]="true" [items]="VoterCastListArray" formControlName="CastId"
+                            (remove)="FiltereDataRemove('CastId')" [disabled]="!globalFilterForm.value.ReligionId"
+                            (selectionChanges)="changedFilterData($event ,'CastId')" optionValueField="castId"
+                            optionTextField="castName" placeholder="Select Caste">
+                        </ngx-select>
+                    </div>
+                </div>
+
+                <div class="row g-2">
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-secondary btn-sm"
+                            (click)="clearBoothVotersFilterForm();globalFilterCallApiByConditn()">Clear All</button>
+                    </div>
+                    <div class="col-sm-6 text-end">
+                        <button type="button" class="btn btn-main btn-sm" data-bs-dismiss="offcanvas"
+                            (click)="globalFilterSubmitData(); offCanvasSidebarCheck = true">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

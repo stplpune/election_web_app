@@ -1,0 +1,39 @@
+
+<div class="container-fluid">
+    <div class="row mx-0 px-0" id="pageheader">
+        <div class="col-sm-4">
+            <span class="page-name">Geofence Report</span>
+        </div>
+        <div class="col-sm-8 text-end">
+        </div>
+    </div>
+
+    <div class="row chartbox">
+        <div class="col-sm-12"> 
+            <div class="position-relative">
+                <agm-map [latitude]="23.7541318" [zoom]="6" [longitude]="80.3681253" (mapReady)="onMapReady($event)">
+                </agm-map>
+                <div class="row form-container" id="filters">
+                    <form [formGroup]="filterForm">
+                        <div class="row" id="filters">
+                            <div class="col-sm-3">
+                                <ngx-select [allowClear]="true" [items]="electionNameArray" formControlName="ElectionId"
+                                    optionValueField="electionId" (select)="getConstituencyName()"
+                                    optionTextField="electionName" (remove)="clearTopFilter('electionId')"
+                                    placeholder="Select Election">
+                                </ngx-select>
+                            </div>
+                            <div class="col-sm-3">
+                                <ngx-select [allowClear]="true" [items]="constituencyNameArray"
+                                    formControlName="ConstituencyId" (select)="onFilter()" optionValueField="constituencyId"
+                                    optionTextField="constituencyName" (remove)="clearTopFilter('constituencyId')"
+                                    placeholder="Select Constituency" [disabled]="!this.filterForm.value.ElectionId">
+                                </ngx-select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>

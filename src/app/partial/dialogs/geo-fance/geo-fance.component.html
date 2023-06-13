@@ -1,0 +1,29 @@
+<h6>Create Geofence</h6>
+
+<form [formGroup]="createGeofence" (ngSubmit)="insertElectionCreateGeofence()">
+    <div class="modal-body p-0">
+        <!-- <input class="form-control" type="text" placeholder="Search Location"  (keydown.enter)="$event.preventDefault()"
+        placeholder="Search Location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
+        #search> -->
+        <div class="mapouter">
+            <div class="mapsearch my-3">
+                <div class="form-container">
+                <input class="form-control" type="text" placeholder="Search Location"
+                    (keydown.enter)="$event.preventDefault()" placeholder="Search Location" autocorrect="off"
+                    autocapitalize="off" spellcheck="off" type="text" #search>
+                </div>
+            </div>
+            <div class="gmap_canvas position-relative">
+                <a (click)="removeShape()" *ngIf="isShapeDrawn" aria-label="Remove Shape" close="closeShape" class="closebtn">
+                    <i class="fas fa-times"></i>
+                </a>
+                <agm-map [latitude]="23.7541318" [zoom]="6" [longitude]="80.3681253" [mapTypeControl]='true' (mapReady)="onMapReady($event)">
+                </agm-map>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" (click)="onNoClick()">Cancel</button>
+        <button type="submit" class="btn btn-main btn-sm">Submit Geofence Data</button>
+    </div>
+</form>

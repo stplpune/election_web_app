@@ -1,0 +1,177 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--main-color);
+    padding: 0 1rem;
+    z-index: 100
+}
+
+.header__container {
+    display: flex;
+    align-items: center;
+    height: 3.5rem;
+    justify-content: space-between;
+    color: #fff;
+}
+
+.header__container h5 {
+    font-size: 1.35rem;
+}
+
+.header__container .btn {
+    border-radius: 2px;
+    font-size: 0.85rem;
+}
+
+.header__img {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%
+}
+
+.header__logo {
+    color: #19181B;
+    font-weight: 500;
+    display: none
+}
+
+.header__icon,
+.header__toggle {
+    font-size: 1.2rem
+}
+
+.header__toggle {
+    color: #fff;
+    cursor: pointer
+}
+
+.header .dropdown-menu {
+    font-size: 0.85rem;
+    border: none;
+    box-shadow: 1px 1px 5px 0px #a7a7a7;
+}
+.header .dropdown-menu .dropdown-item{
+    padding: 0.75rem 1rem !important;
+    cursor: pointer;
+}
+.header .dropdown-menu .dropdown-item.active, 
+.header .dropdown-menu .dropdown-item:active{
+    background-color:var(--main-color) !important;
+    color:#fff !important;
+}
+.header .dropdown-menu i {
+    width: 20px;
+}
+
+@media screen and (max-width:320px) {
+    .header__search {
+        width: 70%
+    }
+}
+
+@media screen and (min-width:768px) {
+    .header {
+        padding: 0 1rem 0 5rem
+    }
+    .header__container {
+        height: calc(3rem + .5rem)
+    }
+    .header__search {
+        width: 300px;
+        padding: .55rem .75rem
+    }
+    .header__toggle {
+        display: none
+    }
+    .header__logo {
+        display: block
+    }
+    .header__img {
+        width: 34px;
+        height: 34px;
+        order: 1
+    }
+}
+
+.btn-ediprofile {
+    font-size: 0.75rem;
+    border: solid 1px rgba(0, 0, 0, 0.35);
+    color: #757575;
+    box-shadow: none;
+    outline: none;
+    padding: 3px 10px;
+}
+
+#myprofile img {
+    width: 130px;
+    height: 130px;
+    /* border: solid 1px #ddd; */
+    padding: 5px;
+    margin-bottom: 15px;
+}
+
+.update-photo {
+    background-color: #eee;
+    border: solid 1px rgba(0, 0, 0, 0.125);
+    padding: 10px;
+    border-radius: 50%;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    line-height: 3px;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #000;
+    opacity: 0.9;
+    left: 165px;
+    top: 5px;
+}
+
+.modal img {
+    border-radius: 7px;
+}
+
+.form-group,
+.form-control {
+    position: relative;
+    box-shadow: none;
+}
+
+.form-control {
+    border: 1px solid #ced4da;
+}
+
+.invalid-feedback {
+    position: absolute;
+    margin-top: 0px;
+}
+
+.eye-icon-pos {
+    position: absolute;
+    right: 20px;
+    top: 40px;
+}
+
+.edit-button {
+    position: absolute;
+    top: 260px;
+    left: 75px;
+    z-index: 9999;
+}
+
+.btn-primary-new {
+    color: #7289da;
+    background-color: #fdfdfd;
+}
+.header-mp{
+    font-size: 0.85rem;
+}
+.rightmenu{
+    display: flex;
+    align-items: center;
+}
+.text-yellow{
+    color: #c8ff00;
+}

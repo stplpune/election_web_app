@@ -1,0 +1,38 @@
+.company-logo{
+    height: 60px !important;
+    width: 90px !important;
+}
+
+.uploaded-images {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin-right: 10px;
+    margin-top: 15px;
+  }
+  
+  .uploaded-images img {
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+  }
+  
+  .uploaded-images .btn {
+    border-radius: 50%;
+    font-size: 0.75rem;
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    padding: 0;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+  }
+  
+  .bg-danger-10 {
+    background: #f001;
+  }
+  
+  .btn-main:focus {
+    background-color: #45408f !important;
+  }

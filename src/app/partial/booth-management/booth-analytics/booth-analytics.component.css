@@ -1,0 +1,66 @@
+#boothanalytics-filters .accordion-button{
+    font-size: 0.85rem;
+    box-shadow: none !important;
+    padding: 10px ;
+    text-transform: uppercase;
+}
+#boothanalytics-filters .accordion-body{
+    font-size: 0.85rem;
+    padding: 10px ;
+}
+#boothanalytics-filters .accordion-button:not(.collapsed){
+    background-color:#eee;
+    color: var(--main-color);
+}
+#boothanalytics-filters .accordion-button:not(.collapsed)::after > svg{
+    fill: #fff;
+    filter: #fff;
+}
+
+.ChekBox{
+    z-index: 9999;
+    position: relative;
+    background: white;
+    border-radius: 5px;
+    max-height: 15rem;
+    overflow-y: scroll;
+    text-align: left;
+}
+.checkboxdd{
+    border: 1px solid #ced4da !important;
+    height:33.2px;
+}
+.chart-container{
+    height: 350px;
+    max-height: 350px;
+    font-size: 0.8rem;
+}
+#familytreeaccordion{
+    font-size:0.85rem
+}
+#familytreeaccordion .familytree-header{
+    background-color: #f5f5f5;
+    border-bottom: solid 2px #aaa;
+    border-top: solid 1px #eee;
+    font-weight: 500;
+    padding-block: 8px;
+}
+#familytreeaccordion .familytree-details{
+    background-color: #f5f5f5;
+}
+#familytreeaccordion .familytree-details,
+#familytreeaccordion .familytree-row{
+    border-top: solid 1px #eee;
+    padding-block: 8px;
+}
+#familytreeaccordion .familytree-row .accordion-button,
+#familytreeaccordion .familytree-row .accordion-button:not(.collapsed)
+{
+    padding:0;
+    color: var(--main-color);
+    background-color:transparent !important;
+    box-shadow: none !important;
+}
+.accordion-button .collapsed > .familytree-row{
+    background-color: red;
+}

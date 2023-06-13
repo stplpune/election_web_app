@@ -1,0 +1,164 @@
+<div class="container-fluid">
+    <div class="row mx-0 px-0" id="pageheader">
+        <div class="col-sm-4">
+            <span class="page-name">Assign Elections to Regional Leader</span>
+        </div>
+    </div>
+
+    <div class="row chartbox mb-3">
+        <div class="col-sm-4">
+            <div class="card mb-3">
+                <form [formGroup]="assignElectionForm" (ngSubmit)="onSubmitAssElection()">
+                    <div class="card-header">Assign Election to Regional Leader</div>
+                    <div class="card-body pt-2">
+                        <div class="form-container">
+                            <div class="mb-3">
+                                <label class="form-label required-field"> Leader Name</label>
+                                <ngx-select [allowClear]="true" [items]="getClientName" formControlName="ClientId" optionValueField="id" optionTextField="Fullname" placeholder="Select Leader Name" [ngClass]="{ 'is-invalid': submitted && f.ElectionId.errors }" (remove)="clearForm()">
+                                </ngx-select>
+                                <div *ngIf="submitted && f.ClientId.errors" class="invalid-feedback">
+                                    <div *ngIf="f.ClientId.errors.required">Leader Name is required</div>
+                                </div>
+                                <!--  (select)="GetConstituencyName($event)" <select class="form-select">
+                                    <option value="">Select Client</option>
+                                </select> getClientName -->
+                            </div>
+                            <div class="card card-body shadow-none border">
+                                <div class="mb-3">
+                                    <label class="form-label" [ngClass]="addSubConstituencyArray.length ==0 ? 'required-field' : ''">
+                                        Election Name</label>
+                                    <ngx-select [allowClear]="true" [items]="electionNameArray" formControlName="ElectionId" optionValueField="Id" optionTextField="ElectionName" placeholder="Select Election" (select)="GetConstituencyName($event)" [ngClass]="{ 'is-invalid': submitted && f.ElectionId.errors }">
+                                    </ngx-select>
+                                    <div *ngIf="submitted && f.ElectionId.errors" class="invalid-feedback">
+                                        <div *ngIf="f.ElectionId.errors.required">Election Name is required</div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" [ngClass]="addSubConstituencyArray.length ==0 ? 'required-field' : ''">
+                                        Constituency Name</label>
+                                    <ngx-select [allowClear]="true" [items]="constituencyNameArray" formControlName="strConstituency" optionValueField="id" optionTextField="ConstituencyName" placeholder="Select Constituency" [disabled]="(!assignElectionForm.value.ElectionId || constituencyNameArray?.length == 0) ? true : false"
+                                        [ngClass]="{ 'is-invalid': submitted && f.strConstituency.errors}">
+                                    </ngx-select>
+                                    <div *ngIf="submitted && f.strConstituency.errors" class="invalid-feedback">
+                                        <div *ngIf="f.strConstituency.errors.required">Constituency name is required
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <button class="btn btn-outline-primary btn-sm" type="button" (click)="addSubConstituency()" [disabled]="(!assignElectionForm.value.ElectionId || !assignElectionForm.value.strConstituency) ? true : false">Add</button>
+                                </div>
+                                <hr>
+                                <table class="table table-hover" *ngIf="addSubConstituencyArray.length != 0 ">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr. No.</th>
+                                            <th>Election / Constituency Name</th>
+                                            <th>Manage</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody *ngFor="let resSubCons of addSubConstituencyArray; let i = index">
+                                        <tr>
+                                            <td>{{i+1}}</td>
+                                            <td>
+                                                <p class="mb-0">{{resSubCons.ElectionName | titlecase}}</p>
+                                                <small class="text-muted">{{resSubCons.ConstituencyName  | titlecase}}</small>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-light text-danger btn-sm ms-1" title="Delete" (click)="delConfirmAssEle(i)">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- <div class="mt-2 text-end" *ngIf="addSubConstituencyArray?.length != 0">
+                                    <pagination-controls previousLabel="" nextLabel=""
+                                        (pageChange)="onClickPagintion(pageSize = $event)"> </pagination-controls>
+                                </div> -->
+                            </div>
+                            <hr>
+                            <div class="row mb-1 justify-content-between">
+                                <div class="col-sm-3 col-6">
+                                    <button class="btn btn-secondary btn-sm" type="button" (click)="clearForm()">Clear</button>
+                                </div>
+                                <div class="col-sm-9 col-6 text-end">
+                                    <button class="btn btn-main btn-sm" type="submit">{{btnText}}  Election</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-header">
+                    <form [formGroup]="filterForm">
+                        <div class="row  justify-content-end">
+                            <div class=" col-sm-4">
+                                <ngx-select [allowClear]="true" [items]="getClientName" formControlName="ClientId" (select)="filterData()" optionValueField="id" optionTextField="Fullname" placeholder="Select Leader Name" (remove)="clearFilter('ClientId')">
+                                </ngx-select>
+                            </div>
+                            <!-- <div class="col-sm-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" formControlName="Search"
+                                        placeholder="Election / Constituency Name" (keyup)="onKeyUpFilter()" />
+                                    <button type="button" class="btn btn-light border btn-sm"
+                                        (click)="clearFilter('search')" *ngIf="filterForm.value.Search"><i
+                                            _ngcontent-tbl-c102="" class="fas fa-times"></i></button>
+                                    <button type="button" *ngIf="!filterForm.value.Search"
+                                        class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
+                                </div>
+                            </div> -->
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Leader Name</th>
+                                <th>Election Name(Constituency Name)</th>
+                                <th>Manage Election<th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let result of resAssignedConstituencytoClient | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index" [class.active]="result.HeaderId == highlightedRow">
+                                <!-- [class.active]="assBoothEle.SrNo == HighlightRow"  -->
+                                <td>{{result?.SrNo }}</td>
+                                <td>{{result?.Fullname | titlecase}}</td>
+                                <td>
+                                    <ol class="mb-0 ps-3">
+                                        <li *ngFor="let subElection of result?.Constituency.split(',');let i=index">
+                                            {{subElection}}</li>
+                                    </ol>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-light text-edit rounded me-1" title="Edit Election" (click)="editConstituency(result?.HeaderId)">
+                                            <i class="far fa-edit"></i></button>
+                                        <button class="btn btn-light text-danger rounded" title="Delete Election"  (click)="delConfirmAssElection(result?.ClientId,result?.HeaderId)"><i class="fas fa-trash-alt"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="resAssignedConstituencytoClient?.length == 0">
+                                <td colspan="4">
+                                    <div class="alert alert-danger text-center py-2">No Results Found!</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                    <!-- <div class="mt-2 text-end" *ngIf="assignedBoothToElectionArray?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Results Found!</div>
+                    </div> -->
+                    <div class="mt-2 text-end" *ngIf="resAssignedConstituencytoClient?.length != 0">
+                        <pagination-controls previousLabel="" nextLabel="" (pageChange)="onClickPagintion(pageSize = $event)"> </pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

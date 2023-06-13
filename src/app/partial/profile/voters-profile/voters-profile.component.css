@@ -1,0 +1,81 @@
+.profile-info img{
+    width: 75px;
+    height: 75px;
+    margin: 0 auto;
+    display: flex;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+.profile-info h6{
+    font-weight: 600;
+    color: var(--main-color);
+}
+.profile-info .contact{
+    color: #888;
+    font-size: 0.85rem;
+    margin-bottom: 2px;
+}
+.list-group-item{
+    border: none !important;
+    padding-block: 5px;
+}
+.voter-label,
+.voter-data{
+    font-size: 0.85rem;
+}
+.voter-label{
+    color: #777;
+}
+.voter-data{
+    font-weight: 500;
+}
+.extrainfo-img{
+    width: 90px;
+    height: 90px;
+    object-fit:cover;
+    border-radius: 5px;
+}
+#voterhomeimages .carousel-item img{
+    border-radius: 5px;
+    width: 100%;
+    height:250px;
+    object-fit: fill;
+}
+.voter-repeat{
+    font-size: 0.85rem;
+}
+.voter-repeat small{
+    font-size: 0.7rem;
+}
+.voter-repeat p{
+    font-size: 0.85rem;
+}
+.voter-repeat .btn:hover,
+.voter-repeat .btn-check:checked+.btn-outline-secondary{
+    background-color: var(--main-color);
+    color: #fff;
+    box-shadow: none;
+}
+
+agm-map {
+    height: 300px;
+}
+.voter-family-photo img{
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    object-position: center;
+    margin: 0 auto;
+    border-radius: 5px;
+}
+#voterhomeimages .carousel-control-next,#voterhomeimages .carousel-control-prev{
+    height: 26px;
+    width: 26px;
+    background-color: rgba(0, 0, 0, 0.753);
+    top:45%;
+}
+#voterhomeimages .carousel-control-prev-icon,
+#voterhomeimages .carousel-control-next-icon{
+    background-size: 60%;
+}

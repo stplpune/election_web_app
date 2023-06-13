@@ -1,0 +1,117 @@
+<div class="row">
+    <div class="col-sm-12">
+        <h6 mat-dialog-title class="mb-1">
+            Name Correction Requests
+        </h6>
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col-md-12">
+        <div class="card card-body p-2">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb  mb-0">
+                  <li class="breadcrumb-item active"><a><small>{{data?.AreaName}}</small></a></li>
+                  <li class="breadcrumb-item active"><a><small>{{data?.boothnickname}}</small></a></li>
+                  <!-- <li class="breadcrumb-item active" aria-current="page">Data</li> -->
+                </ol>
+              </nav>
+        </div>
+
+    </div>
+</div>
+<mat-dialog-content>
+    <form [formGroup]="nameCorrectionForm">
+    <div class="form-container mb-3">
+        <div class="card shadow-none border mb-2 chartbox">
+            <div class="card-header border-bottom-0 bg-transparent pb-0 small text-main">Old Name</div>
+            <div class="card-body pt-1">
+                <div class="row g-2">
+                    <div class="col-sm-6">
+                        <label class="form-label required-field">Full Name (English)</label>
+                        <p class="mb-0">{{data.OldEnglishName}}</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label required-field">पूर्ण नाव (मराठी)</label>
+                        <p class="mb-0">{{data.OldMarathiName}} </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow-none border">
+            <div class="card-header border-bottom-0 bg-transparent pb-0 small text-main">New Name</div>
+            <div class="card-body pt-1">
+                <div class="row mb-3 g-2">
+                    <div class="col-sm-4">
+                        <label class="form-label required-field">First Name</label>
+                        <input type="text" formControlName="NewEFirstName" class="form-control" placeholder="First Name" 
+                          [ngClass]="{ 'is-invalid': submitted && f.NewEFirstName.errors }">
+                        <div *ngIf="submitted && f.NewEFirstName.errors" class="invalid-feedback">
+                            <div *ngIf="f.NewEFirstName.errors.required">First Name is required</div>
+                            <div *ngIf="f.NewEFirstName.errors.pattern">First Name can not contain space</div>
+                            <div *ngIf="f.NewEFirstName.errors.onlyEnglish">Use English Language</div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="form-label required-field">Middle Name</label>
+                        <input type="text" formControlName="NewEMiddleName"  class="form-control" placeholder="Middle Name"
+                        [ngClass]="{ 'is-invalid': submitted && f.NewEMiddleName.errors }">
+                                <div *ngIf="submitted && f.NewEMiddleName.errors" class="invalid-feedback">
+                                    <div *ngIf="f.NewEMiddleName.errors.required">Middle Name is required</div>
+                                    <div *ngIf="f.NewEMiddleName.errors.pattern">Middle Name can not contain space</div>
+                                    <div *ngIf="f.NewEMiddleName.errors.onlyEnglish">Use English Language</div>
+                                </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="form-label required-field">Last Name</label>
+                        <input type="text" formControlName="NewELastName"  class="form-control" placeholder="Last Name"
+                        [ngClass]="{ 'is-invalid': submitted && f.NewELastName.errors }">
+                        <div *ngIf="submitted && f.NewELastName.errors" class="invalid-feedback">
+                            <div *ngIf="f.NewELastName.errors.required">Last Name is required</div>
+                            <div *ngIf="f.NewELastName.errors.pattern">Last Name can not contain space</div>
+                            <div *ngIf="f.NewELastName.errors.onlyEnglish">Use English Language</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-sm-4">
+                        <label class="form-label required-field">नाव</label>
+                        <input type="text" formControlName="NewFirstName" class="form-control" placeholder="नाव" [ngClass]="{ 'is-invalid': submitted && f.NewFirstName.errors }">
+                        <div *ngIf="submitted && f.NewFirstName.errors" class="invalid-feedback">
+                            <div *ngIf="f.NewFirstName.errors.required">First Name is required </div>
+                            <div *ngIf="f.NewFirstName.errors.pattern">First Name can not contain space</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="form-label required-field">मधले नाव</label>
+                        <input type="text" formControlName="NewMiddleName" class="form-control" placeholder="मधले नाव" [ngClass]="{ 'is-invalid': submitted && f.NewMiddleName.errors }">
+                        <div *ngIf="submitted && f.NewMiddleName.errors" class="invalid-feedback">
+                            <div *ngIf="f.NewMiddleName.errors.required">Middle Name is required </div>
+                            <div *ngIf="f.NewMiddleName.errors.pattern">Middle Name can not contain space</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="form-label required-field">आडनाव</label>
+                        <input type="text" formControlName="NewLastName" class="form-control" placeholder="आडनाव" [ngClass]="{ 'is-invalid': submitted && f.NewLastName.errors }">
+                        <div *ngIf="submitted && f.NewLastName.errors" class="invalid-feedback">
+                            <div *ngIf="f.NewLastName.errors.required">Last Name is required</div>
+                            <div *ngIf="f.NewLastName.errors.pattern">Last Name can not contain space</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+    <div class="row g-0">
+        <div class="col-sm-6 text-start">
+            <button class="btn btn-secondary btn-sm me-2" data-bs-dismiss="modal" type="button" (click)="closeModel()"
+            data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+        </div>
+        <div class="col-sm-6 text-end">
+            <button class="btn btn-main btns-m" type="button" data-bs-dismiss="modal" (click)="updateNameCorrectionData()"
+            aria-label="Close" data-bs-dismiss="modal" aria-label="Close">Update Name</button>
+        </div>
+    </div>
+</mat-dialog-content>

@@ -1,0 +1,169 @@
+<nav class="navbar navbar-dark bg-main fixed-top">
+  <div class="container-fluid">
+    <span class="navbar-brand text-main">
+      <i class="fas fa-vote-yea me-2"></i>
+      Election Management
+    </span>
+  </div>
+</nav>
+
+<div class="container" id="login">
+  <div class="row justify-content-center">
+    <div class="col-sm-9">
+      <div class="card border-0 shadow">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-6 p-5 d-none d-sm-none d-lg-block">
+              <img src="assets/images/login-img.jpg" class="img-fluid">
+            </div>
+            <div class="col-sm-6 p-5">
+              <form [formGroup]="loginForm">
+                <h3>Sign In</h3>
+                <div class="form-container">
+                  <div class="mb-3">
+                    <label class="form-label">User Name <span class="text-danger">*</span></label>
+                    <input type="text" placeholder="User Name" class="form-control" formControlName="UserName"
+                      autofocus="off">
+                    <div *ngIf="submitted && f.UserName.errors" class="invalid-feedback">
+                      <div *ngIf="f.UserName.errors.required">User Name is required</div>
+                    </div>
+                  </div>
+                  <div class="mb-2">
+                    <label class="form-label">Password <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                      <input autocomplete="off" [type]="show_button ? 'text' : 'password'" class="form-control"
+                        placeholder="Password" formControlName="Password">
+                      <button type="button" class="btn btn-light bg-transparent" (click)="showPassword()">
+                        <i class="eye-icon-pos" [class]="show_eye ? 'fa fa-eye' : 'fa fa-eye-slash'"> </i>
+                      </button>
+                    </div>
+                    <div *ngIf="submitted && f.Password.errors" class="invalid-feedback">
+                      <div *ngIf="f.Password.errors.required">Password is required</div>
+                      <div *ngIf="f.Password.errors.passwordValid && !f.Password.errors.required">Password is in invalid
+                        format</div>
+                    </div>
+                  </div>
+                  <div class="text-end mb-3">
+                    <a href="#" class="text-main small" data-bs-toggle="modal"
+                      data-bs-target="#ForgetPasswordModal">Forgot Password?</a>
+                  </div>
+                  <div class="text-end">
+                    <button class="btn btn-main px-4 py-2" (click)="onSubmit()" type="submit">
+                      Log In
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for forget password -->
+<div class="modal fade" id="ForgetPasswordModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="ForgetPasswordModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <p class="modal-title mb-0" id="ForgetPasswordModalLabel">Forgot Password</p>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="clearStateForgotPassword()"
+          #closeForgotForm aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="form-container" [formGroup]="forgotPasswordForm">
+          <div class="mb-3">
+            <label class="form-label">Registered Mobile No.</label>
+            <div class="input-group">
+              <input type="text" class="form-control focustInput" formControlName="registeredMobileNo" #registeredMobile
+                #focusInput OnlyNumber maxlength="10" mobileNo [disabled]="generateOTP"
+                placeholder="Registered Mobile No.">
+              <button class="btn bg-success text-white border border-success" [disabled]="generateOTP" type="button"
+                (click)="checkMobileNo()">Send
+                OTP</button>
+            </div>
+          </div>
+          <div *ngIf="generateOTP">
+            <div class="mb-3">
+              <label class="form-label">OTP<span class="text-danger fw-bold mx-1">*</span></label>
+              <div class="input-group">
+                <input type="text" formControlName="OTP" OnlyNumber maxlength="6"
+                  [ngClass]="isSubmitForgotPassword && forgotForm.OTP.errors?'invalid-value':''"
+                  class="form-control focustInput" placeholder="Enter OTP">
+              </div>
+              <div *ngIf="isSubmitForgotPassword && forgotForm.OTP.errors" class="invalid-feedback">
+                <div *ngIf="forgotForm.OTP.errors.required">OTP is required</div>
+                <div *ngIf="forgotForm.OTP.errors?.min">Invalid OTP format</div>
+              </div>
+            </div>
+            <div>
+              <div class="new-password">
+                <div class="mb-3">
+                  <label class="form-label">New Password<span class="text-danger fw-bold mx-1">*</span></label>
+                  <div class="input-group">
+                    <input [type]="newPasswordText" #newPassword class="form-control focustInput"
+                      formControlName="password" placeholder="New Password"
+                      [ngClass]="isSubmitForgotPassword && forgotForm.password.errors?'invalid-value':''">
+                    <button class="btn btn-secondary text-dark" type="button">
+                      <i [ngClass]="newPasswordText=='password'?'fa fa-eye-slash':'fa fa-eye'"
+                        (click)="changeTypeOfPasswordFields('NewPassword')"></i>
+                    </button>
+                  </div>
+                  <div *ngIf="isSubmitForgotPassword && forgotForm.password.errors" class="invalid-feedback">
+                    <div *ngIf="forgotForm.password.errors.required">Password is required</div>
+                    <div
+                      *ngIf="forgotForm.password.errors.capsLetterMissing || forgotForm.password.errors.smallLetterMissing">
+                      Must contain at least one Uppercase and one
+                      Lowercase character (A-Z, a-z)</div>
+                    <div *ngIf="forgotForm.password.errors.numberMissing">Must contain at least one Number (0-9)
+                    </div>
+                    <div *ngIf="forgotForm.password.errors.specialCharacterMissing">Must contain at least one
+                      Special Character
+                      (e.g. @,#,$,%,&)</div>
+                    <div *ngIf="forgotForm.password.errors.lengthInvalid">Password must be 8-20 characters long
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Confirm Password<span class="text-danger fw-bold mx-1">*</span></label>
+                  <div class="input-group">
+                    <input [type]="retypePasswordText" #retypePassword class="form-control focustInput"
+                      formControlName="confirmPassword" placeholder="Confirm Password"
+                      [ngClass]="isSubmitForgotPassword && (forgotForm.password.errors || forgotPasswordForm.hasError('notSame'))?'invalid-value':''">
+                    <button class="btn btn-secondary text-dark" type="button">
+                      <i [ngClass]="retypePasswordText=='password'?'fa fa-eye-slash':'fa fa-eye'"
+                        (click)="changeTypeOfPasswordFields('RetypePassword')"></i>
+                    </button>
+                  </div>
+                  <div *ngIf="isSubmitForgotPassword && forgotForm.confirmPassword.errors" class="invalid-feedback">
+                    <div *ngIf="forgotForm.confirmPassword.errors.required">Confirm Password is required</div>
+                    <div
+                      *ngIf="forgotForm.confirmPassword.errors.capsLetterMissing || forgotForm.confirmPassword.errors.smallLetterMissing">
+                      Must contain at least one Uppercase and one
+                      Lowercase character (A-Z, a-z)</div>
+                    <div *ngIf="forgotForm.confirmPassword.errors.numberMissing">Must contain at least one Number (0-9)
+                    </div>
+                    <div *ngIf="forgotForm.confirmPassword.errors.specialCharacterMissing">Must contain at least one
+                      Special Character
+                      (e.g. @,#,$,%,&)</div>
+                    <div *ngIf="forgotForm.confirmPassword.errors.lengthInvalid">Password must be 8-20 characters long
+                    </div>
+                  </div>
+                  <div *ngIf="isSubmitForgotPassword && forgotPasswordForm.hasError('notSame')"
+                    class="invalid-feedback">
+                    New Password and Confirm Password should be same
+                  </div>
+                </div>
+                <div class="mb-0 text-end">
+                  <button class="btn btn-main" type="submit" (click)="checkOTP()"> Submit </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

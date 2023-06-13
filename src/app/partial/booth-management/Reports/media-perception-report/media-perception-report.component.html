@@ -1,0 +1,238 @@
+<div class="container-fluid">
+    <div class="row mx-0 px-0" id="pageheader">
+        <div class="col-sm-auto">
+            <span class="page-name">Media Perception Report
+            </span>
+        </div>
+        <div class="col-sm text-end">
+            <form [formGroup]="filterForm">
+                <div class="row g-2">
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="clientNameArray" formControlName="ClientId"
+                            optionValueField="clientId" optionTextField="clientName" (select)="clearTopFilter('electionId');
+                         getElectionName(); dataNotFound = false;" (remove)="clearTopFilter('clientId')"
+                            placeholder="Select Leader">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="electionNameArray" formControlName="ElectionId"
+                            optionValueField="electionId" (select)="getConstituencyName(); dataNotFound = false;"
+                            optionTextField="electionName" (remove)="clearTopFilter('electionId')"
+                            [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
+                            placeholder="Select Election">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="constituencyNameArray" formControlName="ConstituencyId"
+                            (select)="highlightRow ='';supportToId = 0 ;getVillageData();dataNotFound = true"
+                            optionValueField="constituencyId" optionTextField="constituencyName"
+                            (remove)="clearTopFilter('constituencyId')" placeholder="Select Constituency"
+                            [disabled]="!this.filterForm.value.ElectionId">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="villageDropdown" formControlName="village"
+                            optionValueField="villageId"
+                            (select)="highlightRow ='';supportToId = 0 ;this.filterForm.value.getBoothId = 0;getPerceptionSummery();ClientWiseBoothList()"
+                            (remove)="clearTopFilter('village')" optionTextField="villageName"
+                            [disabled]="!this.filterForm.value.ConstituencyId" placeholder="Select Village">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="clientWiseBoothListArray" formControlName="getBoothId"
+                            (select)="highlightRow ='';supportToId = 0 ;getPerceptionSummery()"
+                            optionValueField="boothId" optionTextField="boothNickName" placeholder="Select Booth"
+                            [disabled]="!this.filterForm.value.ConstituencyId"
+                            (remove)="highlightRow ='';supportToId = 0 ;getPerceptionSummery()">
+                        </ngx-select>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <ng-container *ngIf="dataNotFound">
+        <div id="dash-stats" class="row g-2">
+            <div class="col-sm-3">
+                <div class="card card-body bg-cyan" (click)="supportToId = 1;clearSearchField()">
+                    <i class="fas fa-user-check"></i>
+                    <p>Supporter</p>
+                    <h3>{{perceptionSummeryArray?.supporter}}</h3>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card card-body bg-green" (click)="supportToId = 2;clearSearchField()">
+                    <i class="fas fa-comment-slash"></i>
+                    <p>Opponent</p>
+                    <h3>{{perceptionSummeryArray?.opponent}}</h3>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card card-body bg-blue" (click)="supportToId = 3;clearSearchField()">
+                    <i class="fas fa-people-arrows"></i>
+                    <p>Nuetral</p>
+                    <h3>{{perceptionSummeryArray?.nuetral}}</h3>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card card-body bg-voilet" (click)="supportToId = 0;clearSearchField()">
+                    <i class="fas fa-chart-bar"></i>
+                    <p>Total</p>
+                    <h3>{{perceptionSummeryArray?.total}}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="row chartbox">
+            <div class="col-sm-5 border-end">
+                <div class="card card-body">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-sm-3 text-success">
+                            <small> {{supportToId == 1 ? 'Supporter Count': supportToId == 2 ? 'Opponent Count' :
+                                supportToId == 3 ? 'Nuetral Count' : 'Total Count'}}</small>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="form-container">
+                                <div class="input-group">
+                                    <input type="text" (keyup)="onKeyUpSearchData()" [formControl]="searchText"
+                                        class="form-control border-end-0 border" placeholder="Search..." />
+                                    <button type="button"
+                                        class="btn btn-light border btn-sm border-start-0 bg-transparent"
+                                        (click)="clearSearchField()" *ngIf="searchText.value"><i _ngcontent-tbl-c102=""
+                                            class="fas fa-times"></i></button>
+                                    <button type="button" *ngIf="!searchText.value"
+                                        class="btn btn-sm border btn-light border-start-0 bg-transparent"><i
+                                            class="fas fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="mt-2">
+                    <div class="row gx-1 ">
+                        <div class="col-lg-3 col-12" *ngFor="let dropDownData of followupStatusDropDownData">
+                            <span class="small {{dropDownData.class}}">
+                                <i class="fas fa-square me-1"></i>
+                                {{dropDownData?.name}}
+                            </span>
+                        </div>
+                    </div>
+                    <table class="table table-hover mt-1">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Person Name</th>
+                                <th>Mobile No.</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="highlightDiv" *ngFor="let boothwisePer of boothwisePerceptionReportArray | paginate: { id: 'bootWisePerReport', itemsPerPage: 10, currentPage: paginationNo, totalItems:getTotal};
+                                    let i = index"
+                                (click)="highlightRow = boothwisePer?.visitId;searchTextPerDetail.setValue('');paginationNoPerDetail = 1;getPerceptionDetailsReport(boothwisePer?.voterId,boothwisePer?.mobileNo)"
+                                [class.active]="boothwisePer?.visitId == highlightRow">
+                                <td>
+                                    <img *ngIf="commonService.checkDataType(boothwisePer?.perceptionPhoto) == true"
+                                        (click)="showImageLightbox(boothwisePer?.perceptionPhoto) ; lightbox.open(0, 'lightbox')"
+                                        [src]="boothwisePer?.perceptionPhoto[0]?.visitPhoto" alt="..."
+                                        class="media-img">
+                                    <img *ngIf="commonService.checkDataType(boothwisePer?.perceptionPhoto) == false"
+                                        src="assets/images/ele.png" alt="..." class="media-img">
+                                </td>
+                                <td>
+                                    <span *ngIf="commonService.checkDataType(boothwisePer?.voterId) == true">
+                                        <a (click)="redirectToVoterPrfile(boothwisePer)"
+                                            class="text-main">{{boothwisePer?.name ? boothwisePer?.name :
+                                            boothwisePer?.personName ? boothwisePer?.personName : '-'}}</a>
+                                    </span>
+                                    <span
+                                        *ngIf="commonService.checkDataType(boothwisePer?.voterId) == false">{{boothwisePer?.name
+                                        ? boothwisePer?.name : boothwisePer?.personName ? boothwisePer?.personName :
+                                        '-'}}</span>
+                                </td>
+                                <td>{{boothwisePer?.mobileNo}}</td>
+                                <td>
+                                    <h6 *ngIf="boothwisePer?.perception == 'Supporter'" title="Supporter" class="text-success"><i
+                                            class="fas fa-bookmark"></i> </h6>
+                                    <h6 *ngIf="boothwisePer?.perception == 'Opponunt'" title="Opponent" class="text-danger"><i
+                                            class="fas fa-bookmark"></i></h6>
+                                    <h6 *ngIf="boothwisePer?.perception == 'Neutral'" title="Neutral" class="text-info"><i
+                                            class="fas fa-bookmark"></i></h6>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="mt-2 text-end" *ngIf="boothwisePerceptionReportArray?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Results Found!</div>
+                    </div>
+                    <div class="mt-2 text-end" *ngIf="boothwisePerceptionReportArray?.length != 0 && getTotalPages > 1">
+                        <pagination-controls id="bootWisePerReport" previousLabel="" nextLabel=""
+                            (pageChange)="onClickPagintion($event)">
+                        </pagination-controls>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-7 border-end" *ngIf="hideDivPerDetail">
+                <div class="card card-body">
+                    <div class="form-container">
+                        <div class="input-group">
+                            <input type="text" (keyup)="onKeyUpSearchPerDetail()" [formControl]="searchTextPerDetail"
+                                class="form-control border-end-0 border" placeholder="Search..." />
+                            <button type="button" class="btn btn-light border btn-sm border-start-0 bg-transparent"
+                                (click)="clearSearchPerDetail()" *ngIf="searchTextPerDetail.value"><i
+                                    _ngcontent-tbl-c102="" class="fas fa-times"></i></button>
+                            <button type="button" *ngIf="!searchTextPerDetail.value"
+                                class="btn btn-sm border btn-light border-start-0 bg-transparent"><i
+                                    class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                    <hr class="mt-2">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Source</th>
+                                <th>Message Type</th>
+                                <th>Posted On</th>
+                                <th>Visit Details</th>
+                                <th>Visit Type</th>
+                                <!-- <th>Visit Title</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let perceptionDetail of perceptionDetailsReportArray | paginate: { itemsPerPage: 10, currentPage: paginationNoPerDetail, totalItems:getTotalPerDetail}; let i = index">
+                                <td>
+                                    <img *ngIf="commonService.checkDataType(perceptionDetail?.perceptionPhoto) == true"
+                                        (click)="showImageLightbox(perceptionDetail?.perceptionPhoto) ; lightbox.open(0, 'lightbox')"
+                                        [src]="perceptionDetail?.perceptionPhoto[0]?.visitPhoto" alt="..."
+                                        class="media-img">
+                                    <img *ngIf="commonService.checkDataType(perceptionDetail?.perceptionPhoto) == false"
+                                        src="assets/images/ele.png" alt="..." class="media-img">
+                                </td>
+                                <td>{{perceptionDetail?.socialMediaName ? perceptionDetail?.socialMediaName : '-'}}</td>
+                                <td>{{perceptionDetail?.supporterName ? perceptionDetail?.supporterName : '-'}}</td>
+                                <td>{{perceptionDetail?.visitDate ? (perceptionDetail?.visitDate | date: 'dd/MM/yyyy
+                                    hh:mm a') : '-'}}</td>
+                                <td>{{perceptionDetail?.visitDetails ? perceptionDetail?.visitDetails : '-'}}</td>
+                                <td>{{perceptionDetail?.visittype ? perceptionDetail?.visittype : '-'}}</td>
+                                <!-- <td>{{perceptionDetail?.visitTitle ? perceptionDetail?.visitTitle : '-'}}</td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="mt-2 text-end" *ngIf="perceptionDetailsReportArray?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Results Found!</div>
+                    </div>
+                    <div class="mt-2 text-end" *ngIf="perceptionDetailsReportArray?.length != 0">
+                        <pagination-controls previousLabel="" nextLabel=""
+                            (pageChange)="onClickPagintionPerDetail($event)">
+                        </pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="!dataNotFound">
+        <div class="alert alert-danger text-center py-2 mb-0">Select above filters to show Data....!</div>
+    </ng-container>
+</div>

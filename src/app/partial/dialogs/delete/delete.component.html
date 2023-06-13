@@ -1,0 +1,28 @@
+<!-- <div class="modal-content">
+    <div class="modal-header bg-transparent border-bottom-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="onNoClick('No')"></button>
+    </div>
+    <div class="modal-body text-center pb-5">
+        
+    </div>
+</div> -->
+
+<mat-dialog-content>
+    <div class="modal-body text-center">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+            <circle class="path circle" fill="none" stroke="#D06079" stroke-width="6" stroke-miterlimit="10" cx="65.1"
+                cy="65.1" r="62.1" />
+            <line class="path line" fill="none" stroke="#D06079" stroke-width="6" stroke-linecap="round"
+                stroke-miterlimit="10" x1="34.4" y1="37.9" x2="95.8" y2="92.3" />
+            <line class="path line" fill="none" stroke="#D06079" stroke-width="6" stroke-linecap="round"
+                stroke-miterlimit="10" x1="95.8" y1="38" x2="34.4" y2="92.2" />
+        </svg>
+        <h5 class="my-3">Are you sure you want to Delete?</h5>
+        <p class="mb-4">This process can not be undone!</p>
+        <button class="btn btn-secondary me-2" data-bs-dismiss="modal" type="button" (click)="onNoClick('No')"
+            data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+        <button class="btn btn-danger" type="button" data-bs-dismiss="modal" (click)="onNoClick('Yes')"
+            aria-label="Close" type="button" data-bs-dismiss="modal" aria-label="Close">I'm
+            Sure</button>
+    </div>
+</mat-dialog-content>

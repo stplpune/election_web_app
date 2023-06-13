@@ -1,0 +1,7 @@
+<app-header *ngIf="loginType == 1"></app-header>
+<app-sidebar *ngIf="loginType == 1" [showMenu]="isShowMenu" class="doNotPrint"></app-sidebar>
+<div [class.main-content]="loginType == 1">
+    <router-outlet></router-outlet>
+</div>
+<!-- <app-footer></app-footer> -->
+

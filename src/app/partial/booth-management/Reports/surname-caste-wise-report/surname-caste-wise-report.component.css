@@ -1,0 +1,11 @@
+.table-height{
+    max-height: 65vh;
+    overflow-y: auto;
+}
+.modal-card{
+    height: 121px;
+    overflow: auto;
+}
+.btn-times{
+    padding: 0px 6px;
+}

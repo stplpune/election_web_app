@@ -1,0 +1,169 @@
+<div class="container-fluid">
+    <div class="row mx-0 px-0" id="pageheader">
+        <div class="col-sm-auto">
+            <span class="page-name">Local Area
+            </span>
+        </div>
+
+        <div class="col-sm text-end">
+            <form [formGroup]="filterForm">
+                <div class="row g-2">
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="clientNameArray" formControlName="ClientId"
+                            optionValueField="clientId" optionTextField="clientName" (select)="clearTopFilter('electionId');
+                       getElectionName(); dataNotFound = true;" (remove)="clearTopFilter('clientId')"
+                            [disabled]="clientNameArray?.length == 1" placeholder="Select Leader">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="electionNameArray" formControlName="ElectionId"
+                            optionValueField="electionId"
+                            (select)="paginationNo = 1;getConstituencyName(); dataNotFound = true;"
+                            optionTextField="electionName" (remove)="clearTopFilter('electionId','eleClrFlag')"
+                            [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
+                            placeholder="Select Election">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="constituencyNameArray" formControlName="ConstituencyId"
+                            (select)="paginationNo = 1;constituencyNameArray.length == 1 ? getVillageData() : getVillageData(); getLocalAreawithVillageList();dataNotFound = true;"
+                            optionValueField="constituencyId" optionTextField="constituencyName"
+                            (remove)="clearTopFilter('constituencyId')" placeholder="Select Constituency"
+                            [disabled]="!this.filterForm.value.ElectionId">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <ngx-select [allowClear]="true" [items]="villageDropdown" formControlName="village"
+                            optionValueField="villageId"
+                            (select)="this.filterForm.value.getBoothId = 0;dataNotFound = true;paginationNo = 1;getLocalAreawithVillageList()"
+                            (remove)="clearTopFilter('village')" optionTextField="villageName"
+                            [disabled]="!this.filterForm.value.ConstituencyId" placeholder="Select Village">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm">
+                        <div class="input-group">
+                            <input type="text" class="form-control" formControlName="searchText"
+                                (keyup)="onKeyUpSearchData()" placeholder="Search Local Area"
+                                [readonly]="!this.filterForm.value.ClientId" />
+                            <button type="button" class="btn btn-light btn-sm" (click)="clearTopFilter('search')"
+                                *ngIf="filterForm.value.searchText"><i _ngcontent-tbl-c102=""
+                                    class="fas fa-times"></i></button>
+                            <button type="button" *ngIf="!filterForm.value.searchText" class="btn btn-sm btn-light"><i
+                                    class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row chartbox mb-3">
+        <div class="col-sm-12">
+            <div class="card">
+                <ng-container *ngIf="!dataNotFound">
+                    <div class="alert alert-danger text-center py-2 mb-0">Select above filters to show Data....!</div>
+                </ng-container>
+
+                <div class="card-body pt-0">
+                    <div class="row" *ngIf="dataNotFound">
+                        <div class="col-sm-12 table-responsive">
+                            <table class="table table-hover table-bordered mt-3">
+                                <thead>
+                                    <tr>
+                                        <th>Sr. No.</th>
+                                        <th>Village Name</th>
+                                        <th>Local Area Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        *ngFor="let localAreaVillage of localAreawithVillageArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:getTotal}; let i = index">
+                                        <td>{{((paginationNo + 1) * 10 + i + 1)-20}}</td>
+                                        <td>{{localAreaVillage?.villageName}}</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <div *ngFor="let localArea of localAreaVillage?.localAreas"
+                                                        class="d-flex justify-content-between align-items-center mnw-200px">
+                                                        <span> {{localArea?.localAreaName}} </span>
+                                                        <span>
+                                                            <button type="button" title="Update Local Area"
+                                                                (click)="editLocalAreaData(localArea,localAreaVillage?.villageId);btnText = 'Update Area'"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#AddLocalAreaModal"
+                                                                class="btn btn-sm btn-outline-primary ms-1 mb-1 rounded"><i
+                                                                    class="far fa-edit"></i></button>
+                                                        </span>
+                                                    </div>
+                                                    <div *ngIf="localAreaVillage.localAreas.length == 0">-</div>
+                                                </div>
+
+                                                <div class="align-self-end">
+                                                    <button type="button" class="btn btn-primary rounded"
+                                                        title="Add Local Area" data-bs-toggle="modal"
+                                                        data-bs-target="#AddLocalAreaModal"
+                                                        (click)="villageId = localAreaVillage?.villageId;btnText = 'Add Area'"><i
+                                                            class="fas fa-plus"></i></button>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="mt-2 text-end" *ngIf="localAreawithVillageArray?.length == 0">
+                                <div class="alert alert-danger text-center py-2">No Results Found!
+                                </div>
+                            </div>
+                            <pagination-controls *ngIf="localAreawithVillageArray?.length != 0" previousLabel=""
+                                nextLabel="" (pageChange)="onClickPagintion($event)">
+                            </pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Modal for Add lOCAL AREA -->
+<div class="modal fade" id="AddLocalAreaModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="AddLocalAreaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form [formGroup]="localAreaForm">
+                <div class="modal-header">
+                    <p class="modal-title mb-0" id="AddLocalAreaLabel">{{btnText == 'Add Area' ? 'Add Local Area' :
+                        'Update Local Area'}}</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" #addLocalAreaModel
+                        aria-label="Close" (click)="clearForm()"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-container">
+                                <div class="mb-3">
+                                    <label class="form-label required-field">Local Area</label>
+                                    <input type="text" class="form-control" placeholder="Enter Local Area"
+                                        formControlName="areaName" (keypress)="commonService.noFirstSpaceAllow($event)"
+                                        [ngClass]="{ 'is-invalid': submitted && f.areaName.errors }">
+                                    <div *ngIf="submitted && f.areaName.errors" class="invalid-feedback">
+                                        <span *ngIf="f.areaName.errors.required">Local Area is Required</span>
+                                        <span *ngIf="f.areaName.errors.pattern">Please Enter Valid Local Area</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="d-flex justify-content-between align-items-center float-end">
+                        <button type="button" class="btn btn-main" (click)="onSubmitForm()">{{btnText}}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

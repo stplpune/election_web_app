@@ -1,0 +1,269 @@
+<div class="container-fluid">
+  <div class="position-relative">
+    <img *ngIf="webBannerImage" [src]="webBannerImage" class="main-img">
+    <img *ngIf="!webBannerImage" src="http://electionwservice.erpguru.in/Images/Banner/Default.jpg" class="main-img">
+    <div class="statistics">
+      <div class="form-container">
+        <div class="row justify-content-end g-2 mb-3">
+          <div class="col-sm-6">
+            <div class="form-label">Election Name</div>
+            <select class="form-select"  (change)="changeElection($event)">
+              <option *ngFor="let item of electionNameArray;let i=index;" [value]="item.electionId"
+                [attr.selected]='item.electionId==electionId ? "selected" : null'>
+                {{item.electionName}}</option>
+            </select>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-label">Constituency Name</div>
+            <select class="form-select" (change)="changeConstituency($event)">
+              <option *ngFor="let item of constituencyNameArray;let i=index;" [value]="item.constituencyId"
+                [attr.selected]='item.constituencyId==constitusionId ? "selected" : null'>
+                {{item.constituencyName}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="row g-2 chartbox" id="dashboard-stats">
+          <div class="col-sm">
+            <div class="card card-body shadow-none border">
+              <p class="mb-1 fw-bold">Voters</p>
+              <h5 class="mb-0 text-start">{{totalVotersCount}}</h5>
+            </div>
+          </div>
+          <div class="col-sm">
+            <div class="card card-body shadow-none border">
+              <p class="mb-1 fw-bold">Booths</p>
+              <h5 class="mb-0 text-start">{{totalBoothsCount}}</h5>
+            </div>
+          </div>
+          <div class="col-sm">
+            <div class="card card-body shadow-none border">
+              <p class="mb-1 fw-bold">Male</p>
+              <h5 class="mb-0 text-start">{{totalMaleCount}}</h5>
+            </div>
+          </div>
+          <div class="col-sm">
+            <div class="card card-body shadow-none border">
+              <p class="mb-1 fw-bold">Female</p>
+              <h5 class="mb-0 text-start">{{totalFeMaleCount}}</h5>
+            </div>
+          </div>
+          <div class="col-sm">
+            <div class="card card-body shadow-none border">
+              <p class="mb-1 fw-bold">Other gender</p>
+              <h5 class="mb-0 text-start">{{totalFeMaleCount}}</h5>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="card shadow-none border">
+              <div class="card-header pb-0">Age Wise Chart</div>
+              <div class="card-body pt-0">
+                <div [hidden]="!isAgewiseChart" class="chart-container" id="chartdiv"></div>
+                <ng-container *ngIf="!isAgewiseChart">
+                  <div class="alert alert-danger text-center py-2 mb-0">No Results Found!</div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- <div class="row chartbox" id="dashboard-stats">
+        <div class="col-sm-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="text-main">Election Name <small class="text-muted">[Constituency] - (Assembly Name)</small></h5>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="row mb-2 gx-2">
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Voters</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Villages</p>
+                                <h5 class="mb-0">7</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Booths</p>
+                                <h5 class="mb-0">94</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Families</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Leaders</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Party</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Migrated</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row gx-2">
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Religion</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Postal Voters</p>
+                                <h5 class="mb-0">7</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Booth Agent</p>
+                                <h5 class="mb-0">94</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Area Agent</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Active Female</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Booth Analysis</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Commitee</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="text-main">Election Name <small class="text-muted">[Constituency] - (Assembly Name)</small></h5>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="row mb-2 gx-2">
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Voters</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Villages</p>
+                                <h5 class="mb-0">7</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Booths</p>
+                                <h5 class="mb-0">94</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Families</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Leaders</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Party</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Migrated</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row gx-2">
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Religion</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Postal Voters</p>
+                                <h5 class="mb-0">7</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Booth Agent</p>
+                                <h5 class="mb-0">94</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Area Agent</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Active Female</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Booth Analysis</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card card-body shadow-none border">
+                                <p class="mb-0">Commitee</p>
+                                <h5 class="mb-0">9874</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+</div>

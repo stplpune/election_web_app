@@ -1,0 +1,161 @@
+<div class="container-fluid">
+    <div class="row mx-0 px-0" id="pageheader">
+        <div class="col-sm-4">
+            <span class="page-name">
+                Prominent Leaders
+            </span>
+        </div>
+    </div>
+
+    <div class="row chartbox mb-3">
+        <div class="col-sm-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <form [formGroup]="prominentLeaderForm" (ngSubmit)="onSubmit()">
+                    <div class="form-container">
+                        <div class="mb-3">
+                            <label for="txtElectionName" class="form-label required-field">Leader Name</label>
+                            <input type="text" formControlName="LeaderName" class="form-control" placeholder="Leader Name"
+                            [ngClass]="{ 'is-invalid': submitted && f.LeaderName.errors }">
+                            <div *ngIf="submitted && f.LeaderName.errors" class="invalid-feedback">
+                                <div *ngIf="f.LeaderName.errors.required">Leader Name is required</div>
+                                <div *ngIf="f.LeaderName.errors?.pattern">Please Enter Valid Leader Name</div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="txtElectionName" class="form-label required-field">Mobile No.</label>
+                            <input type="text" formControlName="MobileNo" (keypress)="acceptedOnlyNumbers($event)" class="form-control" placeholder="Mobile No."
+                            maxlength="10" [ngClass]="{ 'is-invalid': submitted && f.MobileNo.errors }">
+                            <div *ngIf="submitted && f.MobileNo.errors" class="invalid-feedback">
+                                <div *ngIf="f.MobileNo.errors.required">Mobile No. is required</div>
+                                <div *ngIf="f.MobileNo.errors.pattern">Please, Enter 10 digit Valid Number
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="txtElectionName" class="form-label required-field">Select Party</label>
+                            <ngx-select [allowClear]="true" [items]="politicalPartyArray" formControlName="PartyId" optionValueField="PartyId" optionTextField="PartyName"
+                            placeholder="Select Party" [ngClass]="{ 'is-invalid': submitted && f.PartyId.errors }">
+                           </ngx-select>
+                           <div *ngIf="submitted && f.PartyId.errors" class="invalid-feedback">
+                               <div *ngIf="f.PartyId.errors.required">Party Name is required</div>
+                           </div>
+                        </div>
+
+                        <div class="mb-3" *ngIf="globalClientId == 0">
+                            <label for="txtElectionName" class="form-label required-field">Select Client</label>
+                            <ngx-select [allowClear]="true" [items]="clientNameArray" formControlName="ClientId" optionValueField="id" optionTextField="Fullname"
+                             (select)="getElection()" [disabled]="clientNameArray?.length == 1" (remove)="clearFormData('client')" placeholder="Select Client" 
+                             [ngClass]="{ 'is-invalid': submitted && f.ClientId.errors }">
+                            </ngx-select>
+                            <div *ngIf="submitted && f.ClientId.errors" class="invalid-feedback">
+                                <div *ngIf="f.ClientId.errors.required">Election Name is required</div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="mb-3">
+                            <label for="txtElectionName" class="form-label required-field">Select Election</label>
+                            <ngx-select [allowClear]="false" [items]="electionNameArray" formControlName="ElectionId" optionValueField="ElectionId" optionTextField="ElectionName"
+                             (select)="getConstituency()" (remove)="clearFormData('election')" placeholder="Select Election" 
+                             [disabled]="!prominentLeaderForm.value.ClientId" [ngClass]="{ 'is-invalid': submitted && f.ElectionId.errors }">
+                            </ngx-select>
+                            <div *ngIf="submitted && f.ElectionId.errors" class="invalid-feedback">
+                                <div *ngIf="f.ElectionId.errors.required">Election Name is required</div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="txtElectionName" class="form-label required-field">Select Constituency</label>
+                            <ngx-select [allowClear]="false" [items]="constituencyNameArray" (remove)="clearFormData('constituency')" formControlName="ConstituencyId" optionValueField="id" optionTextField="ConstituencyName" placeholder="Select Constituency"
+                           [disabled]="!prominentLeaderForm.value.ElectionId" [ngClass]="{ 'is-invalid': submitted && f.ConstituencyId.errors}">
+                        </ngx-select>
+                        <div *ngIf="submitted && f.ConstituencyId.errors" class="invalid-feedback">
+                            <div *ngIf="f.ConstituencyId.errors.required">Constituency is required
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-6">
+                                <button type="button" (click)="clearForm()" class="btn btn-secondary">Clear</button>
+                            </div>
+                            <div class="col-sm-6 col-6 text-end">
+                                <button type="submit" class="btn btn-main">{{btnText}}</button>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                </form>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row g-2 justify-content-end">
+                        <div class="col-sm-4" *ngIf="globalClientId == 0">
+                            <ngx-select [items]="clientNameArray" [allowClear]="true" [formControl]="ClientIdTop"
+                                (select)="getProminentLeader(); clearForm()" (remove)="clearTopFilter('clientId')"
+                                optionValueField="id" optionTextField="Fullname" placeholder="Select Client">
+                            </ngx-select>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                            <input type="text" class="form-control" [formControl]="Search"
+                                placeholder="Search...." (keyup)="onKeyUpFilter()" />
+                            <button type="button" class="btn btn-light border btn-sm" (click)="clearTopFilter('search')"
+                                *ngIf="Search.value"><i _ngcontent-tbl-c102="" class="fas fa-times"></i></button>
+                            <button type="button" *ngIf="!Search.value"
+                                class="btn btn-sm border btn-light"><i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Leader Name</th>
+                                <th>Mobile No.</th>
+                                <th>Party</th>
+                                <th>Election</th>
+                                <th>Constituency</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let prominentLeader of prominentLeaderArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index" [class.active]="prominentLeader.SrNo == HighlightRow">
+                                <td>{{prominentLeader.SrNo}}</td>
+                                <td>{{prominentLeader.LeaderName}}</td>
+                                <td>{{prominentLeader.MobileNo}}</td>
+                                <td>{{prominentLeader.PartyName}}</td>
+                                <td>{{prominentLeader.ElectionName}}</td>
+                                <td>{{prominentLeader.ConstituencyName}}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" title="Edit Election" (click)="patchProminentLeaderData(prominentLeader)"
+                                        class="btn btn-sm btn-light text-edit me-1 rounded"><i
+                                                class="far fa-edit"></i></button>
+                                        <button type="button" title="Delete Election" (click)="delConfirmation(prominentLeader)"
+                                            class="btn btn-sm btn-light text-danger rounded"><i
+                                                class="fas fa-trash-alt"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                    <div class="mt-2 text-end" *ngIf="prominentLeaderArray?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Results Found!</div>
+                    </div>
+                    <div class="mt-2 text-end" *ngIf="prominentLeaderArray?.length != 0">
+                        <pagination-controls previousLabel="" nextLabel="" (pageChange)="onClickPagintion(pageSize = $event)"> </pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

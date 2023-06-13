@@ -1,0 +1,214 @@
+<div class="container-fluid">
+    <div class="row mx-0 px-0" id="pageheader">
+        <div class="col-sm-4">
+            <span class="page-name">Create Election</span>
+        </div>
+    </div>
+
+    <div class="row chartbox mb-3">
+        <div class="col-sm-4 mb-3 mb-lg-0">
+            <form [formGroup]="createElectionForm" (ngSubmit)="onSubmitElection()">
+                <div class="card">
+                    <div class="card-header">Create Election</div>
+                    <div class="card-body pt-0">
+                        <div class="form-container">
+                            <div class="mb-3">
+                                <label for="txtElectionName" class="form-label required-field">Election Name</label>
+                                <input type="text" class="form-control" formControlName="ElectionName" maxlength="80"
+                                    id="txtElectionName" placeholder="Election Name"
+                                    [ngClass]="{ 'is-invalid': submitted && f.ElectionName.errors }">
+                                <div *ngIf="submitted && f.ElectionName.errors" class="invalid-feedback">
+                                    <div *ngIf="f.ElectionName.errors.required">Election Name is required</div>
+                                    <div *ngIf="f.ElectionName.errors.pattern">Valid Election Name is required</div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="ddlElectionType" class="form-label required-field">Election Type</label>
+                                <ngx-select [allowClear]="true" [items]="electionTypeArray"
+                                    formControlName="ElectionTypeId" optionValueField="Id"
+                                    optionTextField="ElectionType" placeholder="Election Type"
+                                    [ngClass]="{ 'is-invalid': submitted && f.ElectionTypeId.errors }">
+                                </ngx-select>
+
+                                <!-- <select class="form-select" aria-label="Default select example">
+                                    <option value="" selected disabled>Election Type</option>
+                                    <option *ngFor="let eleType of electionTypeArray">{{eleType?.ElectionType}}</option>
+                                  </select> -->
+                                <div *ngIf="submitted && f.ElectionTypeId.errors" class="invalid-feedback">
+                                    <div *ngIf="f.ElectionTypeId.errors.required">Election Type is required</div>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <label for="rblBoothListType" class="form-label">Booth List Type</label>
+                                <div class="d-block">
+                                    <div class="form-check form-check-inline"
+                                        *ngFor="let boothLType of boothListTypeArray">
+                                        <input class="form-check-input" type="radio"
+                                            formControlName="IsAsemblyBoothListApplicable" [value]="boothLType.id"
+                                            name="IsAsemblyBoothListApplicable" id="bluserDefined">
+                                        <label class="form-check-label" for="bluserDefined1">{{boothLType.name}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <label for="rblSubElection" class="form-label">Is Sub-Election Applicable?</label>
+                                <div class="d-block">
+                                    <div class="form-check form-check-inline"
+                                        *ngFor="let subEleApp of subElectionAppArray">
+                                        <input class="form-check-input" type="radio"
+                                            formControlName="IsSubElectionApplicable" [value]="subEleApp.id"
+                                            name="IsSubElectionApplicable" id="subNo"
+                                            (change)="subElectionRadiobtn(subEleApp.id)">
+                                        <label class="form-check-label" for="subNo2">{{subEleApp.name}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="card card-body border shadow-none" *ngIf="subElectionDivHide">
+                                    <div class="row g-1 mb-2">
+                                        <div class="col-sm-12">                                            
+                                            <label for="ddlSelectElection" class="form-label" [ngClass]="addSubElectionArray.length ==0 ? 'required-field' : ''">Select Sub-Election</label>
+                                        </div>
+                                        <div class="col-sm">
+                                            <ngx-select [allowClear]="true" [items]="electionDropArray"
+                                                formControlName="SubElectionId" optionValueField="ElectionName"
+                                                (select)="addBtndisabledEnabled()" optionTextField="ElectionName"
+                                                placeholder="Select Sub-Election" (remove)="SubElectionDisabled = true"
+                                                [ngClass]="{ 'is-invalid': submitted && f.SubElectionId.errors}"
+                                                style="width: 90%;">
+                                            </ngx-select>
+                                            <div *ngIf="submitted && f.SubElectionId.errors" class="invalid-feedback">
+                                                <div *ngIf="f.SubElectionId.errors.required">Sub-Election is required</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-auto">
+                                            <button type="button" [disabled]="SubElectionDisabled"
+                                                class="btn btn-outline-primary btn-sm h-100" (click)="addSubElection()">
+                                                Add
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <table class="table table-hover mb-0" *ngIf="subElecTableHide">
+                                        <thead>
+                                            <tr>
+                                                <th>Sr. No.</th>
+                                                <th>Sub-Election Name</th>
+                                                <th>Manage</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let addSubElection of addSubElectionArray;let i=index">
+                                                <td>{{i+1}}</td>
+                                                <td>{{addSubElection.ElectionName}}</td>
+                                                <td>
+                                                    <button type="button" title="Delete" (click)="delConfirmation(i)"
+                                                        class="btn btn-light text-danger btn-sm ms-1">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="mb-2 mt-4 d-flex justify-content-between">
+                                <button type="button" (click)="clearForm()"
+                                    class="btn btn-secondary  float-lg-start">Clear</button>
+                                <button type="submit" class="btn btn-main float-lg-end">{{btnText}}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-header">
+                    <form [formGroup]="filterForm">
+                        <div class="row g-2 justify-content-end">
+                            <div class="col-sm-3">
+                                <ngx-select [allowClear]="true" [items]="electionTypeArray" optionValueField="Id"
+                                    (remove)="clearFilter('electionType')" (select)="filterData()"
+                                    optionTextField="ElectionType" placeholder="Election Type"
+                                    formControlName="ElectionTypeId"
+                                    [ngClass]="{ 'is-invalid': submitted && f.ElectionTypeId.errors }">
+                                </ngx-select>
+                            </div>
+                            <div class="col-sm-4">
+                                <!-- <input class="form-control" type="text" placeholder="Search..." /> -->
+                                <div class="input-group">
+                                    <input type="text" class="form-control" formControlName="Search"
+                                        placeholder="Election/Sub-Election Name" (keyup)="onKeyUpFilter()" />
+                                    <button type="button" class="btn btn-light btn-sm"
+                                        (click)="clearFilter('search')" *ngIf="filterForm.value.Search"><i
+                                            _ngcontent-tbl-c102="" class="fas fa-times"></i></button>
+                                    <button type="button" *ngIf="!filterForm.value.Search"
+                                        class="btn btn-sm btn-light"><i class="fas fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body">
+                   <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Election Name</th>
+                                <th>Type</th>
+                                <th>Constituency</th>
+                                <th>Sub-Election</th>
+                                <th>Manage Election</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let electionMaster of electionMasterArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index"
+                                [class.active]="electionMaster.Id == HighlightRow">
+                                <td>{{electionMaster.SrNo}}</td>
+                                <td>{{electionMaster.ElectionName}}</td>
+                                <td>{{electionMaster.ElectionType}}</td>
+
+                                <td>
+                                    <a class="fw-bold text-main" (click)="redToCreateConstituency(electionMaster.Id)"
+                                        >{{electionMaster.Constituency}}</a>
+                                </td>
+
+                                <td *ngIf="electionMaster.IsSubElectionApplicable == 1;else otherContent">
+                                    <ol class="mb-0 ps-3">
+                                        <li
+                                            *ngFor="let subElection of electionMaster.SubElection.split(',');let i=index">
+                                            {{subElection}}</li>
+                                    </ol>
+                                </td>
+                                <ng-template #otherContent>
+                                    <td class="text-center">-</td>
+                                </ng-template>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" title="Edit Election"
+                                            (click)="getElectionDetails(electionMaster.Id)"
+                                            class="btn btn-sm btn-light text-edit me-1 rounded"><i
+                                                class="far fa-edit"></i></button>
+                                        <button type="button" title="Delete Election"
+                                            (click)="delConfirmEleMaster(electionMaster.Id)"
+                                            class="btn btn-sm btn-light text-danger rounded"><i
+                                                class="fas fa-trash-alt"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                   </div>
+                    <div class="mt-2 text-end" *ngIf="electionMasterArray?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Results Found!</div>
+                    </div>
+                    <div class="mt-2 text-end" *ngIf="electionMasterArray?.length != 0">
+                        <pagination-controls previousLabel="" nextLabel=""
+                            (pageChange)="onClickPagintion(pageSize = $event)"> </pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

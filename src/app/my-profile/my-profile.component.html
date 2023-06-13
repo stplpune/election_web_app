@@ -1,0 +1,354 @@
+<div class="container-fluid">
+    <div class="row mx-0 px-0" id="pageheader">
+        <div class="col-sm-12">
+            <span class="page-name">
+                My Profile
+            </span>
+        </div>
+    </div>
+
+    <div class="row chartbox">
+        <div class="col-sm-12">
+            <div class="card card-body">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="card shadow-none border mb-3">
+                            <div class="card-header">
+                                Edit Profile
+                                <span class="float-end">
+                                    <button class="btn-profileedit text-edit" [disabled]="!disabledEditForm"
+                                        (click)="this.disabledEditForm = false">Edit Profile</button>
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <form [formGroup]="editProfileForm" enctype="multipart/form-data">
+                                    <fieldset [disabled]="disabledEditForm">
+                                        <div class="row">
+                                            <div class="col-sm-3 text-center mb-3">
+                                                <div class="position-relative">
+                                                    <a class="update-photo" (click)="choosePhoto()">
+                                                        <i class="fas fa-camera"></i>
+                                                    </a>
+                                                    <a class="update-photo" *ngIf="ImgUrl"
+                                                        [class.disable-close-btn]="disabledEditForm"
+                                                        (click)="removePhoto();">
+                                                        <i class="fas fa-times"></i>
+                                                    </a>
+                                                    <input type="file" id="my_file" #myInput class="d-none"
+                                                        (change)="readUrl($event)" #fileInput>
+                                                    <img src="assets/images/Profile-Photo.jpg" *ngIf="!ImgUrl"
+                                                        class="img-fluid img-thumbnail profile-photo">
+                                                    <img *ngIf="ImgUrl" src="{{ImgUrl}}"
+                                                        class="img-fluid img-thumbnail profile-photo">
+                                                </div>
+
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div class="form-container">
+                                                    <div class="mb-3 row">
+                                                        <div class="col-sm-4">
+                                                            <label class="form-label required-field">First Name</label>
+                                                            <input type="text" class="form-control"
+                                                                formControlName="FName" placeholder="First Name"
+                                                                [ngClass]="{ 'is-invalid': submitted && f.FName.errors }">
+                                                            <div *ngIf="submitted && f.FName.errors"
+                                                                class="invalid-feedback">
+                                                                <span *ngIf="f.FName.errors.required">First Name is
+                                                                    required</span>
+                                                                <span *ngIf="f.FName.errors.pattern">Enter valid First
+                                                                    Name</span>
+                                                                <span *ngIf="f.FName.errors?.maxlength">Please enter only 50 characters</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <label for="txtFullName"
+                                                                class="form-label required-field">Middle Name</label>
+                                                            <input type="text" class="form-control"
+                                                                formControlName="MName" placeholder="Middle Name"
+                                                                [ngClass]="{ 'is-invalid': submitted && f.MName.errors }">
+                                                            <div *ngIf="submitted && f.MName.errors"
+                                                                class="invalid-feedback">
+                                                                <span *ngIf="f.MName.errors.required">Middle Name is
+                                                                    required</span>
+                                                                <span *ngIf="f.MName.errors.pattern">Enter valid Middle
+                                                                    Name</span>
+                                                                <span *ngIf="f.MName.errors?.maxlength">Please enter only 50 characters</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <label for="txtFullName"
+                                                                class="form-label required-field">Last Name</label>
+                                                            <input type="text" class="form-control"
+                                                                formControlName="LName" placeholder="Last Name"
+                                                                [ngClass]="{ 'is-invalid': submitted && f.LName.errors }">
+                                                            <div *ngIf="submitted && f.LName.errors"
+                                                                class="invalid-feedback">
+                                                                <span *ngIf="f.LName.errors.required">Last Name is
+                                                                    required</span>
+                                                                <span *ngIf="f.LName.errors.pattern">Enter valid Last
+                                                                    Name</span>
+                                                                <span *ngIf="f.LName.errors?.maxlength">Please enter only 50 characters</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 row">
+                                                        <div class="col-sm-6">
+                                                            <label for="txtEmailID"
+                                                                class="form-label required-field">Email ID</label>
+                                                            <input type="email" class="form-control"
+                                                                placeholder="Email ID" formControlName="EmailId"
+                                                                (keypress)="commonService.emailRegex($event)"
+                                                                [ngClass]="{ 'is-invalid': submitted && f.EmailId.errors }">
+                                                            <div *ngIf="submitted && f.EmailId.errors"
+                                                                class="invalid-feedback">
+                                                                <div *ngIf="f.EmailId.errors.required">Email ID is required
+                                                                </div>
+                                                                <div *ngIf="f.EmailId.errors.email">Enter valid Email ID
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label for="txtContactNo"
+                                                                class="form-label required-field">Mobile No.</label>
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Mobile No" disabled
+                                                                value="{{resProfileData?.MobileNo}}">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-2 row">
+                                                        <div class="col-sm-6">
+                                                            <label for="txtContactNo"
+                                                                class="form-label required-field">User Name</label>
+                                                            <input type="text" class="form-control"
+                                                                placeholder="User Name" disabled
+                                                                value="{{resProfileData?.UserName}}">
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label for="txtEmailID"
+                                                                class="form-label required-field">Gender</label>
+                                                            <div class="d-block">
+                                                                <!-- [checked]="defultCategory == category.name" -->
+                                                                <div class="form-check form-check-inline"
+                                                                    *ngFor="let gender of GenderArray">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        formControlName="Gender"
+                                                                        [checked]="selGender == gender.id"
+                                                                        [value]="gender.id" name="Gender">
+                                                                    <label class="form-check-label"
+                                                                        for="rgender">{{gender.name}}</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="txtAddress" class="form-label required-field">Address</label>
+                                                        <textarea class="form-control" placeholder="Address"
+                                                            maxlength="200" formControlName="Address"
+                                                            [ngClass]="{ 'is-invalid': submitted && f.Address.errors }" rows="4"></textarea>
+                                                        <div *ngIf="submitted && f.Address.errors"
+                                                            class="invalid-feedback">
+                                                            <div *ngIf="f.Address.errors.required">Address is required</div>
+                                                            <div *ngIf="f.Address.errors.pattern">Enter Valid Address</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <!-- [checked]="defultCategory == category.name"GenderArray -->
+                                                        <div class="form-check form-check-inline"
+                                                            *ngFor="let category of categoryArray">
+                                                            <input class="form-check-input" type="radio"
+                                                                formControlName="IsRural" [value]="category.id"
+                                                                name="IsRural"
+                                                                (change)='onRadioChangeCategory(category.name)'>
+                                                            <label class="form-check-label"
+                                                                for="rblRural">{{category.name}}</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 row">
+                                                        <div class="col-sm-4">
+                                                            <label class="form-label required-field">District</label>
+                                                            <ngx-select [allowClear]="true"
+                                                                (remove)="districtClear('district')"
+                                                                [items]="allDistrict" formControlName="DistrictId"
+                                                                (select)="getTaluka(this.editProfileForm.value.DistrictId,'select')"
+                                                                optionValueField="DistrictId"
+                                                                optionTextField="DistrictName"
+                                                                placeholder="Select District"
+                                                                [ngClass]="{ 'is-invalid': submitted && f.DistrictId.errors }">
+                                                            </ngx-select>
+                                                            <div *ngIf="submitted && f.DistrictId.errors"
+                                                                class="invalid-feedback">
+                                                                <div *ngIf="f.DistrictId.errors.required">District is
+                                                                    required
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4"
+                                                            *ngIf="this.editProfileForm.value.IsRural == 1">
+                                                            <label for="ddlTaluka"
+                                                                class="form-label required-field">Taluka</label>
+                                                            <ngx-select [allowClear]="true"
+                                                                (remove)="districtClear('taluka')"
+                                                                [items]="getTalkaByDistrict"
+                                                                [disabled]="!this.editProfileForm.value.DistrictId"
+                                                                formControlName="TalukaId" optionValueField="TalukaId"
+                                                                optionTextField="TalukaName" placeholder="Select Taluka"
+                                                                (select)="getVillageOrCity(this.editProfileForm.value.TalukaId, villageCityLabel);"
+                                                                [ngClass]="{ 'is-invalid': submitted && f.TalukaId.errors }">
+                                                            </ngx-select>
+                                                            <div *ngIf="submitted && f.TalukaId.errors"
+                                                                class="invalid-feedback">
+                                                                <div *ngIf="f.TalukaId.errors.required">Taluka is
+                                                                    required
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <label for="ddlCityVillage"
+                                                                (remove)="districtClear('village')"
+                                                                class="form-label required-field">{{villageCityLabel}}</label>
+                                                            <ngx-select [allowClear]="true"
+                                                                [items]="resultVillageOrCity"
+                                                                placeholder="Select {{villageCityLabel}}"
+                                                                [optionValueField]="setVillOrCityId"
+                                                                formControlName="VillageId"
+                                                                [optionTextField]="setVillOrcityName"
+                                                                [disabled]="villageDisabled"
+                                                                [ngClass]="{ 'is-invalid': submitted && f.VillageId.errors }">
+                                                            </ngx-select>
+                                                            <div *ngIf="submitted && f.VillageId.errors"
+                                                                class="invalid-feedback">
+                                                                <div *ngIf="f.VillageId.errors.required">
+                                                                    {{villageCityLabel}} is required</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="col-sm-6 col-6">
+                                                            <button type="button"
+                                                                (click)="getProfileData();this.disabledEditForm = true; submitted = false;"
+                                                                class="btn btn-secondary  btn-sm">Clear</button>
+                                                        </div>
+                                                        <div class="col-sm-6 col-6 text-end">
+                                                            <button type="submit" (click)="updateProfile()"
+                                                                class="btn btn-main btn-sm">Update Profile</button>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="card shadow-none border">
+                            <div class="card-header">
+                                Change Password
+                            </div>
+                            <div class="card-body form-container">
+                                <form [formGroup]="changePasswordForm" (ngSubmit)="onSubmit()" autocomplete="off">
+                                    <!-- <div class="mb-3">
+                                        <label class="form-label" for="txtUserName">UserName</label>
+                                        <input type="email" class="form-control" [readonly]="true" formControlName="userName" placeholder="UserName">
+                                    </div> -->
+                                    <div class="form-group mb-3">
+                                        <label class="form-label" for="txtOldPassword">Old Password<span
+                                                class="text-center text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <input [type]="show_button ? 'text' : 'password'" class="form-control"
+                                                placeholder="Old Password" formControlName="oldPassword" maxlength="20"
+                                                [ngClass]="{ 'is-invalid': submittedChangePassword && cp.oldPassword.errors }">
+                                            <button type="button" class="btn btn-light">
+                                                <i [class]="show_eye ? 'fa fa-eye' : 'fa fa-eye-slash'"
+                                                (click)="showPassword('old')"> </i>
+                                            </button>
+                                        </div>
+                                        <div *ngIf="submittedChangePassword && cp.oldPassword.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="cp.oldPassword.errors.required">Old Password is required </div>
+                                            <div
+                                                *ngIf="!cp.oldPassword.errors.required && cp.oldPassword.errors.passwordValid">
+                                                Please enter valid Old Password
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label class="form-label" for="txtNewPassword">New Password<span
+                                                class="text-center text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <input [type]="show_button1 ? 'text' : 'password'" class="form-control"
+                                            placeholder="New Password" formControlName="newPassword" maxlength="20"
+                                            [ngClass]="{ 'is-invalid': submittedChangePassword && cp.newPassword.errors }">
+                                            <button type="button" class="btn btn-light">
+                                                <i [class]="show_eye1 ? 'fa fa-eye' : 'fa fa-eye-slash'"
+                                            (click)="showPassword('new')"> </i>
+                                            </button>
+                                        </div>
+                                        <div *ngIf="submittedChangePassword && cp.newPassword.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="cp.newPassword.errors.required">New Password is required </div>
+                                            <div
+                                                *ngIf="!cp.newPassword.errors.required && cp.newPassword.errors.passwordValid">
+                                                Please enter valid New Password</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label class="form-label" for="txtRePassword">Confirm Password<span
+                                                class="text-center text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <input [type]="show_button2 ? 'text' : 'password'" class="form-control"
+                                            placeholder="Confirm Password" formControlName="ConfirmPassword"
+                                            maxlength="20"
+                                            [ngClass]="{ 'is-invalid': submittedChangePassword && cp.ConfirmPassword.errors }">
+                                            <button type="button" class="btn btn-light">
+                                                <i class="eye-icon-pos" [class]="show_eye2 ? 'fa fa-eye' : 'fa fa-eye-slash'"
+                                            (click)="showPassword('confirm')"> </i>
+                                            </button>
+                                        </div>
+                                        <div *ngIf="submittedChangePassword && cp.ConfirmPassword.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="cp.ConfirmPassword.errors.required">Confirm Password is required
+                                            </div>
+                                            <div
+                                                *ngIf="!cp.ConfirmPassword.errors.required && cp.ConfirmPassword.errors.passwordValid">
+                                                Please enter valid Confirm Password </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2 mt-4 d-flex justify-content-between">
+                                        <button type="button" class="btn btn-secondary float-lg-start"
+                                            (click)="clearForm()">Clear</button>
+                                        <button type="submit" class="btn btn-main float-lg-end">Update</button>
+                                    </div>
+                                </form>
+                                <div class="clearfix"></div>
+                                <div class="chartbox mt-3">
+                                    <div class="card border">
+                                        <!-- <div class="card-header"></div> -->
+                                        <div class="card-body">
+                                            <h5 class="small"><b>Password Requirements:</b></h5>
+                                            <ul class="small">
+                                                <li>Must contain at least one Lower Case character (e.g. a,b,c,d)</li>
+                                                <li>Must contain at least one Upper Case character (e.g. A,B,C,D)</li>
+                                                <li>Must contain at least one Number (e.g. 1,2,3,4)</li>
+                                                <li>Must contain at least one Special Character (e.g. @,#,$,%,&)</li>
+                                                <li>Must be 8-20 characters long</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

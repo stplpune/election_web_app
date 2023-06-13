@@ -1,0 +1,22 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="timer" [fullScreen]="true" style="z-index: 9999 !important;">
+  <p style="color: white"> Loading... </p>
+</ngx-spinner>
+<router-outlet></router-outlet>
+
+<button type="button" #openModal class="btn btn-primary d-none"  data-bs-toggle="modal"  data-bs-target="#exampleModal" >Test
+</button>
+
+<!-- Modal -->
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="AddDesignationModalLabel" aria-hidden="true">
+  <button type="button" class="close" data-dismiss="modal" #close aria-label="Close" style="display: none;"></button>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <div class="modal-body p-0 text-center">
+              <img src="assets/images/error.jpg" class="img-fluid">
+              <h3 class="text-danger pb-3" *ngIf="!isConnected">{{status}}</h3>
+              <h3 class="text-success  pb-3" *ngIf="isConnected">{{status}}</h3>
+          </div>
+      </div>
+  </div>
+</div>

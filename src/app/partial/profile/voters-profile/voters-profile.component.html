@@ -1,0 +1,501 @@
+<div class="container-fluid">
+    <div class="row mx-0 px-0" id="pageheader">
+        <div class="col-sm-2">
+            <span class="page-name">
+                Voter Profile
+            </span>
+        </div>
+        <div class="col-sm-10 text-end">
+            <ol class="breadcrumb mb-0 w-auto d-inline-flex">
+                <li class="breadcrumb-item">{{voterProfileData?.State}}</li>
+                <li class="breadcrumb-item">{{voterProfileData?.Assemblyid}} {{voterProfileData?.ConstituencyName}}</li>
+                <li class="breadcrumb-item">{{voterProfileData?.VillageName}}</li>
+                <li class="breadcrumb-item">{{voterProfileData?.BoothName}}</li>
+                <li class="breadcrumb-item">{{voterProfileData?.Area}}</li>
+                <li class="breadcrumb-item active" aria-current="page">{{voterProfileData?.EnglishName}}</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body p-2">
+                    <div class="btn-group voter-repeat" role="group">
+                        <div *ngFor="let VPBoothAgent of voterProfileBoothAgentData; let i = index"
+                            (click)="agentFilledData(VPBoothAgent)" class="me-2">
+                            <input type="radio" class="btn-check" name="btnradio" autocomplete="off"
+                                [checked]="VPBoothAgent.AgentId ==  (GlobalAgentId ||  checkedActiveClass)">
+                            <label class="btn btn-outline-secondary text-start" for="btnradio{{i}}">
+                                <small>{{VPBoothAgent.SurveyDate? VPBoothAgent.SurveyDate : '-'}}</small>
+                                <p class="mb-0">{{VPBoothAgent.FullName}} ({{VPBoothAgent.SubUserTypeName}})</p>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row g-2 chartbox mb-3">
+        <div class="col-sm-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="profile-info">
+                        <div class="text-end">
+                            <span class="badge small bg-danger mb-2 fw-normal"
+                                *ngIf="voterProfileData?.IsNotCall == 1">Do Not Call</span>
+                        </div>
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <img *ngIf="voterProfileData?.VoterPhoto"
+                                    (click)="showProfileLightbox(voterProfileData?.VoterPhoto) ; lightbox.open(0, 'lightbox')"
+                                    src="{{voterProfileData?.VoterPhoto}}">
+                                <img *ngIf="!voterProfileData?.VoterPhoto" src="assets/images/Profile-Photo.jpg">
+                            </div>
+                            <div class="flex-grow-1 ms-2 pt-2">
+                                <h6>{{voterProfileData?.EnglishName}}</h6>
+                                <p class="contact">Voter No. : <span class="text-dark fw-bold">
+                                        {{voterProfileData?.VoterNo}}</span></p>
+                            </div>
+                           <div>
+                            <button type="button" class="btn btn-light btn-sm text-main">
+                                <i class="fas fa-edit" (click)="redirectToCRMHistoryPage()"></i>
+                            </button>
+                           </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body px-0 pt-1">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Nick Name :</span>
+                            <span class="voter-data">{{voterProfileData?.NickName ? voterProfileData?.NickName :
+                                '-'}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Age :</span>
+                            <span class="voter-data">{{voterProfileData?.Age ? voterProfileData?.Age : '-'}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Date Of Birth :</span>
+                            <span class="voter-data">{{voterProfileData?.DateOfBirth ? voterProfileData?.DateOfBirth :
+                                '-'}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Gender :</span>
+                            <span class="voter-data" *ngIf="voterProfileData?.Gender == 'F'">Female</span>
+                            <span class="voter-data" *ngIf="voterProfileData?.Gender == 'M'">Male</span>
+                        </li>
+
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center"
+                            *ngIf="voterProfileData?.IsWrongMobileNo == 0 && commonService.checkDataType(voterProfileData?.MobileNo1) == true">
+                            <span class="voter-label">Mobile 1 :</span>
+                            <span class="voter-data">
+                                <a *ngIf="commonService.checkDataType(voterProfileData?.WatsApp1) == true"
+                                    target="_blank"
+                                    href="https://api.whatsapp.com/send?phone=+91{{voterProfileData?.MobileNo1}}&amp;text=Hi+Election+Team%2C+I+would+like+to+know+more+about+the+product.+Can+you+please+help+me%3F">
+                                    <i class="fab fa-whatsapp me-1 text-primary"></i></a>
+                                {{voterProfileData?.MobileNo1}}
+                            </span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center"
+                            *ngIf="(voterProfileData?.IsWrongMobileNo == 1 || (commonService.checkDataType(voterProfileData?.MobileNo1) != true && voterProfileData?.IsWrongMobileNo == 0)) && voterProfileData?.IsWrongMobileNo2 == 0 && commonService.checkDataType(voterProfileData?.MobileNo2) == true">
+                            <span class="voter-label">Mobile 2 :</span>
+                            <span class="voter-data">
+                                <a *ngIf="commonService.checkDataType(voterProfileData?.WatsApp2) == true"
+                                    target="_blank"
+                                    href="https://api.whatsapp.com/send?phone=+91{{voterProfileData?.MobileNo2}}&amp;text=Hi+Election+Team%2C+I+would+like+to+know+more+about+the+product.+Can+you+please+help+me%3F">
+                                    <i class="fab fa-whatsapp me-1 text-primary"></i></a>
+                                {{voterProfileData?.MobileNo2}}</span>
+                        </li>
+                        <li class="list-group-item"
+                            *ngIf="(commonService.checkDataType(voterProfileData?.MobileNo1) == false || voterProfileData?.IsWrongMobileNo == 1 ) && (commonService.checkDataType(voterProfileData?.MobileNo2) == false || voterProfileData?.IsWrongMobileNo2 == 1) && voterProfileData?.ExtraContcts">
+                            <div class="voter-label">Extra Contacts :</div>
+                            <div class="voter-data">
+                                {{voterProfileData?.ExtraContcts.split(',')[0]}}</div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Email :</span>
+                            <span class="voter-data">{{voterProfileData?.Email ? voterProfileData?.Email : '-'}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Qualification :</span>
+                            <span class="voter-data">{{voterProfileData?.Qualification ? voterProfileData?.Qualification
+                                : '-'}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Blood Group :</span>
+                            <span class="voter-data">{{voterProfileData?.Bloodgroup ? voterProfileData?.Bloodgroup :
+                                '-'}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Need Support :</span>
+                            <span class="voter-data">{{voterProfileData?.NeedSupportText ?
+                                voterProfileData?.NeedSupportText :
+                                '-'}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">House No. :</span>
+                            <span class="voter-data">{{voterProfileData?.HouseNo ? voterProfileData?.HouseNo :
+                                '-'}}</span>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="voter-label">Area :</div>
+                            <div class="voter-data">{{voterProfileData?.Area ? voterProfileData?.Area : '-'}}</div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Postal Voting :</span>
+                            <span class="voter-data">{{voterProfileData?.PostalFlag == 0 ? 'No' :
+                                voterProfileData?.PostalFlag == 1 ? 'Yes' : '-'}}</span>
+                        </li>
+                        <li class="list-group-item" *ngIf="voterProfileData?.PostalFlag == 1">
+                            <div class="voter-label">Postal Voting Reason :</div>
+                            <div class="voter-data">{{voterProfileData?.WhyIsPostal}}</div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="voter-label">Address :</div>
+                            <div class="voter-data"> {{voterProfileData?.Address ? voterProfileData?.Address : '-'}}
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="voter-label">Migrated Address :</div>
+                            <div class="voter-data"> {{voterProfileData?.MigratedArea ? voterProfileData?.MigratedArea :
+                                '-'}}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body pt-0">
+                    <span class="voter-label">Voter Home Images : </span>
+                    <div id="voterhomeimages">
+                        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img *ngIf="voterProfileData?.VoterHomePhoto"
+                                        src="{{voterProfileData?.VoterHomePhoto}}">
+                                    <img *ngIf="!voterProfileData?.VoterHomePhoto" src="assets/images/ele.png">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#voterhomeimages"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#voterhomeimages"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    General Information
+                </div>
+                <div class="card-body pt-0">
+                    <div class="row mb-2">
+                        <div class="col-sm-6" *ngIf="voterProfileData?.ReligionName">
+                            <span class="voter-data">
+                                {{voterProfileData?.ReligionName}} <span *ngIf="voterProfileData?.Castname">({{voterProfileData?.Castname}})</span>
+                            </span>
+                        </div>
+                        <div class="col-sm-6" *ngIf="voterProfileData?.Head">
+                            <span class="voter-data">
+                                <i class="fas fa-house-user fa-1x"></i>
+                                Head : {{voterProfileData?.Head == 'no' ? 'No' : 'Yes'}}, Family
+                                ({{voterProfileData?.Familysize}} Members)</span>
+                        </div>
+                    </div>
+                    <hr class="my-2">
+
+                    <div class="row mb-2">
+                        <div class="col-sm-12">
+                            <div class="voter-data mb-2">
+                                <span>{{voterProfileData?.IsDairyFarmer == 0 ? '' : voterProfileData?.IsDairyFarmer == 1
+                                    ? 'Dairy Farmer, ' : ''}}</span>
+                                <span>{{voterProfileData?.IsGoatSheepFarmer == 0 ? '' :
+                                    voterProfileData?.IsGoatSheepFarmer == 1 ? 'Goat / Sheep Farmer, ' : ''}}</span>
+                                <span>{{voterProfileData?.IsSugarCaneCutter == 0 ? '' :
+                                    voterProfileData?.IsSugarCaneCutter == 1 ? 'SugarCane Cutter / Worker, ' :
+                                    ''}}</span>
+                                <span>{{voterProfileData?.IsFarmer == 0 ? '' : voterProfileData?.IsFarmer == 1 ?
+                                    'Farmer, ' : ''}} </span>
+                                <span>{{voterProfileData?.HaveBusiness == 0 ? '' : voterProfileData?.HaveBusiness == 1 ?
+                                    'Business, ' : ''}}</span>
+                                <span *ngIf="voterProfileData?.BusinnessDetails">({{voterProfileData?.BusinnessDetails ?
+                                    voterProfileData?.BusinnessDetails : '' }}),</span>
+                                <span *ngIf="voterProfileData?.HaveVehicle"> {{voterProfileData?.HaveVehicle == 1 ?
+                                    'Bike' : voterProfileData?.HaveVehicle == 2 ?
+                                    'Family Car' : voterProfileData?.HaveVehicle == 0 ? 'No Vehicle' : ''}},</span>
+                                <span> {{voterProfileData?.FinancialCondition == 1 ? 'Low Income Family' :
+                                    voterProfileData?.FinancialCondition == 2 ? 'Medium Income Family' :
+                                    voterProfileData?.FinancialCondition == 3 ? 'High Income Family' : ''}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-header p-0">Comments :</div>
+                    <div class="card-body p-0 mb-2">
+                        <div class="voter-data">
+                            <ul *ngFor="let VPComments of VPCommentData" class="list-group list-group-flush mb-0">
+                                <li class="list-group-item ps-0" *ngIf="VPComments?.CommentDetails">
+                                    <i class="fas fa-check me-2"></i>
+                                    {{VPComments?.CommentDetails}}
+                                </li>
+                            </ul>
+                            <span class="text-danger" *ngIf="VPCommentData?.length == 0">No Comments</span>
+                        </div>
+                    </div>
+
+                    <div class="card-header p-0"
+                        *ngIf="voterProfileData?.partyname || voterProfileData?.Leader == 'yes' || voterProfileData?.LocalLeader ">
+                        Political Information
+                    </div>
+                    <div class="card-body p-0 mb-2">
+                        <div class="voter-data">
+                            <div class="voter-data mb-2" *ngIf="voterProfileData?.LocalLeader">
+                                Local Leader Name : {{voterProfileData?.LocalLeader}}</div>
+                            <span *ngIf="voterProfileData?.partyname">{{voterProfileData?.partyname}},</span> <span
+                                *ngIf="voterProfileData?.Leader == 'yes'">Leader ({{voterProfileData?.LeaderImportance}}
+                                <i class="fas fa-star text-warning"></i>)</span>
+                        </div>
+                    </div>
+
+                    <div class="card-header p-0">
+                        Political Influence
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="form-container">
+                            <div class="alert alert-success p-2 mb-2">
+                                <label class="form-label">Party/Person Favouring :</label>
+                                <div class="form-data" *ngFor="let posNegInf of posNegativeInfData">
+                                    <span *ngIf="posNegInf?.supportToid == 1">{{posNegInf?.Support}}</span>
+                                </div>
+                            </div>
+                            <div class="alert alert-danger p-2 mb-0">
+                                <label class="form-label">Party/Person Opposing :</label>
+                                <div class="form-data" *ngFor="let posNegInf of posNegativeInfData">
+                                    <span *ngIf="posNegInf?.supportToid == 2">{{posNegInf?.Support}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-sm-12">
+                            <span class="voter-label">Family Details : </span>
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Voter No.</th>
+                                        <th>Member Name</th>
+                                        <th>Mobile No.</th>
+                                        <th>Occupation</th>
+                                        <th>Qualification</th>
+                                        <th>Migration</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- [class.active]="(voterProfileFamily.SrNo == HighlightRow) ?  (voterProfileFamily.SrNo == HighlightRow) : ((voterProfileFamily.VoterId == voterListData.VoterId) && (voterProfileFamily.FamilyHead == 0))" -->
+                                    <tr *ngFor="let voterProfileFamily of voterProfileFamilyData"
+                                        [class.active]="voterProfileFamily.SrNo == HighlightRow"
+                                        (click)="familyMemberData(voterProfileFamily)">
+                                        <td>{{voterProfileFamily.VoterNo}}</td>
+                                        <td>
+                                            <p class="mb-0">{{voterProfileFamily.Family}}</p>
+                                            <span class="badge small bg-danger mb-2 fw-normal">
+                                                <p class="mb-0" *ngIf="voterProfileFamily.IsExpired == 1">Expired</p>
+                                            </span>
+                                        </td>
+                                        <td>{{voterProfileFamily.MobileNo1 ? voterProfileFamily.MobileNo1 : '-'}}</td>
+                                        <td>{{voterProfileFamily.Occupation ? voterProfileFamily.Occupation : '-'}}</td>
+                                        <td>{{voterProfileFamily.Qualification ? voterProfileFamily.Qualification :
+                                            '-'}}</td>
+                                        <td>{{voterProfileFamily.Address ? voterProfileFamily.Address : '-'}}</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                            <div *ngIf="voterProfileFamilyData?.length == 0" class=" mt-2 alert alert-danger p-2 mb-0">
+                                <label _ngcontent-age-c139="" class="form-label text-center">No Data Found</label>
+                            </div>
+                            <!-- <div class="mt-2 p-2" *ngIf="voterProfileFamilyData?.length == 0">
+                                <div class="alert alert-danger text-center">No Results Found!</div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-header py-0">
+                    Extra Information
+                </div>
+                <div class="card-body pt-0">
+                    <div class="card card-body shadow-none border mb-2 p-2"
+                        *ngFor="let voterVisitDetail of voterVisitDetailDataArray">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <!-- (click)="imgData(voterVisitDetail)" -->
+                                <span *ngIf="voterVisitDetail?.VisitPhoto"><img class="extrainfo-img"
+                                        (click)="showGallaryLightbox(voterVisitDetail) ; lightbox.open(0, 'lightbox')"
+                                        src="{{voterVisitDetail?.VisitPhoto.split(',')[0]}}"></span>
+                                <span *ngIf="!voterVisitDetail?.VisitPhoto"><img class="extrainfo-img"
+                                        src="assets/images/ele.png"></span>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <div class="voter-data">{{voterVisitDetail.VisitDate}}</div>
+                                <div class="voter-data">{{voterVisitDetail.visittype}}</div>
+                                <div class="voter-label">
+                                    {{voterVisitDetail.VisitDetails}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card mb-3" *ngIf="MigInfoHide">
+                <div class="card-header d-flex justify-content-between">
+                    <h6 class="voter-data text-main fw-bold">{{VPMemberDetailsData?.MarathiName}}</h6>
+                    <span class="badge small bg-danger mb-2 fw-normal text-end"
+                        *ngIf="VPMemberDetailsData?.IsExpired == 1">Expired
+                    </span>
+                </div>
+                <div class="voter-family-photo text-center mb-2">
+                    <img *ngIf="VPMemberDetailsData?.VoterPhoto" src="{{VPMemberDetailsData?.VoterPhoto}}">
+                    <img *ngIf="!VPMemberDetailsData?.VoterPhoto" src="assets/images/Profile-Photo.jpg">
+                </div>
+                <div class="card-body form-container pt-0">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label class="form-label">Age</label>
+                            <div class="form-data">{{VPMemberDetailsData?.Age ? VPMemberDetailsData?.Age : '-'}}</div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label">Date of Birth</label>
+                            <div class="form-data">{{VPMemberDetailsData?.DateOfBirth ? VPMemberDetailsData?.DateOfBirth
+                                : '-' }}</div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label">Gender</label>
+                            <div class="form-data">{{VPMemberDetailsData?.Gender == 'M' ? 'Male' :
+                                VPMemberDetailsData?.Gender == 'F' ? 'Female' : '-' }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-header">
+                    Migration Information :
+                </div>
+                <div class="card-body pt-0 px-0">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center1">
+                                <span class="voter-label me-2">Migrated :</span>
+                                <span class="voter-data">
+                                    {{VPMemberDetailsData?.Migrated == 'yes' ? 'Yes' :
+                                    VPMemberDetailsData?.Migrated == 'no' ? 'No' : '-'}}</span>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center1">
+                                <span class="voter-label me-2">Migrated City :</span>
+                                <span class="voter-data">{{VPMemberDetailsData?.MigratedCity ?
+                                    VPMemberDetailsData?.MigratedCity
+                                    : '-'}}</span>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center1">
+                                <span class="voter-label me-2">Migrated Area :</span>
+                                <span class="voter-data">{{VPMemberDetailsData?.MigratedArea ?
+                                    VPMemberDetailsData?.MigratedArea
+                                    : '-'}}</span>
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Postal Voting :</span>
+                            <span class="voter-data">{{VPMemberDetailsData?.PostalFlag == 0 ? 'No' :
+                                VPMemberDetailsData?.PostalFlag == 1 ? 'Yes' : '-'}}</span>
+                        </li>
+                        <li class="list-group-item" *ngIf="VPMemberDetailsData?.PostalFlag == 1">
+                            <div class="voter-label">Postal Voting Reason:</div>
+                            <div class="voter-data">{{VPMemberDetailsData?.WhyIsPostal}}</div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="voter-label">Leader:</span>
+                            <span class="voter-data">{{VPMemberDetailsData?.Leader == 'no' ? 'No' :
+                                VPMemberDetailsData?.Leader == 'yes' ? 'Yes' : '-'}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center"
+                            *ngIf="VPMemberDetailsData?.LeaderImportance">
+                            <span class="voter-label">Leader Importance:</span>
+                            <span class="voter-data">{{VPMemberDetailsData?.LeaderImportance}} <i
+                                    class="fas fa-star text-warning"></i></span>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="voter-label">Party Support :</span>
+                                <span class="voter-data">{{VPMemberDetailsData?.partyname ?
+                                    VPMemberDetailsData?.partyname : '-'}}</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="card-header">
+                        Comments :
+                    </div>
+                    <div class="card-body mb-2 py-0">
+                        <div class="voter-data">
+                            <ul *ngFor="let VPMemberDetailComment of VPMemberDetailsCommentsData"
+                                class="list-group list-group-flush mb-0">
+                                <li class="list-group-item ps-0" *ngIf="VPMemberDetailComment?.CommentDetails">
+                                    <i class="fas fa-check me-2"></i>
+                                    {{VPMemberDetailComment?.CommentDetails}}
+                                </li>
+                            </ul>
+                            <span class="text-danger" *ngIf="VPMemberDetailsCommentsData?.length == 0">No
+                                Comments</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-body p-2">
+                <label class="form-label">Location:
+                    <small>{{voterProfileData?.VillageName}},{{voterProfileData?.BoothName}},
+                        {{voterProfileData?.Area}}</small>
+                </label>
+                <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [mapTypeId]="'roadmap'">
+                    <div *ngFor="let votersonmap of VPVotersonmapData">
+                        <agm-marker [latitude]="votersonmap?.Latitude" (markerClick)="markerClicked($event)"
+                            [longitude]="votersonmap?.Longitude">
+                            <agm-info-window>
+                                <strong>{{votersonmap.EnglishName}}</strong>
+                            </agm-info-window>
+                        </agm-marker>
+
+                        <agm-marker [latitude]="votersonmap?.MigratedLatitude" (markerClick)="markerClicked($event)"
+                            [longitude]="votersonmap?.MigratedLongitude">
+                            <agm-info-window>
+                                <strong>{{votersonmap.EnglishName}}</strong>
+                            </agm-info-window>
+                        </agm-marker>
+                    </div>
+                </agm-map>
+            </div>
+            <!-- <ng-template #elseBlock>
+                <div class="h-20 text-center">
+                    <img src="assets/images/location-not-found.svg" class="img-h300">
+                </div>
+            </ng-template> -->
+
+
+        </div>
+    </div>
+</div>

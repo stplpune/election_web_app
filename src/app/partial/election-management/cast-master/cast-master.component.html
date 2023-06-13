@@ -1,0 +1,215 @@
+<div class="container-fluid">
+    <div id="pageheader" class="row mx-0 px-0">
+        <div class="col-sm-4">
+            <span class="page-name">
+                Caste Master
+            </span>
+        </div>
+        <div class="col-sm-8 text-end">
+        </div>
+    </div>
+    <div class="row chartbox mb-3">
+        <div class="col-sm-4">
+            <form [formGroup]="castMasterForm" (ngSubmit)="onSubmitCast()">
+                <div class="card mb-3">
+                    <div class="card-header">
+                         Caste Master
+                    </div>
+                    <div class="card-body pt-0">
+                        <div class="form-container">
+                            <div class="mb-3">
+                                <label class="form-label required-field ">Religion Name</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <ngx-select [allowClear]="true" placeholder="Religion Name" class="w-100 " formControlName="ReligionName"
+                                        [items]="relisionresponseapi" optionValueField="id"
+                                        optionTextField="religionName"
+                                        [ngClass]="{ 'is-invalid': submitted && f.ReligionName.errors }">
+                                    </ngx-select>
+
+                                    <button type="button" title="Add Religion"
+                                        class="btn btn-sm btn-main me-1 rounded float-lg-end" data-bs-toggle="modal"
+                                        data-bs-target="#viewBoothsModal">
+                                        <i class="fa fa-plus text-white"></i>
+                                    </button>
+                                </div>
+                                <div *ngIf="submitted && f.ReligionName.errors" class="invalid-feedback">
+                                    <div *ngIf="f.ReligionName.errors.required">Religion Name is required</div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label required-field ">
+                                    Caste Name
+                                </label>
+                                <input type="text" class="form-control" placeholder="Caste Name"
+                                    formControlName="CastName"
+                                    [ngClass]="{ 'is-invalid': submitted && f.CastName.errors }" maxlength="20" minlength="1">
+                                <div *ngIf="submitted && f.CastName.errors" class="invalid-feedback">
+                                    <div *ngIf="f.CastName.errors.required">Caste Name is required</div>
+                                    <div *ngIf="f.CastName.errors.pattern">Enter valid Caste Name</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-auto mb-3 text-end d-flex justify-content-between">
+                                <button type="button" class="btn btn-secondary  float-lg-start"
+                                    (click)="clearForm()">Clear</button>
+                                <button type="submit" class="btn btn-main float-lg-end">{{ this.iseditbtn == false ? 'Submit': 'Update' }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-8 chartbox">
+            <div class="card ">
+                <div class="card-header">
+                    <form [formGroup]="filterForm">
+                        <div class="row g-2">
+                            <div class="col-sm-3 col-sm-auto ms-auto">
+                                <ngx-select [allowClear]="true" placeholder="Religion Name" [items]="religionfilterresp"
+                                    optionValueField="religionName" optionTextField="religionName" formControlName="ReligionNameId"
+                                    (select)="filterData()" (remove)="clearFilter('religionName')"
+                                   >
+                                </ngx-select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Religion Name</th>
+                                <th>Caste Name</th>
+                                <th>Manage Caste</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of showtableapi | paginate: {id:'cast', itemsPerPage: 10, currentPage: paginationNo, totalItems:total};let i=index">
+                                <td>{{((paginationNo -1) * 10) + (i+1)}}</td>
+                                <td>{{data.religionName}}</td>
+                                <td>{{data.castName}}</td>
+                                <!-- <td>
+                                    <div *ngFor="let castN of data?.castList">
+                                        {{castN.castName}}
+                                    </div>
+                                </td> -->
+                                
+                                <td>
+                                    <div class="btn-group">
+                                        <!-- <button type="button" title="Edit Election" class="btn btn-sm btn-light text-edit me-1 rounded" data-bs-toggle="modal" data-bs-target="#viewBoothsModal">
+                                            <i class="far fa-eye"></i>
+                                            </button> 
+                                        -->
+                                        <button type="button" title="Edit Caste Details"
+                                            class="btn btn-sm btn-light text-edit me-1 rounded" (click)="editCastMasterData(data)">
+                                            <i class="far fa-edit"></i>
+                                        </button>
+                                        <button type="button" title="Delete Caste Details"
+                                            class="btn btn-sm btn-light text-danger rounded" (click)="delConfirmEleMaster(data,'castId')">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="mt-2 text-end" *ngIf="showtableapi?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Results Found!</div>
+                    </div>
+                    <div class="mt-2 text-end">
+                        <pagination-controls previousLabel="" nextLabel="" id="cast"
+                            (pageChange)="onClickPagintion($event)"> </pagination-controls>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!---------------Modal-Page------------------>
+
+<div class="modal fade" id="viewBoothsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="viewBoothsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewBoothsModalLabel">Religion Master</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)=" resetModel()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-container">
+                    <div class="row mb-3">
+                        <div class="col-sm-4 border-end  border-1 chartbox">
+                            <form [formGroup]="addRelisionForm" (ngSubmit)="AddRelision()">
+                            <div class="p-2">
+                                <label class="form-label required-field ">
+                                    Religion Name
+                                </label>
+                                <input type="text" autofocus="autofocus" class="form-control" placeholder="Religion Name" 
+                                    formControlName="ReligionNameinput"  [ngClass]="{ 'is-invalid': submittedRel && g.ReligionNameinput.errors }" minlength="1" maxlength="20">
+                                    <div *ngIf="submittedRel && g.ReligionNameinput.errors" class="invalid-feedback">
+                                        <div *ngIf="g.ReligionNameinput.errors.required">Religion Name is required</div>
+                                        <div *ngIf="g.ReligionNameinput.errors.pattern">Enter valid  Religion Name</div>
+                                    </div>
+                                     <!-- <div *ngIf="g.ReligionNameinput.errors.required">Relision Name is required</div>
+                                    <div *ngIf="g.ReligionNameinput.errors.pattern">Valid Relision Name is required</div> -->
+                                    <div class="mt-3"> 
+                       
+                                    <button type="submit" class="btn btn-main float-lg-end"
+                                        >{{ this.iseditbtn == false ? 'Add': 'Update' }}</button>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                        <div class="col-sm-8 chartbox">
+                            <div class=" mb-2 p-2">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr. No.</th>
+                                            <th>Religion Name</th>
+                                            <th>Manage Religion</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let data of showrelisionTable | paginate: {id:'religion', itemsPerPage: tableSize, currentPage: page, totalItems:count}; let i=index">
+                                            <td>{{((page -1) * 10) + (i+1)}}</td>
+                                            <td>{{data.religionName}}</td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <!-- <button type="button" title="Edit Election" class="btn btn-sm btn-light text-edit me-1 rounded" data-bs-toggle="modal" data-bs-target="#viewBoothsModal">
+                                                                <i class="far fa-eye"></i>
+                                                                </button> 
+                                                            -->
+                                                    <button type="button" title="Edit Religion"
+                                                        class="btn btn-sm btn-light text-edit me-1 rounded" (click)="editRelisionData(data)">
+                                                        <i class="far fa-edit"></i>
+                                                    </button>
+                                                    <button type="button" title="Delete Religion"
+                                                        class="btn btn-sm btn-light text-danger rounded" (click)="delConfirmEleMaster(data,'relisionId')">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="mt-2 text-end">
+                                    <pagination-controls previousLabel="" nextLabel="" id="religion"
+                                        (pageChange)="onClickPagintionReligion($event)"> </pagination-controls>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-secondary" data-bs-dismiss="modal" (click)="resetModel()">Close</button>
+                    </div>
+        </div>
+    </div>
+</div>
+
+<!---------------Modal-Page-End----------------->

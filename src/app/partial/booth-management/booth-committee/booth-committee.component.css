@@ -1,0 +1,78 @@
+.accordion .accordion-item{
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+}
+.accordion .accordion-button{
+    font-size: 0.85rem;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+.accordion .accordion-header{
+    color: var(--main-color);
+    border-top: solid 1px rgba(0,0,0,0.125);
+}
+.list-group{
+    font-size: 0.85rem;
+}
+.fixed-height{
+    height: 75vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: white;
+}
+
+.fixed-height1{
+    max-height: 65vh;
+    overflow-y: auto;
+}
+.fixed-height1 th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: -2px;
+  z-index: 1; 
+  background: #f5f5f5; 
+}
+.fixedBoothCommittee {
+    overflow-y: auto;
+    max-height: 60vh;
+  }
+  .fixedBoothCommittee thead th {
+    position: sticky;
+    top: 0;
+  }
+  table {
+    border-collapse: collapse;   
+  }
+  .form-check{
+    min-height: 0 !important;
+  }
+
+  #bootcomityhdetails .nav-pills .nav-link{
+    color: #aaa;
+    border-bottom:solid 4px #eee ;
+    border-radius: 0;
+    line-height: 16px;
+}
+#bootcomityhdetails .nav-pills .nav-link.active{
+    background-color: transparent;
+    border-bottom: solid 4px var(--main-color);
+    color: #000;
+}
+.w-70{
+  width: 70px;
+  
+}
+.w-170{
+  width: 170px;
+  
+}
+.w-150{
+  width: 150px;
+
+}
+
+.dashboard-table thead th{
+  padding: 5px;
+  border-bottom: none;
+}
