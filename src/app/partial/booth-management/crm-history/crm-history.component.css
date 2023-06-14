@@ -55,30 +55,36 @@
 
 .party-logo {
   width: 26px;
+  height: 26px;
 }
 
 agm-map {
   height: 300px;
 }
-.fa-stack{
+
+.fa-stack {
   font-size: 0.5rem;
 }
-.bg-light-success{
-  background-color:#e0fff1!important ;
+
+.bg-light-success {
+  background-color: #e0fff1 !important;
 }
-.donotcall{
+
+.donotcall {
   position: absolute;
-    width: 110px;
-    right: 0%;
-    z-index: -1;
-    opacity: 0.3;
-    top: 48%;
+  width: 110px;
+  right: 0%;
+  z-index: -1;
+  opacity: 0.3;
+  top: 48%;
 }
+
 .table-height {
   height: 300px;
   overflow-y: auto;
 }
-.table-height thead{
+
+.table-height thead {
   position: sticky;
   top: -1px;
 }
