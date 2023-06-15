@@ -1,0 +1,57 @@
+.member-photo{
+    width:60px;
+    border-radius: 50%;
+    margin-right: 5px;
+    height: 60px;
+    object-fit: cover;
+}
+
+  #PostDetailModal{
+      z-index: 9999;
+  }
+  #PostDetailModal .carousel-item{
+      text-align: center;
+  }
+  #PostDetailModal .carousel-item img{
+    height:92.5vh;
+    width:auto;
+}
+#PostDetailModal .carousel-control-prev,
+#PostDetailModal .carousel-control-next{
+    width: 50px;
+    height: 50px;
+    margin: auto 0;
+    background: black;
+}
+#PostDetailModal .btn-group .btn{
+    font-size: 0.85rem;
+    border: solid 1px rgba(0, 0, 0, 0.125);
+    padding-block: 5px;
+}
+.modal-post{
+    max-height:70vh;
+    overflow-y: auto;
+}
+.likesharecomment a{
+    text-decoration: none !important;
+    color: #222;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+.post-details .type{
+    background-color:#eee;
+    color:#111;
+    font-size: 0.7rem;
+    padding: 5px 10px;
+    border-radius: 30px;
+    margin: auto 0;
+}
+.post-details .title{
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.post-details .description{
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom:5px ;
+}

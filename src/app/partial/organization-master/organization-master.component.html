@@ -1,0 +1,333 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="pageheader" class="row mx-0 px-0">
+                <div class="col-sm-3">
+                    <span class="page-name">Committee Master
+                    </span>
+                </div>
+                <div class="col-sm-9">
+                    <form [formGroup]="filterForm">
+                        <div class="row g-1">
+                            <div class="col-sm-3 col-6">
+                                <ngx-select [allowClear]="true" (remove)="clearFilter('level')" [items]="allLevels"
+                                    (select)="filterData()" formControlName="LevelId" placeholder="Select Level"
+                                    optionValueField="Id" optionTextField="LevelName">
+                                </ngx-select>
+                            </div>
+                            <div class="col-sm-3 col-6">
+                                <ngx-select [allowClear]="allowClearFlag" (remove)="clearFilter('member')"
+                                    (select)="filterData()" formControlName="AllotedDesignation"
+                                    [items]="allotedDesignationArray" optionValueField="id" optionTextField="name"
+                                    placeholder="Is Members Assigned">
+                                </ngx-select>
+                            </div>
+                            <div class="col-sm-3">
+                                <ngx-select [allowClear]="allowClearFlag" (remove)="clearFilter('district')"
+                                    (select)="filterData()" formControlName="filterDistrict"
+                                    [items]="allDistrictByCommittee" optionValueField="DistrictId"
+                                    optionTextField="DistrictName" placeholder="Select District">
+                                </ngx-select>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" formControlName="searchText"
+                                        placeholder="Committee Name..." (keyup)="onKeyUpFilter()" />
+                                    <button type="button" class="btn btn-light border btn-sm"
+                                        (click)="clearFilter('search')" *ngIf="filterForm.value.searchText"><i
+                                            _ngcontent-tbl-c102="" class="fas fa-times"></i></button>
+                                    <button type="button" *ngIf="!filterForm.value.searchText"
+                                        class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
+                                    <!-- <button class="btn btn-sm btn-main" type="button" (click)="filter(this.filterForm.value.searchText)">
+
+                                <i class="fas fa-search"></i> </button> &nbsp; &nbsp;
+                                    <button class="btn btn-secondary btn-main ml-2" type="button" [disabled]="!this.filterForm.value.searchText && !this.filterForm.value.filterDistrict" (click)="clearFilter()">
+                                    Clear </button> -->
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row chartbox mb-3">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row g-1">
+                        <div class="col-auto col-lg-6">
+                            <button (click)="redTocommitteesOnMap()" class="add-buttons">
+                                Committees on Map
+                            </button>
+                        </div>
+                        <div class="col-auto text-end col-lg-6">
+                            <button (click)="clearForm(); initCommittees();" class="add-buttons" data-bs-toggle="modal"
+                                data-bs-target="#AddNewCommittee">Add Committee</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body pt-1">
+                    <div class="table-responsive">
+                        <div class="card card-body shadow-none border comm-details pb-1 mb-3" *ngFor="let result of organizationRes | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total  }"
+                        [class.active]="result.Id == HighlightRow">
+                            <div class="row">
+                                <div class="col-sm-6 col-6">
+                                    <span class="com-level">{{result?.LevelName}}</span>
+                                </div>
+                                <div class="col-sm-6 col-6 text-end">
+                                    <div class="btn-group">
+                                        <button type="button"
+                                            [disabled]="(getCommiteeDetails?.CommiteeId == result?.Id) ?  true : ''"
+                                            title="Edit Committee" data-bs-toggle="modal"
+                                            data-bs-target="#AddNewCommittee"
+                                            class="btn btn-light btn-sm text-edit me-2 rounded"
+                                            (click)="editOrganization(result.Id)"><i
+                                                class="far fa-edit"></i></button>
+                                        <button type="button"
+                                            [disabled]="(getCommiteeDetails?.CommiteeId == result?.Id) ?  true : ''"
+                                            title="Delete Committee" class="btn btn-light btn-sm text-danger rounded"
+                                            (click)="deleteCommitteeConfirmation(result.Id, result.AllottedDesignation)"><i
+                                                class="fas fa-trash-alt"></i></button>
+                                        <!-- <input type="hidden" data-bs-toggle="modal" data-bs-target="#delteteModal" #openDeleteCommitteeModal> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="comm-name">
+                                <a (click)="redirectOrgDetails(result.Id,result.bodylevel,result.BodyOrgCellName)"
+                                            class="text-primary">{{result?.BodyOrgCellName | titlecase}}</a>
+                                <small class="comm-area">[{{result?.Area}}]</small>
+                            </div>
+                            <div class="comm-desis">
+                                {{result?.DesignationAssigned}}
+                            </div>
+                            <div class="row comm-brrs">
+                                <div class="col-sm-6 col-6">
+                                    <span><span class="text-success fw-bold me-1">{{result?.AllottedDesignation}}</span> Appointments</span>
+                                </div>
+                                <div class="col-sm-6 col-6 text-end">
+                                    <button type="button" class="btn btn-light btn-sm" title="Add Designation"
+                                            data-bs-toggle="modal"
+                                            (click)="AddDesignation(result.BodyOrgCellName, result.Id);">
+                                            <i class="fas fa-user-plus"></i>
+                                        </button> 
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No.</th>
+                                    <th>Committee Name</th>
+                                    <th>Level</th>
+                                    <th>Area</th>
+                                    <th>Designations Assigned</th>
+                                    <th></th>
+                                    <th>Office Bearers</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let result of organizationRes | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total  }"
+                                    [class.active]="result.Id == HighlightRow">
+                                    <td>{{result?.SrNo}}</td>
+                                    <td><a (click)="redirectOrgDetails(result.Id,result.DesignationAssigned,result.BodyOrgCellName)"
+                                            class="text-primary">{{result?.BodyOrgCellName | titlecase}}</a></td>
+                                    <td>{{result?.LevelName}}</td>
+                                    <td><span class="text-ellipsis-150px" [appTooltip]
+                                            title="{{result?.Area}}">{{result?.Area}}</span></td>
+                                    <td>
+                                        <span class="text-ellipsis-150px" [appTooltip]
+                                            title="{{result?.DesignationAssigned}}">{{result?.DesignationAssigned}}</span>
+                                    </td>
+
+                                    <td> <button type="button" class="btn btn-light" title="Add Designation"
+                                            data-bs-toggle="modal"
+                                            (click)="AddDesignation(result.BodyOrgCellName, result.Id);">
+                                            <i class="fas fa-user-plus"></i>
+                                        </button> </td>
+                                    <td>{{result?.AllottedDesignation}}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button"
+                                                [disabled]="(getCommiteeDetails?.CommiteeId == result?.Id) ?  true : ''"
+                                                title="Edit Committee" data-bs-toggle="modal"
+                                                data-bs-target="#AddNewCommittee"
+                                                class="btn btn-light text-edit me-2 rounded"
+                                                (click)="editOrganization(result.Id)"><i
+                                                    class="far fa-edit"></i></button>
+                                            <button type="button"
+                                                [disabled]="(getCommiteeDetails?.CommiteeId == result?.Id) ?  true : ''"
+                                                title="Delete Committee" class="btn btn-light text-danger rounded"
+                                                (click)="deleteCommitteeConfirmation(result.Id, result.AllottedDesignation)"><i
+                                                    class="fas fa-trash-alt"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="organizationRes?.length == 0">
+                                    <td colspan="8">
+                                        <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table> -->
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-12 text-end">
+                            <div class="mt-2" *ngIf="organizationRes?.length != 0">
+                                <pagination-controls previousLabel="" nextLabel=""
+                                    (pageChange)="onClickPagintion(pageSize = $event)"> </pagination-controls>
+                                <!-- <pagination-controls previousLabel="" nextLabel="" (pageChange)="pageSize = $event" (click)="onClickPagintion(pageSize)"> </pagination-controls> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Add Add New Committee -->
+<div class="modal fade" id="AddNewCommittee" tabindex="-1" aria-labelledby="AddNewCommitteeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <p class="modal-title" id="AddNewCommitteeLabel">Add New Committee</p>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="clearForm()"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="orgMasterForm" (ngSubmit)="onSubmit()">
+                    <div class="form-container">
+                        <div class="mb-2">
+                            <label class="form-label required-field">Select Committee Level</label>
+                            <ngx-select [allowClear]="true" (remove)="selectLevelClear()" [items]="allLevels"
+                                (select)="selectLevel(this.orgMasterForm.value.BodyLevelId, 'select');getCommitteeByLevel(this.orgMasterForm.value.BodyLevelId)"
+                                formControlName="BodyLevelId" placeholder="Select Level" optionValueField="Id"
+                                optionTextField="LevelName"
+                                [ngClass]="{ 'is-invalid': submitted && f.BodyLevelId.errors }">
+                            </ngx-select>
+                            <div *ngIf="submitted && f.BodyLevelId.errors" class="invalid-feedback">
+                                <div *ngIf="f.BodyLevelId.errors.required">Committee Level is required</div>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label required-field">Parent Committee</label>
+                            <ngx-select [allowClear]="true" [items]="resCommitteeByLevel"
+                                formControlName="SubParentCommitteeId" placeholder="Select Parent Committee"
+                                optionValueField="Id" optionTextField="BodyOrgCellName"
+                                (remove)="clearselOption('committeeName')"
+                                [disabled]="!this.orgMasterForm.value.BodyLevelId || this.orgMasterForm.value.BodyLevelId == 2"
+                                [ngClass]="{ 'is-invalid': submitted && f.SubParentCommitteeId.errors}">
+                            </ngx-select>
+                            <div *ngIf="submitted && f.SubParentCommitteeId.errors" class="invalid-feedback">
+                                <div *ngIf="f.SubParentCommitteeId.errors.required">Committee is required</div>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label for="txtBodyName" class="form-label required-field">Committee Name</label>
+                            <input type="text" class="form-control" id="txtBodyName" placeholder="Committee Name"
+                                formControlName="BodyOrgCellName"
+                                [ngClass]="{ 'is-invalid': submitted && f.BodyOrgCellName.errors }">
+                            <div *ngIf="submitted && f.BodyOrgCellName.errors" class="invalid-feedback">
+                                <div *ngIf="f.BodyOrgCellName.errors.required">Committee name is required</div>
+                                <div *ngIf="f.BodyOrgCellName.errors.maxlength">Committee Name can be max 100 characters
+                                    long.</div>
+                            </div>
+                        </div>
+                   
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
+                                <label class="form-label required-field">Select State</label>
+                                <ngx-select [allowClear]="true" (remove)="clearselOption('State')" [items]="allStates"
+                                    formControlName="StateId" (select)="getDistrict();" placeholder="Select State" optionValueField="Id"
+                                    optionTextField="StateName"
+                                    [ngClass]="{ 'is-invalid': submitted && f.StateId.errors }"
+                                    [disabled]="!this.orgMasterForm.value.SubParentCommitteeId && this.orgMasterForm.value.BodyLevelId != 2">
+                                </ngx-select>
+                                <div *ngIf="submitted && f.StateId.errors" class="invalid-feedback">
+                                    <div *ngIf="f.StateId.errors.required">State is required</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label"
+                                    [ngClass]="{ 'required-field': submitted && f.DistrictId.errors }">Select
+                                    District</label>
+                                <ngx-select [allowClear]="true" (remove)="clearselOption('District')"
+                                    [items]="allDistrict" formControlName="DistrictId"
+                                    (select)="districtEvent(this.orgMasterForm.value.BodyLevelId, this.orgMasterForm.value.DistrictId)"
+                                    [disabled]="disableFlagDist || !this.orgMasterForm.value.StateId"
+                                    (select)="getTaluka(this.orgMasterForm.value.DistrictId)"
+                                    optionValueField="DistrictId" optionTextField="DistrictName"
+                                    placeholder="Select District"
+                                    [ngClass]="{ 'is-invalid': submitted && f.DistrictId.errors }">
+                                </ngx-select>
+                                <div *ngIf="submitted && f.DistrictId.errors" class="invalid-feedback">
+                                    <div *ngIf="f.DistrictId.errors.required">District is required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="mb-2">
+                            <div class="form-check form-check-inline" *ngFor="let category of categoryArray; let i = index">
+                                <input class="form-check-input" type="radio" [attr.disabled]="redioBtnDisabled ? true : null" formControlName="IsRural" [value]="category.id" name="IsRural" id="rblRural{{i}}" [checked]="defultCategory == category.name" (change)='onRadioChangeCategory(category.name, false)'>
+                                <label class="form-check-label" for="rblRural">{{category.name}}</label>
+                            </div>
+                        </div> -->
+                        <!-- -->
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
+                                <label class="form-label"
+                                    [ngClass]="{'required-field': submitted && f.TalukaId.errors}">
+                                    Select Taluka</label>
+                                <ngx-select [allowClear]="true" (remove)="clearselOption('TalukaId')"
+                                    [items]="getTalkaByDistrict"
+                                    [disabled]="disableFlagTal || !this.orgMasterForm.value.DistrictId"
+                                    formControlName="TalukaId" optionValueField="TalukaId" optionTextField="TalukaName"
+                                    placeholder="Select Taluka"
+                                    (select)="getVillageOrCity(this.orgMasterForm.value.TalukaId,villageCityLabel)"
+                                    [ngClass]="{ 'is-invalid': submitted && f.TalukaId.errors }">
+                                </ngx-select>
+                                <div *ngIf="submitted && f.TalukaId.errors" class="invalid-feedback">
+                                    <div *ngIf="f.TalukaId.errors.required">Taluka is required</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label"
+                                    [ngClass]="{ 'required-field': submitted && f.VillageId.errors }">Select
+                                    {{villageCityLabel}}</label>
+                                <ngx-select [allowClear]="true" (remove)="clearselOption('Village')"
+                                    [items]="resultVillageOrCity" placeholder="Select {{villageCityLabel}}"
+                                    [optionValueField]="setVillOrCityId" formControlName="VillageId"
+                                    [optionTextField]="setVillOrcityName"
+                                    [disabled]="disableFlagVill  || !this.orgMasterForm.value.DistrictId"
+                                    [ngClass]="{ 'is-invalid': submitted && f.VillageId.errors }">
+                                </ngx-select>
+                                <div *ngIf="submitted && f.VillageId.errors" class="invalid-feedback">
+                                    <div *ngIf="f.VillageId.errors.required">{{villageCityLabel}} is required</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="my-4">
+                            <div class="row">
+                                <div class="col-sm-6 col-6">
+                                    <button type="button" class="btn btn-secondary  float-start"
+                                        (click)="clearForm()">Clear</button>
+                                </div>
+                                <div class="col-sm-6 col-6">
+                                    <button type="submit" class="btn btn-main float-end">{{btnText}}</button>
+                                </div>
+                            </div>
+                            <!-- <button type="button" class="btn btn-warning mx-1">Update</button>
+                        <button type="button" class="btn btn-danger">Delete</button> -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

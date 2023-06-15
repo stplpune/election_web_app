@@ -1,0 +1,124 @@
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+    <div class="modal-header">
+        <p class="modal-title" id="AddNewCommitteeLabel">Add Sub Committee</p>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="onNoClick()"></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="addCommitteeForm">
+            <div class="form-container">
+                <div class="mb-2">
+                    <label class="form-label required-field">Select Committee Level</label>
+                    <ngx-select [allowClear]="false" (remove)="selectLevelClear()" [items]="allLevels"
+                        formControlName="BodyLevelId" placeholder="Select Level" optionValueField="Id"
+                        optionTextField="LevelName"
+                        (select)="selectLevel(this.addCommitteeForm.value.BodyLevelId);getCommitteeByLevel(this.addCommitteeForm.value.BodyLevelId)"
+                        [ngClass]="{ 'is-invalid': submitted && f.BodyLevelId.errors }">
+                    </ngx-select>
+                    <div *ngIf="submitted && f.BodyLevelId.errors" class="invalid-feedback">
+                        <div *ngIf="f.BodyLevelId.errors.required">Committee Level is required</div>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <!-- [disabled]="!this.addCommitteeForm.value.BodyLevelId || this.addCommitteeForm.value.BodyLevelId == 2" -->
+                    <label class="form-label required-field">Parent Committee</label>
+                    <ngx-select [allowClear]="false" [items]="resCommitteeByLevel" formControlName="SubParentCommitteeId"
+                        placeholder="Select Parent Committee" optionValueField="Id" optionTextField="BodyOrgCellName"
+                        (remove)="clearselOption('committeeName')"
+                        [disabled]="!this.addCommitteeForm.value.BodyLevelId || this.addCommitteeForm.value.BodyLevelId == 2"
+                        [ngClass]="{ 'is-invalid': submitted && f.SubParentCommitteeId.errors}">
+                    </ngx-select>
+                    <div *ngIf="submitted && f.SubParentCommitteeId.errors" class="invalid-feedback">
+                        <div *ngIf="f.SubParentCommitteeId.errors.required">Committee is required</div>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <label for="txtBodyName" class="form-label required-field">Committee Name</label>
+                    <input type="text" class="form-control" id="txtBodyName" placeholder="Committee Name"
+                        formControlName="BodyOrgCellName"
+                        [ngClass]="{ 'is-invalid': submitted && f.BodyOrgCellName.errors }">
+                    <div *ngIf="submitted && f.BodyOrgCellName.errors" class="invalid-feedback">
+                        <div *ngIf="f.BodyOrgCellName.errors.required">Committee name is required</div>
+                        <div *ngIf="f.BodyOrgCellName.errors.maxlength">Committee Name can be max 100 characters
+                            long.</div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-6">
+                        <label class="form-label required-field">Select State</label>
+                        <ngx-select [allowClear]="false" (remove)="clearselOption('State')" [items]="allStates"
+                            formControlName="StateId" (select)="getDistrict()" placeholder="Select State" optionValueField="Id"
+                            optionTextField="StateName" [ngClass]="{ 'is-invalid': submitted && f.StateId.errors }"
+                            [disabled]="!this.addCommitteeForm.value.SubParentCommitteeId && this.addCommitteeForm.value.BodyLevelId != 2">
+                        </ngx-select>
+                        <div *ngIf="submitted && f.StateId.errors" class="invalid-feedback">
+                            <div *ngIf="f.StateId.errors.required">State is required</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label"
+                            [ngClass]="{ 'required-field': submitted && f.DistrictId.errors }">Select
+                            District</label>
+                        <ngx-select [allowClear]="false" (remove)="clearselOption('District')" [items]="allDistrict"
+                            formControlName="DistrictId"
+                            (select)="districtEvent(this.addCommitteeForm.value.BodyLevelId, this.addCommitteeForm.value.DistrictId)"
+                            [disabled]="disableFlagDist || !this.addCommitteeForm.value.StateId"
+                            (select)="getTaluka(this.addCommitteeForm.value.DistrictId)" optionValueField="DistrictId"
+                            optionTextField="DistrictName" placeholder="Select District"
+                            [ngClass]="{ 'is-invalid': submitted && f.DistrictId.errors }">
+                        </ngx-select>
+                        <div *ngIf="submitted && f.DistrictId.errors" class="invalid-feedback">
+                            <div *ngIf="f.DistrictId.errors.required">District is required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-6">
+                        <label class="form-label" [ngClass]="{'required-field': submitted && f.TalukaId.errors}">
+                            Select Taluka</label>
+                        <ngx-select [allowClear]="false" (remove)="clearselOption('TalukaId')"
+                            [items]="getTalkaByDistrict"
+                            [disabled]="disableFlagTal || !this.addCommitteeForm.value.DistrictId"
+                            formControlName="TalukaId" optionValueField="TalukaId" optionTextField="TalukaName"
+                            placeholder="Select Taluka"
+                            (select)="getVillageOrCity(this.addCommitteeForm.value.TalukaId,villageCityLabel)"
+                            [ngClass]="{ 'is-invalid': submitted && f.TalukaId.errors }">
+                        </ngx-select>
+                        <div *ngIf="submitted && f.TalukaId.errors" class="invalid-feedback">
+                            <div *ngIf="f.TalukaId.errors.required">Taluka is required</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label"
+                            [ngClass]="{ 'required-field': submitted && f.VillageId.errors }">Select
+                            {{villageCityLabel}}</label>
+                        <ngx-select [allowClear]="false" (remove)="clearselOption('Village')"
+                            [items]="resultVillageOrCity" placeholder="Select {{villageCityLabel}}"
+                            [optionValueField]="setVillOrCityId" formControlName="VillageId"
+                            [optionTextField]="setVillOrcityName"
+                            [disabled]="disableFlagVill || !this.addCommitteeForm.value.DistrictId"
+                            [ngClass]="{ 'is-invalid': submitted && f.VillageId.errors }">
+                        </ngx-select>
+                        <div *ngIf="submitted && f.VillageId.errors" class="invalid-feedback">
+                            <div *ngIf="f.VillageId.errors.required">{{villageCityLabel}} is required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer d-block">
+        <div class="row">
+            <div class="col-sm-6 col-6">
+                <button type="button" class="btn btn-secondary  float-start" (click)="clearForm()">Clear</button>
+            </div>
+            <div class="col-sm-6 col-6">
+                <button type="submit" class="btn btn-main float-end" (click)="onSubmit()">Create Committee</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

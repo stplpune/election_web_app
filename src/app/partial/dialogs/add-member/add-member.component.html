@@ -1,0 +1,253 @@
+<div class="modal-content">
+    <div class="modal-header bg-transparent border-bottom-0">
+        {{profileFlag}} Member <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="onNoClick('No')"></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="editProfileForm" enctype="multipart/form-data">
+            <div class="row form-container">
+                <div class="col-sm-3">
+                    <div class="position-relative mb-3 d-none d-lg-block d-sm-none">
+                        <a class="update-photo" (click)="choosePhoto()">
+                            <i class="fas fa-camera"></i>
+                        </a>
+                        <a class="update-photo" *ngIf="ImgUrl" [class.disable-close-btn]="disabledEditForm"
+                            (click)="removePhoto();">
+                            <i class="fas fa-times"></i>
+                        </a>
+                        <input type="file" id="my_file" #myInput class="d-none" (change)="readUrl($event)" #fileInput>
+                        <img src="assets/images/dashboard-images/ncp-default.png" *ngIf="!ImgUrl"
+                            class="img-fluid img-thumbnail profile-photo">
+                        <img *ngIf="ImgUrl" src="{{ImgUrl}}" class="img-fluid img-thumbnail profile-photo">
+                    </div>
+                    <div class="d-none d-lg-block d-sm-none">
+                    <label for="txtFacebookURL" class="form-label"><i class="fab fa-facebook-f me-2 text-primary"></i>Facebook URL</label>
+                    <input type="text" class="form-control mb-2" placeholder="Facebook Profile Link" formControlName="FacebookLink">
+                    <div *ngIf="submitted && f.FacebookLink.errors" class="invalid-feedback" style="margin-top: -9px;">
+                        <div *ngIf="f.FacebookLink.errors.pattern">Please enter valid url.</div>
+                     </div>
+                    <label for="txtTwitterURL" class="form-label"><i class="fab fa-twitter me-2 text-info"></i>Twitter URL </label>
+                    <input type="text" class="form-control mb-2" placeholder="Twitter Profile Link" formControlName="TwitterLink">
+                    <div *ngIf="submitted && f.TwitterLink.errors" class="invalid-feedback" style="margin-top: -9px;">
+                        <div *ngIf="f.TwitterLink.errors.pattern">Please enter valid url.</div>
+                     </div>
+                    <label for="txtInstagramURL" class="form-label"><i class="fab fa-instagram me-2 text-warning"></i>Instagram URL </label>
+                    <input type="text" class="form-control  mb-2" placeholder="Instagram Profile Link" formControlName="InstagramLink">
+                   <div *ngIf="submitted && f.InstagramLink.errors" class="invalid-feedback" style="margin-top: -9px;">
+                      <div *ngIf="f.InstagramLink.errors.pattern">Please enter valid url.</div>
+                   </div>
+                </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="row">
+                        <div class="col-sm-4 mb-3">
+                            <label class="form-label required-field">First Name</label>
+                            <input type="text" class="form-control" formControlName="FName" placeholder="First Name"
+                                [ngClass]="{ 'is-invalid': submitted && f.FName.errors }">
+                            <div *ngIf="submitted && f.FName.errors" class="invalid-feedback">
+                                <div *ngIf="f.FName.errors.required">First name is required
+                                </div>
+                                <div *ngIf="f.FName.errors.pattern">First name can not contain space</div>
+                                <div *ngIf="f.FName.errors.onlyEnglish">Use English Language</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mb-3 d-none d-lg-block d-sm-none">
+                            <label for="txtFullName" class="form-label">Middle Name</label>
+                            <input type="text" class="form-control" formControlName="MName" placeholder="Middle Name"
+                                [ngClass]="{ 'is-invalid': submitted && f.MName.errors }">
+                            <div *ngIf="submitted && f.MName.errors" class="invalid-feedback">
+                                <div *ngIf="f.MName.errors.pattern">Middle name can not contain space</div>
+                                <div *ngIf="f.MName.errors.onlyEnglish">Use English Language</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mb-3">
+                            <label for="txtFullName" class="form-label required-field">Last Name</label>
+                            <input type="text" class="form-control" formControlName="LName" placeholder="Last Name"
+                                [ngClass]="{ 'is-invalid': submitted && f.LName.errors }">
+                            <div *ngIf="submitted && f.LName.errors" class="invalid-feedback">
+                                <div *ngIf="f.LName.errors.required">Last name is required
+                                </div>
+                                <div *ngIf="f.LName.errors.pattern">Last name can not contain space</div>
+                                <div *ngIf="f.LName.errors.onlyEnglish">Use English Language</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-none d-lg-block d-sm-none">
+                    <div class="row">
+                        <div class="col-sm-4 mb-3">
+                            <label class="form-label required-field">Committee Name</label>
+                            <ngx-select [allowClear]="true" [items]="resCommittees" placeholder="Select Committee"
+                                optionValueField="Id" (remove)="clikedClose('Committees')" formControlName="BodyId"
+                                optionTextField="BodyOrgCellName"
+                                [disabled]="disableCommitee"
+                                (select)="getCurrentDesignatedMembers(this.editProfileForm.value.BodyId)">
+                            </ngx-select>
+                            <div *ngIf="submitted && f.BodyId.errors" class="invalid-feedback">
+                                <div *ngIf="f.BodyId.errors.required">Select Committee Name
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mb-3">
+                            <label for="ddlVillageTown" class="form-label required-field">Designation</label>
+                            <div class="input-group">
+                                <ngx-select [allowClear]="true" [items]="allDesignatedMembers"
+                                (remove)="clikedClose('Designation')" placeholder="Select Designation"
+                                optionValueField="DesignationId"
+                                 [disabled]="!this.editProfileForm.value.BodyId || allDesignatedMembers?.length == 0 || disableCommitee"
+                                formControlName="DesignationId" optionTextField="DesignationName" style="width: 100%;">
+                            </ngx-select>
+                            <!--  style="width: 83%;" <button  class="rounded btn btn-sm btn-light mx-1 ng-star-inserted" title="Add Designation" (click)="addDesignated(this.editProfileForm.value.BodyId)"><i class="fas fa-plus"></i></button> -->
+                            </div>
+                            <div *ngIf="submitted && f.DesignationId.errors" class="invalid-feedback">
+                                <div *ngIf="f.DesignationId.errors.required">Designation is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="ddlVillageTown" class="form-label">Constituency</label>
+                            <ngx-select [allowClear]="true" [items]="getConstituencyResult"
+                                (remove)="clikedClose('Constituency')" placeholder="Select Constituency"
+                                optionValueField="ConstituencyNo"
+                                formControlName="ConstituencyNo" optionTextField="ConstituencyName">
+                            </ngx-select>
+                           <!--  <div class="mb-3">
+                                <label for="txtMemberName" class="form-label required-field">
+                                    Post From Date</label>
+                                <div class="input-group">
+                                    <input [owlDateTime]="dt3" class="form-control" [max]="maxDate"
+                                        [owlDateTimeTrigger]="dt3" placeholder="From  Date"
+                                        formControlName="PostfromDate">
+                                    <button class="btn btn-light border btn-sm" type="button" [owlDateTimeTrigger]="dt3"
+                                        *ngIf="!this.editProfileForm.value.PostfromDate">
+                                        <i class="fas fa-calendar-alt"></i></button>
+                                    <button class="btn btn-light border btn-sm"
+                                        *ngIf="this.editProfileForm.value.PostfromDate" (click)="clearValueDatePicker()"
+                                        type="button">
+                                        <i class="fas fa-times"></i></button>
+                                </div>
+                                <owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time>
+                                <div *ngIf="submitted && f.PostfromDate.errors" class="invalid-feedback">
+                                    <div *ngIf="f.PostfromDate.errors.required">Post date is required
+                                    </div>
+                                </div> 
+                            </div>-->
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <div class="col-sm-4 d-none d-lg-block d-sm-none">
+                            <label for="txtEmailID" class="form-label">Email ID</label>
+                            <input type="email" class="form-control" placeholder="Email ID" formControlName="EmailId">
+                            <div *ngIf="submitted && f.EmailId.errors" class="invalid-feedback">
+                                <div *ngIf="f.EmailId.errors.email">Enter Valid email id
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="txtEmailID" class="form-label required-field">Contact No</label>
+                            <input type="text" class="form-control" placeholder="Contact No" maxlength="10" (keypress)="acceptedOnlyNumbers($event)"
+
+
+
+                                formControlName="MobileNo" [ngClass]="{ 'is-invalid': submitted && f.MobileNo.errors }">
+                            <div *ngIf="submitted && f.MobileNo.errors" class="invalid-feedback">
+                                <div *ngIf="f.MobileNo.errors.required">Contact No is required
+                                </div>
+                                <div *ngIf="f.MobileNo.errors.pattern">Please, Enter Valid Mobile Number.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 d-none d-lg-block d-sm-none">
+                            <label for="rblArea" class="form-label">Area</label>
+                            <div class="d-block">
+                                <div class="form-check form-check-inline" *ngFor="let category of categoryArray">
+                                    <input class="form-check-input" type="radio" formControlName="IsRural"
+                                        [value]="category.id" name="IsRural"
+                                        (change)='onRadioChangeCategory(category.name)'>
+                                    <label class="form-check-label" for="rblRural">{{category.name}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                    <div class="d-none d-lg-block d-sm-none">
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <label for="ddlDistrict" class="form-label">District</label>
+                            <ngx-select [allowClear]="true" (remove)="districtClear('district')" [items]="allDistrict"
+                                formControlName="DistrictId"
+                                (select)="getTaluka(this.editProfileForm.value.DistrictId,'select')"
+                                optionValueField="DistrictId" optionTextField="DistrictName"
+                                placeholder="Select District">
+                            </ngx-select>
+                        </div>
+                        <div class="col-sm-4" *ngIf="this.editProfileForm.value.IsRural == 1">
+                            <label for="ddlTaluka" class="form-label">Taluka</label>
+                            <ngx-select [allowClear]="true" (remove)="districtClear('taluka')"
+                                [items]="getTalkaByDistrict" [disabled]="!this.editProfileForm.value.DistrictId"
+                                formControlName="TalukaId" optionValueField="TalukaId" optionTextField="TalukaName"
+                                placeholder="Select Taluka"
+                                (select)="getVillageOrCity(this.editProfileForm.value.TalukaId, villageCityLabel)">
+                            </ngx-select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="ddlVillageTown" class="form-label">{{villageCityLabel}}</label>
+                            <ngx-select [allowClear]="true" [items]="resultVillageOrCity"
+                                placeholder="Select {{villageCityLabel}}" [optionValueField]="setVillOrCityId"
+                                formControlName="VillageId" [optionTextField]="setVillOrcityName"
+                                [disabled]="villageDisabled">
+                            </ngx-select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-12">
+                            <label for="rblGender" class="form-label">Gender</label>
+                            <div class="d-block">
+                                <!-- [checked]="defultCategory == category.name" -->
+                                <div class="form-check form-check-inline" *ngFor="let gender of GenderArray">
+                                    <input class="form-check-input" type="radio" formControlName="Gender"
+                                        [checked]="selGender == gender.id" [value]="gender.id" name="Gender">
+                                    <label class="form-check-label" for="rgender">{{gender.name}}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="col-sm-12">
+                            <label for="txtAddress" class="form-label">Address</label>
+                            <textarea class="form-control" formControlName="Address" placeholder="Address"  rows="2"></textarea>
+                        </div> -->
+                    </div>
+                </div>
+                </div>
+
+                <!-- <div class="mb-3 row">
+                    <div class="col-sm-6">
+                    <label class="form-label">Committee Name</label>
+                    <input type="text" class="form-control" value="{{getCommiteeName?.CommiteeName}}" readonly
+                        placeholder="First Name">
+                    </div>
+                </div> -->
+
+                <!-- <div class="mb-3">
+                    <label for="txtAddress" class="form-label">Address</label>
+                    <textarea class="form-control" placeholder="Address" formControlName="Address"
+                        [ngClass]="{ 'is-invalid': submitted && f.Address.errors }"></textarea>
+                </div> -->
+                
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-footer d-block px-0">
+        <div class="row">
+            <div class="col-sm-6 col-6">
+                <button class="btn btn-secondary btn-sm" (click)="clearForm()">Clear</button>
+            </div>
+            <div class="col-sm-6 col-6 text-end">
+                <button class="btn btn-main btn-sm" type="submit" (click)="updateProfile()">{{profileFlag}}
+                    Member</button>
+            </div>
+        </div>
+    </div>
+</div>

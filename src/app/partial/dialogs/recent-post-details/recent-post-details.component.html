@@ -1,0 +1,167 @@
+<div id="PostDetailModal">
+    <div class="modal-dialog modal-fullscreen modal-dialog-centered" style="width: 98vw;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="PostDetailModalLabel">Post Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="onNoClick('No')"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="row m-0 g-0">
+                    <div class="col-sm-8 bg-secondary">
+                        <div id="carouselImageSlideshow" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item"
+                                    *ngFor="let img of activitieDetails.ImagePath.split(','); let i = index"
+                                    [class.active]="i == 0">
+                                    <img [src]="img">
+                                </div>
+                                <div class="carousel-item active" *ngIf="!activitieDetails.ImagePath">
+                                    <img src="assets/images/dashboard-images/ncp-default.png">
+                                </div>
+                            
+                                
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselImageSlideshow"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselImageSlideshow"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card card-body border-0">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <img *ngIf='activitieDetails?.UserProfilePhoto' src="{{activitieDetails?.UserProfilePhoto}}" class="member-photo" alt="...">
+                                    <img *ngIf='!activitieDetails?.UserProfilePhoto' src="assets/images/dashboard-images/ncp-default.png" class="member-photo" alt="...">
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <p class="mb-1 fw-bold d-flex justify-content-between">{{activitieDetails?.UserFName}}
+                                        {{activitieDetails?.UserLName}}  
+                                        <span>
+                                            <div class="text-end post-details fw-normal"><span class="type">{{activitieDetails?.CreatedDate}}
+                                                {{activitieDetails?.CreatedTime}}</span></div>
+                                        </span>
+                                    </p>
+                                    <p class="small text-muted mb-1">{{activitieDetails?.Designation}}</p>
+                                        <small class="small text-muted" *ngIf="activitieDetails?.Activitylocation"><span class="fa fa-map-marker-alt me-1"></span> {{activitieDetails?.Activitylocation}}</small>
+                                </div>
+                            </div>
+                            <div class="modal-post">
+                                <div class="post-details">
+                                    <div class="text-end">
+                                        <span class="type">{{activitieDetails?.Category}}</span>
+                                    </div>
+                                    <p class="title">{{activitieDetails?.Title | titlecase}}</p>
+                                    <p class="description" [innerHTML]="activitieDetails?.Description"></p>
+                                </div>
+                                <div class="my-3">
+                                    <div class="btn-group w-100" role="group" aria-label="Basic radio toggle button group">
+                                        <input type="radio" class="btn-check" name="btnradio" id="btnradio11"
+                                            autocomplete="off">
+                                        <label class="btn btn-outline-primary shadow-none" for="btnradio11"
+                                            (click)="socialMediaCheck('Liked');insertLikesList(activitieDetails.Id)">
+                                            <i class="far fa-thumbs-up me-2"></i>{{activitieDetails?.Likes}}
+                                        </label>
+    
+                                        <input type="radio" class="btn-check" name="btnradio" id="btnradio12"
+                                            autocomplete="off">
+                                        <label class="btn btn-outline-success shadow-none" for="btnradio12"
+                                            (click)="socialMediaCheck('Comments');getCommentsList(activitieDetails.Id)">
+                                            <i class="far fa-comments me-2"></i>{{activitieDetails?.Comments}}
+                                        </label>
+    
+                                        <input type="radio" class="btn-check" name="btnradio" id="btnradio13"
+                                            autocomplete="off">
+                                        <label class="btn btn-outline-info shadow-none" for="btnradio13"
+                                            (click)="socialMediaCheck('ListView');viewListdata(activitieDetails.Id,'5')">
+                                            <i class="far fa-eye me-2"></i>{{activitieDetails?.Views}}
+                                        </label>
+
+                                        <input type="radio" class="btn-check" name="btnradio" id="btnradio14"
+                                            autocomplete="off">
+                                        <label class="btn btn-outline-dark shadow-none" for="btnradio14"
+                                            (click)="socialMediaCheck('Shared') ;viewListdata(activitieDetails.Id,'3')">
+                                            <i class="far fa-share-square me-2"></i>{{activitieDetails?.Shares}}
+                                        </label>
+
+                                    </div>
+                                </div>
+    
+                                <div class="likesharecomment">
+                                    <div class="card" *ngIf="Liked">
+                                        <div class="card-header fw-bold bg-transparent text-primary">
+                                            Liked By
+                                        </div>
+                                        <ul class="list-group list-group-flush"
+                                            *ngIf="resLikesList?.length != 0 else LikedNotfound">
+                                            <li class="list-group-item" *ngFor="let LikesList of resLikesList">
+                                                <a>{{LikesList?.resLikesList}} {{LikesList?.Fname}}
+                                                    {{LikesList?.LName}}</a>
+                                                <!-- <span class="small text-muted float-end">12-02-2021</span> -->
+                                            </li>
+    
+                                        </ul>
+                                        <ng-template #LikedNotfound>
+                                            <div class="m-4 alert alert-danger text-center py-2">No Data Found..!</div>
+                                        </ng-template>
+                                    </div>
+                                    <div class="card" *ngIf="comments">
+                                        <div class="card-header fw-bold bg-transparent text-success">
+                                            Comments
+                                        </div>
+                                        <div class="bg-light p-2">
+                                            <div class="d-flex flex-row align-items-start">
+                                                <textarea class="form-control ml-1 shadow-none textarea" [formControl]="Comment"></textarea></div>
+                                            <div class="mt-2 float-end">
+                                                <button  class="btn btn-secondary me-2 btn-sm" type="button" (click)="cancel()">Clear</button>
+                                                <button class="btn btn-sm btn-main" type="button" (click)="submitComment()">Comment</button>
+                                            </div>
+                                        </div>
+                                        <ul class="list-group list-group-flush"
+                                            *ngIf="resCommentsList_1_0?.length != 0 else commentsNotfound">
+                                            <li class="list-group-item" *ngFor="let commentsList of resCommentsList_1_0">
+                                                <p class="mb-1 small fw-bold"><a>{{commentsList?.Fname}}
+                                                        {{commentsList?.Mname}} {{commentsList?.LName}}</a></p>
+                                                <p class="mb-0 small text-muted">{{commentsList?.Comments}}
+                                                    <button  *ngIf="commentsList?.UserId == loginUserId" (click)="deleteComments(commentsList.Id)" class="btn btn-sm btn-light text-danger rounded"><i class="fas fa-trash-alt"></i></button>
+                                                </p>
+                                                <div class="form-text text-end small">{{commentsList?.CreatedDate}} <small>({{commentsList?.Timeline}})</small></div>
+                                            </li>
+                                        </ul>
+                                        <ng-template #commentsNotfound>
+                                            <div class="m-4 alert alert-danger text-center py-2">No Data Found..!</div>
+                                        </ng-template>
+                                    </div>
+                                    <div class="card" *ngIf="ListView">
+                                        <div class="card-header fw-bold bg-transparent text-info">
+                                            View By
+                                        </div>
+                                        <ul class="list-group list-group-flush" *ngFor="let viewdata of viewDataArray">
+                                            <li class="p-2" >{{viewdata?.FullName}}</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="card" *ngIf="Shared">
+                                        <div class="card-header fw-bold bg-transparent text-info">
+                                            Shared By
+                                        </div>
+                                        <ul class="list-group list-group-flush" *ngFor="let viewdata of viewDataArray">
+                                            <li class="p-2" >{{viewdata?.FullName}}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

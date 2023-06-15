@@ -1,0 +1,122 @@
+<div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h6 class="modal-title" id="ViewDetailsModalLabel">Details</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="onNoClick()"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-6 form-container">
+                    <div class="row mb-2">
+                        <div class="col-sm-8">
+                            <label class="form-label">Name</label>
+                            <div id="txtMembersName" class="form-data">
+                                {{resultBodyMemActDetails.FullName}}
+                            </div>
+                            <!-- <label class="form-label">#ID</label>
+                            <div id="txtID" class="form-data">{{resultBodyMemActDetails.Id}}</div> -->
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label">Post Date</label>
+                            <div id="txtPostDate" class="form-data">
+                                {{resultBodyMemActDetails.ActivityDate}}</div>
+                        </div>
+                    </div>
+                    <!-- <div class="mb-2">
+                        <label class="form-label">Members FullName</label>
+                        <div id="txtMembersName" class="form-data">
+                            {{resultBodyMemActDetails.FullName}}
+                        </div>
+                    </div> -->
+                    <div class="row mb-2">
+                        <div class="col-sm-12" *ngIf="resultBodyMemActDetails?.CategoryName">
+                            <label class="form-label">Work Type</label>
+                            <div id="txtWorkType" class="form-data">
+                                {{resultBodyMemActDetails.CategoryName}}
+                            </div>
+                        </div>
+                        <div class="col-sm-12" *ngIf="resultBodyMemActDetails?.Title">
+                            <label class="form-label">Title</label>
+                            <div id="txtTitle" class="form-data">
+                                {{resultBodyMemActDetails.Title}}
+                            </div>
+                        </div>
+                        <div class="col-sm-4" *ngIf="resultBodyMemActDetails?.ProgramTitle">
+                            <label class="form-label">Program</label>
+                            <div id="txtProgram" class="form-data">
+                                {{resultBodyMemActDetails.ProgramTitle}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2" *ngIf="resultBodyMemActDetails?.Description">
+                        <label class="form-label">Description</label>
+                        <div id="txtDescription" class="form-data">
+                            {{resultBodyMemActDetails.Description}}
+                        </div>
+                    </div>
+                    <!-- <div class="mb-3">
+                            <label class="form-label">Latitude and Longitude</label>
+                            <div class="form-data">
+                                    {{resultBodyMemActDetails.ActivityLocation}}
+                            </div>
+                        </div> -->
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="form-label">Likes</label>
+                            <p class="form-data text-primary">{{resultBodyMemActDetails.TotalLikes}}</p>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label">Comments</label>
+                            <p class="form-data text-success">{{resultBodyMemActDetails.TotalComments}}</p>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label">Shares</label>
+                            <p class="form-data text-info">{{resultBodyMemActDetails.TotalShares}}</p>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label">Abuses</label>
+                            <p class="form-data text-danger">{{resultBodyMemActDetails.TotalAbuses}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 form-container bg-light">
+                    <div class="" *ngIf="lat!='' && lng!=''; else elseBlock">
+                        <label class="form-label">Location</label>
+                        <!-- [fitBounds]="true" -->
+                        <agm-map  [latitude]="lat" [longitude]="lng" [zoom]="15" [mapTypeId]="'roadmap'" [fullscreenControl]='true'>
+                            <agm-marker   [latitude]="lat" [longitude]="lng"  (markerClick)="clickedMarker(infowindow)"> 
+                                <!-- [agmFitBounds]="true"-->
+                            <agm-info-window #infowindow>
+                                <strong>Address -  {{resultBodyMemActDetails?.ActivityLocationAddress}}</strong>
+                            </agm-info-window>
+                            </agm-marker>
+                        </agm-map>
+                    </div>
+                    <ng-template #elseBlock>
+                        <div class="h-20 text-center">
+                            <img src="assets/images/location-not-found.svg" class="img-h300">
+                        </div>
+                    </ng-template>
+
+                </div>
+                <div class="col-sm-12 form-container">
+                    <div class="mb-0">
+                        <label class="form-label">Photos</label>
+                        <div class="row">
+                            <div class="col-sm-2 mb-0" *ngFor="let imgs of comUserdetImg; index as i">
+                                <div *ngIf="imgs?.data?.thumb ; else elseBlock1"> 
+                                <img [lightbox]="i" [src]="imgs?.data?.thumb" class="img-thumbnail h-150">
+                               </div>
+                         </div>
+                        <ng-template #elseBlock1>
+                            <div class=" mb-0">
+                                <img src="assets/images/productimgnotavailable.png" class="img-thumbnail h-150">
+                            </div>
+                     </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

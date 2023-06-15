@@ -14,7 +14,7 @@ import { HeaderComponent } from './partial/template/header/header.component';
 import { SidebarComponent } from './partial/template/sidebar/sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxSelectModule } from 'ngx-select-ex';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -28,6 +28,13 @@ import { RatingModule } from 'ng-starrating';
 import { AgmDrawingModule } from '@agm/drawing';
 import { AgmCoreModule } from '@agm/core';
 import { GeoFanceComponent } from './partial/dialogs/geo-fance/geo-fance.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { AddDesignationComponent } from './partial/dialogs/add-designation/add-designation.component';
+import { AddMemberComponent } from './partial/dialogs/add-member/add-member.component';
+import { ActivityDetailsComponent } from './partial/dialogs/activity-details/activity-details.component';
+import { RecentPostDetailsComponent } from './partial/dialogs/recent-post-details/recent-post-details.component';
+import { AddCommitteeComponent } from './partial/dialogs/add-committee/add-committee.component';
+import { LightboxModule } from '@ngx-gallery/lightbox';
 
 @NgModule({
   declarations: [
@@ -39,7 +46,11 @@ import { GeoFanceComponent } from './partial/dialogs/geo-fance/geo-fance.compone
     DeleteComponent,
     VoterCallEntriesComponent,
     NameCorrectionDialogComponent,
-
+    AddDesignationComponent,
+    AddMemberComponent,
+    ActivityDetailsComponent,
+    RecentPostDetailsComponent,
+    AddCommitteeComponent,
     GeoFanceComponent,
   ],
   imports: [
@@ -48,13 +59,16 @@ import { GeoFanceComponent } from './partial/dialogs/geo-fance/geo-fance.compone
     BrowserAnimationsModule,
     NgxSpinnerModule,
     ReactiveFormsModule,
+    FormsModule,
     NgxSelectModule,
     HttpClientModule,
     MatDialogModule,
     OwlNativeDateTimeModule,
     OwlDateTimeModule,
     RatingModule,
+    LightboxModule,
     NgxPaginationModule,
+    DragDropModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAkNBALkBX7trFQFCrcHO2I85Re2MmzTo8',
       language: 'en',

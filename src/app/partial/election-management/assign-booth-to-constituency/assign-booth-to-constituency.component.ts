@@ -88,7 +88,7 @@ export class AssignBoothToConstituencyComponent implements OnInit {
   get f() { return this.assignBoothForm.controls };
 
   getElection() {
-    // this.callAPIService.setHttp('get', 'Web_GetElection?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'ncpServiceForWeb');
+    // this.callAPIService.setHttp('get', 'Web_GetElection?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.setHttp('get', 'Web_Election_Get_ElectionNameHaveConstituency?UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {

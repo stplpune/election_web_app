@@ -1,0 +1,125 @@
+<div class="modal-dialog m-width">
+    <div class="modal-content">
+        <div class="modal-header">
+            <p class="modal-title" id="AddDesignationModalLabel">Add Designation</p>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" #closeModalAddDesignation
+                (click)="onNoClickModal('No')" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-5">
+                    <form [formGroup]="AddDesignationForm">
+                        <div class="form-container">
+                            <div class="mb-3">
+                                <label for="txtBodyName" class="form-label">Committee Name</label>
+                                <input type="text" class="form-control" readonly formControlName="BodyId" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="ddlDesignationName" class="form-label">Designation Name</label>
+                                <ngx-select [allowClear]="true" [items]="resultDesignation"
+                                    placeholder="Select Designation" formControlName="DesignationId"
+                                    optionValueField="Id" optionTextField="DesignationName">
+                                </ngx-select>
+                                <div *ngIf="addDesFormSubmitted && d.DesignationId.errors" class="invalid-feedback">
+                                    <div *ngIf="d.DesignationId.errors.required">Designation is required</div>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label d-block">Is Multiple</label>
+
+                                <div class="form-check form-check-inline" *ngFor="let isMultiple of IsMultiple">
+                                    <input class="form-check-input" name="IsMultiple" type="radio"
+                                        formControlName="IsMultiple" [checked]="isMultiple.id == editRadioBtnClick"
+                                        [value]="isMultiple.id">
+                                    <label class="form-check-label" for="chkIsMultipleYes">{{isMultiple.name}}</label>
+                                </div>
+                                <div *ngIf="addDesFormSubmitted && d.IsMultiple.errors" class="invalid-feedback"
+                                    style="margin-top: -6px;">
+                                    <div *ngIf="d.IsMultiple.errors.required">Is Multiple is required</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary me-2 " type="button " (click)="clearAddDesignationForm() ">
+                                Clear </button>
+                            <button type="submit " class="btn btn-main ml-2"
+                                (click)="submitDesignationForm()">{{addDesignation}} Designation</button>
+
+                        </div>
+                        <div class="card mt-3 border-0 d-sm-none d-lg-block d-none">
+                            <div class="card-header bg-transparent fw-bold ps-2">Designations Added</div>
+                            <div class="card-body p-0">
+                                <div class="row bg-light border-bottom g-1 px-2 py-2 mb-2">
+                                    <div class="col-sm-2 col-2">
+                                        Sr. No.
+                                    </div>
+                                    <div class="col-sm-8 col-8">
+                                        Designation
+                                    </div>
+
+        
+                                    <div class="col-sm-2 col-2"></div>
+                                </div>
+                                <div cdkDropList class="example-list fs-80rem" (cdkDropListDropped)="swingDesignation($event)">
+                                    <div class="row example-box g-1 py-1 px-2 d-flex align-items-center"
+                                        *ngFor="let bodyAssignedDesignation of allBodyAssignedDesignation" cdkDrag
+                                        [class.active]="bodyAssignedDesignation.SrNo == heightedRow">
+                                        <div class="col-sm-1 col-1">
+                                            {{bodyAssignedDesignation.SrNo}}
+                                        </div>
+                                        <div class="col-sm-8 col-8">
+                                            {{bodyAssignedDesignation.DesignationName}}
+                                        </div>
+                                        <div class="col-sm-3 col-3">
+                                            <button class="btn btn-sm btn-light ng-star-inserted" style="font-size:12px"
+                                                (click)=" editDesignationForm(bodyAssignedDesignation) "  [disabled]="bodyAssignedDesignation.DesignationId == loggedInDesId"><i
+                                                    class="fas fa-pencil-alt "></i></button>
+                                            <button class="btn btn-sm btn-light text-danger rounded"  style="font-size:12px" (click)="getUserPostBodyId(bodyAssignedDesignation.BodyId, bodyAssignedDesignation.DesignationId)" [disabled]="bodyAssignedDesignation.DesignationId == loggedInDesId"> <i class="fas fa-trash-alt"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="row" *ngIf="allAssignedDesignations?.length==0">
+                                        <div class="col-sm-12">
+                                            <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-sm-7 mt-3 chartbox">
+                    <p class="fw-bold">Previously Assigned Designations</p>
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Designation</th>
+                                <th>Person(s) Assigned</th>
+                                <!-- <th></th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let resOfAssignedDesignations of allAssignedDesignations"
+                                [class.active]="resOfAssignedDesignations.SrNo == heightedRow" class="example-box">
+                                <td>{{resOfAssignedDesignations.SrNo}}</td>
+                                <td>{{resOfAssignedDesignations.DesignationName}}</td>
+                                <td>{{resOfAssignedDesignations.PersonAssigned | titlecase}}</td>
+                                    <!-- <td>
+                                    <ng-container *ngIf="!resOfAssignedDesignations.PersonAssigned else noDataFound">
+                                        <a (click)="addEditMember('Create',0)" class="btn btn-sm btn-light" title="Add Member"><i class="fas fa-plus"></i></a>
+                                    </ng-container>
+                                    <ng-template #noDataFound>-</ng-template>
+                                </td> -->
+
+                            </tr>
+                            <tr *ngIf="allAssignedDesignations?.length==0">
+                                <td colspan="4">
+                                    <div class="alert alert-danger text-center py-2 ">No Data Found..!</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
