@@ -31,7 +31,7 @@ import { SearchPipe } from 'src/app/pipes/search.pipe';
 @Component({
   selector: 'app-organization-details',
   templateUrl: './organization-details.component.html',
-  styleUrls: ['./organization-details.component.css', '../../../partial.component.css'],
+  styleUrls: ['./organization-details.component.css', '../../partial.component.css'],
   providers: [ SearchPipe ]
 })
 export class OrganizationDetailsComponent implements OnInit {
