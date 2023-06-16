@@ -648,7 +648,7 @@ export class OrganizationDetailsComponent implements OnInit {
   redToMemberProfile(memberId: any, FullName: any) {
     let obj = { 'memberId': memberId, 'FullName': FullName }
     sessionStorage.setItem('memberId', JSON.stringify(obj));
-    this.router.navigate(['../../../profile'])
+    // this.router.navigate(['../../../profile'])
   }
   
   addNewMember(flag: any, id: any,mobileNo:any) {
