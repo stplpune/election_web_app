@@ -66,7 +66,7 @@ export class OrganizationDetailsComponent implements OnInit {
   total: any;
   pageSize: number = 10;
   resWorkcategory: any;
-  filter!: FormGroup;
+  // filter!: FormGroup;
   globalMemberId: number = 0;
   globalCategoryId: number = 0;
   dataAddEditMember: any;
@@ -130,31 +130,31 @@ export class OrganizationDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.defaultFilterForm()
+    // this.defaultFilterForm()
     this.defaultBodyMemForm();
     // this.getAllBodyMember();
     
     this.getBodyMemberFilterDetails(this.bodyId);
     this.getCurrentDesignatedMembers(this.bodyId);
     //this.getBodyMemeberActivities(this.bodyId);
-    this.getBodyMemeberGraph(this.bodyId);
+    // this.getBodyMemeberGraph(this.bodyId);
     this.getWorkcategoryFilterDetails(this.bodyId);
     //this.activitiesPerodicGraph(this.bodyId);
     this.subCommittess(this.bodyId);
     this.HighlightRowTree = this.bodyId;
     this.subCommitteeName = this.getCommitteeName;
     this.loggedInUserId = this.commonService.loggedInUserId();
-    this.dashboardActivities();
+    // this.dashboardActivities();
     this.searchFilterMember('false');
   }
 
-  defaultFilterForm() {
-    this.filter = this.fb.group({
-      memberName: [0],
-      workType: [0],
-      fromTodate: [['', '']],
-    })
-  }
+  // defaultFilterForm() {
+  //   this.filter = this.fb.group({
+  //     memberName: [0],
+  //     workType: [0],
+  //     fromTodate: [['', '']],
+  //   })
+  // }
 
   filterForm(text: any, flag: any) {
     if (flag == "member") {
@@ -162,7 +162,7 @@ export class OrganizationDetailsComponent implements OnInit {
     } else if (flag == "workType") {
       this.globalCategoryId = text;
     }
-    this.getBodyMemeberActivities(this.bodyId);
+    // this.getBodyMemeberActivities(this.bodyId);
 
   }
 
@@ -258,25 +258,25 @@ export class OrganizationDetailsComponent implements OnInit {
     this.bodyMember.controls['PostFromDate'].setValue(null)
   }
 
-  filterData() {
-    this.paginationNo = 1;
-    this.getBodyMemeberActivities(this.bodyId);
-    this.getBodyMemeberGraph(this.bodyId);
-  }
+  // filterData() {
+  //   this.paginationNo = 1;
+  //   this.getBodyMemeberActivities(this.bodyId);
+  //   this.getBodyMemeberGraph(this.bodyId);
+  // }
 
-  clearFilter(flag: any) {
-    if (flag == 'member') {
-      this.filter.controls['memberName'].setValue(0);
-    } else if (flag == 'workType') {
-      this.filter.controls['workType'].setValue(0);
-    } else if (flag == 'datepicker') {
-      this.defaultCloseBtn = false;
-      this.filter.controls['fromTodate'].setValue(['', '']);
-    }
-    this.paginationNo = 1;
-    this.getBodyMemeberActivities(this.bodyId);
-    this.getBodyMemeberGraph(this.bodyId);
-  }
+  // clearFilter(flag: any) {
+  //   if (flag == 'member') {
+  //     this.filter.controls['memberName'].setValue(0);
+  //   } else if (flag == 'workType') {
+  //     this.filter.controls['workType'].setValue(0);
+  //   } else if (flag == 'datepicker') {
+  //     this.defaultCloseBtn = false;
+  //     this.filter.controls['fromTodate'].setValue(['', '']);
+  //   }
+  //   this.paginationNo = 1;
+  //   this.getBodyMemeberActivities(this.bodyId);
+  //   this.getBodyMemeberGraph(this.bodyId);
+  // }
 
 
 
@@ -432,7 +432,7 @@ export class OrganizationDetailsComponent implements OnInit {
         this.spinner.hide();
         this.toastrService.success(res.data1[0].Msg);
         this.getCurrentDesignatedMembers(this.bodyId);
-        this.getBodyMemeberGraph(this.bodyId);
+        // this.getBodyMemeberGraph(this.bodyId);
       } else {
         this.spinner.hide();
         // this.toastrService.error("Member is not available");
@@ -475,60 +475,60 @@ export class OrganizationDetailsComponent implements OnInit {
     });
   }
 
-  getBodyMemeberActivities(id: any) {
-    let filterData = this.filter.value;
-    let fromDate: any = "";
-    let toDate: any = "";
-    this.filter.value.fromTodate[0] != "" ? (fromDate = this.datePipe.transform(this.filter.value.fromTodate[0], 'dd/MM/yyyy')) : fromDate = '';
-    this.filter.value.fromTodate[1] != "" ? (toDate = this.datePipe.transform(this.filter.value.fromTodate[1], 'dd/MM/yyyy')) : toDate = '';
-    this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_BodyMemeber_Activities?MemberId=' + filterData.memberName + '&BodyId=' + id + '&nopage=' + this.paginationNo + '&CategoryId=' + filterData.workType + '&FromDate=' + fromDate + '&ToDate=' + toDate, false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.spinner.hide();
-        this.resBodyMemAct = res.data1;
-        this.total = res.data2[0].TotalCount;
-      } else {
-        this.spinner.hide();
-        if (res.data == 1) {
-          this.resBodyMemAct = [];
-          //this.toastrService.error("Member is not available");
-        } else {
-          this.toastrService.error("Please try again something went wrong");
-        }
-      }
-    }, (error: any) => {
-      if (error.status == 500) {
-        this.router.navigate(['../../../500'], { relativeTo: this.route });
-      }
-    })
-  }
+  // getBodyMemeberActivities(id: any) {
+  //   let filterData = this.filter.value;
+  //   let fromDate: any = "";
+  //   let toDate: any = "";
+  //   this.filter.value.fromTodate[0] != "" ? (fromDate = this.datePipe.transform(this.filter.value.fromTodate[0], 'dd/MM/yyyy')) : fromDate = '';
+  //   this.filter.value.fromTodate[1] != "" ? (toDate = this.datePipe.transform(this.filter.value.fromTodate[1], 'dd/MM/yyyy')) : toDate = '';
+  //   this.spinner.show();
+  //   this.callAPIService.setHttp('get', 'Web_BodyMemeber_Activities?MemberId=' + filterData.memberName + '&BodyId=' + id + '&nopage=' + this.paginationNo + '&CategoryId=' + filterData.workType + '&FromDate=' + fromDate + '&ToDate=' + toDate, false, false, false, 'electionServiceForWeb');
+  //   this.callAPIService.getHttp().subscribe((res: any) => {
+  //     if (res.data == 0) {
+  //       this.spinner.hide();
+  //       this.resBodyMemAct = res.data1;
+  //       this.total = res.data2[0].TotalCount;
+  //     } else {
+  //       this.spinner.hide();
+  //       if (res.data == 1) {
+  //         this.resBodyMemAct = [];
+  //         this.toastrService.error("Member is not available");
+  //       } else {
+  //         this.toastrService.error("Please try again something went wrong");
+  //       }
+  //     }
+  //   }, (error: any) => {
+  //     if (error.status == 500) {
+  //       this.router.navigate(['../../../500'], { relativeTo: this.route });
+  //     }
+  //   })
+  // }
 
   // onClickPagintion(pageNo: number) {
   //   this.paginationNo = pageNo;
   //   this.getBodyMemeberActivities(this.bodyId);
   // }
 
-  getBodyMemeberGraph(id: any) {
-    this.spinner.show();
-    let obj = 'MemberId=' + this.filter.value.memberName + '&BodyId=' + id + '&CategoryId=' + this.filter.value.workType + '&FromDate=' + this.filter.value.fromTodate[0] + '&ToDate=' + this.filter.value.fromTodate[1];
-    this.callAPIService.setHttp('get', 'Web_BodyMemeber_ActivitiesGraph?' + obj, false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.spinner.hide();
-        this.resultBodyMemActGraph = res.data1;
-        this.bodyMemeberChartGraph(this.resultBodyMemActGraph);
-      } else {
-        this.resultBodyMemActGraph = [];
-        this.bodyMemeberChartGraph(this.resultBodyMemActGraph);
-        // this.toastrService.error("Member is not available");
-      }
-    }, (error: any) => {
-      if (error.status == 500) {
-        this.router.navigate(['../../../500'], { relativeTo: this.route });
-      }
-    })
-  }
+  // getBodyMemeberGraph(id: any) {
+  //   this.spinner.show();
+  //   let obj = 'MemberId=' + this.filter.value.memberName + '&BodyId=' + id + '&CategoryId=' + this.filter.value.workType + '&FromDate=' + this.filter.value.fromTodate[0] + '&ToDate=' + this.filter.value.fromTodate[1];
+  //   this.callAPIService.setHttp('get', 'Web_BodyMemeber_ActivitiesGraph?' + obj, false, false, false, 'electionServiceForWeb');
+  //   this.callAPIService.getHttp().subscribe((res: any) => {
+  //     if (res.data == 0) {
+  //       this.spinner.hide();
+  //       this.resultBodyMemActGraph = res.data1;
+  //       this.bodyMemeberChartGraph(this.resultBodyMemActGraph);
+  //     } else {
+  //       this.resultBodyMemActGraph = [];
+  //       this.bodyMemeberChartGraph(this.resultBodyMemActGraph);
+  //       this.toastrService.error("Member is not available");
+  //     }
+  //   }, (error: any) => {
+  //     if (error.status == 500) {
+  //       this.router.navigate(['../../../500'], { relativeTo: this.route });
+  //     }
+  //   })
+  // }
 
   getBodyMemeberActivitiesDetails(id: any) {
     this.indiMembersProgHighlight = id;
@@ -741,7 +741,7 @@ export class OrganizationDetailsComponent implements OnInit {
           this.getBodyMemberFilterDetails(this.bodyId);
           this.toastrService.success(this.resultBodyMemActDetails.Msg);
           this.bodyMember.reset({ BodyName: this.subCommitteeName });
-          this.getBodyMemeberGraph(this.bodyId);
+          // this.getBodyMemeberGraph(this.bodyId);
           this.addMemberFlag = null
         } else {
           // this.toastrService.error("Member is not available");
@@ -754,34 +754,34 @@ export class OrganizationDetailsComponent implements OnInit {
     }
   }
 
-  getweekRage(event: any) {
-    this.defaultCloseBtn = true;
-    this.filter.patchValue({
-      FromDate: this.datepipe.transform(event.value[0], 'dd/MM/yyyy'),
-      ToDate: this.datepipe.transform(event.value[1], 'dd/MM/yyyy')
-    })
-    this.getBodyMemeberActivities(this.bodyId);
-    this.getBodyMemeberGraph(this.bodyId);
-  }
+  // getweekRage(event: any) {
+  //   this.defaultCloseBtn = true;
+  //   this.filter.patchValue({
+  //     FromDate: this.datepipe.transform(event.value[0], 'dd/MM/yyyy'),
+  //     ToDate: this.datepipe.transform(event.value[1], 'dd/MM/yyyy')
+  //   })
+  //   this.getBodyMemeberActivities(this.bodyId);
+  //   this.getBodyMemeberGraph(this.bodyId);
+  // }
 
-  activitiesPerodicGraph(id: any) {
-    let stringPerodicGraph: any = '?MemberId=' + this.globalMemberId + '&BodyId=' + id + '&CategoryId=' + this.globalCategoryId + '&FromDate=' + this.filter.value.fromTodate[0] + '&ToDate=' + this.filter.value.fromTodate[1];
-    this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_BodyMemeber_Activities_PerodicGraph' + stringPerodicGraph, false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.spinner.hide();
-        this.periodicChart = res.data1;
-        this.WorkDoneRecentActivityGraph();
-      } else {
-        // this.toastrService.error("Body member is not available");
-      }
-    }, (error: any) => {
-      if (error.status == 500) {
-        this.router.navigate(['../../../500'], { relativeTo: this.route });
-      }
-    })
-  }
+  // activitiesPerodicGraph(id: any) {
+  //   let stringPerodicGraph: any = '?MemberId=' + this.globalMemberId + '&BodyId=' + id + '&CategoryId=' + this.globalCategoryId + '&FromDate=' + this.filter.value.fromTodate[0] + '&ToDate=' + this.filter.value.fromTodate[1];
+  //   this.spinner.show();
+  //   this.callAPIService.setHttp('get', 'Web_BodyMemeber_Activities_PerodicGraph' + stringPerodicGraph, false, false, false, 'electionServiceForWeb');
+  //   this.callAPIService.getHttp().subscribe((res: any) => {
+  //     if (res.data == 0) {
+  //       this.spinner.hide();
+  //       this.periodicChart = res.data1;
+  //       this.WorkDoneRecentActivityGraph();
+  //     } else {
+  //       this.toastrService.error("Body member is not available");
+  //     }
+  //   }, (error: any) => {
+  //     if (error.status == 500) {
+  //       this.router.navigate(['../../../500'], { relativeTo: this.route });
+  //     }
+  //   })
+  // }
 
   WorkDoneRecentActivityGraph() {
 
@@ -839,25 +839,25 @@ export class OrganizationDetailsComponent implements OnInit {
 
   // -------------------------------------- list wise activity is  ----------------------------- //
 
-  dashboardActivities() {
-    this.spinner.show();
-    this.callAPIService.setHttp('get', 'Dashboard_Activities_Committee_Web?UserId=' + this.commonService.loggedInUserId() + '&PageNo=' + this.paginationNo + '&BodyId=' + this.bodyId, false, false, false, 'electionServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.resDashboardActivities = res.data1;
-        this.total = res.data2[0].TotalCount;
-        this.spinner.hide();
-      } else {
-        this.resDashboardActivities = [];
-        this.spinner.hide();
-      }
-    }, (error: any) => {
-      this.spinner.hide();
-      if (error.status == 500) {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      }
-    })
-  }
+  // dashboardActivities() {
+  //   this.spinner.show();
+  //   this.callAPIService.setHttp('get', 'Dashboard_Activities_Committee_Web?UserId=' + this.commonService.loggedInUserId() + '&PageNo=' + this.paginationNo + '&BodyId=' + this.bodyId, false, false, false, 'electionServiceForWeb');
+  //   this.callAPIService.getHttp().subscribe((res: any) => {
+  //     if (res.data == 0) {
+  //       this.resDashboardActivities = res.data1;
+  //       this.total = res.data2[0].TotalCount;
+  //       this.spinner.hide();
+  //     } else {
+  //       this.resDashboardActivities = [];
+  //       this.spinner.hide();
+  //     }
+  //   }, (error: any) => {
+  //     this.spinner.hide();
+  //     if (error.status == 500) {
+  //       this.router.navigate(['../500'], { relativeTo: this.route });
+  //     }
+  //   })
+  // }
 
   openRecentPostDetails(activitieDetails: any) {
     this.ActivityId = activitieDetails.Id;
@@ -868,7 +868,7 @@ export class OrganizationDetailsComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result == 'Yes' || result == 'No') {
-        this.dashboardActivities();
+        // this.dashboardActivities();
       }
     });
   }
@@ -883,7 +883,7 @@ export class OrganizationDetailsComponent implements OnInit {
       } else {
         this.spinner.hide();
       }
-      this.dashboardActivities();
+      // this.dashboardActivities();
     }, (error: any) => {
       this.spinner.hide();
       if (error.status == 500) {
@@ -895,7 +895,7 @@ export class OrganizationDetailsComponent implements OnInit {
   onClickPagintion(pageNo: number) {
     window.scroll(0,0);
     this.paginationNo = pageNo;
-    this.dashboardActivities();
+    // this.dashboardActivities();
   }
 
   // -------------------------------------- Activity del on  click ----------------------------- //

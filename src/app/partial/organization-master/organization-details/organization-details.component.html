@@ -23,13 +23,13 @@
         </div>
     </div> -->
     <div class="row mb-3 g-2" id="dash-stats">
-        <div class="col-lg-2 col-6">
+        <!-- <div class="col-lg-2 col-6">
             <div class="card card-body bg-cyan">
                 <i class="fas fa-network-wired"></i>
                 <p>Total Work Done</p>
                 <h3>{{TotalWorkAndIosCount?.TotalWork ? TotalWorkAndIosCount?.TotalWork : '0'}}</h3>
             </div>
-        </div>
+        </div> -->
         <div class="col-lg-2 col-6">
             <div class="card card-body bg-green">
                 <i class="fab fa-apple"></i>
@@ -40,7 +40,7 @@
         <div class="col-lg-2 col-6">
             <div class="card card-body bg-blue">
                 <i class="fab fa-android"></i>
-                <p>Total Executives</p>
+                <p>Total Members</p>
                 <h3>{{TotalWorkAndIosCount?.TotalExecutives ? TotalWorkAndIosCount?.TotalExecutives : '0'}}</h3>
             </div>
         </div>
@@ -132,7 +132,7 @@
                         <div class="col-sm-3 col-6">
                             <div class="card card-body bg-blue h-100">
                                 <i class="fab fa-android"></i>
-                                <p>Executive Members</p>
+                                <p>Total Members</p>
                                 <h3>{{TotalWorkAndIosCount?.IndividualTotalExecutives ?
                                     TotalWorkAndIosCount?.IndividualTotalExecutives : '0'}}</h3>
                             </div>
@@ -239,7 +239,7 @@
 
 
             <!-- recent activity  section start here  -->
-            <div class="card mb-3">
+            <!-- <div class="card mb-3">
                 <div class="card-header pb-0">
                     <span class="fw-bold active">Committee Activities</span>
                 </div>
@@ -261,7 +261,7 @@
                                 <div class="col-9">
                                     <div class="row mb-2">
                                         <div class="col-sm-8 col-auto">
-                                            <!-- <span class="post-type">{{dashboardActivities?.Category}}</span> -->
+                                            <span class="post-type">{{dashboardActivities?.Category}}</span>
                                             <span class="post-date"><i
                                                     class="far fa-clock me-1"></i>{{dashboardActivities?.CreatedDate}}
                                                 {{dashboardActivities?.CreatedTime}}</span>
@@ -288,8 +288,8 @@
                                     
                                     <p class="post-title mt-1">{{dashboardActivities?.Title | titlecase}}</p>
                                     <div class="post-details">
-                                        <!-- <p class="post-title text-muted">{{dashboardActivities?.Description |
-                                            titlecase}}</p> -->
+                                        <p class="post-title text-muted">{{dashboardActivities?.Description |
+                                            titlecase}}</p>
                                         <div class="row small text-muted">
                                             <div class="col-sm-3 col"><i
                                                     class="far fa-thumbs-up me-2"></i>{{dashboardActivities?.Likes}}
@@ -321,7 +321,7 @@
                         (pageChange)="onClickPagintion(pageSize = $event)">
                     </pagination-controls>
                 </div>
-            </div>
+            </div> -->
 
 
         </div>
@@ -340,18 +340,18 @@
                     </div>
                     <div class="card-body pt-0 pb-0">
                         <div class="row mb-3 g-2" id="dash-stats">
-                            <div class="col-sm-3 col-6">
+                            <!-- <div class="col-sm-3 col-6">
                                 <div class="card card-body bg-cyan h-100">
                                     <i class="fas fa-network-wired"></i>
                                     <p>Work Done</p>
                                     <h3>{{TotalWorkAndIosCount?.IndividualTotalWork ?
                                         TotalWorkAndIosCount?.IndividualTotalWork : '0'}}</h3>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-sm-3 col-6">
                                 <div class="card card-body bg-blue h-100">
                                     <i class="fab fa-android"></i>
-                                    <p>Executive Members</p>
+                                    <p>Total Members</p>
                                     <h3>{{TotalWorkAndIosCount?.IndividualTotalExecutives ?
                                         TotalWorkAndIosCount?.IndividualTotalExecutives : '0'}}</h3>
                                 </div>
@@ -579,7 +579,7 @@
             </div> -->
 
             <!-- Individual Members Progress -->
-            <div class="card mb-3">
+            <!-- <div class="card mb-3">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-sm-12 mb-2">
@@ -625,7 +625,7 @@
                 </div>
                 <div class="card-body">
                     <div class="h-400 membersProBarChart chartfont"></div>
-                    <!-- <div class="table-responsive">
+                    <div class="table-responsive">
                         <table class="table table-hover mt-3 mb-0">
                             <thead>
                                 <tr>
@@ -679,7 +679,7 @@
                 <div class="card-body">
                     <div class="card-body recentActivityGraph chartfont h-400">
                     </div>
-                </div> -->
+                </div>
                 </div>
             </div>
         </div>
