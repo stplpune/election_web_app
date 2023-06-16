@@ -19,6 +19,7 @@ import { AddDesignationComponent } from '../dialogs/add-designation/add-designat
 export class OrganizationMasterComponent implements OnInit {
 
   allDistrict: any;
+  allDivision: any;
   getTalkaByDistrict: any;
   orgMasterForm!: FormGroup;
   AddDesignationForm!: FormGroup;
@@ -33,6 +34,7 @@ export class OrganizationMasterComponent implements OnInit {
   villageCityLabel = "Village/Town";
   allStates: any;
   globalDistrictId: any;
+  globalDivisionId: any;
   allLevels: any;
   setVillOrcityName = "VillageName";
   setVillOrCityId = "VillageId";
@@ -58,6 +60,7 @@ export class OrganizationMasterComponent implements OnInit {
   allAssignedDesignations: any;
   modalDeafult = false;
   globalTalukaID: any;
+  disableFlagDivi: boolean = true;
   disableFlagDist: boolean = true;
   disableFlagTal: boolean = true;
   disableFlagVill: boolean = true;
@@ -97,7 +100,7 @@ export class OrganizationMasterComponent implements OnInit {
 
   initCommittees(){
     this.getState();
-    this.getDistrict();
+    // this.getDistrict();
     this.getDesignation();
     this.defaultDesignationForm();
   }
@@ -150,6 +153,7 @@ export class OrganizationMasterComponent implements OnInit {
     this.orgMasterForm = this.fb.group({
       BodyOrgCellName: ['', [Validators.required,Validators.maxLength(100)]],
       StateId: ['', Validators.required],
+      DivisionId: [''],
       DistrictId: [],
       TalukaId: [''],
       VillageId: [''],
@@ -180,27 +184,35 @@ export class OrganizationMasterComponent implements OnInit {
   }
 
   selectLevel(levelId: any, flag: any) {
+    console.log(levelId, flag)
     this.globalLevelId = levelId;
-    console.log(levelId);
     if (levelId == 2) {
-      this.disableFlagDist = true;
+      this.disableFlagDivi = true;
       if (this.editLevalFlag == 'edit' && flag == 'select') { // DistrictId is availble then show city 
         this.orgMasterForm.controls["SubParentCommitteeId"].setValue("");
       }
+    }else if(levelId == 7){
+      this.disableFlagDivi = false;
+      this.disableFlagDist = true;
+      this.disableFlagTal = true;
+      this.disableFlagVill = true;
     }
     else if (levelId == 3) {
-      this.orgMasterForm.controls["SubParentCommitteeId"].setValue("");
+      this.orgMasterForm.controls["SubParentCommitteeId"].setValue("")
+      this.disableFlagDivi = false;;
       this.disableFlagDist = false;
       this.disableFlagTal = true;
       this.disableFlagVill = true;
     }
     else if (levelId == 4) {
+      this.disableFlagDivi = false;
       this.disableFlagTal = false;
       this.disableFlagDist = false;
       this.disableFlagVill = true;
     }
     else if (levelId == 5) {
       this.orgMasterForm.controls["VillageId"].setValue("");
+      this.disableFlagDivi = false;
       this.disableFlagTal = false;
       this.disableFlagDist = false;
       this.disableFlagVill = false;
@@ -213,6 +225,7 @@ export class OrganizationMasterComponent implements OnInit {
     }
     else if (levelId == 6) {
       this.orgMasterForm.controls["VillageId"].setValue("");
+      this.disableFlagDivi = false;
       this.disableFlagDist = false;
       this.disableFlagTal = true;
       this.disableFlagVill = false;
@@ -228,21 +241,40 @@ export class OrganizationMasterComponent implements OnInit {
   }
 
   validationOncondition(levelId: any) {
+    //     0
+    // : 
+    // {Id: 2, LevelName: "State"}
+    // 1
+    // : 
+    // {Id: 7, LevelName: "Division"}
+    // 2
+    // : 
+    // {Id: 3, LevelName: "District"}
+    // 3
+    // : 
+    // {Id: 4, LevelName: "Taluka"}
     if (levelId == 2) {
       this.orgMasterForm.controls["StateId"].setValidators(Validators.required);
+    } else if (levelId == 7) {
+      this.orgMasterForm.controls["SubParentCommitteeId"].setValidators(Validators.required);
+      this.orgMasterForm.controls["StateId"].setValidators(Validators.required);
+      this.orgMasterForm.controls["DivisionId"].setValidators(Validators.required);
     } else if (levelId == 3) {
       this.orgMasterForm.controls["SubParentCommitteeId"].setValidators(Validators.required);
       this.orgMasterForm.controls["StateId"].setValidators(Validators.required);
+      this.orgMasterForm.controls["DivisionId"].setValidators(Validators.required);
       this.orgMasterForm.controls["DistrictId"].setValidators(Validators.required);
     } else if (levelId == 4) {
       this.orgMasterForm.controls["SubParentCommitteeId"].setValidators(Validators.required);
       this.orgMasterForm.controls["StateId"].setValidators(Validators.required);
+      this.orgMasterForm.controls["DivisionId"].setValidators(Validators.required);
       this.orgMasterForm.controls["DistrictId"].setValidators(Validators.required);
       this.orgMasterForm.controls["TalukaId"].setValidators(Validators.required);
 
     } else if (levelId == 5) {
       this.orgMasterForm.controls["SubParentCommitteeId"].setValidators(Validators.required);
       this.orgMasterForm.controls["StateId"].setValidators(Validators.required);
+      this.orgMasterForm.controls["DivisionId"].setValidators(Validators.required);
       this.orgMasterForm.controls["DistrictId"].setValidators(Validators.required);
       this.orgMasterForm.controls["TalukaId"].setValidators(Validators.required);
       this.orgMasterForm.controls["VillageId"].setValidators(Validators.required);
@@ -250,6 +282,7 @@ export class OrganizationMasterComponent implements OnInit {
     } else if (levelId == 6) {
       this.orgMasterForm.controls["SubParentCommitteeId"].setValidators(Validators.required);
       this.orgMasterForm.controls["StateId"].setValidators(Validators.required);
+      this.orgMasterForm.controls["DivisionId"].setValidators(Validators.required);
       this.orgMasterForm.controls["DistrictId"].setValidators(Validators.required);
       this.orgMasterForm.controls["VillageId"].setValidators(Validators.required);
     }
@@ -258,14 +291,27 @@ export class OrganizationMasterComponent implements OnInit {
 
   clearselOption(flag: any) { // on click select option close icon
     if (flag == 'State') {
+      this.disableFlagDivi = true;
       this.disableFlagDist = true;
       this.disableFlagTal = true;
       this.disableFlagVill = true;
       this.orgMasterForm.controls["StateId"].setValue("");
+      this.orgMasterForm.controls["DivisionId"].setValue("");
       this.orgMasterForm.controls["DistrictId"].setValue("");
       this.orgMasterForm.controls["TalukaId"].setValue("");
       this.orgMasterForm.controls["VillageId"].setValue("");
-    } else if (flag == 'District') {
+    }else if (flag == 'Division') {
+      this.disableFlagDivi = true;
+      this.disableFlagDist = true;
+      this.disableFlagTal = true;
+      this.disableFlagVill = true;
+      this.orgMasterForm.controls["DivisionId"].setValue("");
+      this.orgMasterForm.controls["DistrictId"].setValue("");
+      this.orgMasterForm.controls["TalukaId"].setValue("");
+      this.orgMasterForm.controls["VillageId"].setValue("");
+      this.orgMasterForm.controls["SubParentCommitteeId"].setValue("");
+    }else if (flag == 'District') {
+      this.disableFlagDivi = true;
       this.disableFlagDist = true;
       this.disableFlagTal = true;
       this.disableFlagVill = true;
@@ -294,24 +340,32 @@ export class OrganizationMasterComponent implements OnInit {
   updateValueAndValidityMF(levelId: any) {
     if (levelId == 2) {
       this.orgMasterForm.controls["StateId"].updateValueAndValidity();
+    } else if (levelId == 7) {
+      this.orgMasterForm.controls["SubParentCommitteeId"].updateValueAndValidity();
+      this.orgMasterForm.controls["StateId"].updateValueAndValidity();
+      this.orgMasterForm.controls["DivisionId"].updateValueAndValidity();
     } else if (levelId == 3) {
       this.orgMasterForm.controls["SubParentCommitteeId"].updateValueAndValidity();
       this.orgMasterForm.controls["StateId"].updateValueAndValidity();
+      this.orgMasterForm.controls["DivisionId"].updateValueAndValidity();
       this.orgMasterForm.controls["DistrictId"].updateValueAndValidity();
     } else if (levelId == 4) {
       this.orgMasterForm.controls["SubParentCommitteeId"].updateValueAndValidity();
       this.orgMasterForm.controls["StateId"].updateValueAndValidity();
+      this.orgMasterForm.controls["DivisionId"].updateValueAndValidity();
       this.orgMasterForm.controls["DistrictId"].updateValueAndValidity();
       this.orgMasterForm.controls["TalukaId"].updateValueAndValidity();
     } else if (levelId == 5) {
       this.orgMasterForm.controls["SubParentCommitteeId"].updateValueAndValidity();
       this.orgMasterForm.controls["StateId"].updateValueAndValidity();
+      this.orgMasterForm.controls["DivisionId"].updateValueAndValidity();
       this.orgMasterForm.controls["DistrictId"].updateValueAndValidity();
       this.orgMasterForm.controls["TalukaId"].updateValueAndValidity();
       this.orgMasterForm.controls["VillageId"].updateValueAndValidity();
     } else if (levelId == 6) {
       this.orgMasterForm.controls["SubParentCommitteeId"].updateValueAndValidity();
       this.orgMasterForm.controls["StateId"].updateValueAndValidity();
+      this.orgMasterForm.controls["DivisionId"].updateValueAndValidity();
       this.orgMasterForm.controls["DistrictId"].updateValueAndValidity();
       this.orgMasterForm.controls["TalukaId"].updateValueAndValidity();
       this.orgMasterForm.controls["VillageId"].updateValueAndValidity();
@@ -372,10 +426,12 @@ export class OrganizationMasterComponent implements OnInit {
   }
 
   selectLevelClear() {
+    this.disableFlagDivi = true;
     this.disableFlagDist = true;
     this.disableFlagTal = true;
     this.disableFlagVill = true;
     this.orgMasterForm.controls["StateId"].setValue("");
+    this.orgMasterForm.controls["DivisionId"].setValue("");
     this.orgMasterForm.controls["DistrictId"].setValue("");
     this.orgMasterForm.controls["TalukaId"].setValue("");
     this.orgMasterForm.controls["VillageId"].setValue("");
@@ -391,7 +447,7 @@ export class OrganizationMasterComponent implements OnInit {
         this.resCommitteeByLevel = res.data1;
         if (this.btnText == "Update Committee") { // edit for city
           this.orgMasterForm.controls["SubParentCommitteeId"].setValue(this.selEditOrganization.SubParentCommitteeId)
-          this.getDistrict();
+          this.getState();
         } 
         this.spinner.hide();
       } else {
@@ -410,6 +466,10 @@ export class OrganizationMasterComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.allStates = res.data1;
+        if (this.btnText == "Update Committee") { // edit for city
+          this.orgMasterForm.controls["StateId"].setValue(this.selEditOrganization.StateId)
+          this.getDivision(this.selEditOrganization.StateId);
+        } 
         this.spinner.hide();
       } else {
         //this.toastrService.error("Data is not available");
@@ -427,17 +487,42 @@ export class OrganizationMasterComponent implements OnInit {
       this.selCity();
     }
   }
-  getDistrict() {
+
+  getDivision(stateId: any) {
     //this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_GetDistrict_1_0_Committee?StateId=' + 1 +'&UserId='+this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb'); // old API Web_GetDistrict_1_0
+    this.callAPIService.setHttp('get', 'Sp_Web_GetDivision_1_0_Committee?StateId=' + stateId +'&UserId='+this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb'); // old API Web_GetDistrict_1_0
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
+        this.allDivision = res.data1;
+        this.globalDivisionId = this.selEditOrganization?.DivisionId;
+        this.getDistrict(this.globalDivisionId, this.selEditOrganization.StateId);
+        this.spinner.hide();
+      } else {
+        this.spinner.hide();
+        // this.toastrService.error("Data is not available 2");
+      }
+    }, (error: any) => {
+      if (error.status == 500) {
+        this.spinner.hide();
+        this.router.navigate(['../../500'], { relativeTo: this.route });
+      }
+    })
+  }
+
+  getDistrict(divisionId: any, stateId: any) {
+    //this.spinner.show();
+    // this.callAPIService.setHttp('get', 'Web_GetDistrict_1_0_Committee?StateId=' + 1 +'&UserId='+this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb'); // old API Web_GetDistrict_1_0
+    this.callAPIService.setHttp('get', 'Web_GetDistrict_2_0_Committee?DivisionId=' + divisionId + '&StateId=' + stateId +'&UserId='+this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb'); // old API Web_GetDistrict_1_0
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.allDistrict = res.data1;
         this.globalDistrictId = this.selEditOrganization?.DistrictId;
-        if (this.btnText == "Update Committee" && this.globalLevelId == 6) { // edit for city
-          this.selCity();
-        } else if (this.btnText == "Update Committee" && this.globalLevelId == 5 || this.btnText == "Update Committee" && this.globalLevelId == 4) { // edit for Village
-          this.getTaluka(this.globalDistrictId)
+        if(this.btnText == "Update Committee"){
+          if (this.globalLevelId == 6) { // edit for city
+            this.selCity();
+          } else if (this.globalLevelId == 5 || this.globalLevelId == 4) { // edit for Village
+            this.getTaluka(this.globalDistrictId)
+          }
         }
         this.spinner.hide();
       } else {
@@ -545,7 +630,7 @@ export class OrganizationMasterComponent implements OnInit {
       // //this.spinner.show();
       let fromData: any = new FormData();
       this.orgMasterForm.value.BodyLevelId == 6 ? this.orgMasterForm.value.IsRural = 0 : this.orgMasterForm.value.IsRural = 1;
-
+      this.orgMasterForm.value.VillageId = 0;
 
       Object.keys(this.orgMasterForm.value).forEach((cr: any, ind: any) => {
         let value = Object.values(this.orgMasterForm.value)[ind] != null ? Object.values(this.orgMasterForm.value)[ind] : 0;
@@ -556,7 +641,8 @@ export class OrganizationMasterComponent implements OnInit {
       this.btnText == "Create Committee" ? btnTextFlag = 0 : btnTextFlag = this.HighlightRow;
       fromData.append('Id', btnTextFlag);
 
-      this.callAPIService.setHttp('Post', 'Web_Insert_bodycellorgmaster_1_0_SubCommittee', false, fromData, false, 'electionServiceForWeb');
+      // this.callAPIService.setHttp('Post', 'Web_Insert_bodycellorgmaster_1_0_SubCommittee', false, fromData, false, 'electionServiceForWeb');
+      this.callAPIService.setHttp('Post', 'Web_Insert_bodycellorgmaster_2_0_SubCommittee', false, fromData, false, 'electionServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.data == 0) {
           this.btnText = "Create  Committee";
@@ -623,6 +709,7 @@ export class OrganizationMasterComponent implements OnInit {
         this.orgMasterForm.patchValue({
           BodyOrgCellName: this.selEditOrganization.BodyOrgCellName.trim(),
           StateId: this.selEditOrganization.StateId,
+          DivisionId: this.selEditOrganization.DivisionId,
           DistrictId: this.selEditOrganization.DistrictId,
           IsRural: this.selEditOrganization.IsRural,
           BodyLevelId: this.selEditOrganization.BodyLevel,
@@ -837,7 +924,11 @@ export class OrganizationMasterComponent implements OnInit {
   selCity() {
     //this.spinner.show();
     this.villageCityLabel = "City/District";
-    if (this.globalDistrictId == undefined || this.globalDistrictId == "") {
+    if (this.globalDivisionId == undefined || this.globalDivisionId == "") {
+      this.toastrService.error("Please select division");
+      this.spinner.hide();
+      return
+    }else if (this.globalDistrictId == undefined || this.globalDistrictId == "") {
       this.toastrService.error("Please select district");
       this.spinner.hide();
       return
@@ -852,7 +943,11 @@ export class OrganizationMasterComponent implements OnInit {
 
   selVillage() {
     //this.spinner.show();
-    if (this.globalDistrictId == undefined || this.globalDistrictId == "") {
+    if (this.globalDivisionId == undefined || this.globalDivisionId == "") {
+      this.toastrService.error("Please select division");
+      this.spinner.hide();
+      return
+    }else if (this.globalDistrictId == undefined || this.globalDistrictId == "") {
       this.toastrService.error("Please select district");
       this.spinner.hide();
       return

@@ -244,7 +244,7 @@
                             <div class="col-sm-6">
                                 <label class="form-label required-field">Select State</label>
                                 <ngx-select [allowClear]="true" (remove)="clearselOption('State')" [items]="allStates"
-                                    formControlName="StateId" (select)="getDistrict();" placeholder="Select State" optionValueField="Id"
+                                    formControlName="StateId" (select)="getDivision(this.orgMasterForm.value.StateId);" placeholder="Select State" optionValueField="Id"
                                     optionTextField="StateName"
                                     [ngClass]="{ 'is-invalid': submitted && f.StateId.errors }"
                                     [disabled]="!this.orgMasterForm.value.SubParentCommitteeId && this.orgMasterForm.value.BodyLevelId != 2">
@@ -254,20 +254,14 @@
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <label class="form-label"
-                                    [ngClass]="{ 'required-field': submitted && f.DistrictId.errors }">Select
-                                    District</label>
-                                <ngx-select [allowClear]="true" (remove)="clearselOption('District')"
-                                    [items]="allDistrict" formControlName="DistrictId"
-                                    (select)="districtEvent(this.orgMasterForm.value.BodyLevelId, this.orgMasterForm.value.DistrictId)"
-                                    [disabled]="disableFlagDist || !this.orgMasterForm.value.StateId"
-                                    (select)="getTaluka(this.orgMasterForm.value.DistrictId)"
-                                    optionValueField="DistrictId" optionTextField="DistrictName"
-                                    placeholder="Select District"
-                                    [ngClass]="{ 'is-invalid': submitted && f.DistrictId.errors }">
+                                <label [ngClass]="{ 'required-field': submitted && f.DivisionId.errors }">Select Division</label>
+                                <ngx-select [allowClear]="true" (remove)="clearselOption('Division')" [items]="allDivision"
+                                    formControlName="DivisionId" (select)="getDistrict(this.orgMasterForm.value.DivisionId, this.orgMasterForm.value.StateId);" placeholder="Select Division" optionValueField="DivisionId"
+                                    optionTextField="DivisionName" [ngClass]="{ 'is-invalid': submitted && f.DivisionId.errors }"
+                                    [disabled]="disableFlagDivi || !this.orgMasterForm.value.StateId">
                                 </ngx-select>
-                                <div *ngIf="submitted && f.DistrictId.errors" class="invalid-feedback">
-                                    <div *ngIf="f.DistrictId.errors.required">District is required</div>
+                                <div *ngIf="submitted && f.DivisionId.errors" class="invalid-feedback">
+                                    <div *ngIf="f.DivisionId.errors.required">Division is required</div>
                                 </div>
                             </div>
                         </div>
@@ -279,6 +273,23 @@
                         </div> -->
                         <!-- -->
                         <div class="row mb-3">
+                            <div class="col-sm-6">
+                                <label class="form-label"
+                                    [ngClass]="{ 'required-field': submitted && f.DistrictId.errors }">Select
+                                    District</label>
+                                <ngx-select [allowClear]="true" (remove)="clearselOption('District')"
+                                    [items]="allDistrict" formControlName="DistrictId"
+                                    (select)="districtEvent(this.orgMasterForm.value.BodyLevelId, this.orgMasterForm.value.DistrictId)"
+                                    [disabled]="disableFlagDist || !this.orgMasterForm.value.DivisionId"
+                                    (select)="getTaluka(this.orgMasterForm.value.DistrictId)"
+                                    optionValueField="DistrictId" optionTextField="DistrictName"
+                                    placeholder="Select District"
+                                    [ngClass]="{ 'is-invalid': submitted && f.DistrictId.errors }">
+                                </ngx-select>
+                                <div *ngIf="submitted && f.DistrictId.errors" class="invalid-feedback">
+                                    <div *ngIf="f.DistrictId.errors.required">District is required</div>
+                                </div>
+                            </div>
                             <div class="col-sm-6">
                                 <label class="form-label"
                                     [ngClass]="{'required-field': submitted && f.TalukaId.errors}">
@@ -295,7 +306,7 @@
                                     <div *ngIf="f.TalukaId.errors.required">Taluka is required</div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <!-- <div class="col-sm-6">
                                 <label class="form-label"
                                     [ngClass]="{ 'required-field': submitted && f.VillageId.errors }">Select
                                     {{villageCityLabel}}</label>
@@ -309,7 +320,7 @@
                                 <div *ngIf="submitted && f.VillageId.errors" class="invalid-feedback">
                                     <div *ngIf="f.VillageId.errors.required">{{villageCityLabel}} is required</div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="my-4">
