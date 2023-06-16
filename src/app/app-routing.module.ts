@@ -59,6 +59,7 @@ const routes: Routes = [
       { path: 'surname-caste-wise-report', loadChildren: () => import('./partial/booth-management/Reports/surname-caste-wise-report/surname-caste-wise-report.module').then(m => m.SurnameCasteWiseReportModule), data: { title: 'Surname Wise Caste Report', allowedRoles: ['1', '2'] } },
       { path: 'page-access-right', loadChildren: () => import('./partial/booth-management/page-access-right/page-access-right.module').then(m => m.PageAccessRightModule), data: { title: 'Page Access Rights', allowedRoles: ['1', '2'] } },      
       { path: 'committee', loadChildren: () => import('./partial/organization-master/organization-master.module').then(m => m.OrganizationMasterModule), data: { title: 'Committee', allowedRoles: ['1', '2'] }  },
+      { path: 'committees-on-map', loadChildren: () => import('./partial/committees-on-map/committees-on-map.module').then(m => m.CommitteesOnMapModule), data: { title: 'Committees On Map', allowedRoles: ['1', '2'] } },
     ]
   },
   { path: '500', component: ServerErrorComponent },

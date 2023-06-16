@@ -1,0 +1,444 @@
+<div class="container-fluid commitees">
+    <div class="row mx-0 px-0" id="pageheader">
+        <div class="col-sm-3">
+            <span class="page-name">Committees On Map
+            </span>
+        </div>
+        <div class="col-sm-9 text-end">
+            <div class="row g-2">
+                <div class="offset-lg-4 col-sm-4">
+                    <ngx-select [allowClear]="allowClear" (select)="selectDistrict($event)"
+                        (remove)="clearFilter('CommitteesIn')" [formControl]="selDistrict" [items]="allDistrict"
+                        optionValueField="DistrictId" optionTextField="DistrictName" placeholder="Select District">
+                    </ngx-select>
+                </div>
+                <!-- <div class="col-sm-4">
+                    <div class="input-group">
+                        <input [owlDateTime]="dt3" (remove)="clearFilter('dateRangePIcker')" [formControl]="fromToDate"
+                         [selectMode]="'range'" (dateTimeChange)="selDateRangeByFilter(fromToDate.value)" class="form-control" [owlDateTimeTrigger]="dt3" placeholder="Select Date Range">
+                        <button class="btn btn-light border btn-sm" type="button" [owlDateTimeTrigger]="dt3" *ngIf="!fromToDate.value">
+                            <i class="fas fa-calendar-alt"></i></button>
+                        <button class="btn btn-light border btn-sm" type="button" *ngIf="fromToDate.value" (click)="clearFilter('dateRangePIcker')">
+                            <i class="fas fa-times"></i></button>
+                    </div>
+                    <owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time>
+                </div> -->
+                <div class="col-sm">
+                    <div class="input-group">
+                        <input type="text" class="form-control" [formControl]="Search"
+                            placeholder="Search Committees..." (keyup)="filterByCommittee()" />
+                        <button type="button" class="btn btn-light border btn-sm" (click)="clearFilterByCommittee()"
+                            *ngIf="Search.value"><i _ngcontent-tbl-c102="" class="fas fa-times"></i></button>
+                        <button type="button" *ngIf="!Search.value" class="btn btn-sm border btn-light"><i
+                                class="fas fa-search"></i></button>
+                    </div>
+                </div>
+                <div class="col-auto"> <button type="button" class="btn btn-sm btn-secondary me-2"
+                        (click)="location.back();">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <!-- <button  class="btn btn-sm btn-main" (click)="clearallFilter()"><i  class="fas fa-sync-alt"></i></button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row chartbox mb-3">
+        <div class="col-md-12">
+            <div class="card card-body" id="committeesonmap">
+                <div class="row">
+                    <div class="col-sm-6 border-end d-none d-lg-block d-sm-none">
+                        <div class="card card-body shadow-none p-0">
+                            <div class="row">
+                                <!-- <div class="mb-0"><span class="lessThanFiveBox"></span><span>Less than 5</span></div>
+                                <div><span class="zeroActivityBox"></span><span>No activity</span></div> -->
+                                <!-- <div class="mb-3 offset-sm-7 col-sm-5">
+                                    <ngx-select [allowClear]="allowClear" (select)="selectDistrict($event)" (remove)="clearFilter('CommitteesIn')" [formControl]="selDistrict"  [items]="allDistrict" 
+                                        optionValueField="DistrictId" optionTextField="DistrictName" placeholder="Select District">
+                                    </ngx-select>
+                                </div> -->
+                            </div>
+                            <div id="mapsvg1"></div>
+
+                            <!-- <img src="assets/images/maharashtra_districts_map.svg" /> -->
+                        </div>
+                    </div>
+                    <div class="col-sm-3 border-end">
+                        <div class="mb-0 small form-container">
+                            <div class="form-check form-check-inline" *ngFor="let level of allLevels ; let i = index">
+                                <input class="form-check-input" (change)="onCheckChangeLevel($event,level.Id)"
+                                    type="checkbox">
+                                <label class="form-check-label" for="inlineCheckbox{{i}}">{{level.LevelName}}</label>
+                            </div>
+                            <div class="button-group text-end list-buttons">
+                                <button class="btn btn-sm btn-light text-dark fw-bold rounded" type="button"
+                                    (click)="openDialogAddCommittee(commiteeObj)">
+                                    Add Committee
+                                </button>
+                            </div>
+                            <!-- <i  class="fas fa-plus" (click)="openDialogAddCommittee()"></i> -->
+                        </div>
+                        <div class="card shadow-none border-0" *ngIf="defaultCommitteesFlag">
+                            <div class="card-header py-1 px-0 border-bottom">Committees in
+                                <span class="text-main">{{districtName | titlecase}}</span>
+                                <span class="float-end">
+                                    <button (click)="ScrollCompComity()" class="btn btn-sm btn-light">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </button>
+                                    <!-- <button *ngIf="defaultCloseBtn" class="btn btn-sm btn-light" type="button" (click)="clearFilter('CommitteesIn')">
+                                        <i class="fas fa-times"></i>
+                                    </button> -->
+                                </span>
+                            </div>
+                            <div class="card-body p-0 fix-height">
+                                <div class="list-group list-group-flush">
+                                    <a (click)="committeeNameByOrganizationMember(resCommittes.Id, resCommittes.BodyOrgCellName); this.commiteeObj = resCommittes; this.hideComityGraph = false "
+                                        [class.active]="resCommittes.Id == activeRow"
+                                        class="list-group-item list-group-item-action border-0 border-bottom px-2"
+                                        aria-current="true" *ngFor="let resCommittes of resultCommittees">
+                                        <p class="mb-0 fw-bold mt-1">{{resCommittes.BodyOrgCellName | titlecase}} <span
+                                                class="badge rounded-pill bg-light text-dark float-end text-center"
+                                                [appTooltip]
+                                                title="Member Count">{{resCommittes?.AllottedDesignation}}</span> </p>
+                                        <span class="small">{{resCommittes.Area | titlecase}}</span>
+                                    </a>
+
+                                    <!-- <a " class="list-group-item list-group-item-action active" aria-current="true">
+                                      <span class="small">Ahmednagar - Akole - Abit Khind</span>
+                                      <p class="mb-0 fw-bold mt-1">Abit Khind City Committee</p>
+                                    </a> -->
+                                </div>
+                                <div *ngIf="resultCommittees?.length == 0">
+                                    <div class="alert alert-danger text-center py-2 mb-0 small">No Committees Found..!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="card shadow-none">
+                            <div class="card-header p-0" *ngIf="defaultMembersFlag">
+                                <!-- <div class="button-group text-end list-buttons">
+                                    <button class="btn btn-sm btn-light text-dark fw-bold rounded" type="button" (click)="openDialogAddCommittee(commiteeObj)">
+                                        Add Committee
+                                    </button>
+                                </div>                                 -->
+                                Members in <span class="text-main" style="cursor: pointer;"
+                                    (click)="redirectOrgDetails()">{{selCommitteeName |
+                                    titlecase}}</span>
+                            </div>
+                            <!-- <a class="text-primary text-decoration-none" (click)="redirectOrgDetails()">{{selCommitteeName | titlecase}}</a> -->
+
+                            <div class="card-body p-0 fix-height1" *ngIf="defaultMembersFlag">
+                                <div class="card card-body shadow-none border py-2 px-3 mb-2 mem-list"
+                                    *ngFor="let resOrganizationMember of resultOrganizationMember">
+                                    <div class="mb-0 fw-bold mt-1 text-danger"
+                                        *ngIf="resOrganizationMember.MemberName == ''">
+                                        <p class="mem-name">No Member Assigned</p>
+                                        <!-- <p class="mem-desi">{{resOrganizationMember?.DesignationName}}</p> -->
+                                        <!-- <small
+                                            *ngIf="resOrganizationMember?.MobileNo !='' && resOrganizationMember?.MobileNo != null">{{resOrganizationMember?.MobileNo}}</small> -->
+                                    </div>
+                                    <div>
+                                        <a class="mem-name text-main"
+                                            (click)="redToMemberProfile(resOrganizationMember?.MemberId,resOrganizationMember?.MemberName)">{{resOrganizationMember?.MemberName
+                                            | titlecase}}</a>
+                                        <div class="mem-no">{{resOrganizationMember?.MobileNo}}</div>
+                                        <p class="mem-desi">{{resOrganizationMember?.DesignationName}}</p>
+                                        <div class="mem-act">
+                                            <span class="float-start" *ngIf="resOrganizationMember.MemberName != ''">
+                                                <span
+                                                    class="fw-bold me-1">{{resOrganizationMember.TotalWork}}</span>Activities
+                                            </span>
+                                            <span class="float-end">
+                                                <div role="group" aria-label="Action Buttons"
+                                                    class="button-group text-end list-buttons">
+                                                    <button class="rounded btn btn-sm btn-light" title="Add Member"
+                                                        (click)="addEditMember(resOrganizationMember, 'Add')"
+                                                        *ngIf="!resOrganizationMember.MemberName || resOrganizationMember.IsMultiple == 1 && resOrganizationMember.LastaddedUser == 1">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                    <button title="Edit Member" *ngIf="resOrganizationMember.MemberName"
+                                                        (click)="addEditMember(resOrganizationMember, 'Update')"
+                                                        class="btn btn-sm btn-light text-edit mx-1 rounded">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </button>
+                                                    <button *ngIf="resOrganizationMember.MemberName"
+                                                        class="rounded btn btn-sm btn-light text-danger"
+                                                        (click)="deleteConfirmModel(resOrganizationMember.userpostbodyId, resOrganizationMember.BodyId, resOrganizationMember.BodyOrgCellName)"
+                                                        title="Remove Designation">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                    <button title="Remove Designation" data-bs-toggle="modal"
+                                                        data-bs-target="#AddMemberModal" #addMemberModal
+                                                        style="display: none;"></button>
+                                                </div>
+                                            </span>
+                                        </div>
+
+                                        <ul class="list-group list-group-horizontal list-group-flush mem-dev"
+                                            *ngIf="resOrganizationMember.MemberName != ''">
+                                            <li class="list-group-item">
+                                                <!-- Device Code Start-->
+                                                <div *ngIf="resOrganizationMember?.DeviceType == 1">
+                                                    <ng-container
+                                                        *ngIf="resOrganizationMember?.Version_Status==1 ; else oldVersionAndroid">
+                                                        <img [appTooltip]
+                                                            title="New Version:{{resOrganizationMember.UserAppVersion}}"
+                                                            src="assets\images\dashboard-images\Android_robot.svg">
+                                                    </ng-container>
+                                                    <ng-template #oldVersionAndroid>
+                                                        <img [appTooltip]
+                                                            title="Old Version:{{resOrganizationMember.UserAppVersion}}"
+                                                            src="assets\images\dashboard-images\Android_robot_light_Red.svg">
+                                                    </ng-template>
+                                                </div>
+
+                                                <div *ngIf="resOrganizationMember?.DeviceType==2">
+                                                    <ng-container
+                                                        *ngIf="resOrganizationMember?.Version_Status==1 ; else oldVersionIos">
+                                                        <img [appTooltip]
+                                                            title="New Version:{{resOrganizationMember.UserAppVersion}}"
+                                                            src="assets\images\dashboard-images\Apple_logo.svg">
+                                                    </ng-container>
+                                                    <ng-template #oldVersionIos>
+                                                        <img [appTooltip]
+                                                            title="Old Version:{{resOrganizationMember.UserAppVersion}}"
+                                                            src="assets\images\dashboard-images\Apple_logo_light_red.svg">
+                                                    </ng-template>
+                                                </div>
+
+                                                <div *ngIf="resOrganizationMember?.DeviceType==0">
+                                                    <img [appTooltip] title="No Device"
+                                                        src="assets\images\dashboard-images\no-cellphone.svg">
+                                                </div>
+                                                <!-- Device Code End-->
+                                            </li>
+                                            <li class="list-group-item">
+                                                <!-- send Link Code Start-->
+                                                <div *ngIf="resOrganizationMember?.Version_Status==2">
+                                                    <div *ngIf="resOrganizationMember?.DeviceType != 0">
+                                                        <a target="_blank"
+                                                            href="https://api.whatsapp.com/send?phone=+91{{resOrganizationMember.MobileNo}}&amp;text=Dear+Sir/Mam,+Please+Update+NCP+Youth+Mobile+App+from+Play+Store/App+Store+and+get+connected+with+Natonalist+Youth+Congress.+Android+Link+-+https://play.google.com/store/apps/details?id=com.develop.ncp_youth,+iOS+Link+-+https://apps.apple.com/in/app/ncp-youth/id1581373014">
+                                                            <img [appTooltip] title="Send Link"
+                                                                src="assets\images\dashboard-images\whatsapp.svg"></a>
+                                                    </div>
+                                                    <div *ngIf="resOrganizationMember?.DeviceType == 0">
+                                                        <a target="_blank"
+                                                            href="https://api.whatsapp.com/send?phone=+91{{resOrganizationMember.MobileNo}}&amp;text=Dear+Sir/Mam,+Please+download+NCP+Youth+Mobile+App+from+Play+Store/App+Store+and+get+connected+with+Natonalist+Youth+Congress.+Android+Link+-+https://play.google.com/store/apps/details?id=com.develop.ncp_youth,+iOS+Link+-+https://apps.apple.com/in/app/ncp-youth/id1581373014">
+                                                            <img [appTooltip] title="Send Link"
+                                                                src="assets\images\dashboard-images\whatsapp.svg"></a>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="resOrganizationMember?.Version_Status==1">-
+                                                </div>
+                                                <!-- send Link Code end-->
+                                            </li>
+                                            <li class="list-group-item">
+                                                <a class="calltomember"
+                                                    href="tel:{{resOrganizationMember?.MobileNo}}"><i
+                                                        class="fas fa-phone-alt"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                                <!-- <div class="list-group list-group-flush">
+                                    <div class="list-group-item list-group-item-action border-0 border-bottom" aria-current="true"
+                                        *ngFor="let resOrganizationMember of resultOrganizationMember"
+                                        (click)="redToMemberProfile(resOrganizationMember.MemberId, resOrganizationMember.MemberName)">
+                                        <p class="mb-0 fw-bold mt-1" *ngIf="resOrganizationMember.MemberName == ''">
+                                            <span class="text-danger">No Member Assigned</span> 
+                                            <small *ngIf="resOrganizationMember?.MobileNo !='' && resOrganizationMember?.MobileNo != null">{{resOrganizationMember?.MobileNo}}</small>
+                                        </p>
+                                        <div class="d-flex" *ngIf="resOrganizationMember.MemberName != ''">
+                                            <div class="flex-grow-1 ms-1 ps-2">
+                                                {{resOrganizationMember?.MemberName}}
+                                                <p class="mb-0 fw-bold mt-1"> 
+                                                    <span><small>{{resOrganizationMember?.DesignationName}}</small></span><br>
+                                                    <small *ngIf="resOrganizationMember?.MobileNo !='' && resOrganizationMember?.MobileNo != null">
+                                                        {{resOrganizationMember?.MobileNo}}</small><br>
+                                                    <span><small>Work Count:
+                                                            {{resOrganizationMember.TotalWork}}</small></span>
+                                                            <td *ngIf="resOrganizationMember?.DeviceType==1" >
+                                                                <img src="assets\images\dashboard-images\Android_robot.svg">
+                                                            </td>
+                                                            <td *ngIf="resOrganizationMember?.DeviceType==2" >
+                                                                <img src="assets\images\dashboard-images\Apple_logo.svg">
+                                                            </td>
+                                                            <td *ngIf="resOrganizationMember?.DeviceType==0">
+                                                                -
+                                                            </td>
+
+                                                    <a class="calltomember"
+                                                        href="tel:{{resOrganizationMember?.MobileNo}}"><i
+                                                            class="fas fa-phone-alt"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+
+
+
+                                <!-- <div class="list-group list-group-flush" *ngIf="defaultMembersFlag">
+                                    <div class="list-group-item list-group-item-action" aria-current="true"
+                                        *ngFor="let resOrganizationMember of resultOrganizationMember"
+                                        (click)="redToMemberProfile(resOrganizationMember.MemberId, resOrganizationMember.MemberName)">
+                                        <p class="mb-0 fw-bold mt-1" *ngIf="resOrganizationMember.MemberName == ''">
+                                            <span class="text-danger">No Member Assigned</span> <small
+                                                *ngIf="resOrganizationMember?.MobileNo !='' && resOrganizationMember?.MobileNo != null">{{resOrganizationMember?.MobileNo}}</small>
+                                        </p>
+                                        <div class="mb-0 fw-bold mt-1" *ngIf="resOrganizationMember.MemberName != ''">
+                                            {{resOrganizationMember.MemberName}}
+                                            <span class="badge text-white float-end text-center bg-main" [appTooltip]
+                                                title="Work Count">{{resOrganizationMember.TotalWork}}</span>
+                                            <p class="mb-0 fw-bold mt-1"> <small
+                                                    *ngIf="resOrganizationMember?.MobileNo !='' && resOrganizationMember?.MobileNo != null">
+                                                    {{resOrganizationMember?.MobileNo}}</small>
+                                                <a class="calltomember"
+                                                    href="tel:{{resOrganizationMember?.MobileNo}}"><i
+                                                        class="fas fa-phone-alt"></i></a>
+                                            </p>
+                                        </div>
+                                        <span class="small">{{resOrganizationMember.DesignationName}}</span>
+                                    </div>
+                                    <div *ngIf="resultOrganizationMember?.length == 0">
+                                        <div class="alert alert-danger text-center py-2">No Members in this Committe..!
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 mt-4 showmap" *ngIf="hideComityGraph">
+                        <div class="card shadow-none border">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-sm-9">
+                                        Comparison of Committees
+                                    </div>
+                                    <div class="col-sm-3 text-end">
+                                        <div class="input-group">
+                                            <input [owlDateTime]="dt3" (remove)="clearFilter('dateRangePIcker')"
+                                                [formControl]="fromToDate" [selectMode]="'range'"
+                                                (dateTimeChange)="selDateRangeByFilter(fromToDate.value)"
+                                                class="form-control" [owlDateTimeTrigger]="dt3"
+                                                placeholder="Select Date Range">
+                                            <button class="btn btn-light border btn-sm" type="button"
+                                                [owlDateTimeTrigger]="dt3" *ngIf="!fromToDate.value">
+                                                <i class="fas fa-calendar-alt"></i></button>
+                                            <button class="btn btn-light border btn-sm" type="button"
+                                                *ngIf="fromToDate.value" (click)="clearFilter('dateRangePIcker')">
+                                                <i class="fas fa-times"></i></button>
+                                        </div>
+                                        <owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body chartHeight600 WorkDoneByYuvak1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Add/Update/Delete Member for any Designation -->
+<div class="modal fade" id="AddMemberModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="AddMemberModalLabel" aria-hidden="true" *ngIf="selCommitteeName">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form [formGroup]="bodyMember">
+                <div class="modal-header">
+                    <p class="modal-title" id="AddMemberModalLabel">{{addMemberFlag}} Member</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" #closeAddMemberModal
+                        aria-label="Close" (click)="closeModelAddEditMember()"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-container">
+                        <div class="mb-2">
+                            <label for="txtBodyName" class="form-label">Committee Name</label>
+                            <input type="text" class="form-control" readonly formControlName="BodyName" />
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6" *ngIf="bodyMember.value.prevMember">
+                                <div class="mb-2">
+                                    <label for="txtBodyName" class="form-label">Current Member Name</label>
+                                    <input type="text" class="form-control" readonly formControlName="prevMember" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="mb-2">
+                                    <label for="txtBodyName" class="form-label">Designation</label>
+                                    <input type="text" class="form-control" readonly
+                                        formControlName="currentDesignation" />
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="mb-2">
+                                    <label for="txtMemberName" class="form-label required-field">Search Mobile
+                                        Number</label>
+                                    <div class="input-group">
+                                        <div class="col-sm">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" formControlName="mobileNo"
+                                                    [maxlength]="10" placeholder="Search MobileNo..."
+                                                    (keyup)="filterByMember()" (keypress)="acceptedOnlyNumbers($event)"
+                                                    [ngClass]="{ 'is-invalid': submitted && f.mobileNo.errors }"
+                                                    style="width: 85%;" />
+                                            </div>
+                                        </div>
+                                        <button (click)="addNewMember('Add',0,bodyMember.value.mobileNo)"
+                                            class="rounded btn btn-sm btn-light ms-1 ng-star-inserted"><i
+                                                class="fas fa-plus"></i></button>
+                                    </div>
+                                    <div *ngIf="submitted && f.mobileNo.errors" class="invalid-feedback">
+                                        <div *ngIf="f.mobileNo.errors.required">Mobile Number is required </div>
+                                        <div *ngIf="f.mobileNo.errors.pattern">Valid Mobile Number is required </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 chartbox" *ngIf="hideMemberDetailsField">
+                            <div class="card" *ngIf="bodyMemberDetails?.length != 0">
+                                <div class="card-header pb-0">Member Details</div>
+                                <div class="card-body pt-0">
+                                    <label class="form-label mb-0">Email ID</label>
+                                    <div class="form-control-plaintext py-0">
+                                        {{bodyMemberDetails?.Emailid}}</div>
+                                    <label class="form-label mb-0">Contact No.</label>
+                                    <div class="form-control-plaintext py-0">
+                                        {{bodyMemberDetails?.MobileNo}}</div>
+
+                                    <label class="form-label mb-0">Location</label>
+                                    <div class="form-control-plaintext py-0"
+                                        *ngIf="(bodyMemberDetails?.DistrictName || bodyMemberDetails?.TalukaName || bodyMemberDetails?.VillageName) ; else otherContent">
+                                        {{bodyMemberDetails?.DistrictName}}<span
+                                            *ngIf="bodyMemberDetails?.TalukaName">,</span>{{bodyMemberDetails?.TalukaName}}<span
+                                            *ngIf="bodyMemberDetails?.VillageName">,</span>{{bodyMemberDetails?.VillageName}}
+                                    </div>
+                                    <ng-template #otherContent>
+                                        <div class="form-control-plaintext py-0">-</div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div class="mt-2 text-end" *ngIf="bodyMemberDetails?.length == 0">
+                                <div class="alert alert-danger text-center py-2">No Data Found..!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-main" (click)="onSubmit()">Assign
+                        Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
