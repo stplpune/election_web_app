@@ -60,6 +60,7 @@ const routes: Routes = [
       { path: 'page-access-right', loadChildren: () => import('./partial/booth-management/page-access-right/page-access-right.module').then(m => m.PageAccessRightModule), data: { title: 'Page Access Rights', allowedRoles: ['1', '2'] } },      
       { path: 'committee', loadChildren: () => import('./partial/organization-master/organization-master.module').then(m => m.OrganizationMasterModule), data: { title: 'Committee', allowedRoles: ['1', '2'] }  },
       { path: 'committees-on-map', loadChildren: () => import('./partial/committees-on-map/committees-on-map.module').then(m => m.CommitteesOnMapModule), data: { title: 'Committees On Map', allowedRoles: ['1', '2'] } },
+      { path: 'committee-dashboard', loadChildren: () => import('./partial/committee-dashboard/committee-dashboard.module').then(m => m.CommitteeDashboardModule), data: { title: 'Committee Dashboard', allowedRoles: ['1', '2'] } },
     ]
   },
   { path: '500', component: ServerErrorComponent },
