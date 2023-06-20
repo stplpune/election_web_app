@@ -1,0 +1,42 @@
+.comm-details a {
+    text-decoration: none;
+}
+
+.comm-details .btn {
+    font-size: 0.8rem;
+}
+
+.comm-details .com-level {
+    font-size: 0.7rem;
+    background-color: #eee;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.comm-details .comm-name {
+    font-size: 0.85rem;
+    color: var(--main-color);
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.comm-details .comm-area {
+    font-size: 0.75rem;
+    color: #333;
+    margin-left: 15px;
+}
+
+.comm-details .comm-desis {
+    font-size: 0.8rem;
+    color: #333;
+}
+
+.comm-details .comm-brrs {
+    border-top: solid 1px #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: stretch;
+    font-size: 0.75rem;
+    margin-top: 10px;
+}

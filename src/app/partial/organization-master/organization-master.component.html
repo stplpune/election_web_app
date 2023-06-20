@@ -59,20 +59,21 @@
                 <div class="card-header">
                     <div class="row g-1">
                         <div class="col-auto col-lg-6">
-                            <button (click)="redTocommitteesOnMap()" class="add-buttons">
+                            <button (click)="redTocommitteesOnMap()" class="btn btn-main">
                                 Committees on Map
                             </button>
                         </div>
                         <div class="col-auto text-end col-lg-6">
-                            <button (click)="clearForm(); initCommittees();" class="add-buttons" data-bs-toggle="modal"
+                            <button (click)="clearForm(); initCommittees();" class="btn btn-main" data-bs-toggle="modal"
                                 data-bs-target="#AddNewCommittee">Add Committee</button>
                         </div>
                     </div>
                 </div>
                 <div class="card-body pt-1">
                     <div class="table-responsive">
-                        <div class="card card-body shadow-none border comm-details pb-1 mb-3" *ngFor="let result of organizationRes | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total  }"
-                        [class.active]="result.Id == HighlightRow">
+                        <div class="card card-body shadow-none border comm-details pb-1 mb-3"
+                            *ngFor="let result of organizationRes | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total  }"
+                            [class.active]="result.Id == HighlightRow">
                             <div class="row">
                                 <div class="col-sm-6 col-6">
                                     <span class="com-level">{{result?.LevelName}}</span>
@@ -84,8 +85,7 @@
                                             title="Edit Committee" data-bs-toggle="modal"
                                             data-bs-target="#AddNewCommittee"
                                             class="btn btn-light btn-sm text-edit me-2 rounded"
-                                            (click)="editOrganization(result.Id)"><i
-                                                class="far fa-edit"></i></button>
+                                            (click)="editOrganization(result.Id)"><i class="far fa-edit"></i></button>
                                         <button type="button"
                                             [disabled]="(getCommiteeDetails?.CommiteeId == result?.Id) ?  true : ''"
                                             title="Delete Committee" class="btn btn-light btn-sm text-danger rounded"
@@ -97,7 +97,7 @@
                             </div>
                             <div class="comm-name">
                                 <a (click)="redirectOrgDetails(result.Id,result.bodylevel,result.BodyOrgCellName)"
-                                            class="text-primary">{{result?.BodyOrgCellName | titlecase}}</a>
+                                    class="text-main">{{result?.BodyOrgCellName | titlecase}}</a>
                                 <small class="comm-area">[{{result?.Area}}]</small>
                             </div>
                             <div class="comm-desis">
@@ -105,14 +105,15 @@
                             </div>
                             <div class="row comm-brrs">
                                 <div class="col-sm-6 col-6">
-                                    <span><span class="text-success fw-bold me-1">{{result?.AllottedDesignation}}</span> Appointments</span>
+                                    <span><span class="text-success fw-bold me-1">{{result?.AllottedDesignation}}</span>
+                                        Appointments</span>
                                 </div>
                                 <div class="col-sm-6 col-6 text-end">
                                     <button type="button" class="btn btn-light btn-sm" title="Add Designation"
-                                            data-bs-toggle="modal"
-                                            (click)="AddDesignation(result.BodyOrgCellName, result.Id);">
-                                            <i class="fas fa-user-plus"></i>
-                                        </button> 
+                                        data-bs-toggle="modal"
+                                        (click)="AddDesignation(result.BodyOrgCellName, result.Id);">
+                                        <i class="fas fa-user-plus"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -239,13 +240,13 @@
                                     long.</div>
                             </div>
                         </div>
-                   
+
                         <div class="row mb-3">
                             <div class="col-sm-6">
                                 <label class="form-label required-field">Select State</label>
                                 <ngx-select [allowClear]="true" (remove)="clearselOption('State')" [items]="allStates"
-                                    formControlName="StateId" (select)="getDivision(this.orgMasterForm.value.StateId);" placeholder="Select State" optionValueField="Id"
-                                    optionTextField="StateName"
+                                    formControlName="StateId" (select)="getDivision(this.orgMasterForm.value.StateId);"
+                                    placeholder="Select State" optionValueField="Id" optionTextField="StateName"
                                     [ngClass]="{ 'is-invalid': submitted && f.StateId.errors }"
                                     [disabled]="!this.orgMasterForm.value.SubParentCommitteeId && this.orgMasterForm.value.BodyLevelId != 2">
                                 </ngx-select>
@@ -254,10 +255,14 @@
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <label [ngClass]="{ 'required-field': submitted && f.DivisionId.errors }">Select Division</label>
-                                <ngx-select [allowClear]="true" (remove)="clearselOption('Division')" [items]="allDivision"
-                                    formControlName="DivisionId" (select)="getDistrict(this.orgMasterForm.value.DivisionId, this.orgMasterForm.value.StateId);" placeholder="Select Division" optionValueField="DivisionId"
-                                    optionTextField="DivisionName" [ngClass]="{ 'is-invalid': submitted && f.DivisionId.errors }"
+                                <label [ngClass]="{ 'required-field': submitted && f.DivisionId.errors }">Select
+                                    Division</label>
+                                <ngx-select [allowClear]="true" (remove)="clearselOption('Division')"
+                                    [items]="allDivision" formControlName="DivisionId"
+                                    (select)="getDistrict(this.orgMasterForm.value.DivisionId, this.orgMasterForm.value.StateId);"
+                                    placeholder="Select Division" optionValueField="DivisionId"
+                                    optionTextField="DivisionName"
+                                    [ngClass]="{ 'is-invalid': submitted && f.DivisionId.errors }"
                                     [disabled]="disableFlagDivi || !this.orgMasterForm.value.StateId">
                                 </ngx-select>
                                 <div *ngIf="submitted && f.DivisionId.errors" class="invalid-feedback">
