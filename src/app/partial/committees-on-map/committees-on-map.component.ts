@@ -900,5 +900,11 @@ export class CommitteesOnMapComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   // -------------------- Modal for Add/Update/Delete Member for any Designation end here   -------------------- //
+
+  svgMapClick(){
+    $(document).on('click', '#mapsvg1  path', (e: any) => {
+      console.log(e, e.currentTarget.dataset.name)
+    })
+  }
 }
 
