@@ -8,8 +8,9 @@
             <form [formGroup]="filterForm">
                 <div class="row g-2 mb-2">
                     <div class="col-sm-3">
-                        <ngx-select [allowClear]="true" [items]="clientNameArray" formControlName="ClientId" [disabled]="clientNameArray?.length == 1"
-                            optionValueField="clientId" optionTextField="clientName" (select)="clearTopFilter('electionId');
+                        <ngx-select [allowClear]="true" [items]="clientNameArray" formControlName="ClientId"
+                            [disabled]="clientNameArray?.length == 1" optionValueField="clientId"
+                            optionTextField="clientName" (select)="clearTopFilter('electionId');
                              getElectionName(); dataNotFound = false;" (remove)="clearTopFilter('clientId')"
                             placeholder="Select Leader">
                         </ngx-select>
@@ -165,7 +166,7 @@
                                                                             data-bs-target="#AssignVoterModal"
                                                                             (click)="assignVoterObj = generalBCMember; getVoterAreaListBCML(generalBCMember?.boothId);getVoterlistForAssignBoothComity(generalBCMember?.areaAgentId,generalBCMember?.boothId)">
                                                                             <i class="fas fa-user-plus"></i></button>
-                                                                            <button type="button" title="Send Link"
+                                                                        <button type="button" title="Send Link"
                                                                             class="btn btn-sm btn-light text-main rounded fw-bold ml-2"
                                                                             (click)="sendDownloadLink(generalBCMember?.mobileNo)">
                                                                             <i class="fas fa-paper-plane"></i>
@@ -206,7 +207,8 @@
                                 <div class="alert alert-danger text-center py-2">No Results Found!
                                 </div>
                             </div>
-                            <pagination-controls *ngIf="boothWiseComityGenerlAndFemaleArray?.length != 0 && getTotalPages > 1"
+                            <pagination-controls
+                                *ngIf="boothWiseComityGenerlAndFemaleArray?.length != 0 && getTotalPages > 1"
                                 previousLabel="" nextLabel="" (pageChange)="onClickPagintion($event)">
                             </pagination-controls>
                         </div>
@@ -230,18 +232,19 @@
 <!-- Modal for add/edit committee member -->
 <div class="modal fade" id="AddBoothCommitteeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="AddBoothCommitteeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <form [formGroup]="boothCommitteeForm">
                 <div class="modal-header">
-                    <p class="modal-title mb-0" id="AddBoothCommitteeModalLabel">{{saveUpdateFlag == 'add' ? 'Add Booth Committee Member' : 'Update Booth Committee Member'}}</p>
+                    <p class="modal-title mb-0" id="AddBoothCommitteeModalLabel">{{saveUpdateFlag == 'add' ?
+                        'Add Booth Committee Member' : 'Update Booth Committee Member'}}</p>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" #addCommitteeMemberModel
                         aria-label="Close" (click)="removeBindData()"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="form-container">
+                            <!-- <div class="form-container">
                                 <div class="mb-3" *ngIf="saveUpdateFlag == 'add'">
                                     <label class="form-label"> Area</label>
                                     <ngx-select [allowClear]="true" [items]="voterAreaArray" [formControl]="areaNameBC"
@@ -266,7 +269,6 @@
                                             formControlName="fName"
                                             [readOnly]="true"
                                             [ngClass]="{ 'is-invalid': submitted && f.fName.errors }">
-                                            <!-- !boothCommitteeForm.value.voterName &&  -->
                                         <div *ngIf="submitted && f.fName.errors" class="invalid-feedback">
                                             <span *ngIf="f.fName.errors.required">First Name is required</span>
                                             <span *ngIf="f.fName.errors.pattern">Enter valid First Name</span>
@@ -280,7 +282,6 @@
                                             formControlName="mName"
                                             [readOnly]="true"
                                             [ngClass]="{ 'is-invalid': submitted && f.mName.errors }">
-                                             <!-- !boothCommitteeForm.value.voterName &&  -->
                                         <div *ngIf="submitted && f.mName.errors" class="invalid-feedback">
                                             <span *ngIf="f.mName.errors.pattern">Enter valid Middle Name</span>
                                             <span *ngIf="f.mName.errors?.maxlength">Please enter only 50
@@ -293,7 +294,6 @@
                                             formControlName="lName"
                                             [readOnly]="true"
                                             [ngClass]="{ 'is-invalid': submitted && f.lName.errors }">
-                                             <!-- !boothCommitteeForm.value.voterName &&  -->
                                         <div *ngIf="submitted && f.lName.errors" class="invalid-feedback">
                                             <span *ngIf="f.lName.errors.required">Last Name is required</span>
                                             <span *ngIf="f.lName.errors.pattern">Enter valid Last Name</span>
@@ -327,6 +327,124 @@
                                         Designation is required
                                     </div>
                                 </div>
+                            </div> -->
+                            <div class="form-container">
+                                <div class="d-flex gap-2 align-items-center mb-1">
+                                    <div class="form-label mb-0">Booths :</div>
+                                    <div class="form-data">booth 1, booth 2, booth 3 [25 Booths]</div>
+                                </div>
+                                <div class="d-flex gap-2 align-items-center mb-2">
+                                    <div class="form-label mb-0">Area :</div>
+                                    <div class="form-data">
+                                        <div class="d-flex gap-2">
+                                            <a href="#" class="text-main">Area 1</a>
+                                            <a href="#" class="text-main">Area 2</a>
+                                            <a href="#" class="text-main">Area 3</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <div class="card">
+                                            <div class="card-header bg-transparent">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <div>
+                                                        Selected Area : <span class="fw-bold">All</span>
+                                                    </div>
+                                                    <div>
+                                                        <a href="#">Clear Selection</a>
+                                                    </div>
+                                                </div>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Search Voter Name">
+                                                    <button class="btn" type="button">
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <table class="table dashboard-table mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Sr. No.</th>
+                                                            <th>Voter No.</th>
+                                                            <th>Voter Name</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>23423</td>
+                                                            <td>Ramesh Kambale</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <div class="card">
+                                            <div class="card-header bg-transparent">
+                                                Selected User Details :
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-1">
+                                                    <div class="form-label mb-0">Name :</div>
+                                                    <div class="form-data">Vinayak Kambale</div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-sm-6">
+                                                        <div class="form-label">Mobile Number</div>
+                                                        <input type="text" class="form-control"
+                                                            placeholder="Mobile Number">
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="form-label">Select Designation</div>
+                                                        <select class="form-select">
+                                                            <option value="0">Select Designation</option>
+                                                            <option value="1">One</option>
+                                                            <option value="2">Two</option>
+                                                            <option value="3">Three</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-12 text-end mt-2">
+                                                        <button class="btn btn-secondary me-2">Clear</button>
+                                                        <button class="btn btn-main">Add</button>
+                                                    </div>
+                                                </div>
+
+                                                <table class="table dashboard-table mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Sr. No.</th>
+                                                            <th>Name</th>
+                                                            <th>Designation</th>
+                                                            <th>Mobile No.</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>Ramesh Kambale</td>
+                                                            <td>CEO</td>
+                                                            <td>687651354</td>
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <button type="button" title="Delete Election"
+                                                                        class="btn btn-sm btn-light text-danger rounded">
+                                                                        <i class="fas fa-trash-alt"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -352,8 +470,8 @@
             <div class="modal-header">
                 <p class="modal-title" id="AssignVoterModalLabel">Assign Voters - {{assignVoterObj?.voterName}}</p>
                 <button type="button" class="btn-close" #boothCMlist
-                    (click)="allSelectCheckBox.setValue('');searchText = '';selectArea.setValue(0)" data-bs-dismiss="modal" 
-                    aria-label="Close"></button>
+                    (click)="allSelectCheckBox.setValue('');searchText = '';selectArea.setValue(0)"
+                    data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="form-container">
@@ -387,9 +505,13 @@
                                     <th>Mobile Number</th>
                                     <th>Area Name</th>
                                     <th>Assigned To</th>
-                                    <th> <div *ngIf="!searchText" class="d-flex  align-items-center"> <input class="form-check-input me-2" type="checkbox"
+                                    <th>
+                                        <div *ngIf="!searchText" class="d-flex  align-items-center"> <input
+                                                class="form-check-input me-2" type="checkbox"
                                                 [formControl]="allSelectCheckBox" [checked]="allSelectCheckBox.value"
-                                                (change)="selectAllCategory($event)" id="flexCheckDefault"> <span>All</span></div>
+                                                (change)="selectAllCategory($event)" id="flexCheckDefault">
+                                            <span>All</span>
+                                        </div>
                                     </th>
                                 </tr>
                             </thead>
@@ -451,7 +573,8 @@
 </div>
 
 <!-- Modal for Missing Areas  -->
-<div class="modal fade" id="missingAreaModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="missingAreaModelLabel" aria-hidden="true">
+<div class="modal fade" id="missingAreaModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="missingAreaModelLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
