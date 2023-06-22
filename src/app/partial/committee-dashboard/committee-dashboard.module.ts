@@ -7,6 +7,7 @@ import { NgxSelectModule } from 'ngx-select-ex';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { TooltipModule } from 'src/app/directives/tooltip.module';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     FormsModule,
     OwlNativeDateTimeModule,
     OwlDateTimeModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    TooltipModule
   ]
 })
 export class CommitteeDashboardModule { }
