@@ -50,6 +50,7 @@ export class CommitteesOnMapComponent implements OnInit, OnDestroy, AfterViewIni
   clearDataFlag: any;
   DistWiseCommityWGraphArray: any;
   graphInstance: any;
+  graphInstance1: any;
   loggedDistrictId: any;
   loggedUserTypeId: any;
   allowClear: boolean = true;
@@ -162,6 +163,9 @@ export class CommitteesOnMapComponent implements OnInit, OnDestroy, AfterViewIni
     sessionStorage.removeItem('DistrictIdWorkThisWeek');
     if (this.graphInstance) {
       this.graphInstance.destroy();
+    }
+    if (this.graphInstance1) {
+      this.graphInstance1.destroy();
     }
   }
 
@@ -903,8 +907,95 @@ export class CommitteesOnMapComponent implements OnInit, OnDestroy, AfterViewIni
 
   svgMapClick(){
     $(document).on('click', '#mapsvg1  path', (e: any) => {
-      console.log(e, e.currentTarget.dataset.name)
+      console.log(e, e.currentTarget.id);
+      var filteredDistrict = this.allDistrict.filter((x: any) => x.DistrictId == e.currentTarget.id)
+      var path = 'assets/mapSvg/' + filteredDistrict[0]?.DistrictName + '.svg';
+      console.log(path, filteredDistrict)
+      this.showTalukaSvgMap(this.commonService.mapRegions(), path);
     })
+  }
+
+  showTalukaSvgMap(regions_m: any, svgPath: any) {
+    if (this.graphInstance1) {
+      this.graphInstance1.destroy();
+    }
+    this.graphInstance1 = $("#mapsvg2").mapSvg({
+      width: 550,
+      height: 430,
+      colors: {
+        baseDefault: "#bfddff",
+        background: "#fff",
+        selected: "#7289da",
+        hover: "#7289da",
+        directory: "#bfddff",
+        status: {}
+      },
+      regions: regions_m,
+      viewBox: [0, 0, 763.614, 599.92],
+      cursor: "pointer",
+      zoom: {
+        on: false,
+        limit: [0, 50],
+        delta: 2,
+        buttons: {
+          on: true,
+          location: "left"
+        },
+        mousewheel: true
+      },
+      tooltips: {
+        mode: "title",
+        off: true,
+        priority: "local",
+        position: "bottom"
+      },
+      popovers: {
+        mode: "on",
+        on: false,
+        priority: "local",
+        position: "top",
+        centerOn: false,
+        width: 300,
+        maxWidth: 50,
+        maxHeight: 50,
+        resetViewboxOnClose: false,
+        mobileFullscreen: false
+      },
+      gauge: {
+        on: false,
+        labels: {
+          low: "low",
+          high: "high"
+        },
+        colors: {
+          lowRGB: {
+            r: 211,
+            g: 227,
+            b: 245,
+            a: 1
+          },
+          highRGB: {
+            r: 67,
+            g: 109,
+            b: 154,
+            a: 1
+          },
+          low: "#d3e3f5",
+          high: "#436d9a",
+          diffRGB: {
+            r: -144,
+            g: -118,
+            b: -91,
+            a: 0
+          }
+        },
+        min: 0,
+        max: false
+      },
+      source: svgPath,
+      title: "Maharashtra-bg_o",
+      responsive: true
+    });
   }
 }
 
