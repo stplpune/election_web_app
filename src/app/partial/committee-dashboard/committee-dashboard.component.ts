@@ -32,19 +32,19 @@ export class CommitteeDashboardComponent implements OnInit {
   resultOrganizationMember: any;
   activeRow: any;
   selCommitteeName: any;
-  districtName = "Maharashtra State";
+  // districtName = "Maharashtra State";
   defaultCommitteesFlag: boolean = false;
   defaultMembersFlag: boolean = false;
   globalBodyId: any;
   defaultCloseBtn: boolean = false;
-  allDistrict: any;
+  // allDistrict: any;
   selectedDistrictId: any;
-  selDistrict = new FormControl();
+  // selDistrict = new FormControl();
   fromToDate = new FormControl();
   Search = new FormControl('');
   subject: Subject<any> = new Subject();
   searchFilter = "";
-  DistrictId: any; //DistrictId fetch Work this Week Page
+  // DistrictId: any; //DistrictId fetch Work this Week Page
   fromDate: any = '';
   toDate: any = '';
   clearDataFlag: any;
@@ -97,7 +97,7 @@ export class CommitteeDashboardComponent implements OnInit {
     let getsessionStorageData: any = sessionStorage.getItem('DistrictIdWorkThisWeek');
     if(getsessionStorageData){
       let DistrictId = JSON.parse(getsessionStorageData);
-      this.DistrictId = DistrictId.DistrictId;
+      // this.DistrictId = DistrictId.DistrictId;
       this.CommitteeId = DistrictId.CommitteeId;
       this.committeeName = DistrictId.committeeName;
     }
@@ -106,15 +106,15 @@ export class CommitteeDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.loggedUserTypeId = this.commonService.loggedInSubUserTypeId();
     // this.selDistrictName();
-    this.DistrictId ? this.getOrganizationByDistrictId(this.DistrictId) : this.getOrganizationByDistrictId(0);
+    // this.DistrictId ? this.getOrganizationByDistrictId(this.DistrictId) : this.getOrganizationByDistrictId(0);
     this.searchFilterByCommittee('false');
     !this.allLevels ? this.getLevel() : '';
      this.searchFilterMember();
   }
 
-  selDistrictName() {
-    this.loggedUserTypeId == 5 ? this.districtName = this.commonService.getCommiteeInfo().CommiteeName : this.districtName = "Maharashtra State";
-  }
+  // selDistrictName() {
+  //   this.loggedUserTypeId == 5 ? this.districtName = this.commonService.getCommiteeInfo().CommiteeName : this.districtName = "Maharashtra State";
+  // }
 
   svgMapColorReset() {
     $('#mapsvg1 path').css('fill', '#7289da');
@@ -122,7 +122,7 @@ export class CommitteeDashboardComponent implements OnInit {
 
   ngAfterViewInit() {
     this.callSVGMap() // default call SVG MAP
-    this.DistrictId == "" || this.DistrictId == undefined ? this.DistrictId = 0 : this.DistrictId = this.DistrictId;
+    // this.DistrictId == "" || this.DistrictId == undefined ? this.DistrictId = 0 : this.DistrictId = this.DistrictId;
     //this.selectDistrict(this.DistrictId); 10/01/22
 
     $(document).on('click', '#mapsvg1  path', (e: any) => { // add on SVG Map
@@ -133,7 +133,7 @@ export class CommitteeDashboardComponent implements OnInit {
       this.defaultMembersFlag = false;
       let getClickedId = e.currentTarget;
       let distrctId = $(getClickedId).attr('id');
-      this.DistrictId = 0;
+      // this.DistrictId = 0;
       this.selectedDistrictId = distrctId;
       this.toggleClassActive(Number(distrctId));
       this.getOrganizationByDistrictId(Number(distrctId));
@@ -144,15 +144,15 @@ export class CommitteeDashboardComponent implements OnInit {
     this.showSvgMap(this.commonService.mapRegions());
   }
 
-  addClasscommitteeWise(id: any) {
-    $('#mapsvg1  path').addClass('notClicked');
-    setTimeout(() => {
-      this.allDistrict.find((element: any) => {
-        $('#mapsvg1  path[id="' + element.DistrictId + '"]').addClass('clicked');
-        $('#mapsvg1  #'+element.DistrictName).text(element.TotalCommittee )
-      });
-    }, 500);
-  }
+  // addClasscommitteeWise(id: any) {
+  //   $('#mapsvg1  path').addClass('notClicked');
+  //   setTimeout(() => {
+  //     this.allDistrict.find((element: any) => {
+  //       $('#mapsvg1  path[id="' + element.DistrictId + '"]').addClass('clicked');
+  //       $('#mapsvg1  #'+element.DistrictName).text(element.TotalCommittee )
+  //     });
+  //   }, 500);
+  // }
 
   toggleClassActive(distrctId: any) {
     let checksvgDistrictActive = $('#mapsvg1  path').hasClass("svgDistrictActive");
@@ -169,17 +169,17 @@ export class CommitteeDashboardComponent implements OnInit {
     }
   }
 
-  selectDistrict(event: any) {
-    this.hideComityGraph= false;
-    !this.allLevels ? this.getLevel() : '';
-    this.CheckBoxLevelArray = [];
-    this.DistrictId = 0;
-    this.selectedDistrictId = event;
-    this.getOrganizationByDistrictId(this.selectedDistrictId);
-    this.toggleClassActive(this.selectedDistrictId);
-    this.defaultMembersFlag = false;
+  // selectDistrict(event: any) {
+  //   this.hideComityGraph= false;
+  //   !this.allLevels ? this.getLevel() : '';
+  //   this.CheckBoxLevelArray = [];
+  //   this.DistrictId = 0;
+  //   this.selectedDistrictId = event;
+  //   this.getOrganizationByDistrictId(this.selectedDistrictId);
+  //   this.toggleClassActive(this.selectedDistrictId);
+  //   this.defaultMembersFlag = false;
     // this.comActiveClass(0);  
-  }
+  // }
 
   onCheckChangeLevel(event: any,CheckBoxLevelId:any){
     this.hideComityGraph = false;
@@ -210,8 +210,8 @@ export class CommitteeDashboardComponent implements OnInit {
    setTimeout(() => {
     $('html, body .showmap').animate({ scrollTop: $('.showmap').offset().top }, 'slow');
 
-    let checkDistrictId = this.DistrictId || this.selectedDistrictId;
-    this.districtWiseCommityWorkGraph(checkDistrictId);
+    // let checkDistrictId = this.DistrictId || this.selectedDistrictId;
+    // this.districtWiseCommityWorkGraph(checkDistrictId);
    }, 500);
   }
 
@@ -224,7 +224,7 @@ export class CommitteeDashboardComponent implements OnInit {
     this.callAPIService.setHttp('get', 'Web_GetOrganization_byDistrictId_3_0?UserId=' + this.commonService.loggedInUserId() + '&DistrictId=' + ids + '&Search=' + this.searchFilter + '&LevelId=' + this.CheckBoxLevelArrayJSON + '&FromDate=&ToDate=', false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
-        !this.allDistrict ?  this.getDistrict(id) : '';
+        // !this.allDistrict ?  this.getDistrict(id) : '';
         
         this.defaultCloseBtn = true;
         if (id == 0) {
@@ -233,15 +233,15 @@ export class CommitteeDashboardComponent implements OnInit {
         this.defaultCommitteesFlag = true;
         this.spinner.hide();
         this.resultCommittees = res.data1;
-        this.selDistrict.setValue(Number(id));
+        // this.selDistrict.setValue(Number(id));
       } else {
-        !this.allDistrict ?  this.getDistrict(id) : '';
+        // !this.allDistrict ?  this.getDistrict(id) : '';
         this.defaultCommitteesFlag = true;
         this.defaultCloseBtn = true;
         this.resultCommittees = [];
-        this.selDistrict.setValue('');
+        // this.selDistrict.setValue('');
         this.spinner.hide();
-        this.selDistrict.setValue(Number(id));
+        // this.selDistrict.setValue(Number(id));
       }
 
     }, (error: any) => {
@@ -252,36 +252,36 @@ export class CommitteeDashboardComponent implements OnInit {
     })
   }
 
-  getDistrict(id: any) {
-    // this.spinner.show();
-    this.callAPIService.setHttp('get', 'Web_GetDistrict_WithCount_1_0_CommitteeonMap?StateId=' + 1 + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb'); //old API  Web_GetDistrict_1_0_Committee
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.data == 0) {
-        this.spinner.hide();
-        this.allDistrict = res.data1;
-        // if district id != 0  then show district name
-        this.CommitteeId && this.selCommiteeFlag ? this.committeeNameByOrganizationMember(this.CommitteeId, this.committeeName) : '';
-        if (id != 0) {
-          this.allDistrict.find((ele: any) => {
-            if (ele.DistrictId == id) {
-              this.districtName = ele.DistrictName;
-            }
-          });
-        }
-        // this.districtWiseCommityWorkGraph(id); 10/01/22
-        this.addClasscommitteeWise(id);
-        this.onClickFlag == false ?  $('#mapsvg1  path#' + this.selectedDistrictId).addClass('svgDistrictActive') : '';
+  // getDistrict(id: any) {
+  //   this.spinner.show();
+  //   this.callAPIService.setHttp('get', 'Web_GetDistrict_WithCount_1_0_CommitteeonMap?StateId=' + 1 + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb'); //old API  Web_GetDistrict_1_0_Committee
+  //   this.callAPIService.getHttp().subscribe((res: any) => {
+  //     if (res.data == 0) {
+  //       this.spinner.hide();
+  //       this.allDistrict = res.data1;
+  //       if district id != 0  then show district name
+  //       this.CommitteeId && this.selCommiteeFlag ? this.committeeNameByOrganizationMember(this.CommitteeId, this.committeeName) : '';
+  //       if (id != 0) {
+  //         this.allDistrict.find((ele: any) => {
+  //           if (ele.DistrictId == id) {
+  //             this.districtName = ele.DistrictName;
+  //           }
+  //         });
+  //       }
+  //       this.districtWiseCommityWorkGraph(id); 10/01/22
+  //       this.addClasscommitteeWise(id);
+  //       this.onClickFlag == false ?  $('#mapsvg1  path#' + this.selectedDistrictId).addClass('svgDistrictActive') : '';
        
-         id == undefined ||   id == null ||  id == ""  ? '': this.toggleClassActive(id);
-        // this.selectedDistrictId ? $('path#' + this.selectedDistrictId).addClass('svgDistrictActive') : this.toggleClassActive(0);
+  //        id == undefined ||   id == null ||  id == ""  ? '': this.toggleClassActive(id);
+  //       this.selectedDistrictId ? $('path#' + this.selectedDistrictId).addClass('svgDistrictActive') : this.toggleClassActive(0);
         
-      }
-    }, (error: any) => {
-      if (error.status == 500) {
-        this.router.navigate(['../../500'], { relativeTo: this.route });
-      }
-    })
-  }
+  //     }
+  //   }, (error: any) => {
+  //     if (error.status == 500) {
+  //       this.router.navigate(['../../500'], { relativeTo: this.route });
+  //     }
+  //   })
+  // }
 
   getLevel() {
     //this.spinner.show();
@@ -350,21 +350,22 @@ export class CommitteeDashboardComponent implements OnInit {
   // --------------------------------------- filter start here ----------------------------------------------- //
 
   clearFilter(flag: any) {
-    if (flag == 'CommitteesIn') {
+    // if (flag == 'CommitteesIn') {
       //this.CompofComityHide = false;
-      this.selDistrict.reset();
-      this.selDistrictName();
-      this.defaultCloseBtn = false;
-      this.onClickFlag  = true;
+      // this.selDistrict.reset();
+      // this.selDistrictName();
+      // this.defaultCloseBtn = false;
+      // this.onClickFlag  = true;
       // this.removeSessionData();
-      this.toggleClassActive(0);
-      this.getLevel();
-      this.CheckBoxLevelArray = [];
-      this.selectedDistrictId = 0;
-      sessionStorage.removeItem('DistrictIdWorkThisWeek');
-      this.hideComityGraph= false;
-      this.getOrganizationByDistrictId(0);
-    } else if (flag == 'dateRangePIcker') {
+    //   this.toggleClassActive(0);
+    //   this.getLevel();
+    //   this.CheckBoxLevelArray = [];
+    //   this.selectedDistrictId = 0;
+    //   sessionStorage.removeItem('DistrictIdWorkThisWeek');
+    //   this.hideComityGraph= false;
+    //   this.getOrganizationByDistrictId(0);
+    // }
+    if (flag == 'dateRangePIcker') {
       this.clearDateRangeByFilter();
     }
     this.comActiveClass(0);
@@ -383,7 +384,7 @@ export class CommitteeDashboardComponent implements OnInit {
     this.fromDate = this.datePipe.transform(getDate[0], 'dd/MM/yyyy');
     this.toDate = this.datePipe.transform(getDate[1], 'dd/MM/yyyy');
     let checkDistrictId;
-    (this.selDistrict.value =="" || this.selDistrict.value  == null || isNaN(this.selDistrict.value) == true)  ? checkDistrictId = 0 :  checkDistrictId =  this.selDistrict.value;
+    // (this.selDistrict.value =="" || this.selDistrict.value  == null || isNaN(this.selDistrict.value) == true)  ? checkDistrictId = 0 :  checkDistrictId =  this.selDistrict.value;
     this.districtWiseCommityWorkGraph(checkDistrictId);
   }
 
@@ -392,7 +393,7 @@ export class CommitteeDashboardComponent implements OnInit {
     this.fromDate = '';
     this.toDate = '';
     let checkDistrictId;
-    (this.selDistrict.value =="" || this.selDistrict.value  == null || isNaN(this.selDistrict.value) == true)  ? checkDistrictId = 0 :  checkDistrictId =  this.selDistrict.value;
+    // (this.selDistrict.value =="" || this.selDistrict.value  == null || isNaN(this.selDistrict.value) == true)  ? checkDistrictId = 0 :  checkDistrictId =  this.selDistrict.value;
     this.districtWiseCommityWorkGraph(checkDistrictId);
   }
 
@@ -424,10 +425,10 @@ export class CommitteeDashboardComponent implements OnInit {
     this.Search.reset('');
     this.searchFilter = "";
     // this.selDistrict.reset();
-    this.selDistrictName();
+    // this.selDistrictName();
     let checkDistrictId;
     
-    (this.selDistrict.value =="" || this.selDistrict.value  == null || isNaN(this.selDistrict.value) == true)  ? checkDistrictId = 0 :  checkDistrictId =  this.selDistrict.value;
+    // (this.selDistrict.value =="" || this.selDistrict.value  == null || isNaN(this.selDistrict.value) == true)  ? checkDistrictId = 0 :  checkDistrictId =  this.selDistrict.value;
     this.toggleClassActive(checkDistrictId);
     this.getOrganizationByDistrictId(checkDistrictId);
     //this.districtWiseCommityWorkGraph(checkDistrictId);  10/1/22
@@ -908,10 +909,10 @@ export class CommitteeDashboardComponent implements OnInit {
   svgMapClick(){
     $(document).on('click', '#mapsvg1  path', (e: any) => {
       console.log(e, e.currentTarget.id);
-      var filteredDistrict = this.allDistrict.filter((x: any) => x.DistrictId == e.currentTarget.id)
-      var path = 'assets/mapSvg/' + filteredDistrict[0]?.DistrictName + '.svg';
-      console.log(path, filteredDistrict)
-      this.showTalukaSvgMap(this.commonService.mapRegions(), path);
+      // var filteredDistrict = this.allDistrict.filter((x: any) => x.DistrictId == e.currentTarget.id)
+      // var path = 'assets/mapSvg/' + filteredDistrict[0]?.DistrictName + '.svg';
+      // console.log(path, filteredDistrict)
+      // this.showTalukaSvgMap(this.commonService.mapRegions(), path);
     })
   }
 
