@@ -221,10 +221,12 @@
               <div class="col-sm-6">
                 <div id="chart">
                   <apx-chart
-                    [series]="chartOptions.series!"
-                    [chart]="chartOptions.chart!"
-                    [labels]="chartOptions.labels!"
-                    [responsive]="chartOptions.responsive!"
+                    [series]="chartOptions?.series"
+                    [chart]="chartOptions.chart"
+                    [labels]="chartOptions.labels"
+                    [responsive]="chartOptions.responsive"
+                    [legend]="chartOptions.legend"
+                    [colors]="chartOptions.colors"
                   ></apx-chart>
                 </div>
               </div>
@@ -246,7 +248,20 @@
           <div class="col-sm-12">
             <div class="card">
               <div class=" card-body">
-                Bar Graph
+                <div id="chart">
+                  <!-- <apx-chart
+                    [series]="BarchartOptions.series"
+                    [chart]="BarchartOptions.chart"
+                    [dataLabels]="BarchartOptions.dataLabels"
+                    [plotOptions]="BarchartOptions.plotOptions"
+                    [yaxis]="BarchartOptions.yaxis"
+                    [legend]="BarchartOptions.legend"
+                    [fill]="BarchartOptions.fill"
+                    [stroke]="BarchartOptions.stroke"
+                    [tooltip]="BarchartOptions.tooltip"
+                    [xaxis]="BarchartOptions.xaxis"
+                  ></apx-chart> -->
+                </div>
               </div>
               <div class="card-footer bg-transparent border-0">
                 <div class="text-center">Talukawise Booth Committee Formation progress</div>
