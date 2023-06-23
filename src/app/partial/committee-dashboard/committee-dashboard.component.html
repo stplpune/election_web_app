@@ -211,34 +211,6 @@
             </div>
           </div> -->
 
-          <div class="col-sm-12 mt-4 showmap" *ngIf="hideComityGraph">
-            <div class="card shadow-none border">
-              <div class="card-header">
-                <div class="row">
-                  <div class="col-sm-9">
-                    Comparison of Committees
-                  </div>
-                  <div class="col-sm-3 text-end">
-                    <div class="input-group">
-                      <input [owlDateTime]="dt3" (remove)="clearFilter('dateRangePIcker')" [formControl]="fromToDate"
-                        [selectMode]="'range'" (dateTimeChange)="selDateRangeByFilter(fromToDate.value)"
-                        class="form-control" [owlDateTimeTrigger]="dt3" placeholder="Select Date Range">
-                      <button class="btn btn-light border btn-sm" type="button" [owlDateTimeTrigger]="dt3"
-                        *ngIf="!fromToDate.value">
-                        <i class="fas fa-calendar-alt"></i></button>
-                      <button class="btn btn-light border btn-sm" type="button" *ngIf="fromToDate.value"
-                        (click)="clearFilter('dateRangePIcker')">
-                        <i class="fas fa-times"></i></button>
-                    </div>
-                    <owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time>
-                  </div>
-                </div>
-              </div>
-              <div class="card-body chartHeight600 WorkDoneByYuvak1">
-              </div>
-            </div>
-          </div>
-
           <!-- pie chart section -->
           <div class="col-sm-6">
             <div class="d-flex">
@@ -321,100 +293,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal for Add/Update/Delete Member for any Designation -->
-<div class="modal fade" id="AddMemberModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="AddMemberModalLabel" aria-hidden="true" *ngIf="selCommitteeName">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <form [formGroup]="bodyMember">
-        <div class="modal-header">
-          <p class="modal-title" id="AddMemberModalLabel">{{addMemberFlag}} Member</p>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" #closeAddMemberModal aria-label="Close"
-            (click)="closeModelAddEditMember()"></button>
-        </div>
-        <div class="modal-body">
-          <div class="form-container">
-            <div class="mb-2">
-              <label for="txtBodyName" class="form-label">Committee Name</label>
-              <input type="text" class="form-control" readonly formControlName="BodyName" />
-            </div>
-            <div class="row">
-              <div class="col-sm-6" *ngIf="bodyMember.value.prevMember">
-                <div class="mb-2">
-                  <label for="txtBodyName" class="form-label">Current Member Name</label>
-                  <input type="text" class="form-control" readonly formControlName="prevMember" />
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="mb-2">
-                  <label for="txtBodyName" class="form-label">Designation</label>
-                  <input type="text" class="form-control" readonly formControlName="currentDesignation" />
-                </div>
-              </div>
-              <div class="col-sm-12">
-                <div class="mb-2">
-                  <label for="txtMemberName" class="form-label required-field">Search Mobile
-                    Number</label>
-                  <div class="input-group">
-                    <div class="col-sm">
-                      <div class="input-group">
-                        <input type="text" class="form-control" formControlName="mobileNo" [maxlength]="10"
-                          placeholder="Search MobileNo..." (keyup)="filterByMember()"
-                          (keypress)="acceptedOnlyNumbers($event)"
-                          [ngClass]="{ 'is-invalid': submitted && f.mobileNo.errors }" style="width: 85%;" />
-                      </div>
-                    </div>
-                    <button (click)="addNewMember('Add',0,bodyMember.value.mobileNo)"
-                      class="rounded btn btn-sm btn-light ms-1 ng-star-inserted"><i class="fas fa-plus"></i></button>
-                  </div>
-                  <div *ngIf="submitted && f.mobileNo.errors" class="invalid-feedback">
-                    <div *ngIf="f.mobileNo.errors.required">Mobile Number is required </div>
-                    <div *ngIf="f.mobileNo.errors.pattern">Valid Mobile Number is required
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="mb-3 chartbox" *ngIf="hideMemberDetailsField">
-              <div class="card" *ngIf="bodyMemberDetails?.length != 0">
-                <div class="card-header pb-0">Member Details</div>
-                <div class="card-body pt-0">
-                  <label class="form-label mb-0">Email ID</label>
-                  <div class="form-control-plaintext py-0">
-                    {{bodyMemberDetails?.Emailid}}</div>
-                  <label class="form-label mb-0">Contact No.</label>
-                  <div class="form-control-plaintext py-0">
-                    {{bodyMemberDetails?.MobileNo}}</div>
-
-                  <label class="form-label mb-0">Location</label>
-                  <div class="form-control-plaintext py-0"
-                    *ngIf="(bodyMemberDetails?.DistrictName || bodyMemberDetails?.TalukaName || bodyMemberDetails?.VillageName) ; else otherContent">
-                    {{bodyMemberDetails?.DistrictName}}<span
-                      *ngIf="bodyMemberDetails?.TalukaName">,</span>{{bodyMemberDetails?.TalukaName}}<span
-                      *ngIf="bodyMemberDetails?.VillageName">,</span>{{bodyMemberDetails?.VillageName}}
-                  </div>
-                  <ng-template #otherContent>
-                    <div class="form-control-plaintext py-0">-</div>
-                  </ng-template>
-                </div>
-              </div>
-              <div class="mt-2 text-end" *ngIf="bodyMemberDetails?.length == 0">
-                <div class="alert alert-danger text-center py-2">No Data Found..!
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-main" (click)="onSubmit()">Assign
-            Member</button>
-        </div>
-      </form>
     </div>
   </div>
 </div>
