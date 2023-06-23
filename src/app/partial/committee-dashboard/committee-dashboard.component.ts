@@ -404,7 +404,42 @@ export class CommitteeDashboardComponent implements OnInit {
     });
   }
 
+ 
   getTalukaCommitteeCountByDistrict(){
+    var req = '?UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.commonService.getlocalStorageData().ClientId + '&DistrictId=' + this.selectedDistrictId || 0;
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'ClientMasterApp/Dashboard/GetWebTalukaDashbordState' + req, false, false, false, 'electionMicroSerApp'); //old API  Web_GetDistrict_1_0_Committee
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res?.responseData && res?.responseData.length != 0) {
+        // res.responseData.map((x:any)=>{
+        //   x.talukaName=x.talukaName.split(' ')[0]
+        // })
+        var talukaByDistrictId = res.responseData;
+        // this.districtWiseCommityWorkGraph(id); 10/01/22
+        this.addClasscommitteeWise1(talukaByDistrictId);
+        // this.onClickFlag == false ?  $('#mapsvg1  path#' + this.selectedDistrictId).addClass('svgDistrictActive') : '';
+       
+        //  id == undefined ||   id == null ||  id == ""  ? '': this.toggleClassActive(id);
+        this.selectedDistrictId ? $('path#' + this.selectedDistrictId).addClass('svgDistrictActive') : this.toggleClassActive(0);
+        
+      }
+    }, (error: any) => {
+      if (error.status == 500) {
+        this.router.navigate(['../../500'], { relativeTo: this.route });
+      }
+    })
+  }
 
+  addClasscommitteeWise1(arr: any) {
+    $('#mapsvg2  path').addClass('notClicked');
+    setTimeout(() => {
+      arr.find((element: any) => {
+        console.log(element)
+        $('#mapsvg2  path[id="' + element.talukaId + '"]').addClass('clicked');
+        $('#mapsvg2  #'+element.talukaName).text(element?.boothCommittee)
+      });
+    }, 500);
   }
 }
+
