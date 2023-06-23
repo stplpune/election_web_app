@@ -54,7 +54,8 @@ export class CommonService {
     redirectToDashborad() {
         if (this.checkUserIsLoggedIn() == true) {
         let logInUserType: any = this.getAllPageName();
-        let redirectToDashboard = logInUserType[0].PageURL;
+        let pageURLObj = logInUserType?.find((x: any) => x.PageId == this.getlocalStorageData().StartPageId); 
+        let redirectToDashboard = pageURLObj?.PageURL;
         return redirectToDashboard;
         }
     }
