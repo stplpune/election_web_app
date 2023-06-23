@@ -437,7 +437,7 @@ export class CommitteeDashboardComponent implements OnInit {
       arr.find((element: any) => {
         console.log(element)
         $('#mapsvg2  path[id="' + element.talukaId + '"]').addClass('clicked');
-        $('#mapsvg2  #'+element.talukaName).text(element?.boothCommittee)
+        $('#mapsvg2  #'+element.talukaId).text(element?.boothCommittee)
       });
     }, 500);
   }
