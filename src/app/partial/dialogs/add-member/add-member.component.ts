@@ -272,7 +272,7 @@ export class AddMemberComponent implements OnInit, OnDestroy {
   updateProfile() {
     // this.addValiditonTaluka(this.editProfileForm.value.IsRural)
     this.submitted = true;
-
+    
     if (this.editProfileForm.invalid) {
       this.spinner.hide();
       return;
@@ -297,6 +297,7 @@ export class AddMemberComponent implements OnInit, OnDestroy {
       }
 
       fromData.append('IsPhotoChange', this.profilePhotoChange);
+      fromData.append('ClientId', this.commonService.getlocalStorageData().ClientId);
 
       this.callAPIService.setHttp('Post', 'Web_Insert_User_1_0_Committee', false, fromData, false, 'electionServiceForWeb');
       this.callAPIService.getHttp().subscribe((res: any) => {

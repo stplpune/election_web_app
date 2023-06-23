@@ -29,6 +29,14 @@ export class CommonService {
         return loginObj;
         }
     }
+
+    getLoggedUserStateData() {
+        if (this.checkUserIsLoggedIn() == true) {
+        let loginObj = JSON.parse(localStorage.loggedInDetails).data3[0];
+        return loginObj;
+        }
+    }
+
     getLoginType() {
         let LoginType = JSON.parse(localStorage.loggedInDetails).data1[0];
         return LoginType.LoginType;

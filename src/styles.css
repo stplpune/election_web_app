@@ -244,7 +244,7 @@ a.text-main:hover {
 }
 
 #pageheader .btn {
-    /* width: 34px; 
+    /* width: 34px;
     height: 34px;*/
     box-shadow: none;
     outline: none;
@@ -767,3 +767,33 @@ input::-ms-clear {
 .bg-danger-10 {
     background: #ffbcbc !important;
 }
+
+
+
+/* my css */
+#committeesonmap #mapsvg1.mapsvg svg {
+  -webkit-user-select: none;
+  user-select: none;
+  /* overflow: visible !important; */
+  /* max-width: none !important; */
+  max-height: none !important;
+  width: 470px !important;
+  height: 320px !important;
+  position: relative;
+  /* right: 0 !important; */
+  transition: transform .40s;
+  transform-origin: 0% 0%;
+  -webkit-transform-origin: 0% 0%;
+}
+/* #committeesonmap #mapsvg2.mapsvg svg {
+  -webkit-user-select: none;
+  user-select: none;
+  max-height: none !important;
+  width: 470px !important;
+  transform-origin: right;
+   height: 120px !important;
+  position: relative;
+  transition: transform .40s;
+  transform-origin: 0% 0%;
+  -webkit-transform-origin: 0% 0%;
+} */
