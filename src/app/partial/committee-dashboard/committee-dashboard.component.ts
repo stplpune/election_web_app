@@ -177,7 +177,8 @@ export class CommitteeDashboardComponent implements OnInit {
         this.allDistrict = res.responseData;
         // this.districtWiseCommityWorkGraph(id); 10/01/22
         this.addClasscommitteeWise();
-        this.bindPieChartDataForTalukaPresident(this.allDistrict[0]?.districtId);
+        this.bindPieChartDataForTalukaPresident(3);  //this.allDistrict[0]?.districtId 
+        
         // this.onClickFlag == false ?  $('#mapsvg1  path#' + this.selectedDistrictId).addClass('svgDistrictActive') : '';
        
         //  id == undefined ||   id == null ||  id == ""  ? '': this.toggleClassActive(id);
@@ -193,9 +194,10 @@ export class CommitteeDashboardComponent implements OnInit {
     })
   }
 //------------  get Pie Chart Details --------------------------------
-  bindPieChartDataForTalukaPresident(_disId?:any){
+  bindPieChartDataForTalukaPresident(distId?:any){
+    this.bindBarChartDataForTalukaPresident(distId)
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'ClientMasterApp/Dashboard/GetWebDashbordDistrictDetailState?UserId=1&ClientId=1&DistrictId=1', false, false, false, 'electionMicroSerApp');
+    this.callAPIService.setHttp('get', 'ClientMasterApp/Dashboard/GetWebDashbordDistrictDetailState?UserId=1&ClientId=1&DistrictId='+distId, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       this.spinner.hide();
       if (res.statusCode == '200') {
@@ -241,14 +243,15 @@ export class CommitteeDashboardComponent implements OnInit {
   }
 
   // --------------------------------------  Construct BarChart  -----------------------
-  bindBarChartDataForTalukaPresident(disId?:any){
+  bindBarChartDataForTalukaPresident(distId?:any){
     this.spinner.show();
-    this.callAPIService.setHttp('get', 'ClientMasterApp/Dashboard/GetWebTalukaPresidentsDashbordState?UserId=1&ClientId=1&DistrictId=1', false, false, false, 'electionMicroSerApp');
+    this.callAPIService.setHttp('get', 'ClientMasterApp/Dashboard/GetWebTalukaWiseBoothCommitteeDashbordState?UserId=1&ClientId=1&DistrictId='+distId, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       this.spinner.hide();
       if (res.statusCode == '200') {
         this.talukaPresidentDashArray = res!.responseData;
-        //this.constructBarChart(this.talukaPresidentDashArray);
+        console.log(this.talukaPresidentDashArray)
+        this.constructBarChart(this.talukaPresidentDashArray);
       } else {
         this.talukaPresidentDashArray = [];
       }
@@ -263,17 +266,18 @@ export class CommitteeDashboardComponent implements OnInit {
     this.BarchartOptions = {
       series: [
         {
-          name: "Net Profit",
-          data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+          name: "Booths ",
+          data: talDetailsArray.map((x:any)=>x.totalBooths)
         },
         {
-          name: "Revenue",
-          data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+          name: "Booth Committee's",
+          data: talDetailsArray.map((x:any)=>x.boothCommittee)
         },
       ],
       chart: {
         type: "bar",
-        height: 350
+        height: 350,
+        toolbar: { show:false },
       },
       plotOptions: {
         bar: {
@@ -291,17 +295,7 @@ export class CommitteeDashboardComponent implements OnInit {
         colors: ["transparent"]
       },
       xaxis: {
-        categories: [
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct"
-        ]
+        categories: talDetailsArray.map((x:any)=>x.talukaName)
       },
       yaxis: {
         title: {
@@ -533,7 +527,6 @@ export class CommitteeDashboardComponent implements OnInit {
     $('#mapsvg2  path').addClass('notClicked');
     setTimeout(() => {
       arr.find((element: any) => {
-        console.log(element)
         $('#mapsvg2  path[id="' + element.talukaId + '"]').addClass('clicked');
         $('#mapsvg2  #'+element.talukaId).text(element?.boothCommittee)
       });
