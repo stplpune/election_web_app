@@ -58,9 +58,7 @@
                                     </ngx-select>
                                 </div> -->
               </div>
-              <div id="mapsvg1" 
-              (click)="svgMapClick()"
-              ></div>
+              <div id="mapsvg1" (click)="svgMapClick()" ></div>
               <div class="d-flex justify-content-end w-100">
                 <div id="mapsvg2"></div>
               </div>
@@ -249,7 +247,14 @@
             </div>
             <div class="row">
               <div class="col-sm-6">
-                pie chart
+                <div id="chart">
+                  <apx-chart
+                    [series]="chartOptions.series!"
+                    [chart]="chartOptions.chart!"
+                    [labels]="chartOptions.labels!"
+                    [responsive]="chartOptions.responsive!"
+                  ></apx-chart>
+                </div>
               </div>
               <div class="col-sm-6">
                 <h6>Important Leader</h6>

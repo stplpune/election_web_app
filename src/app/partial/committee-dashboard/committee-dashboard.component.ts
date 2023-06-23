@@ -20,6 +20,21 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteComponent } from '../dialogs/delete/delete.component';
 import { AddMemberComponent } from '../dialogs/add-member/add-member.component';
 
+import { ChartComponent } from "ng-apexcharts";
+
+import {
+  ApexNonAxisChartSeries,
+  ApexResponsive,
+  ApexChart
+} from "ng-apexcharts";
+
+export type ChartOptions = {
+  series: ApexNonAxisChartSeries;
+  chart: ApexChart;
+  responsive: ApexResponsive[];
+  labels: any;
+};
+
 @Component({
   selector: 'app-committee-dashboard',
   templateUrl: './committee-dashboard.component.html',
@@ -37,7 +52,7 @@ export class CommitteeDashboardComponent implements OnInit {
   defaultMembersFlag: boolean = false;
   globalBodyId: any;
   defaultCloseBtn: boolean = false;
-  // allDistrict: any;
+  allDistrict: any;
   selectedDistrictId: any;
   // selDistrict = new FormControl();
   fromToDate = new FormControl();
@@ -88,6 +103,9 @@ export class CommitteeDashboardComponent implements OnInit {
   UserIdForRegMobileNo = '';
   committeeNameBOMember: any;
 
+  @ViewChild("chart") chart: ChartComponent | undefined;
+  public chartOptions: Partial<ChartOptions>;
+
   constructor(private commonService: CommonService, private toastrService: ToastrService,
     private spinner: NgxSpinnerService, private router: Router, private fb: FormBuilder, public datePipe: DatePipe,
     private route: ActivatedRoute, private callAPIService: CallAPIService, public location: Location, 
@@ -101,15 +119,38 @@ export class CommitteeDashboardComponent implements OnInit {
       this.CommitteeId = DistrictId.CommitteeId;
       this.committeeName = DistrictId.committeeName;
     }
+
+    this.chartOptions = {
+      series: [44, 55, 13, 43, 22],
+      chart: {
+        width: 380,
+        type: "pie"
+      },
+      labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: "bottom"
+            }
+          }
+        }
+      ]
+    };
   }
 
   ngOnInit(): void {
     this.loggedUserTypeId = this.commonService.loggedInSubUserTypeId();
+    this.getDistrict();
     // this.selDistrictName();
     // this.DistrictId ? this.getOrganizationByDistrictId(this.DistrictId) : this.getOrganizationByDistrictId(0);
-    this.searchFilterByCommittee('false');
-    !this.allLevels ? this.getLevel() : '';
-     this.searchFilterMember();
+    // this.searchFilterByCommittee('false');
+    // !this.allLevels ? this.getLevel() : '';
+    //  this.searchFilterMember();
   }
 
   // selDistrictName() {
@@ -144,15 +185,15 @@ export class CommitteeDashboardComponent implements OnInit {
     this.showSvgMap(this.commonService.mapRegions());
   }
 
-  // addClasscommitteeWise(id: any) {
-  //   $('#mapsvg1  path').addClass('notClicked');
-  //   setTimeout(() => {
-  //     this.allDistrict.find((element: any) => {
-  //       $('#mapsvg1  path[id="' + element.DistrictId + '"]').addClass('clicked');
-  //       $('#mapsvg1  #'+element.DistrictName).text(element.TotalCommittee )
-  //     });
-  //   }, 500);
-  // }
+  addClasscommitteeWise() {
+    $('#mapsvg1  path').addClass('notClicked');
+    setTimeout(() => {
+      this.allDistrict.find((element: any) => {
+        $('#mapsvg1  path[id="' + element.districtId + '"]').addClass('clicked');
+        $('#mapsvg1  #'+element.districtName).text(element.boothCommittee )
+      });
+    }, 500);
+  }
 
   toggleClassActive(distrctId: any) {
     let checksvgDistrictActive = $('#mapsvg1  path').hasClass("svgDistrictActive");
@@ -252,36 +293,29 @@ export class CommitteeDashboardComponent implements OnInit {
     })
   }
 
-  // getDistrict(id: any) {
-  //   this.spinner.show();
-  //   this.callAPIService.setHttp('get', 'Web_GetDistrict_WithCount_1_0_CommitteeonMap?StateId=' + 1 + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb'); //old API  Web_GetDistrict_1_0_Committee
-  //   this.callAPIService.getHttp().subscribe((res: any) => {
-  //     if (res.data == 0) {
-  //       this.spinner.hide();
-  //       this.allDistrict = res.data1;
-  //       if district id != 0  then show district name
-  //       this.CommitteeId && this.selCommiteeFlag ? this.committeeNameByOrganizationMember(this.CommitteeId, this.committeeName) : '';
-  //       if (id != 0) {
-  //         this.allDistrict.find((ele: any) => {
-  //           if (ele.DistrictId == id) {
-  //             this.districtName = ele.DistrictName;
-  //           }
-  //         });
-  //       }
-  //       this.districtWiseCommityWorkGraph(id); 10/01/22
-  //       this.addClasscommitteeWise(id);
-  //       this.onClickFlag == false ?  $('#mapsvg1  path#' + this.selectedDistrictId).addClass('svgDistrictActive') : '';
+  getDistrict() {
+    var usrData = this.commonService.getLoggedUserStateData();
+    var req = '?UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.commonService.getlocalStorageData().ClientId + '&StateId='+ usrData?.StateId || 0 +'&DivisionId='+ usrData?.DivisionId || 0 +'&DistrictId=' + usrData?.DistrictId || 0 + '&TalukaId=' + usrData?.TalukaId || 0;
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'ClientMasterApp/Dashboard/GetWebDashbordState' + req, false, false, false, 'electionMicroSerApp'); //old API  Web_GetDistrict_1_0_Committee
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res?.responseData && res?.responseData.length != 0) {
+        this.allDistrict = res.responseData;
+        // this.districtWiseCommityWorkGraph(id); 10/01/22
+        this.addClasscommitteeWise();
+        // this.onClickFlag == false ?  $('#mapsvg1  path#' + this.selectedDistrictId).addClass('svgDistrictActive') : '';
        
-  //        id == undefined ||   id == null ||  id == ""  ? '': this.toggleClassActive(id);
-  //       this.selectedDistrictId ? $('path#' + this.selectedDistrictId).addClass('svgDistrictActive') : this.toggleClassActive(0);
+        //  id == undefined ||   id == null ||  id == ""  ? '': this.toggleClassActive(id);
+        this.selectedDistrictId ? $('path#' + this.selectedDistrictId).addClass('svgDistrictActive') : this.toggleClassActive(0);
         
-  //     }
-  //   }, (error: any) => {
-  //     if (error.status == 500) {
-  //       this.router.navigate(['../../500'], { relativeTo: this.route });
-  //     }
-  //   })
-  // }
+      }
+    }, (error: any) => {
+      if (error.status == 500) {
+        this.router.navigate(['../../500'], { relativeTo: this.route });
+      }
+    })
+  }
 
   getLevel() {
     //this.spinner.show();
@@ -909,14 +943,15 @@ export class CommitteeDashboardComponent implements OnInit {
   svgMapClick(){
     $(document).on('click', '#mapsvg1  path', (e: any) => {
       console.log(e, e.currentTarget.id);
-      // var filteredDistrict = this.allDistrict.filter((x: any) => x.DistrictId == e.currentTarget.id)
-      // var path = 'assets/mapSvg/' + filteredDistrict[0]?.DistrictName + '.svg';
-      // console.log(path, filteredDistrict)
-      // this.showTalukaSvgMap(this.commonService.mapRegions(), path);
+      var filteredDistrict = this.allDistrict.filter((x: any) => x.districtId == e.currentTarget.id)
+      var path = 'assets/mapSvg/' + filteredDistrict[0]?.districtName + '.svg';
+      console.log(path, filteredDistrict)
+      this.showTalukaSvgMap(this.commonService.mapRegions(), path);
     })
   }
 
   showTalukaSvgMap(regions_m: any, svgPath: any) {
+    this.getTalukaCommitteeCountByDistrict();
     if (this.graphInstance1) {
       this.graphInstance1.destroy();
     }
@@ -997,5 +1032,9 @@ export class CommitteeDashboardComponent implements OnInit {
       title: "Maharashtra-bg_o",
       responsive: true
     });
+  }
+
+  getTalukaCommitteeCountByDistrict(){
+
   }
 }
