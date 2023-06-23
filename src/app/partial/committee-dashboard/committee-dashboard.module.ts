@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TooltipModule } from 'src/app/directives/tooltip.module';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { TooltipModule } from 'src/app/directives/tooltip.module';
     OwlNativeDateTimeModule,
     OwlDateTimeModule,
     NgxPaginationModule,
-    TooltipModule
+    TooltipModule,
+    NgApexchartsModule,
   ]
 })
 export class CommitteeDashboardModule { }
