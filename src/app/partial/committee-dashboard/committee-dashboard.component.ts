@@ -19,21 +19,7 @@ import { AddCommitteeComponent } from '../dialogs/add-committee/add-committee.co
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteComponent } from '../dialogs/delete/delete.component';
 import { AddMemberComponent } from '../dialogs/add-member/add-member.component';
-
 import { ChartComponent } from "ng-apexcharts";
-
-import {
-  ApexNonAxisChartSeries,
-  ApexResponsive,
-  ApexChart
-} from "ng-apexcharts";
-
-export type ChartOptions = {
-  series: ApexNonAxisChartSeries;
-  chart: ApexChart;
-  responsive: ApexResponsive[];
-  labels: any;
-};
 
 @Component({
   selector: 'app-committee-dashboard',
@@ -104,8 +90,10 @@ export class CommitteeDashboardComponent implements OnInit {
   committeeNameBOMember: any;
 
   @ViewChild("chart") chart: ChartComponent | undefined;
-  public chartOptions: Partial<ChartOptions>;
-
+  chartOptions: any;
+  talukaPresidentDashObj!:object;
+  BarchartOptions:any
+  talukaPresidentDashArray=new Array();
   constructor(private commonService: CommonService, private toastrService: ToastrService,
     private spinner: NgxSpinnerService, private router: Router, private fb: FormBuilder, public datePipe: DatePipe,
     private route: ActivatedRoute, private callAPIService: CallAPIService, public location: Location, 
@@ -119,28 +107,6 @@ export class CommitteeDashboardComponent implements OnInit {
       this.CommitteeId = DistrictId.CommitteeId;
       this.committeeName = DistrictId.committeeName;
     }
-
-    this.chartOptions = {
-      series: [44, 55, 13, 43, 22],
-      chart: {
-        width: 380,
-        type: "pie"
-      },
-      labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200
-            },
-            legend: {
-              position: "bottom"
-            }
-          }
-        }
-      ]
-    };
   }
 
   ngOnInit(): void {
@@ -211,6 +177,8 @@ export class CommitteeDashboardComponent implements OnInit {
         this.allDistrict = res.responseData;
         // this.districtWiseCommityWorkGraph(id); 10/01/22
         this.addClasscommitteeWise();
+        this.bindPieChartDataForTalukaPresident(3);  //this.allDistrict[0]?.districtId 
+        
         // this.onClickFlag == false ?  $('#mapsvg1  path#' + this.selectedDistrictId).addClass('svgDistrictActive') : '';
        
         //  id == undefined ||   id == null ||  id == ""  ? '': this.toggleClassActive(id);
@@ -218,11 +186,135 @@ export class CommitteeDashboardComponent implements OnInit {
         
       }
     }, (error: any) => {
+      this.spinner.hide();
       if (error.status == 500) {
+        
         this.router.navigate(['../../500'], { relativeTo: this.route });
       }
     })
   }
+//------------  get Pie Chart Details --------------------------------
+  bindPieChartDataForTalukaPresident(distId?:any){
+    this.bindBarChartDataForTalukaPresident(distId)
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'ClientMasterApp/Dashboard/GetWebDashbordDistrictDetailState?UserId=1&ClientId=1&DistrictId='+distId, false, false, false, 'electionMicroSerApp');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res.statusCode == '200') {
+        this.talukaPresidentDashObj = res?.responseData1;
+        this.constructPieChart(this.talukaPresidentDashObj)
+      } else {
+        this.talukaPresidentDashObj = [];
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+  constructPieChart(obj:any){
+    this.chartOptions = {
+      series: [ obj?.totalBoothCommittee, obj?.totalBooths,],
+      chart: {
+        width: 380,
+        type: "pie"
+      },
+      labels: ["Total Booth Committee", "Total Booths", ],
+      colors:['#f89e14','#297af0'], 
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: "top"
+            }
+          }
+        }
+      ],
+      legend:{
+        show: true,
+        position: 'bottom'
+      },
+    };
+  }
+
+  // --------------------------------------  Construct BarChart  -----------------------
+  bindBarChartDataForTalukaPresident(distId?:any){
+    this.spinner.show();
+    this.callAPIService.setHttp('get', 'ClientMasterApp/Dashboard/GetWebTalukaWiseBoothCommitteeDashbordState?UserId=1&ClientId=1&DistrictId='+distId, false, false, false, 'electionMicroSerApp');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res.statusCode == '200') {
+        this.talukaPresidentDashArray = res!.responseData;
+        console.log(this.talukaPresidentDashArray)
+        this.constructBarChart(this.talukaPresidentDashArray);
+      } else {
+        this.talukaPresidentDashArray = [];
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
+  constructBarChart(talDetailsArray:any){
+    this.BarchartOptions = {
+      series: [
+        {
+          name: "Booths ",
+          data: talDetailsArray.map((x:any)=>x.totalBooths)
+        },
+        {
+          name: "Booth Committee's",
+          data: talDetailsArray.map((x:any)=>x.boothCommittee)
+        },
+      ],
+      chart: {
+        type: "bar",
+        height: 350,
+        toolbar: { show:false },
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: "55%",
+          endingShape: "rounded"
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ["transparent"]
+      },
+      xaxis: {
+        categories: talDetailsArray.map((x:any)=>x.talukaName)
+      },
+      yaxis: {
+        title: {
+          text: "$ (thousands)"
+        }
+      },
+      fill: {
+        opacity: 1
+      },
+      // tooltip: {
+      //   y: {
+      //     formatter: function(val:any) {
+      //       return "$ " + val + " thousands";
+      //     }
+      //   }
+      // }
+    };
+  }
+
 
   // --------------------------------------- Maharashtra SVG MAP ----------------------------------------------- //
 
@@ -435,11 +527,13 @@ export class CommitteeDashboardComponent implements OnInit {
     $('#mapsvg2  path').addClass('notClicked');
     setTimeout(() => {
       arr.find((element: any) => {
-        console.log(element)
         $('#mapsvg2  path[id="' + element.talukaId + '"]').addClass('clicked');
         $('#mapsvg2  #'+element.talukaId).text(element?.boothCommittee)
       });
     }, 500);
   }
+
+
+
 }
 
