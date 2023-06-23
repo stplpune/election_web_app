@@ -7,50 +7,40 @@
         <div class="col-sm text-end">
             <form [formGroup]="filterForm">
                 <div class="row g-2 mb-2">
-                    <div class="col-sm-3">
-                        <ngx-select [allowClear]="true" [items]="clientNameArray" formControlName="ClientId"
-                            [disabled]="clientNameArray?.length == 1" optionValueField="clientId"
-                            optionTextField="clientName" (select)="clearTopFilter('electionId');
-                             getElectionName(); dataNotFound = false;" (remove)="clearTopFilter('clientId')"
-                            placeholder="Select Leader">
-                        </ngx-select>
-                    </div>
-                    <div class="col-sm-4">
-                        <ngx-select [allowClear]="true" [items]="electionNameArray" formControlName="ElectionId"
-                            optionValueField="electionId" (select)="getConstituencyName(); dataNotFound = false"
-                            optionTextField="electionName" (remove)="clearTopFilter('electionId')"
-                            [disabled]="!this.filterForm.value.ClientId || electionNameArray?.length == 0"
-                            placeholder="Select Election">
-                        </ngx-select>
-                    </div>
-                    <div class="col-sm-3">
-                        <ngx-select [allowClear]="true" [items]="constituencyNameArray" formControlName="ConstituencyId"
-                            (select)="getVillageData();dataNotFound = true" optionValueField="constituencyId"
-                            optionTextField="constituencyName" (remove)="clearTopFilter('constituencyId')"
-                            placeholder="Select Constituency" [disabled]="!this.filterForm.value.ElectionId">
+                    <div class="col-sm-2">
+                        <ngx-select [allowClear]="true" (remove)="clearFilter('state')" [items]="stateArray" formControlName="StateId"
+                            (select)="clearFilter('state');getDivision()" placeholder="Select State" optionValueField="id"
+                            optionTextField="stateName" [disabled]="stateArray?.length == 1">
                         </ngx-select>
                     </div>
                     <div class="col-sm-2">
-                        <ngx-select [allowClear]="true" [items]="villageDropdown" formControlName="village"
-                            optionValueField="villageId"
-                            (select)="filterForm.controls['getBoothId'].setValue(0);filterForm.controls['AreaId'].setValue(0);globleBoothCommitteeType = 1;getBoothWiseCommitteGeneralAndFemale();ClientWiseBoothList()"
-                            (remove)="clearTopFilter('village')" optionTextField="villageName"
-                            [disabled]="!this.filterForm.value.ConstituencyId" placeholder="Select Village">
+                        <ngx-select [allowClear]="true" [items]="divisionArray" formControlName="DivisionId" [disabled]="divisionArray?.length == 1 || !f['StateId'].value"
+                        optionValueField="divisionId" optionTextField="divisionName" (select)="clearFilter('division');getDistrict()" 
+                        (remove)="clearFilter('division')" placeholder="Select Division">
                         </ngx-select>
                     </div>
-                    <div class="col-sm-7">
-                        <ngx-select [allowClear]="true" [items]="clientWiseBoothListArray" formControlName="getBoothId"
-                            (select)="getVoterAreaList();globleBoothCommitteeType = 1;getBoothWiseCommitteGeneralAndFemale()"
-                            optionValueField="boothId" optionTextField="boothNickName" placeholder="Select Booth"
-                            [disabled]="!filterForm.value.ConstituencyId" (remove)="clearTopFilter('boothId')">
+                    <div class="col-sm-2">
+                        <ngx-select [allowClear]="true" [items]="districtArray" formControlName="DistrictId" [disabled]="districtArray?.length == 1 || !f['DivisionId'].value"
+                        optionValueField="districtId" optionTextField="districtName" (select)="clearFilter('district');getTaluka()" 
+                        (remove)="clearFilter('district')" placeholder="Select District">
                         </ngx-select>
                     </div>
-                    <div class="col-sm-5">
-                        <ngx-select [allowClear]="true" [items]="voterAreaArray" formControlName="AreaId"
-                            (remove)="globleBoothCommitteeType = 1;getBoothWiseCommitteGeneralAndFemale()"
-                            (select)="globleBoothCommitteeType = 1;getBoothWiseCommitteGeneralAndFemale()"
-                            [disabled]="!filterForm.value.getBoothId || !filterForm.value.ConstituencyId"
-                            optionValueField="areaId" optionTextField="areaName" placeholder="Select Area">
+                    <div class="col-sm-2">
+                        <ngx-select [allowClear]="true" [items]="talkaArray" formControlName="TalukaId" [disabled]="talkaArray?.length == 1 || !f['DistrictId'].value"
+                        optionValueField="talukaId" optionTextField="talukaName" (select)="clearFilter('taluka');getVillage();getBooth();dataNotFound = true" 
+                        (remove)="clearFilter('taluka')" placeholder="Select Taluka">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm-2">
+                        <ngx-select [allowClear]="true" [items]="villageArray" formControlName="VillageId" [disabled]="villageArray?.length == 1 || !f['TalukaId'].value"
+                        optionValueField="villageId" optionTextField="villageName" (select)="clearFilter('village');getBooth()" 
+                        (remove)="clearFilter('village');getBooth()" placeholder="Select Village">
+                        </ngx-select>
+                    </div>
+                    <div class="col-sm-2">
+                        <ngx-select [allowClear]="true" [items]="boothArray" formControlName="BoothId" [disabled]="!f['TalukaId'].value"
+                        optionValueField="boothId" optionTextField="boothNickName" (select)="clearFilter('booth')" 
+                        (remove)="clearFilter('booth')" placeholder="Select Booth">
                         </ngx-select>
                     </div>
                 </div>
@@ -68,19 +58,19 @@
                     <div class="row col-sm-5 p-0 pb-2 mt-2" id="bootcomityhdetails" *ngIf="dataNotFound">
                         <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" [class.active]="globleBoothCommitteeType == 1"
+                                <button class="nav-link" [class.active]="boothCommitteeType == 1"
                                     id="pills-BCommmitee-tab" data-bs-toggle="pill" data-bs-target="#pills-migrated"
                                     type="button" role="tab"
-                                    (click)="globleBoothCommitteeType = 1;getBoothWiseCommitteGeneralAndFemale()"
+                                    (click)="boothCommitteeType = 1;getCommitteMemberTypewise()"
                                     aria-controls="pills-migrated" aria-selected="true">
                                     General Booth Committee
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" [class.active]="globleBoothCommitteeType == 2"
+                                <button class="nav-link" [class.active]="boothCommitteeType == 2"
                                     id="pills-pending-tab" data-bs-toggle="pill" data-bs-target="#pills-pending"
                                     type="button" role="tab"
-                                    (click)="globleBoothCommitteeType = 2;getBoothWiseCommitteGeneralAndFemale()"
+                                    (click)="boothCommitteeType = 2;getCommitteMemberTypewise()"
                                     aria-controls="pills-pending" aria-selected="false">
                                     Female Booth Committee
                                 </button>
@@ -97,9 +87,9 @@
                                         <tr>
                                             <th rowspan="2">Sr. No.</th>
                                             <th rowspan="2">Booth Name</th>
-                                            <th *ngIf="globleBoothCommitteeType == 1" colspan="5" class="text-center">
+                                            <th *ngIf="boothCommitteeType == 1" colspan="5" class="text-center">
                                                 General Booth Committee</th>
-                                            <th *ngIf="globleBoothCommitteeType == 2" colspan="5" class="text-center">
+                                            <th *ngIf="boothCommitteeType == 2" colspan="5" class="text-center">
                                                 Female
                                                 Booth Committee</th>
                                         </tr>
@@ -122,7 +112,7 @@
                                     <tbody>
 
                                         <tr
-                                            *ngFor="let boothComityGenerl_Female of boothWiseComityGenerlAndFemaleArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:getTotal}; let i = index">
+                                            *ngFor="let boothComityGenerl_Female of boothComtyMemberListArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:getTotal}; let i = index">
                                             <td>{{((paginationNo + 1) * 10 + i + 1)-20}}</td>
                                             <td>{{boothComityGenerl_Female?.boothId}}-{{boothComityGenerl_Female?.boothName}}
                                             </td>
@@ -183,32 +173,21 @@
                                                     </table>
                                                 </div>
                                                 <div class="d-flex justify-content-end align-items-center">
-                                                    <div
-                                                        *ngIf="boothComityGenerl_Female.boothcommitteeMissingArea?.length != 0 ">
-                                                        <a class="primary text-end" data-bs-toggle="modal"
-                                                            data-bs-target="#missingAreaModel"
-                                                            (click)="missingAreaData = boothComityGenerl_Female.boothcommitteeMissingArea">
-                                                            <button class=" btn btn-main  mb-0">Missing Areas</button>
-                                                        </a>
-                                                    </div>
                                                     <button type="button" class="btn btn-primary rounded m-2 ms-3"
-                                                        title="Add Committee Member"
-                                                        (click)="saveUpdateFlag = 'add';btnTextBoothComity = 'Submit';areaNameBC.setValue('');getSearchVoterBCGeneralAndFemale(boothComityGenerl_Female?.boothId);getVoterAreaList()"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#AddBoothCommitteeModal"><i
-                                                            class="fas fa-plus"></i></button>
+                                                        title="Add Committee Member" (click)="clearBCDetail();addBoothCommiteeMemberBtn(boothComityGenerl_Female)"
+                                                        data-bs-toggle="modal" data-bs-target="#AddBoothCommitteeModal"><i class="fas fa-plus"></i></button>
                                                 </div>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="mt-2 text-end" *ngIf="boothWiseComityGenerlAndFemaleArray?.length == 0">
+                            <div class="mt-2 text-end" *ngIf="boothComtyMemberListArray?.length == 0">
                                 <div class="alert alert-danger text-center py-2">No Results Found!
                                 </div>
                             </div>
                             <pagination-controls
-                                *ngIf="boothWiseComityGenerlAndFemaleArray?.length != 0 && getTotalPages > 1"
+                                *ngIf="boothComtyMemberListArray?.length != 0 && getTotalPages > 1"
                                 previousLabel="" nextLabel="" (pageChange)="onClickPagintion($event)">
                             </pagination-controls>
                         </div>
@@ -217,16 +196,6 @@
             </div>
         </div>
     </div>
-
-
-
-    <!-- ...................................... Tab Code Start here................................... -->
-
-
-
-    <!-- ...................................... Tab Code End here................................... -->
-
-
 </div>
 
 <!-- Modal for add/edit committee member -->
@@ -234,7 +203,6 @@
     aria-labelledby="AddBoothCommitteeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
-            <form [formGroup]="boothCommitteeForm">
                 <div class="modal-header">
                     <p class="modal-title mb-0" id="AddBoothCommitteeModalLabel">{{saveUpdateFlag == 'add' ?
                         'Add Booth Committee Member' : 'Update Booth Committee Member'}}</p>
@@ -244,103 +212,16 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-12">
-                            <!-- <div class="form-container">
-                                <div class="mb-3" *ngIf="saveUpdateFlag == 'add'">
-                                    <label class="form-label"> Area</label>
-                                    <ngx-select [allowClear]="true" [items]="voterAreaArray" [formControl]="areaNameBC"
-                                        optionValueField="areaId" (select)="filterVoterByAreaId()"
-                                        (remove)="filterVoterByAreaId()" optionTextField="areaName"
-                                        placeholder="Select Area">
-                                    </ngx-select>
-                                </div>
-                                <div class="mb-3" *ngIf="saveUpdateFlag == 'add'">
-                                    <label class="form-label"> Name</label>
-                                    <ngx-select [allowClear]="true" [items]="searchVoterBCGeneralAndFemaleArray"
-                                        formControlName="voterName" [disabled]="saveUpdateFlag == 'update'"
-                                        (remove)="removeBindData()" (selectionChanges)="bindVoterDetail($event)"
-                                        optionTextField="mixVoterName" placeholder="Select Name">
-                                    </ngx-select>
-                                </div>
-                                <hr *ngIf="saveUpdateFlag == 'add'">
-                                <div class="row mb-3 gx-2">
-                                    <div class="col-sm-4">
-                                        <label class="form-label required-field">First Name</label>
-                                        <input class="form-control" type="text" placeholder="First Name"
-                                            formControlName="fName"
-                                            [readOnly]="true"
-                                            [ngClass]="{ 'is-invalid': submitted && f.fName.errors }">
-                                        <div *ngIf="submitted && f.fName.errors" class="invalid-feedback">
-                                            <span *ngIf="f.fName.errors.required">First Name is required</span>
-                                            <span *ngIf="f.fName.errors.pattern">Enter valid First Name</span>
-                                            <span *ngIf="f.fName.errors?.maxlength">Please enter only 50
-                                                Characters.</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label class="form-label">Middle Name</label>
-                                        <input class="form-control" type="text" placeholder="Middle Name"
-                                            formControlName="mName"
-                                            [readOnly]="true"
-                                            [ngClass]="{ 'is-invalid': submitted && f.mName.errors }">
-                                        <div *ngIf="submitted && f.mName.errors" class="invalid-feedback">
-                                            <span *ngIf="f.mName.errors.pattern">Enter valid Middle Name</span>
-                                            <span *ngIf="f.mName.errors?.maxlength">Please enter only 50
-                                                Characters.</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label class="form-label required-field">Last Name</label>
-                                        <input class="form-control" type="text" placeholder="Last Name"
-                                            formControlName="lName"
-                                            [readOnly]="true"
-                                            [ngClass]="{ 'is-invalid': submitted && f.lName.errors }">
-                                        <div *ngIf="submitted && f.lName.errors" class="invalid-feedback">
-                                            <span *ngIf="f.lName.errors.required">Last Name is required</span>
-                                            <span *ngIf="f.lName.errors.pattern">Enter valid Last Name</span>
-                                            <span *ngIf="f.lName.errors?.maxlength">Please enter only 50
-                                                Characters.</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label required-field">Mobile No.</label>
-                                    <input type="text" class="form-control" placeholder="Mobile No."
-                                        formControlName="mobileNo"
-                                        (keypress)="commonService.acceptedOnlyNumbers($event)" maxlength="10"
-                                        [readOnly]="!boothCommitteeForm.value.voterName && saveUpdateFlag == 'add'"
-                                        [ngClass]="{ 'is-invalid': submitted && f.mobileNo.errors }">
-                                    <div *ngIf="submitted && f.mobileNo.errors" class="invalid-feedback">
-                                        <span *ngIf="f.mobileNo.errors.required">Mobile No. is required</span>
-                                        <span *ngIf="f.mobileNo.errors.pattern">Enter valid 10-digit Mobile No.</span>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label required-field">Designation</label>
-                                    <ngx-select [allowClear]="true" [items]="designationMasterArray"
-                                        formControlName="designationId"
-                                        [disabled]="!boothCommitteeForm.value.voterName && saveUpdateFlag == 'add'"
-                                        optionValueField="id" optionTextField="designationName"
-                                        placeholder="Select Designation"
-                                        [ngClass]="{ 'is-invalid': submitted && f.designationId.errors }">
-                                    </ngx-select>
-                                    <div *ngIf="submitted && f.designationId.errors" class="invalid-feedback">
-                                        Designation is required
-                                    </div>
-                                </div>
-                            </div> -->
                             <div class="form-container">
                                 <div class="d-flex gap-2 align-items-center mb-1">
                                     <div class="form-label mb-0">Booths :</div>
-                                    <div class="form-data">booth 1, booth 2, booth 3 [25 Booths]</div>
+                                    <div class="form-data">{{boothComityListObj?.boothName}} [{{boothComityListObj?.totalVoters ? boothComityListObj?.totalVoters : 0}}]</div>
                                 </div>
                                 <div class="d-flex gap-2 align-items-center mb-2">
                                     <div class="form-label mb-0">Area :</div>
                                     <div class="form-data">
-                                        <div class="d-flex gap-2">
-                                            <a href="#" class="text-main">Area 1</a>
-                                            <a href="#" class="text-main">Area 2</a>
-                                            <a href="#" class="text-main">Area 3</a>
-                                        </div>
+                                            <a class="text-main" *ngFor="let areaObj of voterAreaArray"
+                                            (click)="areaClick(areaObj)"><span [ngClass]="{'text-secondary':areaObj?.areaId == areaObjforAdd?.areaId}" *ngIf="areaObj.areaName">{{areaObj.areaName}},</span></a>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -349,70 +230,101 @@
                                             <div class="card-header bg-transparent">
                                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                                     <div>
-                                                        Selected Area : <span class="fw-bold">All</span>
+                                                        Selected Area : <span class="fw-bold">{{areaObjforAdd?.areaName}}</span>
                                                     </div>
                                                     <div>
-                                                        <a href="#">Clear Selection</a>
+                                                        <button type="button" class="btn btn-light border btn-sm"
+                                                            (click)="areaObjforAdd = '';clearBCForm();getSearchVoterBCGeneralAndFemale(boothIdforAdd)" *ngIf="areaObjforAdd?.areaName">
+                                                            <i class="fas fa-times"></i></button>
                                                     </div>
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Search Voter Name">
-                                                    <button class="btn" type="button">
-                                                        <i class="fa fa-times"></i>
-                                                    </button>
+                                                    <div class=" input-group">
+                                                        <input class="form-control" type="text" placeholder="Search Voter Name"
+                                                            [formControl]="voterSearch" (keyup)="onKeyUpSearchData()" />
+                                                        <button type="button" class="btn btn-light border btn-sm"
+                                                            (click)="voterSearch.setValue('');clearBCForm();getSearchVoterBCGeneralAndFemale(boothIdforAdd)" *ngIf="voterSearch.value">
+                                                            <i class="fas fa-times"></i></button>
+                                                        <button type="button" *ngIf="!voterSearch.value"
+                                                            class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="card-body">
-                                                <table class="table dashboard-table mb-0">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Sr. No.</th>
-                                                            <th>Voter No.</th>
-                                                            <th>Voter Name</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>23423</td>
-                                                            <td>Ramesh Kambale</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                                <div class="fixed-height1">
+                                                    <table class="table dashboard-table mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Sr. No.</th>
+                                                                <th>Voter No.</th>
+                                                                <th>Voter Name</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let voterObj of boothComitySearchVoterArray; let i=index">
+                                                                <td>{{i+1}}</td>
+                                                                <td>{{voterObj?.voterNo}}</td>
+                                                                <td>{{voterObj?.englishName}}</td>
+                                                                <td><div class="btn-group">
+                                                                        <button type="button" class="btn btn-light rounded text-primary" [disabled]="voterObj?.disableFlag"
+                                                                        (click)="clearBCForm();bindVoterDetail(voterObj)" title="Add"><i class="fas fa-plus"></i></button>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="mt-2 text-end" *ngIf="boothComitySearchVoterArray?.length == 0">
+                                                    <div class="alert alert-danger text-center py-2">No Results Found!
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-7">
                                         <div class="card">
                                             <div class="card-header bg-transparent">
-                                                Selected User Details :
+                                                Selected Voter Details :
                                             </div>
                                             <div class="card-body">
-                                                <div class="mb-1">
-                                                    <div class="form-label mb-0">Name :</div>
-                                                    <div class="form-data">Vinayak Kambale</div>
+                                                <form [formGroup]="boothCommitteeForm">
+                                                <div class="row mb-3">
+                                                    <div class="col-sm-6">Name : {{voterClickObj?.englishName}}</div> 
+                                                    <div class="col-sm-3">VoterNo : {{voterClickObj?.voterNo}}</div>
+                                                    <div class="col-sm-3">Age : {{voterClickObj?.age}}</div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-sm-6">
-                                                        <div class="form-label">Mobile Number</div>
-                                                        <input type="text" class="form-control"
-                                                            placeholder="Mobile Number">
+                                                        <label class="form-label required-field">Mobile Number</label>
+                                                        <input type="text" class="form-control" placeholder="Mobile No."
+                                                            formControlName="mobileNo" [readonly]="!voterClickObj" (input)="isMobileNoExists()"
+                                                            (keypress)="commonService.acceptedOnlyNumbers($event)" maxlength="10"
+                                                            [ngClass]="{ 'is-invalid': submitted && b.mobileNo.errors }">
+                                                        <div *ngIf="submitted && b.mobileNo.errors" class="invalid-feedback">
+                                                            <span *ngIf="b.mobileNo.errors.required">Mobile Number is required</span>
+                                                            <span *ngIf="b.mobileNo.errors.pattern">Enter valid 10-digit Mobile No.</span>
+                                                        </div>
                                                     </div>
                                                     <div class="col-sm-6">
-                                                        <div class="form-label">Select Designation</div>
-                                                        <select class="form-select">
-                                                            <option value="0">Select Designation</option>
-                                                            <option value="1">One</option>
-                                                            <option value="2">Two</option>
-                                                            <option value="3">Three</option>
-                                                        </select>
+                                                        <label class="form-label required-field">Designation</label>
+                                                        <ngx-select [allowClear]="true" [items]="designationArray"
+                                                            formControlName="designationId" [disabled]="!voterClickObj"
+                                                            optionValueField="id" optionTextField="designationName"
+                                                            placeholder="Select Designation"
+                                                            [ngClass]="{ 'is-invalid': submitted && b.designationId.errors }">
+                                                        </ngx-select>
+                                                        <div *ngIf="submitted && b.designationId.errors" class="invalid-feedback">
+                                                            Designation is required
+                                                        </div>
                                                     </div>
+
                                                     <div class="col-sm-12 text-end mt-2">
-                                                        <button class="btn btn-secondary me-2">Clear</button>
-                                                        <button class="btn btn-main">Add</button>
+                                                        <button class="btn btn-secondary me-2" type="button" (click)="clearBCForm()">Clear</button>
+                                                        <button class="btn btn-main" type="submit" [disabled]="!voterClickObj" (click)="addBCMemberForm()">Add</button>
                                                     </div>
                                                 </div>
+                                                </form>
 
                                                 <table class="table dashboard-table mb-0">
                                                     <thead>
@@ -425,14 +337,14 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>Ramesh Kambale</td>
-                                                            <td>CEO</td>
-                                                            <td>687651354</td>
+                                                        <tr *ngFor="let voterObj of pushVoterListArray; let i=index">
+                                                            <td>{{i+1}}</td>
+                                                            <td>{{voterObj?.fullName}}</td>
+                                                            <td>{{voterObj?.designationId}}</td>
+                                                            <td>{{voterObj?.mobileNo}}</td>
                                                             <td>
                                                                 <div class="btn-group">
-                                                                    <button type="button" title="Delete Election"
+                                                                    <button type="button" title="Delete Election" (click)="deleteVoter(i)"
                                                                         class="btn btn-sm btn-light text-danger rounded">
                                                                         <i class="fas fa-trash-alt"></i>
                                                                     </button>
@@ -441,6 +353,10 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
+                                                <div class="mt-2 text-end" *ngIf="pushVoterListArray?.length == 0">
+                                                    <div class="alert alert-danger text-center py-2">No Results Found!
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -450,13 +366,18 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <div class="d-flex justify-content-between align-items-center float-end">
-                        <button type="button"
-                            [disabled]="!boothCommitteeForm.value.voterName && saveUpdateFlag == 'add'"
-                            class="btn btn-main" (click)="onSubmitForm()">{{btnTextBoothComity}}</button>
+                    <div class="row">
+                        <div class="col-sm-10">Missing Areas : <small class="text-main" *ngFor="let areaObj of boothComityListObj?.boothcommitteeMissingArea"
+                            >{{areaObj.areaName}},</small>
+                        </div> 
+                        <div class="col-sm-2">
+                            <div class="d-flex justify-content-between align-items-center float-end">
+                                <button type="button" [disabled]="!this.pushVoterListArray.length"
+                                    class="btn btn-main" (click)="onSubmitForm()">{{btnTextBoothComity}}</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </form>
         </div>
     </div>
 </div>
@@ -590,36 +511,6 @@
                     </ul>
                 </div>
 
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- modal pop up -->
-<button data-bs-toggle="modal" class="requestdemo" style="display:none" #CommityMemberconfModel
-    data-bs-target="#conformationModel"></button>
-<div class="modal fade border" id="conformationModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="conformationModelLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" style="width: 300px;">
-        <div class="modal-content">
-            <div class="modal-header bg-transparent border-bottom-0">
-                <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" #CommityMemberconfModel
-                    aria-label="Close"></button> -->
-            </div>
-            <div class="modal-body text-center pb-5">
-                <!-- <svg _ngcontent-wqt-c55="" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
-                    <circle _ngcontent-wqt-c55="" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10"
-                        cx="65.1" cy="65.1" r="62.1" class="path circle"></circle>
-                    <polyline _ngcontent-wqt-c55="" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round"
-                        stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " class="path check"></polyline>
-                </svg> -->
-                <h5 class="my-3">{{confornModelMsg}}</h5>
-                <p class="mb-4">Do you want to add committee member.</p>
-                <button class="btn btn-secondary me-2" data-bs-dismiss="modal" type="button" data-bs-dismiss="modal"
-                    aria-label="Close">Cancel</button>
-                <button class="btn btn-danger" type="button" data-bs-dismiss="modal" aria-label="Close"
-                    (click)="committeeMConformation(confoUserId)" type="button" data-bs-dismiss="modal"
-                    aria-label="Close">Add</button>
             </div>
         </div>
     </div>
