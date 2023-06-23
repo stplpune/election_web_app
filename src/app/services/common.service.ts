@@ -49,11 +49,12 @@ export class CommonService {
         }
     }
 
+    
+
     redirectToDashborad() {
         if (this.checkUserIsLoggedIn() == true) {
         let logInUserType: any = this.getAllPageName();
-        console.log(this.getlocalStorageData().StartPageId,'StartPageId   PageId')
-        let pageURLObj = logInUserType?.find((x: any) => x.PageId == this.getlocalStorageData().StartPageId);
+        let pageURLObj = logInUserType?.find((x: any) => x.PageId == this.getlocalStorageData().StartPageId); 
         let redirectToDashboard = pageURLObj?.PageURL;
         return redirectToDashboard;
         }
