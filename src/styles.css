@@ -797,3 +797,18 @@ input::-ms-clear {
   transform-origin: 0% 0%;
   -webkit-transform-origin: 0% 0%;
 } */
+
+.committeesonmap2{
+    position: relative;
+}
+.committeesonmap2>div:last-child {
+    position: absolute;
+    right: 0!important;
+    display: block;
+    top: 280px;
+    max-width: 300px;
+}
+.committeesonmap2 .mapsvg svg {
+    width: 500px;
+    min-height: 300px;
+}

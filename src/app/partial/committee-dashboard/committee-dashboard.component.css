@@ -6,4 +6,12 @@
 ol li{
   margin: 10px 0px !important;
 }
-
+.commiteeMapOuter{
+  position: relative;
+}
+.commiteeMapOuter > div.mapsvg-wrap:last-child{
+  position: absolute!important;
+  right: 0!important;
+  top: 230px!important;
+  max-width: 310px!important;
+}

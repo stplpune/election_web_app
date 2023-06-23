@@ -58,10 +58,15 @@
                                     </ngx-select>
                                 </div> -->
               </div>
-              <div id="mapsvg1" (click)="svgMapClick()" ></div>
-              <div class="d-flex justify-content-end w-100">
+              <div class="committeesonmap2">
+                <div id="mapsvg1" (click)="svgMapClick()" ></div>
+                <!-- <div id="mapsvg2"></div> -->
                 <div id="mapsvg2"></div>
               </div>
+               
+                 
+              
+              
 
               <!-- <img src="assets/images/maharashtra_districts_map.svg" /> -->
             </div>
@@ -222,11 +227,11 @@
                 <div id="chart">
                   <apx-chart
                     [series]="chartOptions?.series"
-                    [chart]="chartOptions.chart"
-                    [labels]="chartOptions.labels"
-                    [responsive]="chartOptions.responsive"
-                    [legend]="chartOptions.legend"
-                    [colors]="chartOptions.colors"
+                    [chart]="chartOptions?.chart"
+                    [labels]="chartOptions?.labels"
+                    [responsive]="chartOptions?.responsive"
+                    [legend]="chartOptions?.legend"
+                    [colors]="chartOptions?.colors"
                   ></apx-chart>
                   <div class="mt-2"> <p class="bold">Booth Committee Performance</p> </div>
                 </div>
@@ -234,13 +239,9 @@
               <div class="col-sm-6">
                 <h6>Important Leader</h6>
                 <ol>
-                  <li>Rohit pawar</li>
-                  <li>XXX Mobile</li>
-                  <li>abcd</li>
-                  <li>abcd</li>
-                  <li>abcd</li>
-                  <li>abcd</li>
-                  <li>abcd</li>
+                  <li type="button" *ngFor="let impLeaders of impLeadersArray" data-bs-toggle="modal" data-bs-target="#exampleModal" 
+                  (click)="openImpLeaderModal(impLeaders?.voterId)" >{{impLeaders?.voterName}}</li>
+                  
                 </ol>
               </div>
             </div>
@@ -251,17 +252,17 @@
               <div class=" card-body">
                 <div id="chart">
                   <apx-chart
-                    [series]="BarchartOptions.series"
-                    [chart]="BarchartOptions.chart"
-                    [dataLabels]="BarchartOptions.dataLabels"
-                    [plotOptions]="BarchartOptions.plotOptions"
-                    [yaxis]="BarchartOptions.yaxis"
-                    [legend]="BarchartOptions.legend"
-                    [fill]="BarchartOptions.fill"
-                    [stroke]="BarchartOptions.stroke"
-                    [tooltip]="BarchartOptions.tooltip"
-                    [xaxis]="BarchartOptions.xaxis"
-                    [dataLabels]="BarchartOptions.dataLabels"
+                    [series]="BarchartOptions?.series"
+                    [chart]="BarchartOptions?.chart"
+                    [dataLabels]="BarchartOptions?.dataLabels"
+                    [plotOptions]="BarchartOptions?.plotOptions"
+                    [yaxis]="BarchartOptions?.yaxis"
+                    [legend]="BarchartOptions?.legend"
+                    [fill]="BarchartOptions?.fill"
+                    [stroke]="BarchartOptions?.stroke"
+                    [tooltip]="BarchartOptions?.tooltip"
+                    [xaxis]="BarchartOptions?.xaxis"
+                    [dataLabels]="BarchartOptions?.dataLabels"
                   ></apx-chart>
                 </div>
               </div>
@@ -287,8 +288,8 @@
                       <li *ngFor="let taluka of talukaIMPleaderArray"  class="col-sm-6">
                         Taluka : {{taluka?.talukaName}}
                         <ul>
-                          <li
-                          *ngFor="let impLeader of taluka?.talukaWiseIMPLeaders">{{impLeader?.voterName +' ( ' + impLeader?.mobileNo1 +' )'}}</li>
+                          <li *ngFor="let impLeader of impLeadersArray" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" 
+                          (click)="openImpLeaderModal(impLeader?.voterId)" >{{impLeader?.voterName +' ( ' + impLeader?.mobileNo1 +' )'}}</li>
                         </ul>
                       </li>
                     </ol>
@@ -302,3 +303,5 @@
     </div>
   </div>
 </div>
+
+

@@ -96,6 +96,8 @@ export class CommitteeDashboardComponent implements OnInit {
   talukaPresidentDashArray=new Array();
   talukaIMPleaderArray=new Array();
   talukaPresidentDataArray=new Array();
+  impLeadersArray=new Array();
+  impLeaderDetails=new Array();
   constructor(private commonService: CommonService, private toastrService: ToastrService,
     private spinner: NgxSpinnerService, private router: Router, private fb: FormBuilder, public datePipe: DatePipe,
     private route: ActivatedRoute, private callAPIService: CallAPIService, public location: Location, 
@@ -205,9 +207,12 @@ export class CommitteeDashboardComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode == '200') {
         this.talukaPresidentDashObj = res?.responseData1;
+        this.impLeadersArray=res?.responseData2
+
         this.constructPieChart(this.talukaPresidentDashObj)
       } else {
         this.talukaPresidentDashObj = [];
+        this.impLeadersArray=[];
       }
     }, (error: any) => {
       this.spinner.hide();
@@ -594,6 +599,23 @@ export class CommitteeDashboardComponent implements OnInit {
         $('#mapsvg2  #'+element.talukaId).text(element?.boothCommittee)
       });
     }, 500);
+  }
+
+
+  /// -----------------------------------  open Modal -----------------
+  openImpLeaderModal(vId:any){
+    this.talukaIMPleaderArray.filter((res:any)=>{
+      for(let i=0;i<res.talukaWiseIMPLeaders.length;i++){
+        if(vId == res?.talukaWiseIMPLeaders[i]?.voterId ){
+          this.impLeaderDetails = res?.talukaWiseIMPLeaders[i]
+          console.log(this.impLeaderDetails);
+        }
+      }
+      
+      // if(res?.talukaWiseIMPLeaders.voterId == vId){
+      //   this.impLeaderName =
+      // }
+    })
   }
 
 
