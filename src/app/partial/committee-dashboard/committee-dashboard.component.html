@@ -228,6 +228,7 @@
                     [legend]="chartOptions.legend"
                     [colors]="chartOptions.colors"
                   ></apx-chart>
+                  <div class="mt-2"> <p class="bold">Booth Committee Performance</p> </div>
                 </div>
               </div>
               <div class="col-sm-6">
@@ -260,6 +261,7 @@
                     [stroke]="BarchartOptions.stroke"
                     [tooltip]="BarchartOptions.tooltip"
                     [xaxis]="BarchartOptions.xaxis"
+                    [dataLabels]="BarchartOptions.dataLabels"
                   ></apx-chart>
                 </div>
               </div>
@@ -274,30 +276,19 @@
                 <div class="col-sm-6">
                   <h6 class="fw-bold">Taluka President</h6>
                   <ol>
-                    <li>President 1</li>
-                    <li>President 2</li>
-                    <li>President 3</li>
-                    <li>President 4</li>
-                    <li>President 5</li>
-                    <li>President 6</li>
-                    <li>President 7</li>
-                    <li>President 8</li>
+                    <li *ngFor="let presidents of talukaPresidentDataArray">{{ presidents?.talukaName +' : '+ (presidents?.memberName ? presidents?.memberName:'-')}}</li>
                   </ol>
                 </div>
                 <div class="col-sm-6">
                   <div class="imp_leaders">
                     <h6 class="fw-bold">Talukawise Important Leaders</h6>
-                    <ol>
-                      <li>Taluka Haveli
+
+                    <ol class="row">
+                      <li *ngFor="let taluka of talukaIMPleaderArray"  class="col-sm-6">
+                        Taluka : {{taluka?.talukaName}}
                         <ul>
-                          <li>Leader 1</li>
-                          <li>Leader 2</li>
-                        </ul>
-                      </li>
-                      <li>Taluka Velhe
-                        <ul>
-                          <li>Leader 1</li>
-                          <li>Leader 2</li>
+                          <li
+                          *ngFor="let impLeader of taluka?.talukaWiseIMPLeaders">{{impLeader?.voterName +' ( ' + impLeader?.mobileNo1 +' )'}}</li>
                         </ul>
                       </li>
                     </ol>
