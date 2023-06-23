@@ -49,8 +49,6 @@ export class CommonService {
         }
     }
 
-    
-
     redirectToDashborad() {
         if (this.checkUserIsLoggedIn() == true) {
         let logInUserType: any = this.getAllPageName();
