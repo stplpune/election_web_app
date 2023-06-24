@@ -145,12 +145,6 @@
                                                                     <div class="btn-group" role="group"
                                                                         aria-label="Basic example">
                                                                         <button type="button"
-                                                                            class="btn btn-light rounded text-dark"
-                                                                            title="Edit" data-bs-toggle="modal"
-                                                                            (click)="saveUpdateFlag = 'update'; bindVoterDetail(generalBCMember)"
-                                                                            data-bs-target="#AddBoothCommitteeModal"><i
-                                                                                class="fas fa-edit"></i></button>
-                                                                        <button type="button"
                                                                             class="btn btn-light mx-2 rounded text-primary"
                                                                             title="Assign Voters" data-bs-toggle="modal"
                                                                             data-bs-target="#AssignVoterModal"
@@ -161,11 +155,6 @@
                                                                             (click)="sendDownloadLink(generalBCMember?.mobileNo)">
                                                                             <i class="fas fa-paper-plane"></i>
                                                                         </button>
-                                                                        <button type="button"
-                                                                            class="btn btn-light rounded text-danger"
-                                                                            (click)="deleteConfirmModel(generalBCMember)"
-                                                                            title="Delete"><i
-                                                                                class="fas fa-trash-alt"></i></button>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -173,17 +162,24 @@
                                                     </table>
                                                 </div>
                                                 <div class="d-flex justify-content-end align-items-center">
-                                                    <button type="button" class="btn btn-primary rounded m-2 ms-3"
-                                                        title="Add Committee Member" (click)="clearBCDetail();addBoothCommiteeMemberBtn(boothComityGenerl_Female)"
-                                                        data-bs-toggle="modal" data-bs-target="#AddBoothCommitteeModal"><i class="fas fa-plus"></i></button>
+                                                    <button type="button" class="btn btn-light rounded text-dark  m-2 ms-2" title="Update Committee Member" data-bs-toggle="modal" 
+                                                    *ngIf="boothComityGenerl_Female?.boothcommitteeMembers?.length" (click)="updateBoothCommiteeMemberBtn(boothComityGenerl_Female)"
+                                                         data-bs-target="#AddBoothCommitteeModal"><i class="fas fa-edit"></i>
+                                                    </button>
+                                                    
+                                                    <button type="button" class="btn btn-primary rounded m-2 ms-3" title="Add Committee Member"
+                                                    *ngIf="!boothComityGenerl_Female?.boothcommitteeMembers?.length"
+                                                        (click)="addBoothCommiteeMemberBtn(boothComityGenerl_Female)" data-bs-toggle="modal"
+                                                        data-bs-target="#AddBoothCommitteeModal"><i class="fas fa-plus"></i>
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                            <div class="mt-2 text-end" *ngIf="boothComtyMemberListArray?.length == 0">
-                                <div class="alert alert-danger text-center py-2">No Results Found!
+                                <div class="mt-2 text-end" *ngIf="boothComtyMemberListArray?.length == 0">
+                                    <div class="alert alert-danger text-center py-2">No Results Found!
+                                    </div>
                                 </div>
                             </div>
                             <pagination-controls
@@ -268,7 +264,7 @@
                                                                 <td>{{voterObj?.englishName}}</td>
                                                                 <td><div class="btn-group">
                                                                         <button type="button" class="btn btn-light rounded text-primary" [disabled]="voterObj?.disableFlag"
-                                                                        (click)="clearBCForm();bindVoterDetail(voterObj)" title="Add"><i class="fas fa-plus"></i></button>
+                                                                        (click)="clearBCForm();AddVoterDetail(voterObj)" title="Add"><i class="fas fa-plus"></i></button>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -329,7 +325,7 @@
                                                 <table class="table dashboard-table mb-0">
                                                     <thead>
                                                         <tr>
-                                                            <th>Sr. No.</th>
+                                                            <th>Voter No.</th>
                                                             <th>Name</th>
                                                             <th>Designation</th>
                                                             <th>Mobile No.</th>
@@ -338,22 +334,24 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr *ngFor="let voterObj of pushVoterListArray; let i=index">
-                                                            <td>{{i+1}}</td>
+                                                            <ng-container *ngIf="voterObj?.isdeleted != 1">
+                                                            <td>{{voterObj?.voterNo}}</td>
                                                             <td>{{voterObj?.fullName}}</td>
-                                                            <td>{{voterObj?.designationId}}</td>
+                                                            <td *ngFor="let design of designationArray"><span *ngIf="design?.id == voterObj?.designationId">{{design?.designationName}}</span></td>
                                                             <td>{{voterObj?.mobileNo}}</td>
                                                             <td>
                                                                 <div class="btn-group">
-                                                                    <button type="button" title="Delete Election" (click)="deleteVoter(i)"
+                                                                    <button type="button" title="Delete" (click)="deleteConfirmModel(i,voterObj)"
                                                                         class="btn btn-sm btn-light text-danger rounded">
                                                                         <i class="fas fa-trash-alt"></i>
                                                                     </button>
                                                                 </div>
                                                             </td>
+                                                        </ng-container>
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                                <div class="mt-2 text-end" *ngIf="pushVoterListArray?.length == 0">
+                                                <div class="mt-2 text-end" *ngIf="pushVoterListArray?.length == 0 || voterAvailableOrNotinList() == false">
                                                     <div class="alert alert-danger text-center py-2">No Results Found!
                                                     </div>
                                                 </div>
@@ -366,9 +364,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <div class="row">
+                    <div class="row w-100 gx-1">
                         <div class="col-sm-10">Missing Areas : <small class="text-main" *ngFor="let areaObj of boothComityListObj?.boothcommitteeMissingArea"
-                            >{{areaObj.areaName}},</small>
+                            ><span *ngIf="areaObj?.hideAreaFlag != true">{{areaObj.areaName}},</span></small>
                         </div> 
                         <div class="col-sm-2">
                             <div class="d-flex justify-content-between align-items-center float-end">
@@ -493,25 +491,3 @@
     </div>
 </div>
 
-<!-- Modal for Missing Areas  -->
-<div class="modal fade" id="missingAreaModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="missingAreaModelLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <p class="modal-title" id="missingAreaModelLabel">Missing Areas</p>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body mt-20">
-                <div>
-                    <ul>
-                        <div *ngFor="let missingArea of missingAreaData">
-                            <li *ngIf="missingArea?.areaName"> {{missingArea?.areaName}}</li>
-                        </div>
-                    </ul>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>

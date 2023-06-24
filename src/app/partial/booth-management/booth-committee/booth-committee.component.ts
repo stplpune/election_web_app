@@ -28,8 +28,8 @@ export class BoothCommitteeComponent implements OnInit {
   dataNotFound: boolean = false;
 
 
-  missingAreaData:any;
-  assignVoterObj:any;
+  missingAreaData: any;
+  assignVoterObj: any;
 
 
 
@@ -44,14 +44,14 @@ export class BoothCommitteeComponent implements OnInit {
   localStorageData = this.commonService.getlocalStorageData();
   boothArray: any;
 
-  boothComtyMemberListArray:any;
+  boothComtyMemberListArray: any;
   getTotal: any;
-  paginationNo: number = 1; 
+  paginationNo: number = 1;
   pageSize: number = 10;
-  getTotalPages:any;
+  getTotalPages: any;
 
   boothCommitteeType = 1;
-  boothComitySearchVoterArray:any;
+  boothComitySearchVoterArray: any;
   designationArray: any;
 
   constructor(
@@ -74,7 +74,7 @@ export class BoothCommitteeComponent implements OnInit {
     this.searchVoterData();
   }
 
-  get f(){ return this.filterForm.controls};
+  get f() { return this.filterForm.controls };
 
   defaultFilterForm() {
     this.filterForm = this.fb.group({
@@ -92,7 +92,7 @@ export class BoothCommitteeComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.stateArray = res.responseData;
-        this.stateArray?.length == 1 ? (this.f['StateId'].setValue(this.stateArray[0]?.id),this.getDivision()) : '';
+        this.stateArray?.length == 1 ? (this.f['StateId'].setValue(this.stateArray[0]?.id), this.getDivision()) : '';
       } else {
         this.stateArray = [];
       }
@@ -104,7 +104,7 @@ export class BoothCommitteeComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.divisionArray = res.responseData;
-        this.divisionArray?.length == 1 ? (this.f['DivisionId'].setValue(this.divisionArray[0]?.divisionId),this.getDistrict()) : '';
+        this.divisionArray?.length == 1 ? (this.f['DivisionId'].setValue(this.divisionArray[0]?.divisionId), this.getDistrict()) : '';
       } else {
         this.divisionArray = [];
       }
@@ -112,11 +112,11 @@ export class BoothCommitteeComponent implements OnInit {
   }
 
   getDistrict() {
-    this.callAPIService.setHttp('get', 'Filter/GetAllDistricts?UserId=' + this.commonService.loggedInUserId() + '&StateId=' + this.f['StateId'].value + '&DivisionId=' + (this.f['DivisionId'].value || 0) , false, false, false, 'electionMicroServiceForWeb');
+    this.callAPIService.setHttp('get', 'Filter/GetAllDistricts?UserId=' + this.commonService.loggedInUserId() + '&StateId=' + this.f['StateId'].value + '&DivisionId=' + (this.f['DivisionId'].value || 0), false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.districtArray = res.responseData;
-        this.districtArray?.length == 1 ? (this.f['DistrictId'].setValue(this.districtArray[0]?.districtId),this.getTaluka()) : '';
+        this.districtArray?.length == 1 ? (this.f['DistrictId'].setValue(this.districtArray[0]?.districtId), this.getTaluka()) : '';
         // this.getTaluka();
       } else {
         this.districtArray = [];
@@ -129,7 +129,7 @@ export class BoothCommitteeComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.talkaArray = res.responseData;
-        this.talkaArray?.length == 1 ? (this.f['TalukaId'].setValue(this.talkaArray[0]?.talukaId),this.getVillage()) : '';
+        this.talkaArray?.length == 1 ? (this.f['TalukaId'].setValue(this.talkaArray[0]?.talukaId), this.getVillage()) : '';
       } else {
         this.talkaArray = [];
       }
@@ -145,7 +145,7 @@ export class BoothCommitteeComponent implements OnInit {
       } else {
         this.villageArray = [];
       }
-    },(error: any) => {if (error.status == 500) {this.router.navigate(['../../500'], { relativeTo: this.route })}})
+    }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
   }
 
   getBooth() {
@@ -157,64 +157,66 @@ export class BoothCommitteeComponent implements OnInit {
       } else {
         this.boothArray = [];
       }
-    },(error: any) => {if (error.status == 500) {this.router.navigate(['../../500'], { relativeTo: this.route })}})
+    }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
   }
 
 
   clearFilter(flag: any) {// state         
-    if (flag == 'state'){
+    if (flag == 'state') {
       this.f['DivisionId'].setValue('');
       this.f['DistrictId'].setValue('');
       this.f['TalukaId'].setValue('');
       this.f['VillageId'].setValue('');
       this.f['BoothId'].setValue('');
       this.dataNotFound = false;
-    } else if(flag == 'division'){
+    } else if (flag == 'division') {
       this.f['DistrictId'].setValue('');
       this.f['TalukaId'].setValue('');
       this.f['VillageId'].setValue('');
       this.f['BoothId'].setValue('');
       this.dataNotFound = false;
-    } else if(flag == 'district'){
+    } else if (flag == 'district') {
       this.f['TalukaId'].setValue('');
       this.f['VillageId'].setValue('');
       this.f['BoothId'].setValue('');
       this.dataNotFound = false;
-    } else if(flag == 'taluka'){
+    } else if (flag == 'taluka') {
       this.f['VillageId'].setValue('');
       this.f['BoothId'].setValue('');
       this.dataNotFound = false;
       this.boothCommitteeType = 1;
       this.getCommitteMemberTypewise();
       this.clearBCDetail();
-    } else if(flag == 'village'){
+    } else if (flag == 'village') {
       this.f['BoothId'].setValue('');
       this.boothCommitteeType = 1;
       this.getCommitteMemberTypewise();
       this.clearBCDetail();
-    }  else if(flag == 'booth'){
+    } else if (flag == 'booth') {
+      this.boothCommitteeType = 1;
+      this.getCommitteMemberTypewise();
       this.clearBCDetail();
     }
   }
 
-  getCommitteMemberTypewise(){  // Main Api For Table
+  getCommitteMemberTypewise() {  // Main Api For Table
     // this.nullishFilterForm();
-    this.spinner.show(); 
+    this.spinner.show();
     let obj = this.localStorageData?.ClientId + '&TalukaId=' + (this.filterForm.value.TalukaId || 0)
-    + '&VillageId=' + (this.filterForm.value.village || 0) + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&AreaId=' + 0 
-    + '&IsPresident=' + 0 + '&CommitteeTypeId=' + this.boothCommitteeType + '&pageno=' + this.paginationNo + '&pagesize=' + this.pageSize
-    this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/GetBoothWiseCommitteMemberCommitteeTypewiseState?ClientId='+ obj , false, false, false, 'electionMicroSerApp');
+      + '&VillageId=' + (this.filterForm.value.village || 0) + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&AreaId=' + 0
+      + '&IsPresident=' + 0 + '&CommitteeTypeId=' + this.boothCommitteeType + '&pageno=' + this.paginationNo + '&pagesize=' + this.pageSize
+    this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/GetBoothWiseCommitteMemberCommitteeTypewiseState?ClientId=' + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
         this.boothComtyMemberListArray = res.responseData.responseData1;
         this.getTotal = res.responseData.responseData2.totalPages * this.pageSize;
         this.getTotalPages = res.responseData.responseData2.totalPages;
-       } else {
+      } else {
         this.spinner.hide();
         this.boothComtyMemberListArray = [];
       }
-    }, (error: any) => {this.spinner.hide();this.router.navigate(['../500'], { relativeTo: this.route })})
+    }, (error: any) => { this.spinner.hide(); this.router.navigate(['../500'], { relativeTo: this.route }) })
   }
 
   onClickPagintion(pageNo: number) {
@@ -223,45 +225,46 @@ export class BoothCommitteeComponent implements OnInit {
   }
 
 
-    //.......... get Voter Area List ...............//
-    getVoterAreaList(boothId:any) {
-      this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/GetAreaDetailsWithBothId?ClientId=' + this.localStorageData?.ClientId + '&UserId='
-        + this.commonService.loggedInUserId() + '&BoothId=' + boothId,
-        + '&VillageId=' + this.filterForm.value.VillageId, false, false, 'electionMicroSerApp');
-      this.callAPIService.getHttp().subscribe((res: any) => {
-        if (res.responseData != null && res.statusCode == "200") {
-          this.voterAreaArray = res.responseData;
-        } else {
-          this.voterAreaArray = [];
-        }
-      }, (error: any) => {this.router.navigate(['../500'], { relativeTo: this.route })})
-    }
+  //.......... get Voter Area List ...............//
+  getVoterAreaList(boothId: any) {
+    this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/GetAreaDetailsWithBothId?ClientId=' + this.localStorageData?.ClientId + '&UserId='
+      + this.commonService.loggedInUserId() + '&BoothId=' + boothId,
+      + '&VillageId=' + this.filterForm.value.VillageId, false, false, 'electionMicroSerApp');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
+        this.voterAreaArray = res.responseData;
+      } else {
+        this.voterAreaArray = [];
+      }
+    }, (error: any) => { this.router.navigate(['../500'], { relativeTo: this.route }) })
+  }
 
-  getDesignationMaster(){  // Get Designation Master
-    this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/GetDesignationMasterState?ClientId='+ this.localStorageData?.ClientId, false, false, false, 'electionMicroSerApp');
+  getDesignationMaster() {  // Get Designation Master 
+    this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/GetDesignationMasterState?ClientId=' + this.localStorageData?.ClientId, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.designationArray = res.responseData;
-       } else {
+      } else {
         this.designationArray = [];
       }
-    }, (error: any) => {this.router.navigate(['../500'], { relativeTo: this.route })})
+    }, (error: any) => { this.router.navigate(['../500'], { relativeTo: this.route }) })
   }
- 
-  isMobileNoExists(){  // verify Mobile No Registerd or Not
+
+  isMobileNoExists() {  // verify Mobile No Registerd or Not
     if (this.b['mobileNo'].value?.length == 10 && this.b['mobileNo'].status == 'VALID') {
-    let obj = '&Id=' + 0 + '&MobileNo=' + this.b['mobileNo'].value;
-    this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/IsMobileNoExists?ClientId='+ this.localStorageData?.ClientId + obj, false, false, false, 'electionMicroSerApp');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != null && res.statusCode == "200") {
-        res.responseData?.id == 0 ? (this.toastrService.error(res.responseData?.msg),this.b['mobileNo'].setValue('')) : ''
-       } else {
-      }
-    }, (error: any) => {this.router.navigate(['../500'], { relativeTo: this.route })})
+      let obj = '&Id=' + 0 + '&MobileNo=' + this.b['mobileNo'].value;
+      this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/IsMobileNoExists?ClientId=' + this.localStorageData?.ClientId + obj, false, false, false, 'electionMicroSerApp');
+      this.callAPIService.getHttp().subscribe((res: any) => {
+        if (res.responseData != null && res.statusCode == "200") {
+          res.responseData?.id == 0 ? (this.toastrService.error(res.responseData?.msg), this.b['mobileNo'].setValue('')) : ''
+        } else {
+        }
+      }, (error: any) => { this.router.navigate(['../500'], { relativeTo: this.route }) })
+    }
   }
-  }  
- 
-  addBoothCommiteeMemberBtn(obj:any){
+
+  addBoothCommiteeMemberBtn(obj: any) {
+    this.clearBCDetail();
     this.boothComityListObj = obj;
     this.saveUpdateFlag = 'add';
     this.btnTextBoothComity = 'Submit';
@@ -270,33 +273,75 @@ export class BoothCommitteeComponent implements OnInit {
     this.areaObjforAdd = '';
   }
 
+  updateBoothCommiteeMemberBtn(obj: any) {
+    this.clearBCDetail();
+    this.boothComityListObj = obj;
+    this.saveUpdateFlag = 'update';
+    this.btnTextBoothComity = 'Update';
+    this.getSearchVoterBCGeneralAndFemale(obj?.boothId);
+    this.getVoterAreaList(obj?.boothId);
+    this.areaObjforAdd = '';
+
+    obj?.boothcommitteeMembers?.map((ele: any) => {
+      let fullName = ele?.voterName?.trim().split(' ');
+      let obj = {
+        "id": 0,
+        "fullName": ele?.voterName,
+        "mobileNo": ele?.mobileNo,
+        "fName": fullName[0],
+        "mName": fullName?.length == 3 ? fullName[1] : '',
+        "lName": fullName?.length == 3 ? fullName[2] : fullName[1],
+        "gender": 0,
+        "boothId": ele?.boothId,
+        "designationId": ele?.designationId,
+        "voterId": ele?.voterId,
+        "clientId": parseInt(this.localStorageData?.ClientId),
+        "createdBy": this.commonService.loggedInUserId(),
+        "subUserTypeId": 4,
+        "areaAgentId": ele?.areaAgentId,
+        "committeeTypeId": this.boothCommitteeType,
+        "isdeleted": 0,
+        "assignedBoothlist": [
+          {
+            "assemblyId": this.boothComityListObj?.assemblyId || 0,
+            "boothId": ele?.boothId,
+            "constituencyId": 0,
+            "electionId": 0
+          }
+        ],
+        "voterNo": ele?.voterNo
+      }
+      this.pushVoterListArray.push(obj);
+    })
+  }
+
 
   subject: Subject<any> = new Subject();
   voterSearch = new FormControl('');
-  boothIdforAdd:any;
-  areaObjforAdd:any;
-  boothComityListObj:any;
+  boothIdforAdd: any;
+  areaObjforAdd: any;
+  boothComityListObj: any;
 
-  getSearchVoterBCGeneralAndFemale(boothId:any){
+  getSearchVoterBCGeneralAndFemale(boothId: any) {
     this.boothIdforAdd = boothId;
-    this.spinner.show(); 
-    let obj = this.localStorageData?.ClientId + '&SearchText=' + this.voterSearch.value 
-    + '&BoothId=' + boothId + '&AreaId=' + (this.areaObjforAdd?.areaId || 0) + '&CommitteeTypeId=' + this.boothCommitteeType 
-    this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/GetBoothWiseCommitteGeneralAndFemaleSearchState?ClientId='+ obj , false, false, false, 'electionMicroSerApp');
+    this.spinner.show();
+    let obj = this.localStorageData?.ClientId + '&SearchText=' + this.voterSearch.value
+      + '&BoothId=' + boothId + '&AreaId=' + (this.areaObjforAdd?.areaId || 0) + '&CommitteeTypeId=' + this.boothCommitteeType
+    this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/GetBoothWiseCommitteGeneralAndFemaleSearchState?ClientId=' + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
         this.boothComitySearchVoterArray = res.responseData;
-        this.pushVoterListArray.map((ele:any)=>{
-          this.boothComitySearchVoterArray.map((ele1:any)=>{
+        this.pushVoterListArray.map((ele: any) => {
+          this.boothComitySearchVoterArray.map((ele1: any) => {
             ele?.voterId == ele1?.voterId ? ele1['disableFlag'] = true : '';
           })
         })
-       } else {
+      } else {
         this.spinner.hide();
         this.boothComitySearchVoterArray = [];
       }
-    }, (error: any) => {this.spinner.hide();this.router.navigate(['../500'], { relativeTo: this.route })})
+    }, (error: any) => { this.spinner.hide(); this.router.navigate(['../500'], { relativeTo: this.route }) })
   }
 
 
@@ -306,11 +351,11 @@ export class BoothCommitteeComponent implements OnInit {
 
   searchVoterData() {
     this.subject.pipe(debounceTime(700)).subscribe(() => {
-        this.voterSearch.value;
-        this.paginationNo = 1;
-        this.clearBCForm();
-        this.getSearchVoterBCGeneralAndFemale(this.boothIdforAdd);
-      });
+      this.voterSearch.value;
+      this.paginationNo = 1;
+      this.clearBCForm();
+      this.getSearchVoterBCGeneralAndFemale(this.boothIdforAdd);
+    });
   }
 
 
@@ -318,183 +363,211 @@ export class BoothCommitteeComponent implements OnInit {
   submitted: boolean = false;
   btnTextBoothComity = 'Submit';
   @ViewChild('addCommitteeMemberModel') addCommitteeMemberModel: any;
-  saveUpdateFlag:any;
-  voterClickObj:any;
-  pushVoterListArray:any[] = [];
+  saveUpdateFlag: any;
+  voterClickObj: any;
+  pushVoterListArray: any[] = [];
 
   get b() { return this.boothCommitteeForm.controls };
 
   defaultBoothComityForm() {
-    this.boothCommitteeForm = this.fb.group({  
+    this.boothCommitteeForm = this.fb.group({
       id: [0],
       mobileNo: ['', [Validators.required, Validators.pattern('[6-9]\\d{9}')]],
-      designationId: ['',Validators.required],
+      designationId: ['', Validators.required],
     })
   }
 
-  addBCMemberForm(){
+  addBCMemberForm() {
     this.submitted = true;
     if (this.boothCommitteeForm.invalid) {
       return;
-    } else if(!this.voterClickObj){
-      this.toastrService.error('Please Select Committee Member');
-    } else{
+    } else if (!this.voterClickObj) {
+      this.toastrService.error('Please Select Voter');
+    } else {
 
       let formData = this.boothCommitteeForm.value
-      let fullName = this.saveUpdateFlag == 'add' ? this.voterClickObj?.englishName?.trim().split(' ') : this.voterClickObj?.voterName?.trim().split(' ');
+      let fullName = this.voterClickObj?.englishName?.trim().split(' ');
 
-       let obj = {
-          "id": formData.id,
-          "fullName": this.voterClickObj?.englishName,
-          "mobileNo": formData.mobileNo,
-          "fName": fullName[0],
-          "mName": fullName?.length == 3 ? fullName[1] : '',
-          "lName": fullName?.length == 3 ? fullName[2] : fullName[1],
-          "gender": 0,
-          "boothId": this.boothComityListObj?.boothId || 0,
-          "designationId": formData.designationId,   
-          "voterId": this.voterClickObj?.voterId, 
-          "clientId": parseInt(this.localStorageData?.ClientId),
-          "createdBy": this.commonService.loggedInUserId(),
-          "subUserTypeId": 4,
-          "areaAgentId": 0,
-          "committeeTypeId": this.boothCommitteeType,
-          "assignedBoothlist": [
-            {
-              "assemblyId": this.boothComityListObj?.assemblyId || 0,
-              "boothId": this.boothComityListObj?.boothId || 0,
-              "constituencyId": 0,
-              "electionId": 0
-            }
-          ]
-        }
-          this.pushVoterListArray.push(obj);
-          this.getSearchVoterBCGeneralAndFemale(this.boothIdforAdd); // (purpose) show only disable selected Voter
-          this.clearBCForm();
+      let obj = {
+        "id": formData.id,
+        "fullName": this.voterClickObj?.englishName,
+        "mobileNo": formData.mobileNo,
+        "fName": fullName[0],
+        "mName": fullName?.length == 3 ? fullName[1] : '',
+        "lName": fullName?.length == 3 ? fullName[2] : fullName[1],
+        "gender": 0,
+        "boothId": this.boothComityListObj?.boothId || 0,
+        "designationId": formData.designationId,
+        "voterId": this.voterClickObj?.voterId,
+        "clientId": parseInt(this.localStorageData?.ClientId),
+        "createdBy": this.commonService.loggedInUserId(),
+        "subUserTypeId": 4,
+        "areaAgentId": 0,
+        "committeeTypeId": this.boothCommitteeType,
+        "assignedBoothlist": [
+          {
+            "assemblyId": this.boothComityListObj?.assemblyId || 0,
+            "boothId": this.boothComityListObj?.boothId || 0,
+            "constituencyId": 0,
+            "electionId": 0
+          }
+        ],
+        "areaId": this.voterClickObj?.areaId, //extra Added below three Key for condition 
+        "voterNo": this.voterClickObj?.voterNo,
+        "isdeleted": 0,
+      }
+      this.pushVoterListArray.push(obj);
+      this.removeSelectedMissingArea('add',this.voterClickObj?.areaId);
+      this.getSearchVoterBCGeneralAndFemale(this.boothIdforAdd); // (purpose) show only disable selected Voter
+      this.clearBCForm();
     }
   }
 
-  deleteVoter(index:any){
-    this.pushVoterListArray.splice(index, 1);
-    this.getSearchVoterBCGeneralAndFemale(this.boothIdforAdd); // (purpose) only enabled selected Voter
+  removeSelectedMissingArea(flag: any,areaid:any) {
+    this.boothComityListObj?.boothcommitteeMissingArea?.map((ele: any) => {
+      if (this.pushVoterListArray?.length) {
+        this.pushVoterListArray?.map((ele1: any) => {
+          if (ele?.areaId == ele1?.areaId) {
+            (flag == 'add' && areaid == ele?.areaId) ? ele['hideAreaFlag'] = true : '';
+            (flag == 'delete' && areaid == ele?.areaId) ? ele['hideAreaFlag'] = false : '';
+          } 
+        })
+      } else {
+        ele['hideAreaFlag'] = false;
+      }
+    })
   }
 
-  clearBCForm(){
+  clearBCForm() {
     this.submitted = false;
     this.defaultBoothComityForm();
     this.voterClickObj = '';
   }
 
-  clearBCDetail(){
+  clearBCDetail() {
     this.submitted = false;
-    this.defaultBoothComityForm(); 
+    this.defaultBoothComityForm();
     this.pushVoterListArray = [];
     this.voterClickObj = '';
     this.voterSearch.setValue('');
   }
 
-  areaClick(obj:any){
+  areaClick(obj: any) {
     this.areaObjforAdd = obj;
     this.voterSearch.setValue('');
     this.clearBCForm();
     this.getSearchVoterBCGeneralAndFemale(this.boothIdforAdd);
   }
-  
 
-  bindVoterDetail(voterObj: any) {  // Add And Update BoothCommittee Model
+
+  AddVoterDetail(voterObj: any) {  // Add BoothCommittee Model
     this.voterClickObj = voterObj;
-    this.saveUpdateFlag == 'add' ? this.boothCommitteeForm.controls['designationId'].setValue(2):'';
-    if (voterObj?.length || this.saveUpdateFlag == 'update') {
+    this.boothCommitteeForm.controls['designationId'].setValue(10);
+    if (voterObj?.length) {
       this.getDesignationMaster();
-      this.saveUpdateFlag == 'add' ? (this.btnTextBoothComity = 'Submit', this.boothCommitteeForm?.controls['id'].setValue(0)) : (this.btnTextBoothComity = 'Update', this.boothCommitteeForm.controls['id'].setValue(voterObj?.areaAgentId));
+      this.btnTextBoothComity = 'Submit';
       this.boothCommitteeForm.patchValue({
-        id: this.boothCommitteeForm.value.id,
-        mobileNo: this.saveUpdateFlag == 'add' ? voterObj?.mobileNo1 || '' : voterObj?.mobileNo,
-        designationId: this.saveUpdateFlag == 'update' ? voterObj?.designationId : this.boothCommitteeForm.value.designationId
+        id: 0,
+        mobileNo: voterObj?.mobileNo1 || '',
+        designationId: this.boothCommitteeForm.value.designationId
       })
     }
   }
 
-  removeBindData(){
+  removeBindData() {
     this.defaultBoothComityForm();
     this.submitted = false;
   }
 
+  voterAvailableOrNotinList(){
+    return this.pushVoterListArray.some(item => item.isdeleted != 1);
+  }
+
   onSubmitForm() {
-    // if (this.boothCommitteeForm.invalid) {
-    //   return;
-    // } else {
+    if (this.voterAvailableOrNotinList() == false) {
+      this.toastrService.error('Please Add Member');
+      return;
+    } else {
       this.spinner.show();
-      this.callAPIService.setHttp('POST', 'ClientMasterApp/BoothCommittee/CreateBoothCommitteeAreaUserState', false, this.pushVoterListArray, false, 'electionMicroSerApp');
+      let url = this.saveUpdateFlag == 'update' ? 'ClientMasterApp/BoothCommittee/UpdateBoothCommitteeAreaUserState' : 'ClientMasterApp/BoothCommittee/CreateBoothCommitteeAreaUserState';
+      this.callAPIService.setHttp('POST', url, false, this.pushVoterListArray, false, 'electionMicroSerApp');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.responseData != null && res.statusCode == "200") {
           this.spinner.hide();
           this.toastrService.success(res.statusMessage);
           this.addCommitteeMemberModel.nativeElement.click();
           this.getCommitteMemberTypewise();
-        } else {
-          this.spinner.hide();
-        }
+        } else { this.spinner.hide(); }
       }, (error: any) => {
         this.spinner.hide();
         this.router.navigate(['../500'], { relativeTo: this.route });
       })
-    // }
+    }
   }
 
-    //.......................................  Delete Booth Committee member code Start Here .................................//
+  //.......................................  Delete Booth Committee member code Start Here .................................//
 
-    deleteConfirmModel(obj: any) {
-      const dialogRef = this.dialog.open(DeleteComponent,{
-        disableClose: true,
-      });
-      dialogRef.afterClosed().subscribe(result => {
-        if (result == 'Yes') {
-          this.deleteBoothComityMember(obj);
-        }
-      });
-    }
-  
-    deleteBoothComityMember(eleObj: any) {
-      let obj = this.localStorageData?.ClientId + '&BoothId=' + eleObj?.boothId + '&AreaAgentId=' + eleObj?.areaAgentId
-        + '&VoterId=' + eleObj?.voterId + '&Deletedby=' + this.commonService.loggedInUserId() + '&ConstituencyId=' + 0
-      this.callAPIService.setHttp('DELETE', 'ClientMasterApp/BoothCommittee/Delete?ClientId=' + obj, false, false, false, 'electionMicroSerApp');
-      this.callAPIService.getHttp().subscribe((res: any) => {
-        if (res.responseData != null && res.statusCode == "200") {
-          this.toastrService.success(res.responseData.msg);
-          this.getCommitteMemberTypewise();
-        } else {
-        }
-      }, (error: any) => {
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      })
-    }
-  
-    //.......................................  Delete Booth Committee member code End Here .................................//
 
-     //............................................  Booth Committee Member List Model Code Start Here ...................................//
+  deleteConfirmModel(index: any,voterObj:any) {
+    const dialogRef = this.dialog.open(DeleteComponent, {
+      disableClose: true,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == 'Yes') {
+        this.removeSelectedMissingArea('delete',voterObj?.areaId); //for Missing Area Show Hide
+        if(voterObj?.areaAgentId == 0){
+          this.pushVoterListArray.splice(index, 1);
+        }else{
+          this.pushVoterListArray.map((ele:any,i:any)=>{
+            if(index == i){ ele['isdeleted'] = 1 }
+          })
+        }
+        this.voterAvailableOrNotinList();
+        this.getSearchVoterBCGeneralAndFemale(this.boothIdforAdd); // (purpose) only enabled selected Voter
+      }
+    });
+  }
+
+  // deleteBoothComityMember(eleObj: any) {
+  //   let obj = this.localStorageData?.ClientId + '&BoothId=' + eleObj?.boothId + '&AreaAgentId=' + eleObj?.areaAgentId
+  //     + '&VoterId=' + eleObj?.voterId + '&Deletedby=' + this.commonService.loggedInUserId() + '&ConstituencyId=' + 0
+  //   this.callAPIService.setHttp('DELETE', 'ClientMasterApp/BoothCommittee/Delete?ClientId=' + obj, false, false, false, 'electionMicroSerApp');
+  //   this.callAPIService.getHttp().subscribe((res: any) => {
+  //     if (res.responseData != null && res.statusCode == "200") {
+  //       this.toastrService.success(res.responseData.msg);
+  //       this.getCommitteMemberTypewise();
+  //     } else {
+  //     }
+  //   }, (error: any) => {
+  //     this.router.navigate(['../500'], { relativeTo: this.route });
+  //   })
+  // }
+
+  //.......................................  Delete Booth Committee member code End Here .................................//
+
+  //............................................  Booth Committee Member List Model Code Start Here ...................................//
 
   getVoterlistForAssignBoothComityArray: any;
   assignedBoothComitySubject: Subject<any> = new Subject();
   areaAgentIdABL: any;
-  getBoothId:any;
+  getBoothId: any;
   voterAreaBCMLArray: any;
   getAreaIdBMCL: any;
   uservoterListArray: any[] = [];
-  selectArea:any = new FormControl(0);
+  selectArea: any = new FormControl(0);
   searchText: any = '';
   allSelectCheckBox = new FormControl('');
   // allSelectCheckBox = new FormControl({value: '', disabled: (this.searchText != '' ? true : false)})
   @ViewChild('boothCMlist') boothCMlist: any;
-   
 
-  getVoterAreaListBCML(boothId:any) { 
+
+  getVoterAreaListBCML(boothId: any) {
     this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/GetAreaDetailsWithBothId?ClientId=' + this.localStorageData?.ClientId + '&UserId='
-    + this.commonService.loggedInUserId() + '&BoothId=' + boothId,
-    + '&VillageId=' + this.filterForm.value.VillageId, false, false, 'electionMicroSerApp');
+      + this.commonService.loggedInUserId() + '&BoothId=' + boothId,
+      + '&VillageId=' + this.filterForm.value.VillageId, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
-        this.voterAreaBCMLArray = res.responseData;  
+        this.voterAreaBCMLArray = res.responseData;
       } else {
         this.voterAreaBCMLArray = [];
       }
@@ -503,7 +576,7 @@ export class BoothCommitteeComponent implements OnInit {
     })
   }
 
-  getVoterlistForAssignBoothComity(areaAgentId: any,boothId:any) {  // List Booth Committee Member get Api Code
+  getVoterlistForAssignBoothComity(areaAgentId: any, boothId: any) {  // List Booth Committee Member get Api Code
     this.spinner.show();
     this.areaAgentIdABL = areaAgentId;
     this.getBoothId = boothId;
@@ -535,7 +608,7 @@ export class BoothCommitteeComponent implements OnInit {
     } else if (flag == 'area') {
       this.selectArea.setValue(0);
       this.searchText = '';
-      this.getVoterlistForAssignBoothComity(this.areaAgentIdABL,this.getBoothId);
+      this.getVoterlistForAssignBoothComity(this.areaAgentIdABL, this.getBoothId);
     }
   }
 
@@ -553,14 +626,14 @@ export class BoothCommitteeComponent implements OnInit {
         return ele;
       }
     });
-                 //.........................  check Count Code for Check All Selected Condition Start Code......................//
+    //.........................  check Count Code for Check All Selected Condition Start Code......................//
     let x = 1, y = 1, checkedCount, unCheckedCount;
     let arrayLength = this.getVoterlistForAssignBoothComityArray?.length;
     this.getVoterlistForAssignBoothComityArray.find((ele: any) => {
       ele.isAssigned == 1 ? checkedCount = x++ : unCheckedCount = y++;
     })
     arrayLength == checkedCount ? this.allSelectCheckBox.setValue(true) : this.allSelectCheckBox.setValue(false);
-               //.........................  check Count Code for Check All Selected Condition End Code......................//
+    //.........................  check Count Code for Check All Selected Condition End Code......................//
   }
 
   onSubmitAVoterToComityMemberForm() {
@@ -574,53 +647,53 @@ export class BoothCommitteeComponent implements OnInit {
     //   this.toastrService.error('Please select at least 1 Voter');
     //   return;
     // } else {
-      let obj = {
-        "headerId": 0,
-        "userId": this.areaAgentIdABL,
-        "constituencyId": 0,
-        "boothId": this.getBoothId,
-        "clientId": parseInt(this.localStorageData?.ClientId),
-        "createdBy": this.commonService.loggedInUserId(),
-        "uservoterlists": this.uservoterListArray
-      }
-      this.spinner.show();
-      this.callAPIService.setHttp('POST', 'ClientMasterApp/BoothCommittee/AssignVotersToCommitteeMember', false, obj, false, 'electionMicroSerApp');
-      this.callAPIService.getHttp().subscribe((res: any) => {
-        if (res.responseData != null && res.statusCode == "200") {
-          this.spinner.hide();
-          this.toastrService.success(res.statusMessage);
-          this.getCommitteMemberTypewise();
-          this.boothCMlist.nativeElement.click();
-          this.uservoterListArray = [];
-        } else {
-          this.spinner.hide();
-          this.toastrService.error(res.statusMessage);
-        }
-      }, (error: any) => {
+    let obj = {
+      "headerId": 0,
+      "userId": this.areaAgentIdABL,
+      "constituencyId": 0,
+      "boothId": this.getBoothId,
+      "clientId": parseInt(this.localStorageData?.ClientId),
+      "createdBy": this.commonService.loggedInUserId(),
+      "uservoterlists": this.uservoterListArray
+    }
+    this.spinner.show();
+    this.callAPIService.setHttp('POST', 'ClientMasterApp/BoothCommittee/AssignVotersToCommitteeMember', false, obj, false, 'electionMicroSerApp');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
-        this.router.navigate(['../500'], { relativeTo: this.route });
-      })
+        this.toastrService.success(res.statusMessage);
+        this.getCommitteMemberTypewise();
+        this.boothCMlist.nativeElement.click();
+        this.uservoterListArray = [];
+      } else {
+        this.spinner.hide();
+        this.toastrService.error(res.statusMessage);
+      }
+    }, (error: any) => {
+      this.spinner.hide();
+      this.router.navigate(['../500'], { relativeTo: this.route });
+    })
     // }
   }
 
   //............................................  Booth Committee Member List Model Code End Here ...................................//
-//-------------------------------  Send Lind for Login Credential Code Start Here  -------------------------------------
-sendDownloadLink(mobileNo: any) {
-  this.callAPIService.setHttp('get', 'Send_App_Download_link?mobileno=' + mobileNo, false, false, false, 'electionServiceForWeb');
-  this.callAPIService.getHttp().subscribe((res: any) => {
-    if (res.data == 0) {
+  //-------------------------------  Send Lind for Login Credential Code Start Here  -------------------------------------
+  sendDownloadLink(mobileNo: any) {
+    this.callAPIService.setHttp('get', 'Send_App_Download_link?mobileno=' + mobileNo, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.data == 0) {
 
-      this.toastrService.success(res.data1);
-    } else {
+        this.toastrService.success(res.data1);
+      } else {
 
-    }
-  }, (error: any) => {
+      }
+    }, (error: any) => {
 
-    if (error.status == 500) {
-      this.router.navigate(['../500'], { relativeTo: this.route });
-    }
-  })
-}
+      if (error.status == 500) {
+        this.router.navigate(['../500'], { relativeTo: this.route });
+      }
+    })
+  }
 }
 
 
