@@ -1,4 +1,3 @@
-<div class="modal-dialog modal-dialog-centered">
 <div class="modal-content">
     <div class="modal-header">
         <p class="modal-title" id="AddNewCommitteeLabel">Add Sub Committee</p>
@@ -23,8 +22,9 @@
                 <div class="mb-2">
                     <!-- [disabled]="!this.addCommitteeForm.value.BodyLevelId || this.addCommitteeForm.value.BodyLevelId == 2" -->
                     <label class="form-label required-field">Parent Committee</label>
-                    <ngx-select [allowClear]="false" [items]="resCommitteeByLevel" formControlName="SubParentCommitteeId"
-                        placeholder="Select Parent Committee" optionValueField="Id" optionTextField="BodyOrgCellName"
+                    <ngx-select [allowClear]="false" [items]="resCommitteeByLevel"
+                        formControlName="SubParentCommitteeId" placeholder="Select Parent Committee"
+                        optionValueField="Id" optionTextField="BodyOrgCellName"
                         (remove)="clearselOption('committeeName')"
                         [disabled]="!this.addCommitteeForm.value.BodyLevelId || this.addCommitteeForm.value.BodyLevelId == 2"
                         [ngClass]="{ 'is-invalid': submitted && f.SubParentCommitteeId.errors}">
@@ -49,8 +49,9 @@
                     <div class="col-sm-6">
                         <label class="form-label required-field">Select State</label>
                         <ngx-select [allowClear]="false" (remove)="clearselOption('State')" [items]="allStates"
-                            formControlName="StateId" (select)="getDistrict()" placeholder="Select State" optionValueField="Id"
-                            optionTextField="StateName" [ngClass]="{ 'is-invalid': submitted && f.StateId.errors }"
+                            formControlName="StateId" (select)="getDistrict()" placeholder="Select State"
+                            optionValueField="Id" optionTextField="StateName"
+                            [ngClass]="{ 'is-invalid': submitted && f.StateId.errors }"
                             [disabled]="!this.addCommitteeForm.value.SubParentCommitteeId && this.addCommitteeForm.value.BodyLevelId != 2">
                         </ngx-select>
                         <div *ngIf="submitted && f.StateId.errors" class="invalid-feedback">
@@ -120,5 +121,4 @@
             </div>
         </div>
     </div>
-</div>
 </div>
