@@ -805,8 +805,9 @@ input::-ms-clear {
     position: absolute;
     right: 0!important;
     display: block;
-    top: 280px;
-    max-width: 300px;
+    /* top: 280px; */
+    top: 250px;
+    max-width: 270px;
 }
 .committeesonmap2 .mapsvg svg {
     width: 500px;

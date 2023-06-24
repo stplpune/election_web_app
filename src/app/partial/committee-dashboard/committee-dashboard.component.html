@@ -33,7 +33,7 @@
                 class="fas fa-search"></i></button>
           </div> -->
         </div>
-        <div class="col-auto"> 
+        <div class="col-auto">
           <!-- <button type="button" class="btn btn-sm btn-secondary me-2" (click)="location.back();">
             <i class="fas fa-arrow-left"></i>
           </button> -->
@@ -46,8 +46,8 @@
   <div class="row chartbox mb-3">
     <div class="col-md-12">
       <div class="card card-body" id="committeesonmap">
-        <div class="row gy-3">
-          <div class="col-sm-6 border-end d-none d-lg-block d-sm-none">
+        <div class="row gy-4">
+          <div class="col-sm-6 border-end d-none d-lg-block d-sm-none map-height">
             <div class="card card-body shadow-none p-0">
               <div class="row">
                 <!-- <div class="mb-0"><span class="lessThanFiveBox"></span><span>Less than 5</span></div>
@@ -59,14 +59,14 @@
                                 </div> -->
               </div>
               <div class="committeesonmap2">
-                <div id="mapsvg1" (click)="svgMapClick()" ></div>
+                <div id="mapsvg1" (click)="svgMapClick('mapClick')"></div>
                 <!-- <div id="mapsvg2"></div> -->
                 <div id="mapsvg2"></div>
               </div>
-               
-                 
-              
-              
+
+
+
+
 
               <!-- <img src="assets/images/maharashtra_districts_map.svg" /> -->
             </div>
@@ -218,81 +218,165 @@
 
           <!-- pie chart section -->
           <div class="col-sm-6">
-            <div class="d-flex">
-              <h6>President - </h6>
-              <h6>Mobile No - </h6>
+            <div class="d-flex gap-4 justify-content-start">
+              <h4>President : {{presidentDetailsObj?.fullName ? presidentDetailsObj?.fullName :'-'}}</h4>
+              <h4>Mobile No : {{presidentDetailsObj?.mobileNo ? presidentDetailsObj?.mobileNo :'-'}}</h4>
             </div>
             <div class="row">
               <div class="col-sm-6">
-                <div id="chart">
-                  <apx-chart
-                    [series]="chartOptions?.series"
-                    [chart]="chartOptions?.chart"
-                    [labels]="chartOptions?.labels"
-                    [responsive]="chartOptions?.responsive"
-                    [legend]="chartOptions?.legend"
-                    [colors]="chartOptions?.colors"
-                  ></apx-chart>
-                  <div class="mt-2"> <p class="bold">Booth Committee Performance</p> </div>
+                <div id="chart" *ngIf="pieChartShow">
+                  <apx-chart [series]="chartOptions?.series" [chart]="chartOptions?.chart"
+                    [labels]="chartOptions?.labels" [responsive]="chartOptions?.responsive"
+                    [legend]="chartOptions?.legend" [colors]="chartOptions?.colors"></apx-chart>
+                  <div class="mt-2 text-center">
+                    <p class="bold">Booth Committee Performance</p>
+                  </div>
+                </div>
+                <div *ngIf="!pieChartShow" class=" card-body">
+                  <div class="alert alert-danger text-center py-2 mb-0 small">No Data Found..!
+                  </div>
                 </div>
               </div>
               <div class="col-sm-6">
-                <h6>Important Leader</h6>
+                <!-- <h6>Important Leader</h6>
                 <ol>
                   <li type="button" *ngFor="let impLeaders of impLeadersArray" data-bs-toggle="modal" data-bs-target="#exampleModal" 
                   (click)="openImpLeaderModal(impLeaders?.voterId)" >{{impLeaders?.voterName}}</li>
-                  
-                </ol>
+                </ol> -->
+                <div class="card shadow-none border-0">
+                  <div class="card-header py-1 px-0 border-bottom">
+                    <span class="text-main">Important Leader</span>
+                  </div>
+                  <div class="card-body p-0 fix-height">
+                    <div class="list-group list-group-flush">
+                      <a class="list-group-item list-group-item-action border-0 border-bottom px-2 "
+                        *ngFor="let impLeaders of impLeadersArray" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        (click)="openImpLeaderModal(impLeaders?.voterId)">
+                        <!-- {{impLeaders?.voterName}} 
+                         {{impLeaders?.mobileNo1}} -->
+                         <p class="mb-0 fw-bold mt-1"> {{impLeaders?.voterName}}  </p>
+                          <span class="small">{{impLeaders?.mobileNo1}}</span>
+
+                      </a>
+                      <div *ngIf="impLeadersArray.length==0" class=" card-body">
+                        <div class="alert alert-danger text-center py-2 mb-0 small">No Data Found..!
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <!-- Bar graph section -->
           <div class="col-sm-12">
             <div class="card">
-              <div class=" card-body">
+              <div class=" card-body" *ngIf="barChartShow">
                 <div id="chart">
-                  <apx-chart
-                    [series]="BarchartOptions?.series"
-                    [chart]="BarchartOptions?.chart"
-                    [dataLabels]="BarchartOptions?.dataLabels"
-                    [plotOptions]="BarchartOptions?.plotOptions"
-                    [yaxis]="BarchartOptions?.yaxis"
-                    [legend]="BarchartOptions?.legend"
-                    [fill]="BarchartOptions?.fill"
-                    [stroke]="BarchartOptions?.stroke"
-                    [tooltip]="BarchartOptions?.tooltip"
-                    [xaxis]="BarchartOptions?.xaxis"
-                    [dataLabels]="BarchartOptions?.dataLabels"
-                  ></apx-chart>
+                  <apx-chart [series]="BarchartOptions?.series" [chart]="BarchartOptions?.chart"
+                    [dataLabels]="BarchartOptions?.dataLabels" [plotOptions]="BarchartOptions?.plotOptions"
+                    [yaxis]="BarchartOptions?.yaxis" [legend]="BarchartOptions?.legend" [fill]="BarchartOptions?.fill"
+                    [stroke]="BarchartOptions?.stroke" [tooltip]="BarchartOptions?.tooltip"
+                    [xaxis]="BarchartOptions?.xaxis" [dataLabels]="BarchartOptions?.dataLabels"></apx-chart>
                 </div>
+                <div class="text-center fw-bold mt-2">Talukawise Booth Committee Formation progress</div>
               </div>
-              <div class="card-footer bg-transparent border-0">
-                <div class="text-center">Talukawise Booth Committee Formation progress</div>
+              <div *ngIf="!barChartShow" class=" card-body">
+                <div class="alert alert-danger text-center py-2 mb-0 small">No Data Found..!
+                </div>
               </div>
             </div>
           </div>
           <div class="col-sm-12">
             <div class="card card-body shadow">
               <div class="row">
-                <div class="col-sm-6">
-                  <h6 class="fw-bold">Taluka President</h6>
+                <div class="col-sm-3">
+                  <!-- <h6 class="fw-bold">Taluka President</h6>
                   <ol>
-                    <li *ngFor="let presidents of talukaPresidentDataArray">{{ presidents?.talukaName +' : '+ (presidents?.memberName ? presidents?.memberName:'-')}}</li>
-                  </ol>
-                </div>
-                <div class="col-sm-6">
-                  <div class="imp_leaders">
-                    <h6 class="fw-bold">Talukawise Important Leaders</h6>
+                    <li *ngFor="let presidents of talukaPresidentDataArray">{{ presidents?.talukaName +' : '+
+                      (presidents?.memberName ? presidents?.memberName:'-')}}</li>
+                  </ol> -->
+                  <div class="card shadow-none border-0">
+                    <div class="card-header py-1 px-0 border-bottom">
+                      <span class="text-main">Taluka President</span>
+                    </div>
+                    <div class="card-body p-0 fix-height">
+                      <div class="list-group-item list-group-item-action border-0 border-bottom px-2"
+                        *ngFor="let presidents of talukaPresidentDataArray">
+                        <span class="mb-0 fw-bold mt-1"> {{ presidents?.talukaName}}  </span>
+                        {{ ' : '+
+                        (presidents?.memberName ? presidents?.memberName:'-')}}
+                      </div>
+                    </div>
+                  </div>
 
-                    <ol class="row">
-                      <li *ngFor="let taluka of talukaIMPleaderArray"  class="col-sm-6">
-                        Taluka : {{taluka?.talukaName}}
-                        <ul>
-                          <li *ngFor="let impLeader of impLeadersArray" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" 
-                          (click)="openImpLeaderModal(impLeader?.voterId)" >{{impLeader?.voterName +' ( ' + impLeader?.mobileNo1 +' )'}}</li>
-                        </ul>
-                      </li>
-                    </ol>
+                </div>
+                <div class="col-sm-9">
+                  <div class="imp_leaders">
+                    <!-- <h6 class="fw-bold">Talukawise Important Leaders</h6>
+
+                    <div class="row ">
+                      <div *ngFor="let taluka of talukaIMPleaderArray" class="col-sm-4 border-0 border-bottom px-2 ">
+                        {{taluka?.talukaName}}
+                        <ol class="row">
+                          <li *ngFor="let impLeader of impLeadersArray" type="button" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal" (click)="openImpLeaderModal(impLeader?.voterId)">
+                            {{impLeader?.voterName +' ( ' + impLeader?.mobileNo1 +' )'}}</li>
+                        </ol>
+                      </div>
+                    </div> -->
+
+
+
+
+                    <div class="card shadow-none border-0">
+                      <div class="card-header py-1 px-0 border-bottom">
+                        <span class="text-main">Talukawise Important Leaders</span>
+                      </div>
+                      <div class="card-body fix-height">
+                        <div class="row gy-2">
+                          <div class="col-sm-4" *ngFor="let taluka of talukaIMPleaderArray">
+                            <div class="card">
+                              <!-- <div class="p-2"></div> -->
+                              <div class="card-body">
+                                <span class="fw-bold">{{taluka?.talukaName}}</span>
+                                <div class="leader_names_scroll list-group list-group-flush">
+                                  <div class="list-group-item list-group-item-action border-0 border-bottom px-2"
+                                    *ngFor="let impLeader of impLeadersArray" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal" (click)="openImpLeaderModal(impLeader?.voterId)">
+                                    <!-- {{impLeader?.voterName +' ( ' + impLeader?.mobileNo1 +' )'}} -->
+
+                                    <p class="mb-0 fw-bold mt-1">{{impLeader?.voterName | titlecase}} </p>
+                                    <span class="small">{{impLeader?.mobileNo1}}</span>
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- </div> -->
+
+
+                        <!-- <div class="row">
+                        <div class="col-sm-4" *ngFor="let taluka of talukaIMPleaderArray">
+                          <div class="list-group-item list-group-item-action border-0 border-bottom px-2 ">
+                            <h6 class="fw-bold">{{taluka?.talukaName}}</h6>
+                            <div class="text-center" *ngFor="let impLeader of impLeadersArray" type="button"
+                              data-bs-toggle="modal" data-bs-target="#exampleModal"
+                              (click)="openImpLeaderModal(impLeader?.voterId)">
+                              {{impLeader?.voterName +' ( ' + impLeader?.mobileNo1 +' )'}}
+                            </div>
+                          </div>
+                        </div>
+
+                      </div> -->
+                      </div>
+                    </div>
+
+
+
                   </div>
                 </div>
               </div>
@@ -304,4 +388,27 @@
   </div>
 </div>
 
-
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Important Leader Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- <div class="row">
+          <div class="col-md-4">
+            <img [src]="impLeaderDetails?.profilePhoto" width="150" height="150" alt="profilePhoto" srcset="">
+            <h3> {{impLeaderDetails?.partyShortCode}}</h3>
+          </div>
+          <div class="col-md-8">
+            <h1><strong><i>Party Name : {{impLeaderDetails?.partyShortCode}}</i></strong></h1>
+            <h2>{{impLeaderDetails?.voterName}}</h2>
+            <h4> {{impLeaderDetails?.mobileNo1}}</h4>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>
