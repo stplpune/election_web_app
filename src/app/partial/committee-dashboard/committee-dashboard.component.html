@@ -390,7 +390,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-data-bs-backdrop="static" data-bs-keyboard="false">
+  data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -404,7 +404,7 @@ data-bs-backdrop="static" data-bs-keyboard="false">
             <!-- <h6> {{impLeaderDetails?.partyShortCode}}</h6> -->
           </div>
           <div class="col-md">
-            <div class="row gx-2">
+            <!-- <div class="row gx-2"> -->
               <!-- <div class="col-sm text-end">
                 <img [src]="impLeaderDetails?.partyIconImage" alt="profilePhoto" width="50" height="50" srcset=""
                   class="img-fluid">
@@ -413,12 +413,12 @@ data-bs-backdrop="static" data-bs-keyboard="false">
               </div> -->
               <div class="row align-items-center gx-2">
                 <div class="col-sm-4">Leader Name :</div>
-                <div class="col-sm"> 
+                <div class="col-sm">
                   <!-- {{impLeaderDetails?.voterName}} -->
                   <div class="d-flex justify-content-between align-items-center ">
                     <div class="fw-bold">{{impLeaderDetails?.voterName}}</div>
-                    <div><img [src]="impLeaderDetails?.partyIconImage" alt="profilePhoto" width="40" height="40" srcset=""
-                      class="img-fluid">
+                    <div><img [src]="impLeaderDetails?.partyIconImage" alt="profilePhoto" width="40" height="40"
+                        srcset="" class="img-fluid">
                     </div>
 
                   </div>
@@ -432,15 +432,15 @@ data-bs-backdrop="static" data-bs-keyboard="false">
                 <div class="col-sm-4">Mobile No :</div>
                 <div class="col-sm fw-bold">{{impLeaderDetails?.mobileNo1}}</div>
               </div>
-              
-            </div>
+
+            <!-- </div> -->
           </div>
-          <div class="row my-4">
-            <!-- <div class="col-sm-5">Remark :</div> -->
-            <div class="leader-work-details">
-              <div class="col-sm">{{impLeaderDetails?.remark}}</div>
-            </div>
+          <!-- <div class="row my-4"> -->
+          <!-- <div class="col-sm-5">Remark :</div> -->
+          <div class="leader-work-details text-justify">
+            {{impLeaderDetails?.remark}}
           </div>
+          <!-- </div> -->
         </div>
       </div>
     </div>
