@@ -42,20 +42,29 @@ export class CommonService {
         return LoginType.LoginType;
     }
 
+    // getAllPageName() {
+    //     if (this.checkUserIsLoggedIn() == true) {
+    //     let getAllPageName = JSON.parse(localStorage.loggedInDetails).data2;
+    //     return getAllPageName;
+    //     }
+    // }
+
     getAllPageName() {
         if (this.checkUserIsLoggedIn() == true) {
         let getAllPageName = JSON.parse(localStorage.loggedInDetails).data2;
+        let pageURLObj = getAllPageName?.find((x: any) => x.PageId == this.getlocalStorageData().StartPageId); 
+        let index = getAllPageName.indexOf(pageURLObj);
+        getAllPageName.splice(index, 1);
+        getAllPageName.splice(0, 0, pageURLObj);
         return getAllPageName;
         }
     }
 
-    
-
     redirectToDashborad() {
         if (this.checkUserIsLoggedIn() == true) {
         let logInUserType: any = this.getAllPageName();
-        let pageURLObj = logInUserType?.find((x: any) => x.PageId == this.getlocalStorageData().StartPageId); 
-        let redirectToDashboard = pageURLObj?.PageURL;
+        // let pageURLObj = logInUserType?.find((x: any) => x.PageId == this.getlocalStorageData().StartPageId); 
+        let redirectToDashboard = logInUserType[0].PageURL;
         return redirectToDashboard;
         }
     }
