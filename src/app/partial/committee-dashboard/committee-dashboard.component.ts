@@ -101,7 +101,7 @@ export class CommitteeDashboardComponent implements OnInit {
   presidentDetailsObj:any;
   barChartShow:boolean=false;
   pieChartShow:boolean=false;
-
+  previousDistSelected:string='';
   constructor(private commonService: CommonService, private toastrService: ToastrService,
     private spinner: NgxSpinnerService, private router: Router, private fb: FormBuilder, public datePipe: DatePipe,
     private route: ActivatedRoute, private callAPIService: CallAPIService, public location: Location, 
@@ -478,9 +478,13 @@ export class CommitteeDashboardComponent implements OnInit {
     if(status=='mapClick'){
       $(document).on('click', '#mapsvg1  path', (e: any) => {
         console.log(e, e.currentTarget.id);
-        this.selectedDistrictId = e.currentTarget.id;
-        var filteredDistrict = this.allDistrict.filter((x: any) => x.districtId == e.currentTarget.id)
-       this.setSVGPath(filteredDistrict);
+        if(this.previousDistSelected != e.currentTarget.id){
+          this.selectedDistrictId = e.currentTarget.id;
+          this.previousDistSelected =this.selectedDistrictId;
+          var filteredDistrict = this.allDistrict.filter((x: any) => x.districtId == e.currentTarget.id)
+         this.setSVGPath(filteredDistrict);
+        }
+       
       })
     }else{
       var filteredDistrict = this.allDistrict.filter((x: any) => x.districtId == this.selectedDistrictId)
