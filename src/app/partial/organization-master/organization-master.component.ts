@@ -81,7 +81,8 @@ export class OrganizationMasterComponent implements OnInit {
   resCommitteeByLevel:any;
   result:any;
   allDistrictByCommittee:any;
-  
+  @ViewChild('closeewCommitteeModal') closeewCommitteeModal: any;
+
   constructor(private callAPIService: CallAPIService, private router: Router, private fb: FormBuilder,
     private toastrService: ToastrService, private commonService: CommonService, public dialog: MatDialog,
     private spinner: NgxSpinnerService, private route: ActivatedRoute) { }
@@ -652,6 +653,8 @@ export class OrganizationMasterComponent implements OnInit {
           this.toastrService.success(res.data1[0].Msg);
           this.getOrganizationList();
           this.clearForm();
+
+          this.closeewCommitteeModal.nativeElement.click();
         } else {
           // //this.toastrService.error("Data is not available");
         }
@@ -821,7 +824,6 @@ export class OrganizationMasterComponent implements OnInit {
           this.getBodyAssignedDesignation();
           this.AlreadyAssignedDesignations(this.desBodyId);
           this.spinner.hide();
-
           this.getOrganizationList();
         } else {
           this.toastrService.error("Members is not available");

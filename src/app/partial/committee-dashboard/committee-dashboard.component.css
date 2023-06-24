@@ -15,3 +15,28 @@ ol li{
   top: 230px!important;
   max-width: 310px!important;
 }
+
+.fix-height {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.map-height{
+  height: 450px !important;
+}
+
+.leader_names_scroll{
+  max-height: 17vh !important;
+  overflow-y: scroll !important;
+
+}
+
+.leader-profilepic{
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+}
+
+.leader-work-details{
+  max-height: 60vh !important;
+  overflow-y: scroll !important;
+}
