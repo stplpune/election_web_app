@@ -97,7 +97,7 @@ export class CommitteeDashboardComponent implements OnInit {
   talukaIMPleaderArray=new Array();
   talukaPresidentDataArray=new Array();
   impLeadersArray=new Array();
-  impLeaderDetails=new Array();
+  impLeaderDetails:any;
   presidentDetailsObj:any;
   barChartShow:boolean=false;
   pieChartShow:boolean=false;
@@ -626,21 +626,21 @@ export class CommitteeDashboardComponent implements OnInit {
   }
   
 
-  /// -----------------------------------  open Modal -----------------
-  openImpLeaderModal(vId:any){
-    this.talukaIMPleaderArray.filter((res:any)=>{
-      for(let i=0;i<res.talukaWiseIMPLeaders.length;i++){
-        if(vId == res?.talukaWiseIMPLeaders[i]?.voterId ){
-          this.impLeaderDetails = res?.talukaWiseIMPLeaders[i]
-          console.log(this.impLeaderDetails);
-        }
-      }
+  // /// -----------------------------------  open Modal -----------------
+  // openImpLeaderModal(vId:any){
+  //   this.talukaIMPleaderArray.filter((res:any)=>{
+  //     for(let i=0;i<res.talukaWiseIMPLeaders.length;i++){
+  //       if(vId == res?.talukaWiseIMPLeaders[i]?.voterId ){
+  //         this.impLeaderDetails = res?.talukaWiseIMPLeaders[i]
+  //         console.log(this.impLeaderDetails);
+  //       }
+  //     }
       
-      // if(res?.talukaWiseIMPLeaders.voterId == vId){
-      //   this.impLeaderName =
-      // }
-    })
-  }
+  //     // if(res?.talukaWiseIMPLeaders.voterId == vId){
+  //     //   this.impLeaderName =
+  //     // }
+  //   })
+  // }
 
 
 

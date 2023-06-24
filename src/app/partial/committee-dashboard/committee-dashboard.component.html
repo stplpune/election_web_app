@@ -251,7 +251,7 @@
                     <div class="list-group list-group-flush">
                       <a class="list-group-item list-group-item-action border-0 border-bottom px-2 "
                         *ngFor="let impLeaders of impLeadersArray" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                        (click)="openImpLeaderModal(impLeaders?.voterId)">
+                        (click)="impLeaderDetails=impLeaders">
                         <!-- {{impLeaders?.voterName}} 
                          {{impLeaders?.mobileNo1}} -->
                          <p class="mb-0 fw-bold mt-1"> {{impLeaders?.voterName}}  </p>
@@ -343,7 +343,7 @@
                                 <div class="leader_names_scroll list-group list-group-flush">
                                   <div class="list-group-item list-group-item-action border-0 border-bottom px-2"
                                     *ngFor="let impLeader of impLeadersArray" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal" (click)="openImpLeaderModal(impLeader?.voterId)">
+                                    data-bs-target="#exampleModal" (click)="impLeaderDetails=impLeader">
                                     <!-- {{impLeader?.voterName +' ( ' + impLeader?.mobileNo1 +' )'}} -->
 
                                     <p class="mb-0 fw-bold mt-1">{{impLeader?.voterName | titlecase}} </p>
@@ -397,7 +397,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <!-- <div class="row">
+        <div class="row">
           <div class="col-md-4">
             <img [src]="impLeaderDetails?.profilePhoto" width="150" height="150" alt="profilePhoto" srcset="">
             <h3> {{impLeaderDetails?.partyShortCode}}</h3>
@@ -407,7 +407,7 @@
             <h2>{{impLeaderDetails?.voterName}}</h2>
             <h4> {{impLeaderDetails?.mobileNo1}}</h4>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
