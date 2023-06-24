@@ -254,8 +254,8 @@
                         (click)="impLeaderDetails=impLeaders">
                         <!-- {{impLeaders?.voterName}} 
                          {{impLeaders?.mobileNo1}} -->
-                         <p class="mb-0 fw-bold mt-1"> {{impLeaders?.voterName}}  </p>
-                          <span class="small">{{impLeaders?.mobileNo1}}</span>
+                        <p class="mb-0 fw-bold mt-1"> {{impLeaders?.voterName}} </p>
+                        <span class="small">{{impLeaders?.mobileNo1}}</span>
 
                       </a>
                       <div *ngIf="impLeadersArray.length==0" class=" card-body">
@@ -303,7 +303,7 @@
                     <div class="card-body p-0 fix-height">
                       <div class="list-group-item list-group-item-action border-0 border-bottom px-2"
                         *ngFor="let presidents of talukaPresidentDataArray">
-                        <span class="mb-0 fw-bold mt-1"> {{ presidents?.talukaName}}  </span>
+                        <span class="mb-0 fw-bold mt-1"> {{ presidents?.talukaName}} </span>
                         {{ ' : '+
                         (presidents?.memberName ? presidents?.memberName:'-')}}
                       </div>
@@ -389,7 +389,8 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -399,13 +400,43 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-md-4">
-            <img [src]="impLeaderDetails?.profilePhoto" width="150" height="150" alt="profilePhoto" srcset="">
-            <h3> {{impLeaderDetails?.partyShortCode}}</h3>
+            <img [src]="impLeaderDetails?.profilePhoto" alt="profilePhoto" srcset="" class="leader-profilepic">
+            <!-- <h6> {{impLeaderDetails?.partyShortCode}}</h6> -->
           </div>
           <div class="col-md-8">
-            <h1><strong><i>Party Name : {{impLeaderDetails?.partyShortCode}}</i></strong></h1>
-            <h2>{{impLeaderDetails?.voterName}}</h2>
-            <h4> {{impLeaderDetails?.mobileNo1}}</h4>
+            <div class="row">
+              <!-- <div class="col-sm text-end">
+                <img [src]="impLeaderDetails?.partyIconImage" alt="profilePhoto" width="50" height="50" srcset=""
+                  class="img-fluid">
+                <p>{{impLeaderDetails?.partyShortCode}}</p>
+                <p>{{impLeaderDetails?.partyIconImage}}</p>
+              </div> -->
+              <div class="row align-items-center">
+                <div class="col-sm-5">Leader Name :</div>
+                <div class="col-sm"> 
+                  <!-- {{impLeaderDetails?.voterName}} -->
+                  <div class="d-flex justify-content-between align-items-center ">
+                    <div class="fw-bold">{{impLeaderDetails?.voterName}}</div>
+                    <div><img [src]="impLeaderDetails?.partyIconImage" alt="profilePhoto" width="40" height="40" srcset=""
+                      class="img-fluid">
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">Designation :</div>
+                <div class="col-sm fw-bold">{{impLeaderDetails?.designation}}</div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">Mobile No :</div>
+                <div class="col-sm fw-bold">{{impLeaderDetails?.mobileNo1}}</div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">Remark :</div>
+                <div class="col-sm">{{impLeaderDetails?.remark}}</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
