@@ -236,7 +236,7 @@ export class CommitteeDashboardComponent implements OnInit {
     this.chartOptions = {
       series: [ obj?.totalBoothCommittee, obj?.totalBooths,],
       chart: {
-        width: 380,
+        width: 300,
         type: "pie"
       },
       labels: ["Total Booth Committee", "Total Booths", ],
