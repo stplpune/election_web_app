@@ -34,5 +34,9 @@ ol li{
   border-radius: 50%;
   width: 100px;
   height: 100px;
+}
 
+.leader-work-details{
+  max-height: 60vh !important;
+  overflow-y: scroll !important;
 }
