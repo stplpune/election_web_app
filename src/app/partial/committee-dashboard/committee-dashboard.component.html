@@ -223,7 +223,7 @@
               <h4>Mobile No : {{presidentDetailsObj?.mobileNo ? presidentDetailsObj?.mobileNo :'-'}}</h4>
             </div>
             <div class="row">
-              <div class="col-sm-6">
+              <div class="col-sm-6 border-end">
                 <div id="chart" *ngIf="pieChartShow">
                   <apx-chart [series]="chartOptions?.series" [chart]="chartOptions?.chart"
                     [labels]="chartOptions?.labels" [responsive]="chartOptions?.responsive"
@@ -290,7 +290,7 @@
           <div class="col-sm-12">
             <div class="card card-body shadow">
               <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-3 border-end">
                   <!-- <h6 class="fw-bold">Taluka President</h6>
                   <ol>
                     <li *ngFor="let presidents of talukaPresidentDataArray">{{ presidents?.talukaName +' : '+
