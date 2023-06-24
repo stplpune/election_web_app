@@ -336,13 +336,13 @@
                       <div class="card-body fix-height">
                         <div class="row gy-2">
                           <div class="col-sm-4" *ngFor="let taluka of talukaIMPleaderArray">
-                            <div class="card">
+                            <div class="card h-100">
                               <!-- <div class="p-2"></div> -->
                               <div class="card-body">
                                 <span class="fw-bold">{{taluka?.talukaName}}</span>
                                 <div class="leader_names_scroll list-group list-group-flush">
                                   <div class="list-group-item list-group-item-action border-0 border-bottom px-2"
-                                    *ngFor="let impLeader of impLeadersArray" type="button" data-bs-toggle="modal"
+                                    *ngFor="let impLeader of taluka?.talukaWiseIMPLeaders" type="button" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal" (click)="impLeaderDetails=impLeader">
                                     <!-- {{impLeader?.voterName +' ( ' + impLeader?.mobileNo1 +' )'}} -->
 
