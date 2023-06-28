@@ -1,1 +1,177 @@
-<p>local-govt-body works!</p>
+<div class="container-fluid">
+    <div class="row mx-0 px-0" id="pageheader">
+        <div class="col-sm-auto">
+            <span class="page-name">Local Government Body
+            </span>
+        </div>
+    </div>
+
+    <div class="row chartbox">
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-header">
+                    Add Local Government Body
+                </div>
+                <div class="card-body pt-0">
+                    <div class="form-container">
+                        <div class="mb-2">
+                            <label for="" class="form-label">Constituency</label>
+                            <input type="text" class="form-control" placeholder="Constituency Name">
+                        </div>
+                        <div class="mb-2">
+                            <label for="" class="form-label">Category</label>
+                            <select class="form-select">
+                                <option value="">Select Category</option>
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label for="" class="form-label">Type</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault1">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Rural
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault2" checked>
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Urban
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row gx-2 mb-2">
+                            <div class="col-sm-6">
+                                <label for="" class="form-label">State</label>
+                                <select class="form-select">
+                                    <option value="">Select State</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="" class="form-label">Division</label>
+                                <select class="form-select">
+                                    <option value="">Select Division</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label for="" class="form-label">District</label>
+                            <select class="form-select">
+                                <option value="">Select District</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="txtSearchAssembly" class="form-label">Taluka / Village</label>
+                            <div class="card border shadow-none">
+                                <div class="card-header border-bottom p-0 py-1">
+                                    <input type="text" placeholder="Search Taluka / Village"
+                                        class="form-control form-control-sm border-0">
+                                </div>
+                                <div class="card-body py-2 ChekBox">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                        <label class="form-check-label" for="defaultCheck1">
+                                            Default checkbox
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                                        <label class="form-check-label" for="defaultCheck2">
+                                            Disabled checkbox
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                        <label class="form-check-label" for="defaultCheck1">
+                                            Default checkbox
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                                        <label class="form-check-label" for="defaultCheck2">
+                                            Disabled checkbox
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-secondary">Clear</button>
+                            <button type="submit" class="btn btn-main">Add Local Body</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex gap-2">
+                        <select class="form-select">
+                            <option value="">Select Constituency</option>
+                        </select>
+                        <div class="input-group">
+                            <input type="text" placeholder="Constituency/Assembly Name" class="form-control">
+                            <button type="button" class="btn btn-sm btn-light">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No.</th>
+                                    <th>Consitution/Assembly Name</th>
+                                    <th>Category</th>
+                                    <th>Type</th>
+                                    <th>State</th>
+                                    <th>Division</th>
+                                    <th>District</th>
+                                    <th>Taluka/Village</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Demo</td>
+                                    <td>Demo</td>
+                                    <td>Rural</td>
+                                    <td>Maharashtra</td>
+                                    <td>Pune</td>
+                                    <td>Baramati</td>
+                                    <td>
+                                        <ul class="mb-0 ps-3">
+                                            <li>Taluka</li>
+                                            <li>Taluka</li>
+                                            <li>Taluka</li>
+                                            <li>Taluka</li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" title="Edit Constituency"
+                                                class="btn btn-sm btn-light text-edit me-1 rounded">
+                                                <i class="far fa-edit"></i>
+                                            </button>
+                                            <button type="button" title="Delete Constituency"
+                                                class="btn btn-sm btn-light text-danger rounded">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
