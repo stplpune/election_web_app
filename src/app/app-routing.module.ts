@@ -55,16 +55,16 @@ const routes: Routes = [
       { path: 'surname-wise-report', loadChildren: () => import('./partial/booth-management/Reports/surname-wise-report/surname-wise-report.module').then(m => m.SurnameWiseReportModule), data: { title: 'Surname Wise Report', allowedRoles: ['1', '2', '6'] } },
       { path: 'family-head-report', loadChildren: () => import('./partial/booth-management/Reports/family-head-report/family-head-report.module').then(m => m.FamilyHeadReportModule), data: { title: 'Family Head Report', allowedRoles: ['1', '2', '6'] } },
       { path: 'media-perception-report', loadChildren: () => import('./partial/booth-management/Reports/media-perception-report/media-perception-report.module').then(m => m.MediaPerceptionReportModule), data: { title: 'Media Perception Report', allowedRoles: ['1', '2'] } },
-      { path: 'booth-committee', loadChildren: () => import('./partial/booth-management/booth-committee/booth-committee.module').then(m => m.BoothCommitteeModule), data: { title: 'Booth Committee', allowedRoles: ['1', '2','7','8'] } },
+      { path: 'booth-committee', loadChildren: () => import('./partial/booth-management/booth-committee/booth-committee.module').then(m => m.BoothCommitteeModule), data: { title: 'Booth Committee', allowedRoles: ['1', '2', '7', '8'] } },
       { path: 'surname-caste-wise-report', loadChildren: () => import('./partial/booth-management/Reports/surname-caste-wise-report/surname-caste-wise-report.module').then(m => m.SurnameCasteWiseReportModule), data: { title: 'Surname Wise Caste Report', allowedRoles: ['1', '2'] } },
-      { path: 'page-access-right', loadChildren: () => import('./partial/booth-management/page-access-right/page-access-right.module').then(m => m.PageAccessRightModule), data: { title: 'Page Access Rights', allowedRoles: ['1', '2'] } },      
-      { path: 'committee', loadChildren: () => import('./partial/organization-master/organization-master.module').then(m => m.OrganizationMasterModule), data: { title: 'Committee', allowedRoles: ['1', '2', '7', '8'] }  },
+      { path: 'page-access-right', loadChildren: () => import('./partial/booth-management/page-access-right/page-access-right.module').then(m => m.PageAccessRightModule), data: { title: 'Page Access Rights', allowedRoles: ['1', '2'] } },
+      { path: 'committee', loadChildren: () => import('./partial/organization-master/organization-master.module').then(m => m.OrganizationMasterModule), data: { title: 'Committee', allowedRoles: ['1', '2', '7', '8'] } },
       { path: 'committees-on-map', loadChildren: () => import('./partial/committees-on-map/committees-on-map.module').then(m => m.CommitteesOnMapModule), data: { title: 'Committees On Map', allowedRoles: ['1', '2', '7', '8'] } },
       { path: 'committee-dashboard', loadChildren: () => import('./partial/committee-dashboard/committee-dashboard.module').then(m => m.CommitteeDashboardModule), data: { title: 'Committee Dashboard', allowedRoles: ['1', '2', '7', '8'] } },
+      { path: 'local-govt-body', loadChildren: () => import('./partial/booth-management/local-govt-body/local-govt-body.module').then(m => m.LocalGovtBodyModule), data: { title: 'Local Government Body' } },
     ]
   },
   { path: '500', component: ServerErrorComponent },
-
   { path: '**', component: PageNotFoundComponent },
 ];
 
