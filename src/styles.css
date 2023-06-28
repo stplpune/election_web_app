@@ -640,6 +640,7 @@ ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
     column-count: 2;
     -webkit-columns: 2;
     -moz-columns: 2;
+    columns: 2;
     column-gap: 10px;
     font-size: 0.85rem;
     margin: 0;
@@ -767,23 +768,6 @@ input::-ms-clear {
 .bg-danger-10 {
     background: #ffbcbc !important;
 }
-
-
-
-/* my css */
-
-/* #committeesonmap #mapsvg2.mapsvg svg {
-  -webkit-user-select: none;
-  user-select: none;
-  max-height: none !important;
-  width: 470px !important;
-  transform-origin: right;
-   height: 120px !important;
-  position: relative;
-  transition: transform .40s;
-  transform-origin: 0% 0%;
-  -webkit-transform-origin: 0% 0%;
-} */
 
 .committeesonmap2 {
     position: relative;
