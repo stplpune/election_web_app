@@ -771,20 +771,7 @@ input::-ms-clear {
 
 
 /* my css */
-#committeesonmap #mapsvg1.mapsvg svg {
-  -webkit-user-select: none;
-  user-select: none;
-  /* overflow: visible !important; */
-  /* max-width: none !important; */
-  max-height: none !important;
-  width: 470px !important;
-  height: 320px !important;
-  position: relative;
-  /* right: 0 !important; */
-  transition: transform .40s;
-  transform-origin: 0% 0%;
-  -webkit-transform-origin: 0% 0%;
-}
+
 /* #committeesonmap #mapsvg2.mapsvg svg {
   -webkit-user-select: none;
   user-select: none;
@@ -798,18 +785,36 @@ input::-ms-clear {
   -webkit-transform-origin: 0% 0%;
 } */
 
-.committeesonmap2{
+.committeesonmap2 {
     position: relative;
 }
+
 .committeesonmap2>div:last-child {
     position: absolute;
-    right: 0!important;
+    right: 0 !important;
     display: block;
     /* top: 280px; */
     top: 250px;
     max-width: 270px;
 }
+
 .committeesonmap2 .mapsvg svg {
     width: 500px;
     min-height: 300px;
+}
+
+@media screen and (max-width:320px) {
+    #mapsvg1 svg {
+        transform: scale(1) !important;
+    }
+
+    .committeesonmap2 .mapsvg svg {
+        width: 257px;
+        min-height: 204px;
+        transform: scale(0.9) !important;
+    }
+
+    .committeesonmap2>div:last-child {
+        top: 210px;
+    }
 }
