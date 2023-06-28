@@ -102,6 +102,11 @@ export class CommitteeDashboardComponent implements OnInit {
   barChartShow:boolean=false;
   pieChartShow:boolean=false;
   previousDistSelected:string='';
+  previousTalSelected:string='';
+  talukaByDistrictId=new Array();
+  mapselected:string='dist'
+  filteredTal=new Array(); 
+  filteredDistrict=new Array(); 
   constructor(private commonService: CommonService, private toastrService: ToastrService,
     private spinner: NgxSpinnerService, private router: Router, private fb: FormBuilder, public datePipe: DatePipe,
     private route: ActivatedRoute, private callAPIService: CallAPIService, public location: Location, 
@@ -176,15 +181,13 @@ export class CommitteeDashboardComponent implements OnInit {
 
   getDistrict() {
     var usrData = this.commonService.getLoggedUserStateData();
-    var req = '?UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.commonService.getlocalStorageData().ClientId + '&StateId='+ usrData?.StateId || 0 +'&DivisionId='+ usrData?.DivisionId || 0 +'&DistrictId=' + usrData?.DistrictId || 0 + '&TalukaId=' + usrData?.TalukaId || 0;
+    var req = '?UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.commonService.getlocalStorageData().ClientId + '&StateId='+ (usrData?.StateId ?usrData?.StateId: 0) +'&DivisionId='+ (usrData?.DivisionId ?usrData?.DivisionId: 0) +'&DistrictId=' + (usrData?.DistrictId ?usrData?.DistrictId:  0) + '&TalukaId=' + (usrData?.TalukaId ?usrData?.DistrictId: 0);
     this.spinner.show();
     this.callAPIService.setHttp('get', 'ClientMasterApp/Dashboard/GetWebDashbordState' + req, false, false, false, 'electionMicroSerApp'); //old API  Web_GetDistrict_1_0_Committee
     this.callAPIService.getHttp().subscribe((res: any) => {
       this.spinner.hide();
       if (res?.responseData && res?.responseData.length != 0) {
         this.allDistrict = res.responseData;
-        // this.districtWiseCommityWorkGraph(id); 10/01/22
-        
         this.selectedDistrictId=3;//this.allDistrict[0]?.districtId  
         this.svgMapClick('Default');
         this.addClasscommitteeWise(); 
@@ -203,10 +206,10 @@ export class CommitteeDashboardComponent implements OnInit {
     })
   }
 //------------  get Pie Chart Details --------------------------------
-  bindPieChartDataForTalukaPresident(distId?:any){
+  bindPieChartDataForTalukaPresident(distId?:any, talId?:any){
     this.spinner.show();
     
-    var req = '?UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.commonService.getlocalStorageData().ClientId + '&DistrictId=' + distId || 0;
+    var req = '?UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.commonService.getlocalStorageData().ClientId + '&DistrictId=' + (distId || 0) +'&TalukaId='+(talId ||0);
     this.callAPIService.setHttp('get', 'ClientMasterApp/Dashboard/GetWebDashbordDistrictDetailState'+req, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       this.spinner.hide();
@@ -229,7 +232,7 @@ export class CommitteeDashboardComponent implements OnInit {
       }
     })
     
-    this.bindBarChartDataForTalukaPresident(distId)
+    this.bindBarChartDataForTalukaPresident(distId,talId)
   }
   constructPieChart(obj:any){
     this.pieChartShow =( obj?.totalBoothCommittee >1 || obj?.totalBooths >1 )? true:false;
@@ -262,9 +265,9 @@ export class CommitteeDashboardComponent implements OnInit {
   }
 
   // --------------------------------------  Construct BarChart  -----------------------
-  bindBarChartDataForTalukaPresident(distId?:any){
+  bindBarChartDataForTalukaPresident(distId?:any,selectedTal?:any){
     this.spinner.show();
-    var req = '?UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.commonService.getlocalStorageData().ClientId + '&DistrictId=' + distId || 0;
+    var req = '?UserId=' + this.commonService.loggedInUserId() + '&ClientId=' + this.commonService.getlocalStorageData().ClientId + '&DistrictId=' +( distId || 0) +'&TalukaId='+ (selectedTal||0);
     this.callAPIService.setHttp('get', 'ClientMasterApp/Dashboard/GetWebTalukaWiseBoothCommitteeDashbordState'+req, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       this.spinner.hide();
@@ -475,30 +478,44 @@ export class CommitteeDashboardComponent implements OnInit {
   }
 
   svgMapClick(status:string){
+    this.filteredTal=[];
+    this.previousTalSelected='';
     if(status=='mapClick'){
       $(document).on('click', '#mapsvg1  path', (e: any) => {
-        console.log(e, e.currentTarget.id);
-        if(this.previousDistSelected != e.currentTarget.id){
+        if(this.previousDistSelected != e.currentTarget.id || this.mapselected!='dist'){
+          this.mapselected='dist';
           this.selectedDistrictId = e.currentTarget.id;
           this.previousDistSelected =this.selectedDistrictId;
-          var filteredDistrict = this.allDistrict.filter((x: any) => x.districtId == e.currentTarget.id)
-         this.setSVGPath(filteredDistrict);
+          this.filteredDistrict = this.allDistrict.filter((x: any) => x.districtId == e.currentTarget.id);
+         this.setSVGPath(this.filteredDistrict, 'dist');
         }
        
       })
     }else{
-      var filteredDistrict = this.allDistrict.filter((x: any) => x.districtId == this.selectedDistrictId)
-      this.setSVGPath(filteredDistrict)
+      this.filteredDistrict = this.allDistrict.filter((x: any) => x.districtId == this.selectedDistrictId)
+      this.setSVGPath(this.filteredDistrict,'dist')
     }
-    
-   
   }
-  setSVGPath(filteredDistrict:any){
-    var path = 'assets/mapSvg/' + filteredDistrict[0]?.districtName + '.svg';
-    this.showTalukaSvgMap(this.commonService.mapRegions(), path);
-    this.bindPieChartDataForTalukaPresident(this.selectedDistrictId); 
-    this.getTalukaWiseIMPLeader();
-    this.getTalukaPresidentData();
+  svgMapClick1(status:string){
+    this.mapselected='tal';
+      $(document).on('click', '#mapsvg2  path', (e: any) => {
+        let selectedTalId = ((e.currentTarget.id).split('d')[((e.currentTarget.id).split('d').length-1)]);
+        if(this.previousTalSelected != selectedTalId){
+          this.previousTalSelected =selectedTalId;
+          this.filteredTal = this.talukaByDistrictId.filter((x: any) => x.talukaId == Number(selectedTalId))
+         this.setSVGPath(this.selectedDistrictId,'tal', this.filteredTal );
+        }
+      })
+      
+  }
+  setSVGPath(filteredDistrict:any, status:string, filterTal?:any){
+    if(status=='dist'){
+      var path = 'assets/mapSvg/' + filteredDistrict[0]?.districtName + '.svg';
+      this.showTalukaSvgMap(this.commonService.mapRegions(), path);
+      this.getTalukaWiseIMPLeader();
+      this.getTalukaPresidentData();
+    }
+    this.bindPieChartDataForTalukaPresident(this.selectedDistrictId, (filterTal? filterTal[0]?.talukaId:0)); 
   }
 
   showTalukaSvgMap(regions_m: any, svgPath: any) {
@@ -603,9 +620,9 @@ export class CommitteeDashboardComponent implements OnInit {
         // res.responseData.map((x:any)=>{
         //   x.talukaName=x.talukaName.split(' ')[0]
         // })
-        var talukaByDistrictId = res.responseData;
+        this.talukaByDistrictId = res.responseData;
         // this.districtWiseCommityWorkGraph(id); 10/01/22
-        this.addClasscommitteeWise1(talukaByDistrictId);
+        this.addClasscommitteeWise1(this.talukaByDistrictId);
         // this.onClickFlag == false ?  $('#mapsvg1  path#' + this.selectedDistrictId).addClass('svgDistrictActive') : '';
        
         //  id == undefined ||   id == null ||  id == ""  ? '': this.toggleClassActive(id);
