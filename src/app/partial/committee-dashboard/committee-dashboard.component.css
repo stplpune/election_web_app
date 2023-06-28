@@ -1,42 +1,31 @@
-
-.imp_leaders ol li ul{
-  list-style-type: upper-alpha;
-}
-
-ol li{
-  margin: 10px 0px !important;
-}
-.commiteeMapOuter{
+.commiteeMapOuter {
   position: relative;
 }
-.commiteeMapOuter > div.mapsvg-wrap:last-child{
-  position: absolute!important;
-  right: 0!important;
-  top: 230px!important;
-  max-width: 310px!important;
+
+.commiteeMapOuter>div.mapsvg-wrap:last-child {
+  position: absolute !important;
+  right: 0 !important;
+  top: 230px !important;
+  max-width: 310px !important;
 }
 
-.fix-height {
-  max-height: 60vh;
-  overflow-y: auto;
-}
-.map-height{
+.map-height {
   height: 450px !important;
 }
 
-.leader_names_scroll{
-  max-height: 17vh !important;
-  overflow-y: scroll !important;
-
+.profile-party {
+  text-align: center !important;
+  width: 150px;
+  margin: 0 auto;
+  margin-bottom: 1rem;
 }
 
-.leader-profilepic{
-  border-radius: 50%;
-  width: 100px;
-  height: 100px;
+.profile-party .profilepic {
+  width: 150px;
 }
 
-.leader-work-details{
-  max-height: 60vh !important;
-  overflow-y: scroll !important;
+.profile-party .party-pic {
+  position: absolute !important;
+  bottom: 0;
+  right: 10px;
 }

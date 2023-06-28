@@ -1,235 +1,36 @@
 <div class="container-fluid commitees">
-  <div class="row mx-0 px-0" id="pageheader">
-    <div class="col-sm-3">
-      <span class="page-name">Committees On Map
-      </span>
-    </div>
-    <div class="col-sm-9 text-end">
-      <div class="row g-2">
-        <!-- <div class="offset-lg-4 col-sm-4">
-          <ngx-select [allowClear]="allowClear" (select)="selectDistrict($event)" (remove)="clearFilter('CommitteesIn')"
-            [formControl]="selDistrict" [items]="allDistrict" optionValueField="DistrictId"
-            optionTextField="DistrictName" placeholder="Select District">
-          </ngx-select>
-        </div> -->
-        <!-- <div class="col-sm-4">
-                    <div class="input-group">
-                        <input [owlDateTime]="dt3" (remove)="clearFilter('dateRangePIcker')" [formControl]="fromToDate"
-                         [selectMode]="'range'" (dateTimeChange)="selDateRangeByFilter(fromToDate.value)" class="form-control" [owlDateTimeTrigger]="dt3" placeholder="Select Date Range">
-                        <button class="btn btn-light border btn-sm" type="button" [owlDateTimeTrigger]="dt3" *ngIf="!fromToDate.value">
-                            <i class="fas fa-calendar-alt"></i></button>
-                        <button class="btn btn-light border btn-sm" type="button" *ngIf="fromToDate.value" (click)="clearFilter('dateRangePIcker')">
-                            <i class="fas fa-times"></i></button>
-                    </div>
-                    <owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time>
-                </div> -->
-        <div class="col-sm">
-          <!-- <div class="input-group">
-            <input type="text" class="form-control" [formControl]="Search" placeholder="Search Committees..."
-              (keyup)="filterByCommittee()" />
-            <button type="button" class="btn btn-light border btn-sm" (click)="clearFilterByCommittee()"
-              *ngIf="Search.value"><i _ngcontent-tbl-c102="" class="fas fa-times"></i></button>
-            <button type="button" *ngIf="!Search.value" class="btn btn-sm border btn-light"><i
-                class="fas fa-search"></i></button>
-          </div> -->
-        </div>
-        <div class="col-auto">
-          <!-- <button type="button" class="btn btn-sm btn-secondary me-2" (click)="location.back();">
-            <i class="fas fa-arrow-left"></i>
-          </button> -->
-          <!-- <button  class="btn btn-sm btn-main" (click)="clearallFilter()"><i  class="fas fa-sync-alt"></i></button> -->
-        </div>
-      </div>
-    </div>
+  <div id="pageheader">
+    <span class="page-name">Committees On Map</span>
   </div>
-
   <div class="row chartbox mb-3">
     <div class="col-md-12">
       <div class="card card-body" id="committeesonmap">
         <div class="row gy-4">
           <div class="col-sm-6 border-end d-none d-lg-block d-sm-none map-height">
             <div class="card card-body shadow-none p-0">
-              <div class="row">
-                <!-- <div class="mb-0"><span class="lessThanFiveBox"></span><span>Less than 5</span></div>
-                                <div><span class="zeroActivityBox"></span><span>No activity</span></div> -->
-                <!-- <div class="mb-3 offset-sm-7 col-sm-5">
-                                    <ngx-select [allowClear]="allowClear" (select)="selectDistrict($event)" (remove)="clearFilter('CommitteesIn')" [formControl]="selDistrict"  [items]="allDistrict"
-                                        optionValueField="DistrictId" optionTextField="DistrictName" placeholder="Select District">
-                                    </ngx-select>
-                                </div> -->
-              </div>
               <div class="committeesonmap2">
                 <div id="mapsvg1" (click)="svgMapClick('mapClick')"></div>
-                <!-- <div id="mapsvg2"></div> -->
                 <div id="mapsvg2"></div>
               </div>
-
-
-
-
-
-              <!-- <img src="assets/images/maharashtra_districts_map.svg" /> -->
             </div>
           </div>
-          <!-- <div class="col-sm-3 border-end">
-            <div class="mb-0 small form-container">
-              <div class="form-check form-check-inline" *ngFor="let level of allLevels ; let i = index">
-                <input class="form-check-input" (change)="onCheckChangeLevel($event,level.Id)" type="checkbox">
-                <label class="form-check-label" for="inlineCheckbox{{i}}">{{level.LevelName}}</label>
-              </div>
-              <div class="button-group text-end list-buttons">
-                <button class="btn btn-sm btn-light text-dark fw-bold rounded" type="button"
-                  (click)="openDialogAddCommittee(commiteeObj)">
-                  Add Committee
-                </button>
-              </div>
-            </div>
-            <div class="card shadow-none border-0" *ngIf="defaultCommitteesFlag">
-              <div class="card-header py-1 px-0 border-bottom">Committees in
-                <span class="text-main">{{districtName | titlecase}}</span>
-                <span class="float-end">
-                </span>
-              </div>
-              <div class="card-body p-0 fix-height">
-                <div class="list-group list-group-flush">
-                  <a (click)="committeeNameByOrganizationMember(resCommittes.Id, resCommittes.BodyOrgCellName); this.commiteeObj = resCommittes; this.hideComityGraph = false "
-                    [class.active]="resCommittes.Id == activeRow"
-                    class="list-group-item list-group-item-action border-0 border-bottom px-2" aria-current="true"
-                    *ngFor="let resCommittes of resultCommittees">
-                    <p class="mb-0 fw-bold mt-1">{{resCommittes.BodyOrgCellName | titlecase}} <span
-                        class="badge rounded-pill bg-light text-dark float-end text-center" [appTooltip]
-                        title="Member Count">{{resCommittes?.AllottedDesignation}}</span> </p>
-                    <span class="small">{{resCommittes.Area | titlecase}}</span>
-                  </a>
-                </div>
-                <div *ngIf="resultCommittees?.length == 0">
-                  <div class="alert alert-danger text-center py-2 mb-0 small">No Committees Found..!
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
-
-          <!-- <div class="col-sm-3">
-            <div class="card shadow-none">
-              <div class="card-header p-0" *ngIf="defaultMembersFlag">
-                Members in <span class="text-main" style="cursor: pointer;"
-                  (click)="redirectOrgDetails()">{{selCommitteeName |
-                  titlecase}}</span>
-              </div>
-
-              <div class="card-body p-0 fix-height1" *ngIf="defaultMembersFlag">
-                <div class="card card-body shadow-none border py-2 px-3 mb-2 mem-list"
-                  *ngFor="let resOrganizationMember of resultOrganizationMember">
-                  <div class="mb-0 fw-bold mt-1 text-danger" *ngIf="resOrganizationMember.MemberName == ''">
-                    <p class="mem-name">No Member Assigned</p>
-                   </div>
-                  <div>
-                    <a class="mem-name text-main"
-                      (click)="redToMemberProfile(resOrganizationMember?.MemberId,resOrganizationMember?.MemberName)">{{resOrganizationMember?.MemberName
-                      | titlecase}}</a>
-                    <div class="mem-no">{{resOrganizationMember?.MobileNo}}</div>
-                    <p class="mem-desi">{{resOrganizationMember?.DesignationName}}</p>
-                    <div class="mem-act">
-                      <span class="float-start" *ngIf="resOrganizationMember.MemberName != ''">
-                        <span class="fw-bold me-1">{{resOrganizationMember.TotalWork}}</span>Activities
-                      </span>
-                      <span class="float-end">
-                        <div role="group" aria-label="Action Buttons" class="button-group text-end list-buttons">
-                          <button class="rounded btn btn-sm btn-light" title="Add Member"
-                            (click)="addEditMember(resOrganizationMember, 'Add')"
-                            *ngIf="!resOrganizationMember.MemberName || resOrganizationMember.IsMultiple == 1 && resOrganizationMember.LastaddedUser == 1">
-                            <i class="fas fa-plus"></i>
-                          </button>
-                          <button title="Edit Member" *ngIf="resOrganizationMember.MemberName"
-                            (click)="addEditMember(resOrganizationMember, 'Update')"
-                            class="btn btn-sm btn-light text-edit mx-1 rounded">
-                            <i class="fas fa-pencil-alt"></i>
-                          </button>
-                          <button *ngIf="resOrganizationMember.MemberName"
-                            class="rounded btn btn-sm btn-light text-danger"
-                            (click)="deleteConfirmModel(resOrganizationMember.userpostbodyId, resOrganizationMember.BodyId, resOrganizationMember.BodyOrgCellName)"
-                            title="Remove Designation">
-                            <i class="fas fa-trash-alt"></i>
-                          </button>
-                          <button title="Remove Designation" data-bs-toggle="modal" data-bs-target="#AddMemberModal"
-                            #addMemberModal style="display: none;"></button>
-                        </div>
-                      </span>
-                    </div>
-
-                    <ul class="list-group list-group-horizontal list-group-flush mem-dev"
-                      *ngIf="resOrganizationMember.MemberName != ''">
-                      <li class="list-group-item">
-                        <div *ngIf="resOrganizationMember?.DeviceType == 1">
-                          <ng-container *ngIf="resOrganizationMember?.Version_Status==1 ; else oldVersionAndroid">
-                            <img [appTooltip] title="New Version:{{resOrganizationMember.UserAppVersion}}"
-                              src="assets\images\dashboard-images\Android_robot.svg">
-                          </ng-container>
-                          <ng-template #oldVersionAndroid>
-                            <img [appTooltip] title="Old Version:{{resOrganizationMember.UserAppVersion}}"
-                              src="assets\images\dashboard-images\Android_robot_light_Red.svg">
-                          </ng-template>
-                        </div>
-
-                        <div *ngIf="resOrganizationMember?.DeviceType==2">
-                          <ng-container *ngIf="resOrganizationMember?.Version_Status==1 ; else oldVersionIos">
-                            <img [appTooltip] title="New Version:{{resOrganizationMember.UserAppVersion}}"
-                              src="assets\images\dashboard-images\Apple_logo.svg">
-                          </ng-container>
-                          <ng-template #oldVersionIos>
-                            <img [appTooltip] title="Old Version:{{resOrganizationMember.UserAppVersion}}"
-                              src="assets\images\dashboard-images\Apple_logo_light_red.svg">
-                          </ng-template>
-                        </div>
-
-                        <div *ngIf="resOrganizationMember?.DeviceType==0">
-                          <img [appTooltip] title="No Device" src="assets\images\dashboard-images\no-cellphone.svg">
-                        </div>
-                      </li>
-                      <li class="list-group-item">
-                        <div *ngIf="resOrganizationMember?.Version_Status==2">
-                          <div *ngIf="resOrganizationMember?.DeviceType != 0">
-                            <a target="_blank"
-                              href="https://api.whatsapp.com/send?phone=+91{{resOrganizationMember.MobileNo}}&amp;text=Dear+Sir/Mam,+Please+Update+NCP+Youth+Mobile+App+from+Play+Store/App+Store+and+get+connected+with+Natonalist+Youth+Congress.+Android+Link+-+https://play.google.com/store/apps/details?id=com.develop.ncp_youth,+iOS+Link+-+https://apps.apple.com/in/app/ncp-youth/id1581373014">
-                              <img [appTooltip] title="Send Link" src="assets\images\dashboard-images\whatsapp.svg"></a>
-                          </div>
-                          <div *ngIf="resOrganizationMember?.DeviceType == 0">
-                            <a target="_blank"
-                              href="https://api.whatsapp.com/send?phone=+91{{resOrganizationMember.MobileNo}}&amp;text=Dear+Sir/Mam,+Please+download+NCP+Youth+Mobile+App+from+Play+Store/App+Store+and+get+connected+with+Natonalist+Youth+Congress.+Android+Link+-+https://play.google.com/store/apps/details?id=com.develop.ncp_youth,+iOS+Link+-+https://apps.apple.com/in/app/ncp-youth/id1581373014">
-                              <img [appTooltip] title="Send Link" src="assets\images\dashboard-images\whatsapp.svg"></a>
-                          </div>
-                        </div>
-                        <div *ngIf="resOrganizationMember?.Version_Status==1">-
-                        </div>
-                      </li>
-                      <li class="list-group-item">
-                        <a class="calltomember" href="tel:{{resOrganizationMember?.MobileNo}}"><i
-                            class="fas fa-phone-alt"></i></a>
-                      </li>
-                    </ul>
-                  </div>
-
-                </div>
-
-               </div>
-            </div>
-          </div> -->
-
-          <!-- pie chart section -->
           <div class="col-sm-6">
-            <div class="d-flex gap-4 justify-content-start">
-              <h4>President : {{presidentDetailsObj?.fullName ? presidentDetailsObj?.fullName :'-'}}</h4>
-              <h4>Mobile No : {{presidentDetailsObj?.mobileNo ? presidentDetailsObj?.mobileNo :'-'}}</h4>
+            <div class="card card-body shadow-none border py-2 mb-2">
+              <div class="d-flex gap-4 justify-content-between text-success">
+                <p class="mb-0 small">President : <span class="fw-bold">{{presidentDetailsObj?.fullName ?
+                    presidentDetailsObj?.fullName :'-'}}</span></p>
+                <p class="mb-0 small">Mobile No : <span class="fw-bold">{{presidentDetailsObj?.mobileNo ?
+                    presidentDetailsObj?.mobileNo :'-'}}</span></p>
+              </div>
             </div>
             <div class="row">
               <div class="col-sm-6 border-end">
+                <p class="bold">Booth Committee Performance</p>
                 <div id="chart" *ngIf="pieChartShow">
                   <apx-chart [series]="chartOptions?.series" [chart]="chartOptions?.chart"
                     [labels]="chartOptions?.labels" [responsive]="chartOptions?.responsive"
                     [legend]="chartOptions?.legend" [colors]="chartOptions?.colors"></apx-chart>
                   <div class="mt-2 text-center">
-                    <p class="bold">Booth Committee Performance</p>
                   </div>
                 </div>
                 <div *ngIf="!pieChartShow" class=" card-body">
@@ -238,22 +39,15 @@
                 </div>
               </div>
               <div class="col-sm-6">
-                <!-- <h6>Important Leader</h6>
-                <ol>
-                  <li type="button" *ngFor="let impLeaders of impLeadersArray" data-bs-toggle="modal" data-bs-target="#exampleModal" 
-                  (click)="openImpLeaderModal(impLeaders?.voterId)" >{{impLeaders?.voterName}}</li>
-                </ol> -->
                 <div class="card shadow-none border-0">
                   <div class="card-header py-1 px-0 border-bottom">
-                    <span class="text-main">Important Leader</span>
+                    <span class="text-main">Important Leaders</span>
                   </div>
                   <div class="card-body p-0 fix-height">
                     <div class="list-group list-group-flush">
                       <a class="list-group-item list-group-item-action border-0 border-bottom px-2 "
                         *ngFor="let impLeaders of impLeadersArray" data-bs-toggle="modal" data-bs-target="#exampleModal"
                         (click)="impLeaderDetails=impLeaders">
-                        <!-- {{impLeaders?.voterName}} 
-                         {{impLeaders?.mobileNo1}} -->
                         <p class="mb-0 fw-bold mt-1"> {{impLeaders?.voterName}} </p>
                         <span class="small">{{impLeaders?.mobileNo1}}</span>
 
@@ -268,115 +62,63 @@
               </div>
             </div>
           </div>
-          <!-- Bar graph section -->
           <div class="col-sm-12">
-            <div class="card">
-              <div class=" card-body" *ngIf="barChartShow">
-                <div id="chart">
-                  <apx-chart [series]="BarchartOptions?.series" [chart]="BarchartOptions?.chart"
-                    [dataLabels]="BarchartOptions?.dataLabels" [plotOptions]="BarchartOptions?.plotOptions"
-                    [yaxis]="BarchartOptions?.yaxis" [legend]="BarchartOptions?.legend" [fill]="BarchartOptions?.fill"
-                    [stroke]="BarchartOptions?.stroke" [tooltip]="BarchartOptions?.tooltip"
-                    [xaxis]="BarchartOptions?.xaxis" [dataLabels]="BarchartOptions?.dataLabels"></apx-chart>
-                </div>
-                <div class="text-center fw-bold mt-2">Talukawise Booth Committee Formation progress</div>
+            <div *ngIf="barChartShow">
+              <div id="chart">
+                <apx-chart [series]="BarchartOptions?.series" [chart]="BarchartOptions?.chart"
+                  [dataLabels]="BarchartOptions?.dataLabels" [plotOptions]="BarchartOptions?.plotOptions"
+                  [yaxis]="BarchartOptions?.yaxis" [legend]="BarchartOptions?.legend" [fill]="BarchartOptions?.fill"
+                  [stroke]="BarchartOptions?.stroke" [tooltip]="BarchartOptions?.tooltip"
+                  [xaxis]="BarchartOptions?.xaxis" [dataLabels]="BarchartOptions?.dataLabels"></apx-chart>
               </div>
-              <div *ngIf="!barChartShow" class=" card-body">
-                <div class="alert alert-danger text-center py-2 mb-0 small">No Data Found..!
-                </div>
+              <div class="text-center fw-bold mt-2">Talukawise Booth Committee Formation progress</div>
+            </div>
+            <div *ngIf="!barChartShow" class=" card-body">
+              <div class="alert alert-danger text-center py-2 mb-0 small">No Data Found..!
               </div>
             </div>
           </div>
           <div class="col-sm-12">
-            <div class="card card-body shadow">
-              <div class="row">
-                <div class="col-sm-3 border-end">
-                  <!-- <h6 class="fw-bold">Taluka President</h6>
-                  <ol>
-                    <li *ngFor="let presidents of talukaPresidentDataArray">{{ presidents?.talukaName +' : '+
-                      (presidents?.memberName ? presidents?.memberName:'-')}}</li>
-                  </ol> -->
-                  <div class="card shadow-none border-0">
-                    <div class="card-header py-1 px-0 border-bottom">
-                      <span class="text-main">Taluka President</span>
-                    </div>
-                    <div class="card-body p-0 fix-height">
-                      <div class="list-group-item list-group-item-action border-0 border-bottom px-2"
-                        *ngFor="let presidents of talukaPresidentDataArray">
-                        <span class="mb-0 fw-bold mt-1"> {{ presidents?.talukaName}} </span>
-                        {{ ' : '+
-                        (presidents?.memberName ? presidents?.memberName:'-')}}
-                      </div>
+            <div class="row">
+              <div class="col-sm-3 border-end">
+                <div class="card shadow-none border-0">
+                  <div class="card-header py-1 px-0 border-bottom">
+                    <span class="text-main">Taluka President</span>
+                  </div>
+                  <div class="card-body p-0 fix-height">
+                    <div class="list-group-item list-group-item-action border-0 border-bottom px-2"
+                      *ngFor="let presidents of talukaPresidentDataArray">
+                      <span class="mb-0 fw-bold mt-1"> {{ presidents?.talukaName}} </span>
+                      {{ ' : '+
+                      (presidents?.memberName ? presidents?.memberName:'-')}}
                     </div>
                   </div>
-
                 </div>
-                <div class="col-sm-9">
-                  <div class="imp_leaders">
-                    <!-- <h6 class="fw-bold">Talukawise Important Leaders</h6>
 
-                    <div class="row ">
-                      <div *ngFor="let taluka of talukaIMPleaderArray" class="col-sm-4 border-0 border-bottom px-2 ">
-                        {{taluka?.talukaName}}
-                        <ol class="row">
-                          <li *ngFor="let impLeader of impLeadersArray" type="button" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal" (click)="openImpLeaderModal(impLeader?.voterId)">
-                            {{impLeader?.voterName +' ( ' + impLeader?.mobileNo1 +' )'}}</li>
-                        </ol>
-                      </div>
-                    </div> -->
-
-
-
-
-                    <div class="card shadow-none border-0">
-                      <div class="card-header py-1 px-0 border-bottom">
-                        <span class="text-main">Talukawise Important Leaders</span>
-                      </div>
-                      <div class="card-body fix-height">
-                        <div class="row gy-2">
-                          <div class="col-sm-4" *ngFor="let taluka of talukaIMPleaderArray">
-                            <div class="card h-100">
-                              <!-- <div class="p-2"></div> -->
-                              <div class="card-body">
-                                <span class="fw-bold">{{taluka?.talukaName}}</span>
-                                <div class="leader_names_scroll list-group list-group-flush">
-                                  <div class="list-group-item list-group-item-action border-0 border-bottom px-2"
-                                    *ngFor="let impLeader of taluka?.talukaWiseIMPLeaders" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal" (click)="impLeaderDetails=impLeader">
-                                    <!-- {{impLeader?.voterName +' ( ' + impLeader?.mobileNo1 +' )'}} -->
-
-                                    <p class="mb-0 fw-bold mt-1">{{impLeader?.voterName | titlecase}} </p>
-                                    <span class="small">{{impLeader?.mobileNo1}}</span>
-                                  </div>
-                                </div>
-                              </div>
-
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- </div> -->
-
-
-                        <!-- <div class="row">
-                        <div class="col-sm-4" *ngFor="let taluka of talukaIMPleaderArray">
-                          <div class="list-group-item list-group-item-action border-0 border-bottom px-2 ">
-                            <h6 class="fw-bold">{{taluka?.talukaName}}</h6>
-                            <div class="text-center" *ngFor="let impLeader of impLeadersArray" type="button"
+              </div>
+              <div class="col-sm-9">
+                <div class="imp_leaders">
+                  <div class="card shadow-none border-0">
+                    <div class="card-header py-1 px-0 border-bottom">
+                      <span class="text-main">Talukawise Important Leaders</span>
+                    </div>
+                    <div class="card-body fix-height">
+                      <div class="row gy-2">
+                        <div class="col-sm-6" *ngFor="let taluka of talukaIMPleaderArray">
+                          <span class="fw-bold text-main">{{taluka?.talukaName}}</span>
+                          <div class="list-group list-group-flush mb-3">
+                            <div
+                              class="list-group-item list-group-item-action px-0 d-flex border-0 border-bottom justify-content-between align-items-center"
+                              *ngFor="let impLeader of taluka?.talukaWiseIMPLeaders" type="button"
                               data-bs-toggle="modal" data-bs-target="#exampleModal"
-                              (click)="openImpLeaderModal(impLeader?.voterId)">
-                              {{impLeader?.voterName +' ( ' + impLeader?.mobileNo1 +' )'}}
+                              (click)="impLeaderDetails=impLeader">
+                              <p class="mb-0 fw-bold mt-1">{{impLeader?.voterName | titlecase}} </p>
+                              <span class="small">{{impLeader?.mobileNo1}}</span>
                             </div>
                           </div>
                         </div>
-
-                      </div> -->
                       </div>
                     </div>
-
-
-
                   </div>
                 </div>
               </div>
@@ -391,57 +133,38 @@
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
   data-bs-backdrop="static" data-bs-keyboard="false">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Important Leader Details</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body form-container">
-        <div class="row">
-          <div class="col-md-3">
-            <img [src]="impLeaderDetails?.profilePhoto" alt="profilePhoto" srcset="" class="leader-profilepic">
-            <!-- <h6> {{impLeaderDetails?.partyShortCode}}</h6> -->
+        <div class="profile-party">
+          <div class="position-relative">
+            <img [src]="impLeaderDetails?.profilePhoto" alt="profilePhoto" srcset="" class="profilepic">
+            <img [src]="impLeaderDetails?.partyIconImage" alt="profilePhoto" width="40" height="40" srcset=""
+              class="party-pic">
           </div>
-          <div class="col-md">
-            <!-- <div class="row gx-2"> -->
-              <!-- <div class="col-sm text-end">
-                <img [src]="impLeaderDetails?.partyIconImage" alt="profilePhoto" width="50" height="50" srcset=""
-                  class="img-fluid">
-                <p>{{impLeaderDetails?.partyShortCode}}</p>
-                <p>{{impLeaderDetails?.partyIconImage}}</p>
-              </div> -->
-              <div class="row align-items-center gx-2">
-                <div class="col-sm-4">Leader Name :</div>
-                <div class="col-sm">
-                  <!-- {{impLeaderDetails?.voterName}} -->
-                  <div class="d-flex justify-content-between align-items-center ">
-                    <div class="fw-bold">{{impLeaderDetails?.voterName}}</div>
-                    <div><img [src]="impLeaderDetails?.partyIconImage" alt="profilePhoto" width="40" height="40"
-                        srcset="" class="img-fluid">
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-              <div class="row gx-2">
-                <div class="col-sm-4">Designation :</div>
-                <div class="col-sm fw-bold">{{impLeaderDetails?.designation}}</div>
-              </div>
-              <div class="row gx-2">
-                <div class="col-sm-4">Mobile No :</div>
-                <div class="col-sm fw-bold">{{impLeaderDetails?.mobileNo1}}</div>
-              </div>
-
-            <!-- </div> -->
-          </div>
-          <!-- <div class="row my-4"> -->
-          <!-- <div class="col-sm-5">Remark :</div> -->
-          <div class="leader-work-details text-justify">
-            {{impLeaderDetails?.remark}}
-          </div>
-          <!-- </div> -->
         </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+            <div>Leader Name</div>
+            <div class="fw-bold">{{impLeaderDetails?.voterName}}</div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+            <div>Designation</div>
+            <div class="fw-bold">{{impLeaderDetails?.designation}}</div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+            <div>Mobile No.</div>
+            <div class="fw-bold">{{impLeaderDetails?.mobileNo1}}</div>
+          </li>
+          <li class="list-group-item px-0">
+            <div>Remarks </div>
+            <div class="fw-bold">{{impLeaderDetails?.remark}}</div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
