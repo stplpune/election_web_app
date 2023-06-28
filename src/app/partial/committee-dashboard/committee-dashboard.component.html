@@ -1,6 +1,6 @@
 <div class="container-fluid commitees">
   <div id="pageheader" class="px-3">
-    <span class="page-name">Committees On Map</span>
+    <span class="page-name">Committees Dashboard</span>
   </div>
   <div class="row chartbox mb-3">
     <div class="col-md-12">
@@ -9,7 +9,7 @@
           <div class="col-sm-6 border-end map-height">
             <div class="card card-body shadow-none p-0">
               <div class="committeesonmap2">
-                <div class="text-end">{{filteredDistrict[0]?.districtName  + (filteredTal.length ? (' (' + filteredTal[0]?.talukaName +')'):'')}}</div>
+                <div class="text-end fw-bold text-primary">{{filteredDistrict[0]?.districtName  + (filteredTal.length ? (' (' + filteredTal[0]?.talukaName +')'):'')}}</div>
                 <!--   -->
                 <div id="mapsvg1" (click)="svgMapClick('mapClick')"></div>
                 <div id="mapsvg2" (click)="svgMapClick1('mapClick')"></div>
