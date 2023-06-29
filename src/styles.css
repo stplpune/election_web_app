@@ -27,6 +27,7 @@ body {
     .main-content {
         margin-left: 0 !important;
     }
+    /* mycss */
     /* @media screen and (max-width: 420px) { */
         .committeesonmap2 .mapsvg svg {
           width: 280px !important;
