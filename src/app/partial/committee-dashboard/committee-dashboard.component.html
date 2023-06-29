@@ -11,8 +11,8 @@
               <div class="committeesonmap2">
                 <div class="text-end fw-bold text-primary">{{filteredDistrict[0]?.districtName  + (filteredTal.length ? (' (' + filteredTal[0]?.talukaName +')'):'')}}</div>
                 <!--   -->
-                <div id="mapsvg1" (click)="svgMapClick('mapClick')"></div>
-                <div id="mapsvg2" (click)="svgMapClick1('mapClick')"></div>
+                <div  id="mapsvg1" (click)="svgMapClick('mapClick')"></div>
+                <div [class]="previousDistSelected=='9' ? 'm-5' : 'm-4'" id="mapsvg2" (click)="svgMapClick1('mapClick')"></div>
               </div>
             </div>
           </div>

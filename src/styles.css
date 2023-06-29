@@ -27,6 +27,12 @@ body {
     .main-content {
         margin-left: 0 !important;
     }
+    /* @media screen and (max-width: 420px) { */
+        .committeesonmap2 .mapsvg svg {
+          width: 280px !important;
+          min-height: 200px !important;
+        }
+      /* } */
 }
 
 .bg-main {
@@ -783,7 +789,8 @@ input::-ms-clear {
 }
 
 .committeesonmap2 .mapsvg svg {
-    width: 500px;
+    /* width: 500px; */
+    width: 450px;
     min-height: 300px;
 }
 
