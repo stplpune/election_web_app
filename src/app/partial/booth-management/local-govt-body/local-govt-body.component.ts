@@ -30,6 +30,7 @@ export class LocalGovtBodyComponent implements OnInit {
   paginationNo:any = 1;
   villageTalukaDetailsList = new Array();
   resultVillageOrCity = new Array();
+  urbanRuralFlag:boolean = false;
   urbanRuralTypeArray:any[] = [{id:0,name:'Rural'},{id:1,name:'Urban'}]
   get f(){ return this.filterForm.controls };
   get f_m(){ return this.mainForm.controls };
@@ -66,6 +67,7 @@ export class LocalGovtBodyComponent implements OnInit {
   // ACCESS FORM-CONTROL VALUES USING FORM-GROUP
   controlForm(){
     this.mainForm = this.fb.group({
+      constituencyName:[''],
       isRural:[0],
       stateId: [''],
       divisionId: [''],
@@ -78,6 +80,7 @@ export class LocalGovtBodyComponent implements OnInit {
 
   selType(isRuralUrbanId?:any){
     if(isRuralUrbanId == 1){
+      this.urbanRuralFlag = true;
       this.f_m['stateId'].setValue('');
       this.f_m['divisionId'].setValue('');
       this.f_m['districtId'].setValue('');
