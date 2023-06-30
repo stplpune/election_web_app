@@ -20,11 +20,17 @@
                                 <input type="text" class="form-control" placeholder="Constituency Name">
                             </div>
                             <div class="mb-2">
+                                <ngx-select [allowClear]="true" [items]="categoryArray_m" formControlName="categoryId"
+                                optionValueField="id" optionTextField="categoryType" 
+                                (remove)="clearFilter_m('category_m')" placeholder="Select Category">
+                                </ngx-select>
+                            </div>
+                            <!-- <div class="mb-2">
                                 <label for="" class="form-label">Category</label>
                                 <select class="form-select">
                                     <option value="">Select Category</option>
                                 </select>
-                            </div>
+                            </div> -->
                             <div class="mb-2">
                                 <label for="" class="form-label">Type</label>
                                 <div class="d-flex gap-3">

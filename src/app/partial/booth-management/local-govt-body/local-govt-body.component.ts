@@ -160,6 +160,7 @@ export class LocalGovtBodyComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.categoryArray = res.responseData;
+        this.categoryArray_m = res.responseData;
         // this.categoryArray?.length == 1 ? this.f['categoryId'].setValue(this.categoryArray[0]?.categoryId) : '';
       } else {
         this.categoryArray = [];
