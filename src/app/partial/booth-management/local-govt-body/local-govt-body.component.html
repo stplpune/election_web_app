@@ -7,202 +7,184 @@
     </div>
 
     <div class="row chartbox">
-            <div class="col-sm-4">
-                <form [formGroup]="mainForm">
-                <div class="card">
-                    <div class="card-header">
-                        Add Local Government Body
-                    </div>
-                    <div class="card-body pt-0">
-                        <div class="form-container">
-                            <div class="mb-2">
-                                <label for="" class="form-label">Constituency</label>
-                                <input type="text" class="form-control" placeholder="Constituency Name">
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-header">
+                    Add Local Government Body
+                </div>
+                <div class="card-body pt-0">
+                    <form [formGroup]="localGovBodyForm">
+                    <div class="form-container">
+                        <div class="mb-2">
+                            <label for="" class="form-label">Constituency Name</label>
+                            <input type="text" class="form-control" placeholder="Constituency Name" formControlName="constituencyName"
+                            (keypress)="commonService.noFirstSpaceAllow($event)" maxlength="50"
+                            [ngClass]="{ 'is-invalid': submitted && g.constituencyName.errors }">
+                        <div *ngIf="submitted && g.constituencyName.errors" class="invalid-feedback">
+                            <span *ngIf="g.constituencyName.errors.required">Constituency Name is Required</span>
+                            <span *ngIf="g.constituencyName.errors.pattern">Please Enter Valid Constituency Name</span>
+                        </div>
+                        </div>
+                        <div class="mb-2">
+                            <label for="" class="form-label">Category</label>
+                            <ngx-select [allowClear]="true" [items]="categoryArray" formControlName="categoryId" optionValueField="id"
+                            optionTextField="categoryType" placeholder="Select Category"
+                            [ngClass]="{ 'is-invalid': submitted && g.categoryId.errors }">
+                            <div *ngIf="submitted && g.categoryId.errors" class="invalid-feedback">
+                                <span *ngIf="g.categoryId.errors.required">Category is Required</span>
+                                <span *ngIf="g.categoryId.errors.pattern">Please Enter Valid Category</span>
                             </div>
-                            <div class="mb-2">
-                                <ngx-select [allowClear]="true" [items]="categoryArray_m" formControlName="categoryId"
-                                optionValueField="id" optionTextField="categoryType" 
-                                (remove)="clearFilter_m('category_m')" placeholder="Select Category">
-                                </ngx-select>
-                            </div>
-                            <!-- <div class="mb-2">
-                                <label for="" class="form-label">Category</label>
-                                <select class="form-select">
-                                    <option value="">Select Category</option>
-                                </select>
-                            </div> -->
-                            <div class="mb-2">
-                                <label for="" class="form-label">Type</label>
-                                <div class="d-flex gap-3">
-                                    <div class="form-check" *ngFor="let array of urbanRuralTypeArray">
-                                        <input class="form-check-input" type="radio" [value]="array.id" (click)="onClickType(array.id);selType(array.id)" formControlName="isRural">
-                                        <label class="form-check-label">
-                                            {{array?.name}}
-                                        </label>
-                                    </div>
-                                    <!-- <div class="form-check">
-                                        <input class="form-check-input" type="radio" formControlName="isRural" name="flexRadioDefault"
-                                             checked>
-                                        <label class="form-check-label" for="flexRadioDefault2">
-                                            Urban
-                                        </label>
-                                    </div> -->
+                        </ngx-select>
+                        </div>
+                        <div class="mb-2">
+                            <label for="" class="form-label">Type</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check" *ngFor="let array of urbanRuralTypeArray">
+                                    <input class="form-check-input" type="radio" [value]="array.id" (change)="selectionType(array.id)" formControlName="isRural">
+                                    <label class="form-check-label">{{array?.name}}</label>
                                 </div>
-                            </div>
-                            <div class="row gx-2 mb-2">
-                                <div class="col-sm-6">
-                                    <ngx-select [allowClear]="true" (remove)="clearFilter_m('state_m')" [items]="stateArray_m" formControlName="stateId"
-                                        (select)="clearFilter_m('state_m');getDivision('state_m')" placeholder="Select State" optionValueField="id"
-                                        optionTextField="stateName">
-                                    </ngx-select>
-                                </div>
-    
-                                <!-- <div class="col-sm-6">
-                                    <label for="" class="form-label">State</label>
-                                    <select class="form-select">
-                                        <option value="">Select State</option>
-                                    </select>
-                                </div> -->
-    
-                                <div class="col-sm-6">
-                                    <ngx-select [allowClear]="true" [items]="divisionArray_m" formControlName="divisionId"
-                                        [disabled]="divisionArray_m?.length == 1 || !f_m['stateId'].value" optionValueField="divisionId"
-                                        optionTextField="divisionName" (select)="clearFilter('division_m');getDistrict('division_m')"
-                                        (remove)="clearFilter_m('division_m')" placeholder="Select Division">
-                                    </ngx-select>
-                                </div>
-    
-                                <!-- <div class="col-sm-6">
-                                    <label for="" class="form-label">Division</label>
-                                    <select class="form-select">
-                                        <option value="">Select Division</option>
-                                    </select>
-                                </div> -->
-                            </div>
-
-                            <div class="row gx-2 mb-2">
-                                <div class="col-sm-6">
-                                    <ngx-select [allowClear]="true" [items]="districtArray_m" formControlName="districtId" [disabled]="districtArray_m?.length == 1 || !f_m['divisionId'].value"
-                                    optionValueField="districtId" optionTextField="districtName" (select)="clearFilter_m('district_m');getTaluka('district_m');(urbanRuralFlag ? getVillageOrCity(mainForm.value.districtId,'district') : '')" 
-                                    (remove)="clearFilter_m('district_m')" placeholder="Select District">
-                                    </ngx-select>
-                                </div>
-    
-                                <div class="col-sm-6" *ngIf="!mainForm.value.isRural">
-                                    <ngx-select [allowClear]="true" [items]="talkaArray_m" formControlName="talukaId" [disabled]="talkaArray_m?.length == 1 || !f_m['districtId'].value"
-                                    optionValueField="talukaId" optionTextField="talukaName" (select)="clearFilter_m('taluka_m');getVillage('taluka_m');(!urbanRuralFlag ? getVillageOrCity(mainForm.value.talukaId,'taluka') : '')" 
-                                    (remove)="clearFilter_m('taluka_m')" placeholder="Select Taluka">
-                                    </ngx-select>
-                                </div>
-    
-                            </div>
-                            
-                            <!-- <div class="mb-2">
-                                <label for="" class="form-label">District</label>
-                                <select class="form-select">
-                                    <option value="">Select District</option>
-                                </select>
-                            </div> -->
-                            <div class="mb-3" *ngIf="resultVillageOrCity.length">
-                                <label for="txtSearchAssembly" class="form-label">{{urbanRuralFlag ? 'City' : 'Village'}}</label>
-                                <div class="card border shadow-none">
-                                    <div class="card-header border-bottom p-0 py-1">
-                                        <input type="text" placeholder="Search Taluka / Village"
-                                            class="form-control form-control-sm border-0">
-                                    </div>
-                                    <div class="card-body py-2 ChekBox">
-                                        <div class="form-check" *ngFor="let list of resultVillageOrCity">
-                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                            <label class="form-check-label" for="defaultCheck1">
-                                                {{list.CityName}}
-                                            </label>
-                                        </div>
-                                        <!-- <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                            <label class="form-check-label" for="defaultCheck2">
-                                                Disabled checkbox
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                            <label class="form-check-label" for="defaultCheck1">
-                                                Default checkbox
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                            <label class="form-check-label" for="defaultCheck2">
-                                                Disabled checkbox
-                                            </label>
-                                        </div> -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <button type="button" class="btn btn-secondary">Clear</button>
-                                <button type="submit" class="btn btn-main">Add Local Body</button>
                             </div>
                         </div>
+                        <div class="row gx-2 mb-2">
+                            <div class="col-sm-6">
+                                <label class="form-label">State</label>
+                                <ngx-select [allowClear]="true" (remove)="clearLGBFilterForm('state')"
+                                [items]="stateArray" formControlName="stateId" [disabled]="stateArray?.length == 1"
+                                (select)="clearLGBFilterForm('state');getDivision('govt')" placeholder="Select State"
+                                optionValueField="id" optionTextField="stateName"
+                                [ngClass]="{ 'is-invalid': submitted && g.stateId.errors }">
+                            </ngx-select>
+                            <div *ngIf="submitted && g.stateId.errors" class="invalid-feedback"> State is Required </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="" class="form-label">Division</label>
+                                <ngx-select [allowClear]="true" [items]="divisionGovtArray" formControlName="divisionId"
+                                [disabled]="divisionGovtArray?.length == 1 || !g['stateId'].value" optionValueField="divisionId"
+                                optionTextField="divisionName" (select)="clearLGBFilterForm('division');getDistrict('govt');"
+                                (remove)="clearLGBFilterForm('division')" placeholder="Select Division"
+                                [ngClass]="{ 'is-invalid': submitted && g.divisionId.errors }">
+                            </ngx-select>
+                            <div *ngIf="submitted && g.divisionId.errors" class="invalid-feedback"> Client is Required </div>
+                            </div>
+                        </div>
+
+                        <div class="row gx-2 mb-2">
+                            <div class="col-sm-6">
+                                <label for="" class="form-label">District</label>
+                                <ngx-select [allowClear]="true" [items]="districtGovtArray" formControlName="districtId"
+                                    [disabled]="districtGovtArray?.length == 1 || !g['divisionId'].value" optionValueField="districtId"
+                                    optionTextField="districtName" (select)="clearLGBFilterForm('district');getTaluka('govt')"
+                                    (remove)="clearLGBFilterForm('district')" placeholder="Select District"
+                                    [ngClass]="{ 'is-invalid': submitted && g.districtId.errors }">
+                                </ngx-select>
+                                <div *ngIf="submitted && g.districtId.errors" class="invalid-feedback"> District is Required </div>
+                            </div>
+                            <div class="col-sm-6" *ngIf="g['isRural'].value != 1">
+                                <label for="" class="form-label">Taluka</label>
+                                <ngx-select [allowClear]="true" [items]="talukaGovtArray" formControlName="talukaId" [disabled]="talukaGovtArray?.length == 1 || !g['districtId'].value"
+                                optionValueField="talukaId" optionTextField="talukaName" (select)="clearLGBFilterForm('taluka');getVillage('govt')" 
+                                (remove)="clearLGBFilterForm('taluka')" placeholder="Select Taluka">
+                                </ngx-select>
+                            </div>
+                        </div>
+    
+                        <div class="mb-3">
+                            <label for="txtSearchAssembly" class="form-label">Village / City</label>
+                            <div class="card border shadow-none">
+                                        <div class="card-header border-bottom p-0 py-1">
+                                            <input type="text" formControlName="village_CityId"
+                                                [(ngModel)]="villageGovtObj" placeholder="Search Village / City"
+                                                class="form-control form-control-sm border-0">
+                                        </div>
+                                        <div class="card-body py-2 form-height ChekBox"
+                                            *ngIf="( villageGovtArray | filter:villageGovtObj ) as villageGovtResult">
+                                            <div class="form-check" *ngFor="let villageObj of villageGovtResult">
+                                                <input class="form-check-input" type="checkbox" (change)="onClickCheckBox($event, villageObj)"
+                                                [checked]="villageObj.checked == true">
+                                                <label class="form-check-label" for="flexCheckDefault">
+                                                    {{villageObj.villageName}}
+                                                </label>
+                                            </div>
+                                            <div *ngIf="villageGovtResult.length === 0">
+                                                <div class="alert alert-danger text-center py-2">No Results Found!
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-secondary" (click)="clearForm()">Clear</button>
+                            <button type="submit" class="btn btn-main" (click)="onSubmit()">Add Local Body</button>
+                        </div>
                     </div>
+                </form>
                 </div>
-                
-        </form>
             </div>
-        
+        </div>
         <div class="col-sm-8">
             <div class="card">
                 <div class="card-header">
-                    <div class="d-flex gap-2">
-                        <form [formGroup]="filterForm">
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <ngx-select [allowClear]="true" (remove)="clearFilter('state');getCommitteMemberTypewise()" [items]="stateArray" formControlName="stateId"
-                                        (select)="clearFilter('state');getDivision();getCommitteMemberTypewise()" placeholder="Select State" optionValueField="id"
-                                        optionTextField="stateName">
-                                    </ngx-select>
-                                </div>
-                                <div class="col-sm-3">
-                                    <ngx-select [allowClear]="true" [items]="divisionArray" formControlName="divisionId"
-                                        [disabled]="divisionArray?.length == 1 || !f['stateId'].value" optionValueField="divisionId"
-                                        optionTextField="divisionName" (select)="clearFilter('division');getDistrict();getCommitteMemberTypewise()"
-                                        (remove)="clearFilter('division');getCommitteMemberTypewise()" placeholder="Select Division">
-                                    </ngx-select>
-                                </div>
-                                <div class="col-sm-3">
-                                    <ngx-select [allowClear]="true" [items]="districtArray" formControlName="districtId" [disabled]="districtArray?.length == 1 || !f['divisionId'].value"
-                                    optionValueField="districtId" optionTextField="districtName" (select)="clearFilter('district');getTaluka();getCommitteMemberTypewise()" 
-                                    (remove)="clearFilter('district');getCommitteMemberTypewise()" placeholder="Select District">
-                                    </ngx-select>
-                                </div>
-                                <div class="col-sm-3">
-                                    <ngx-select [allowClear]="true" [items]="talkaArray" formControlName="talukaId" [disabled]="talkaArray?.length == 1 || !f['districtId'].value"
-                                    optionValueField="talukaId" optionTextField="talukaName" (select)="clearFilter('taluka');getVillage();getCommitteMemberTypewise()" 
-                                    (remove)="clearFilter('taluka');getCommitteMemberTypewise()" placeholder="Select Taluka">
-                                    </ngx-select>
-                                </div>
-                                <div class="col-sm-3">
-                                    <ngx-select [allowClear]="true" [items]="villageArray" formControlName="villageId" [disabled]="villageArray?.length == 1 || !f['talukaId'].value"
-                                    optionValueField="villageId" optionTextField="villageName" (select)="clearFilter('village');getCommitteMemberTypewise()" 
-                                    (remove)="clearFilter('village');getCommitteMemberTypewise()" placeholder="Select Village">
-                                    </ngx-select>
-                                </div>
-                                <div class="col-sm-3">
-                                    <ngx-select [allowClear]="true" [items]="categoryArray" formControlName="categoryId"
-                                    optionValueField="id" optionTextField="categoryType" (select)="getCommitteMemberTypewise()" 
-                                    (remove)="clearFilter('category');getCommitteMemberTypewise()" placeholder="Select Category">
-                                    </ngx-select>
-                                </div>
-                                <div class="input-group col-sm-3">
-                                    <input type="text" placeholder="Search" class="form-control" formControlName="SearchText">
-                                    <button type="button" class="btn btn-sm btn-light">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
-                            </div>  
-                        </form>
+                    <form [formGroup]="filterForm">
+                    <div class="row g-2 mb-2">
+                        <div class="col-sm-3">
+                            <ngx-select [allowClear]="true" (remove)="clearFilter('state')"
+                                [items]="stateArray" formControlName="stateId" [disabled]="stateArray?.length == 1"
+                                (select)="clearFilter('state');getDivision('filter')" placeholder="Select State"
+                                optionValueField="id" optionTextField="stateName">
+                            </ngx-select>
+                        </div>
+                        <div class="col-sm-3">
+                            <ngx-select [allowClear]="true" [items]="divisionFilterArray" formControlName="divisionId"
+                            [disabled]="divisionFilterArray?.length == 1 || !f['stateId'].value" optionValueField="divisionId"
+                            optionTextField="divisionName" (select)="clearFilter('division');getDistrict('filter');"
+                            (remove)="clearFilter('division')" placeholder="Select Division">
+                        </ngx-select>
+                        </div>
+                        <div class="col-sm-3">
+                            <ngx-select [allowClear]="true" [items]="districtFilterArray" formControlName="districtId"
+                                [disabled]="districtFilterArray?.length == 1 || !f['divisionId'].value" optionValueField="districtId"
+                                optionTextField="districtName" (select)="clearFilter('district');getTaluka('filter')"
+                                (remove)="clearFilter('district')" placeholder="Select District">
+                            </ngx-select>
+                        </div>
+                        <div class="col-sm-3">
+                            <ngx-select [allowClear]="true" [items]="talukaFilterArray" formControlName="talukaId" [disabled]="talukaFilterArray?.length == 1 || !f['districtId'].value"
+                            optionValueField="talukaId" optionTextField="talukaName" (select)="clearFilter('taluka');getVillage('filter')" 
+                            (remove)="clearFilter('taluka')" placeholder="Select Taluka">
+                            </ngx-select>
+                        </div>
                     </div>
-            
+                
+                    <div class="row g-2 mb-2">
+                        <div class="col-sm-3">
+                            <ngx-select [allowClear]="true" [items]="villageFilterArray" formControlName="villageId"
+                                [disabled]="villageFilterArray?.length == 1 || !f['talukaId'].value" optionValueField="villageId"
+                                optionTextField="villageName" (select)="clearFilter('village')" (remove)="clearFilter('village')"
+                                placeholder="Select Village">
+                            </ngx-select>
+                        </div>
+                        <div class="col-sm-3">
+                            <ngx-select [allowClear]="true" [items]="categoryArray" formControlName="categoryId" optionValueField="id"
+                                optionTextField="categoryType" (remove)="clearFilter('category')" placeholder="Select Category">
+                            </ngx-select>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <div class=" input-group">
+                                    <input class="form-control" type="text" placeholder="Search..."
+                                        formControlName="SearchText" (keyup)="onKeyUpSearchData()" />
+                                    <button type="button" class="btn btn-light border btn-sm"
+                                        (click)="clearFilter('search')" *ngIf="filterForm.value.SearchText"><i
+                                            class="fas fa-times"></i></button>
+                                    <button type="button" *ngIf="!filterForm.value.SearchText"
+                                        class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
                 </div>
+
                 <div class="card-body pt-0">
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -212,7 +194,7 @@
                                     <th>Consitution/Assembly Name</th>
                                     <th>Category</th>
                                     <th>Type</th>
-                                    <th>State</th>
+                                    <!-- <th>State</th> -->
                                     <th>Division</th>
                                     <th>District</th>
                                     <th>Taluka/Village</th>
@@ -220,27 +202,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let mainData of localBodyListArray; let i = index">
+                                    <tr *ngFor="let localBodyObj of localBodyListArray  | paginate: {itemsPerPage: pageSize, 
+                                        currentPage: paginationNo, totalItems:getTotal}; let i = index">
                                     <td>{{((paginationNo + 1) * 10 + i + 1)-20}}</td>
-                                    <td>{{mainData?.constituencyName ? mainData?.constituencyName : '-'}}</td>
-                                    <td>{{mainData?.categoryType ? mainData.categoryType : '-'}}</td>
-                                    <td>{{mainData?.isRural == 0 ? 'Rural' : 'Urban'}}</td>
-                                    <td>{{mainData?.getAssignVillagestoConstituencyCommitteeList?.stateName ?
-                                        mainData?.getAssignVillagestoConstituencyCommitteeList?.stateName : '-'}}</td>
-                                    <td>{{mainData?.getAssignVillagestoConstituencyCommitteeList[0]?.divisionName ? 
-                                        mainData?.getAssignVillagestoConstituencyCommitteeList[0]?.divisionName : '-'}}</td>
-                                    <td>{{mainData?.getAssignVillagestoConstituencyCommitteeList[0]?.districtName ? 
-                                        mainData?.getAssignVillagestoConstituencyCommitteeList[0]?.districtName : '-'}}</td>
+                                    <td>{{localBodyObj?.constituencyName ? localBodyObj?.constituencyName : '-'}}</td>
+                                    <td>{{localBodyObj?.categoryType ? localBodyObj.categoryType : '-'}}</td>
+                                    <td>{{localBodyObj?.isRural == 0 ? 'Rural' : 'Urban'}}</td>
+                                    <!-- <td>{{localBodyObj?.getAssignVillagestoConstituencyCommitteeList?.stateName ?
+                                        localBodyObj?.getAssignVillagestoConstituencyCommitteeList?.stateName : '-'}}</td> -->
+                                    <td>{{localBodyObj?.getAssignVillagestoConstituencyCommitteeList[0]?.divisionName ? 
+                                        localBodyObj?.getAssignVillagestoConstituencyCommitteeList[0]?.divisionName : '-'}}</td>
+                                    <td>{{localBodyObj?.getAssignVillagestoConstituencyCommitteeList[0]?.districtName ? 
+                                        localBodyObj?.getAssignVillagestoConstituencyCommitteeList[0]?.districtName : '-'}}</td>
                                     <td>
-                                        Taluka Count : {{mainData?.getAssignVillagestoConstituencyCommitteeList[0]?.length ? 
-                                            mainData?.getAssignVillagestoConstituencyCommitteeList[0]?.length : 0}}
-                                            <span>
-                                                <button type="button" title="show details" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                                                (click)="showVillageTalukaList(mainData?.getAssignVillagestoConstituencyCommitteeList)"
+                                        Taluka Count : {{localBodyObj?.getAssignVillagestoConstituencyCommitteeList?.length ?
+                                        localBodyObj?.getAssignVillagestoConstituencyCommitteeList?.length : 0}}
+                                        <span>
+                                            <button type="button" title="show details" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                (click)="showVillageTalukaList(localBodyObj?.getAssignVillagestoConstituencyCommitteeList)"
                                                 class="btn btn-sm btn-light text-edit me-1 rounded">
                                                 <i class="far fa-eye"></i>
                                             </button>
-                                            </span>
+                                        </span>
                                     </td>
                                     <td>
                                         <div class="btn-group">
@@ -248,8 +231,8 @@
                                                 class="btn btn-sm btn-light text-edit me-1 rounded">
                                                 <i class="far fa-edit"></i>
                                             </button>
-                                            <button type="button" title="Delete Constituency"
-                                                class="btn btn-sm btn-light text-danger rounded">
+                                            <button type="button" title="Delete Constituency"  class="btn btn-sm btn-light text-danger rounded"
+                                            (click)="deleteConfirmModel(localBodyObj?.id)">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </div>
@@ -258,11 +241,19 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="mt-2 text-end" *ngIf="localBodyListArray?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Results Found!
+                        </div>
+                    </div>
+                    <pagination-controls *ngIf="localBodyListArray?.length != 0" previousLabel="" nextLabel=""
+                        (pageChange)="onClickPagintion($event)">
+                    </pagination-controls>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
