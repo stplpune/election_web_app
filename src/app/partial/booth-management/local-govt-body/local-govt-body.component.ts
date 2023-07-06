@@ -73,7 +73,7 @@ export class LocalGovtBodyComponent implements OnInit {
       this.localGovBodyForm = this.fb.group({
         id:[0],
         constituencyName:['',[Validators.required]],
-        isRural:[2],
+        isRural:[0],
         stateId: ['',[Validators.required]],
         divisionId: ['',[Validators.required]],
         districtId: ['',[Validators.required]],
@@ -236,7 +236,7 @@ export class LocalGovtBodyComponent implements OnInit {
   defaultFilterForm() {
     this.filterForm = this.fb.group({
       stateId: [''],
-      isRural:[0], 
+      isRural:[2], 
       divisionId: [''],
       districtId: [''],
       talukaId: [''],
@@ -348,7 +348,7 @@ export class LocalGovtBodyComponent implements OnInit {
   getConstituencymastercommittee() {  // Main Api For Table
     this.spinner.show();
     let obj = 'pageNo=' + this.paginationNo + '&pageSize=' + this.pageSize + '&StateId=' + (this.f['stateId'].value || 0) + '&DivisionId=' + (this.f['divisionId'].value || 0) + '&DistrictId='+ (this.f['districtId'].value || 0) +'&TalukaId=' + (this.f['talukaId'].value || 0) + '&CategoryId=' + (this.f['categoryId'].value || 0) +
-     '&Search=' + (this.f['SearchText'].value || '') + '&IsRural=' + (this.f['isRural'].value || 0) + '&VillageId=' + (this.f['villageId'].value || 0);
+     '&Search=' + (this.f['SearchText'].value || '') + '&IsRural=' + (this.f['isRural'].value) + '&VillageId=' + (this.f['villageId'].value || 0);
     this.callAPIService.setHttp('get', 'Constituency/ConstituenctCommittee/GetAll?' + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {

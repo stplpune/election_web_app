@@ -129,7 +129,7 @@
                         <div class="col-sm-3">
                             <ngx-select [allowClear]="true" [items]="urbanRuralTypeArray" formControlName="isRural"
                             optionValueField="id" optionTextField="name" (select)="clearFilter('state');getConstituencymastercommittee()" 
-                            (remove)="clearFilter('state')" placeholder="Select Type">
+                            (remove)="f['isRural'].setValue(2);clearFilter('state')" placeholder="Select Type">
                             </ngx-select>
                         </div>
                         <div class="col-sm-3">
