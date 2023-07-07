@@ -274,7 +274,7 @@ a.text-main:hover {
 }
 
 .chartbox .card .card-header {
-    background-color: transparent !important;
+    background-color: transparent;
     border-bottom: none;
     font-size: .85rem;
     font-weight: 600;
@@ -677,6 +677,7 @@ ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
 
 .mat-dialog-container {
     background-color: #fff;
+    padding: 0px !important;
 }
 
 .mat-dialog-content {
