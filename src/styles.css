@@ -810,3 +810,7 @@ input::-ms-clear {
         top: 210px;
     }
 }
+
+#mapsvg1 svg {
+    transform: scale(1) !important;
+}
