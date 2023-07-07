@@ -198,8 +198,8 @@
 
             <div class="modal-header">
                 <p class="modal-title" id="AddNewCommitteeLabel">Add New Committee</p>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeewCommitteeModal
-                    (click)="clearForm()"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    #closeewCommitteeModal (click)="clearForm()"></button>
             </div>
             <div class="modal-body">
                 <form [formGroup]="orgMasterForm" (ngSubmit)="onSubmit()">
@@ -255,7 +255,8 @@
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <label [ngClass]="{ 'required-field': submitted && f.DivisionId.errors }">Select
+                                <label class="form-label"
+                                    [ngClass]="{ 'required-field': submitted && f.DivisionId.errors }">Select
                                     Division</label>
                                 <ngx-select [allowClear]="true" (remove)="clearselOption('Division')"
                                     [items]="allDivision" formControlName="DivisionId"
