@@ -478,13 +478,11 @@ a.text-main:hover {
 }
 
 .invalid-feedback {
-    /* position: absolute; */
-    /* margin-top: -1px; */
     width: auto;
     font-size: 70%;
     color: #dc3545;
     display: flex;
-    margin-top: 0;
+    margin-top: 2px;
 }
 
 .ngx-select__toggle,
