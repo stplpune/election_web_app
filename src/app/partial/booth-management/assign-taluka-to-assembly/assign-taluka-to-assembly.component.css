@@ -1,0 +1,98 @@
+.ChekBox{
+    height: 200px;
+    overflow: scroll;
+}
+
+.btn-modal-close {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 1.5rem;
+    position: absolute;
+    top: -20px;
+    right: -14px;
+    color: #555;
+  }
+  
+  .modal-height {
+    height: 89vh;
+    max-height: 89vh;
+    overflow: auto;
+  }
+  
+  .profile-pic {
+    width: 95px;
+    border: solid 1px #eee;
+    height: 95px;
+    object-fit: contain;
+    object-position: top;
+  }
+  
+  .card-header {
+    line-height: unset !important;
+    background-color: rgba(0, 0, 0, .03) !important;
+  }
+  
+  .form-check {
+    min-height: unset !important;
+  }
+  
+  .table-height {
+    height: 300px;
+    overflow-y: auto;
+  }
+  
+  .table-height .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table-height thead {
+    position: sticky;
+    top: 0;
+  }
+  
+  .votername {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--main-color);
+  }
+  
+  .party-logo {
+    width: 26px;
+    height: 26px;
+  }
+  
+  agm-map {
+    height: 300px;
+  }
+  
+  .fa-stack {
+    font-size: 0.5rem;
+  }
+  
+  .bg-light-success {
+    background-color: #e0fff1 !important;
+  }
+  
+  .donotcall {
+    position: absolute;
+    width: 110px;
+    right: 0%;
+    z-index: -1;
+    opacity: 0.3;
+    top: 48%;
+  }
+  
+  .table-height {
+    height: 300px;
+    overflow-y: auto;
+  }
+  
+  .table-height thead {
+    position: sticky;
+    top: -1px;
+  }
+  table,td,tr{
+    border: solid 1px black;
+  }
