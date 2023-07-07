@@ -27,13 +27,15 @@ body {
     .main-content {
         margin-left: 0 !important;
     }
+
     /* mycss */
     /* @media screen and (max-width: 420px) { */
-        .committeesonmap2 .mapsvg svg {
-          width: 280px !important;
-          min-height: 200px !important;
-        }
-      /* } */
+    .committeesonmap2 .mapsvg svg {
+        width: 280px !important;
+        min-height: 200px !important;
+    }
+
+    /* } */
 }
 
 .bg-main {
@@ -675,7 +677,6 @@ ngx-select.ng-untouched.ng-pristine.ng-invalid.is-invalid .ngx-select__toggle {
 
 .mat-dialog-container {
     background-color: #fff;
-    padding: 0px !important;
 }
 
 .mat-dialog-content {
