@@ -274,7 +274,7 @@ a.text-main:hover {
 }
 
 .chartbox .card .card-header {
-    background-color: transparent;
+    background-color: transparent !important;
     border-bottom: none;
     font-size: .85rem;
     font-weight: 600;
