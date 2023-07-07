@@ -367,40 +367,29 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-6" *ngIf="bodyMember.value.prevMember">
-                                <div class="mb-2">
-                                    <label for="txtBodyName" class="form-label">Current Member Name</label>
-                                    <input type="text" class="form-control" readonly formControlName="prevMember" />
-                                </div>
+                                <label for="txtBodyName" class="form-label">Current Member Name</label>
+                                <input type="text" class="form-control" readonly formControlName="prevMember" />
                             </div>
                             <div class="col-sm-6">
-                                <div class="mb-2">
-                                    <label for="txtBodyName" class="form-label">Designation</label>
-                                    <input type="text" class="form-control" readonly
-                                        formControlName="currentDesignation" />
-                                </div>
+                                <label for="txtBodyName" class="form-label">Designation</label>
+                                <input type="text" class="form-control" readonly formControlName="currentDesignation" />
                             </div>
                             <div class="col-sm-12">
-                                <div class="mb-2">
-                                    <label for="txtMemberName" class="form-label required-field">Search Mobile
-                                        Number</label>
-                                    <div class="input-group">
-                                        <div class="col-sm">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" formControlName="mobileNo"
-                                                    [maxlength]="10" placeholder="Search MobileNo..."
-                                                    (keyup)="filterByMember()" (keypress)="acceptedOnlyNumbers($event)"
-                                                    [ngClass]="{ 'is-invalid': submitted && f.mobileNo.errors }"
-                                                    style="width: 85%;" />
-                                            </div>
-                                        </div>
-                                        <button (click)="addNewMember('Add',0,bodyMember.value.mobileNo)"
-                                            class="rounded btn btn-sm btn-light ms-1 ng-star-inserted"><i
-                                                class="fas fa-plus"></i></button>
-                                    </div>
-                                    <div *ngIf="submitted && f.mobileNo.errors" class="invalid-feedback">
-                                        <div *ngIf="f.mobileNo.errors.required">Mobile Number is required </div>
-                                        <div *ngIf="f.mobileNo.errors.pattern">Valid Mobile Number is required </div>
-                                    </div>
+                                <label for="txtMemberName" class="form-label required-field">Search Mobile
+                                    Number</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" formControlName="mobileNo" [maxlength]="10"
+                                        placeholder="Search Mobile No." (keyup)="filterByMember()"
+                                        (keypress)="acceptedOnlyNumbers($event)"
+                                        [ngClass]="{ 'is-invalid': submitted && f.mobileNo.errors }"
+                                        style="width: 85%;" />
+                                    <button (click)="addNewMember('Add',0,bodyMember.value.mobileNo)"
+                                        class="rounded btn btn-sm btn-light ms-1 ng-star-inserted"><i
+                                            class="fas fa-plus"></i></button>
+                                </div>
+                                <div *ngIf="submitted && f.mobileNo.errors" class="invalid-feedback">
+                                    <div *ngIf="f.mobileNo.errors.required">Mobile Number is required </div>
+                                    <div *ngIf="f.mobileNo.errors.pattern">Valid Mobile Number is required </div>
                                 </div>
                             </div>
                         </div>
