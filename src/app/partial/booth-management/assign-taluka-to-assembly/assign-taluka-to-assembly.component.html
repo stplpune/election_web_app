@@ -34,7 +34,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr  *ngFor="let assemblyArr of getAssemblyArray  | paginate : { itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalCount }; let i = index">
+                <tr  *ngFor="let assemblyArr of assembyTableConvertArr  | paginate : { itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalCount }; let i = index">
                   <td [attr.rowspan]="getRowSpan('constituencyName',i)" [style.display]="getRowSpan('constituencyName',i)?'':'none'">{{assemblyArr.srNo}}</td>
                   <td [attr.rowspan]="getRowSpan('constituencyName',i)" [style.display]="getRowSpan('constituencyName', i)?'': 'none'"> {{ assemblyArr.constituencyName ? assemblyArr.constituencyName : '-' }}</td>
                   <!-- <td>{{ assemblyArr.stateName ? assemblyArr.stateName : '-' }}</td> -->
@@ -51,9 +51,9 @@
               </tbody>
             </table>
           </div>
-          <div class="alert alert-danger py-2 text-center" role="alert" *ngIf="getAssemblyArray?.length == 0">
+          <div class="alert alert-danger py-2 text-center" role="alert" *ngIf="assembyTableConvertArr?.length == 0">
             No Results Found!</div>
-          <pagination-controls *ngIf="getAssemblyArray?.length != 0" previousLabel="" nextLabel="" (pageChange)="onClickPagintion($event)"></pagination-controls>
+          <pagination-controls *ngIf="assembyTableConvertArr?.length != 0" previousLabel="" nextLabel="" (pageChange)="onClickPagintion($event)"></pagination-controls>
         </div>
       </div>
     </div>

@@ -36,6 +36,7 @@ export class AssignTalukaToAssemblyComponent implements OnInit {
   chekedTalukaName:any=[];
   spliceFlag:boolean=false;
   assemblyDisabledFlag:boolean=false;
+  assembyTableConvertArr:any=[];
   get f(){return this.assignTalukaForm.controls}
   @ViewChild('closeModal') closeModal!: ElementRef;
 
@@ -66,22 +67,21 @@ export class AssignTalukaToAssemblyComponent implements OnInit {
 //#region------------------------------------------------table method start here------------------------------------------------------------------
  getAssemblyTable(){
   this.spans=[];
-  this.getAssemblyArray=[];
+  this.getAssemblyArray=[];this.assembyTableConvertArr=[];
   this.apiService.setHttp('get', 'api/AssignTalukatoAssembly/GetAll?AssemblyId='+(this.searchAssembly.value? this.searchAssembly.value:0)+'&pageNo='+this.pageNumber+'&pageSize='+this.pageSize, false, false, false, 'electionMicroSerApp');
   this.apiService.getHttp().subscribe((res: any) => {
     if (res.responseData != null && res.statusCode == "200") {
-      // this.getAssemblyArray = res.responseData;
-      let asembyaarrrrr:any=[];
-      asembyaarrrrr = res.responseData;
+      this.getAssemblyArray = res.responseData;
+      this.getAssemblyArray = res.responseData;
       let talArr:any=[];
-      asembyaarrrrr.forEach((ele:any,i:number)=>{
+      this.getAssemblyArray.forEach((ele:any,i:number)=>{
         if(ele.talukadetailsList.length){
           ele.talukadetailsList.map((talEle:any)=>{
             talArr.push(talEle.talukaName);
             talEle['constituencyName']=ele.constituencyName;
             talEle['srNo']=i+1;
             talEle['taltaltal']=talArr.join(',');
-            this.getAssemblyArray.push(talEle)
+            this.assembyTableConvertArr.push(talEle)
           })
         }else{
               let talEle={
@@ -89,7 +89,7 @@ export class AssignTalukaToAssemblyComponent implements OnInit {
                 assemblyId:ele.id,
                 srNo:i+1,
               }
-              this.getAssemblyArray.push(talEle)
+              this.assembyTableConvertArr.push(talEle)
         }
         talArr=[]
       }) 
@@ -98,6 +98,7 @@ export class AssignTalukaToAssemblyComponent implements OnInit {
       this.cacheSpan('districtName',(d:any) => d.constituencyName + d.districtName);  
 
     } else {
+      this.assembyTableConvertArr = [];
       this.getAssemblyArray = [];
     }
   }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.activatedRout }) } })
@@ -139,12 +140,15 @@ deleteAssembly(delObj:any){
 
 //patch edit object
 editAssembly(editObj:any){
+  this.getAssemblyArray.map((ele:any)=>{
+    if(ele.id==editObj.assemblyId){
+      this.editObj=ele;
+    }
+  })
   this.editTableSubTaluka=[];
-  this.editObj=editObj;
   this.assignTalukaForm.controls['assembly'].setValue(editObj.id);
-  this.assignTalukaForm.controls['stateId'].setValue(editObj.talukadetailsList[1].stateId);
-
-  editObj.talukadetailsList?.forEach((item: any) => {
+  editObj?.talukadetailsList?.length?this.assignTalukaForm.controls['stateId'].setValue(editObj?.talukadetailsList[0]?.stateId):'';
+  this.editObj.talukadetailsList?.forEach((item: any) => {
     let existing: any = this.editTableSubTaluka?.filter((v: any) => {
       return v.districtId == item.districtId;
     });
@@ -219,7 +223,6 @@ onClickCheckBox(event:any,obj:any){
       }
     })
 }
-
 
 //add record in sub-taluka table 
 assignSubTaluka(){
@@ -333,11 +336,11 @@ onSubmitAssembly(){
 //#region-----------------------------------rowspan---------------------------------------------------------
 spans:any=[];
 cacheSpan(key:any, accessor:any) {
-  for (let i = 0; i < this.getAssemblyArray.length;) {
-    let currentValue = accessor(this.getAssemblyArray[i]);
+  for (let i = 0; i < this.assembyTableConvertArr.length;) {
+    let currentValue = accessor(this.assembyTableConvertArr[i]);
     let count = 1;
-    for (let j = i + 1; j < this.getAssemblyArray.length; j++) {        
-      if (currentValue != accessor(this.getAssemblyArray[j])) {
+    for (let j = i + 1; j < this.assembyTableConvertArr.length; j++) {        
+      if (currentValue != accessor(this.assembyTableConvertArr[j])) {
         break;
       }
       count++;
