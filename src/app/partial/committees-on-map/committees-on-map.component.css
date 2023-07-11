@@ -1,85 +1,103 @@
-#committeesonmap .list-group-item.active{
-    background-color:var(--main-color);
+#committeesonmap .list-group-item.active {
+    background-color: var(--main-color);
     color: #fff;
 }
-#committeesonmap .list-group-item p{
+
+#committeesonmap .list-group-item p {
     font-size: 0.85rem;
 }
-.fix-height{
+
+.fix-height {
     max-height: 60vh;
     overflow-y: auto;
 }
-.fix-height1{
+
+.fix-height1 {
     max-height: 73vh;
     overflow-y: auto;
 }
-.chartHeight600{
-    height:600px;
+
+.chartHeight600 {
+    height: 600px;
     font-size: .75rem;
 }
-.calltomember{
+
+.calltomember {
     float: right;
-    background-color:#e7ebf8 ;
+    background-color: #e7ebf8;
     color: var(--main-color);
     width: 28px;
     height: 28px;
     text-align: center;
     line-height: 28px;
     border-radius: 50%;
-  }
-  .calltomember:hover{
-      background-color: var(--main-color);
-      color: #fff;
-  }
-  .mem-list{
-      position: relative;
-  }
-  .mem-list:hover{
-    background-color:#eee;
-  }
-    .mem-list .mem-name{
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 5px;
-  }
-  .mem-list .mem-no{
-      font-size: 0.75rem;
-      color: #454545;
-      margin-bottom: 5px;
-  }
-  .mem-list .mem-desi{
-      font-size: 0.8rem;
-      color: #333;
-      margin-bottom: 5px;
-      font-weight: 600;
-  }
-  .mem-list .mem-act{
-      font-size: 0.75rem;
-      display: flex;
-      align-items: center;
-      justify-content: end;
-  }
-  .mem-list .mem-dev{
-      position: absolute;
-      top: 5px;
-      right: 5px;
-  }
-  .mem-list .mem-dev .list-group-item{
-      padding: 2px 4px!important;
-      border: none !important;
-      background-color: transparent;
-  }
-  .mem-list .mem-dev img{
-      width: 20px;
-  }
-  .mem-list .mem-dev1{
+}
+
+.calltomember:hover {
+    background-color: var(--main-color);
+    color: #fff;
+}
+
+.mem-list {
+    position: relative;
+}
+
+.mem-list:hover {
+    background-color: #eee;
+}
+
+.mem-list .mem-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.mem-list .mem-no {
+    font-size: 0.75rem;
+    color: #454545;
+    margin-bottom: 5px;
+}
+
+.mem-list .mem-desi {
+    font-size: 0.8rem;
+    color: #333;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.mem-list .mem-act {
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.mem-list .mem-dev {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.mem-list .mem-dev .list-group-item {
+    padding: 2px 4px !important;
+    border: none !important;
+    background-color: transparent;
+}
+
+.mem-list .mem-dev img {
+    width: 20px;
+}
+
+.mem-list .mem-dev1 {
     position: absolute;
     top: 5px;
     left: 224px;
 }
-.mem-list .mem-dev1 img{
+
+.mem-list .mem-dev1 img {
     width: 20px;
 }
-.list-buttons .btn{
-    font-size: 0.65rem ;
+
+.list-buttons .btn {
+    font-size: 0.65rem;
 }

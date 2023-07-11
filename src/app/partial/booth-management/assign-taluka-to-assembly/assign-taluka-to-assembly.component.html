@@ -1,0 +1,165 @@
+<div class="container-fluid">
+  <div class="row mx-1" id="pageheader">
+    <div class="col-sm-3">
+      <span class="page-name">Assign Taluka To Assembly</span>
+    </div>
+    <div class="col-sm-9 text-end">
+      <button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#AddTalukaToAssembly" (click)="getAllAssembly('add'); getAllState()">
+        Add Taluka To Assembly
+      </button>
+    </div>
+  </div>
+
+<!-- table with filter -->
+  <div class="row chartbox">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="col-sm-4 float-end">
+            <ngx-select [allowClear]="true" (remove)="getAssemblyTable()" [items]="assemblyFilterArray" [formControl]="searchAssembly"
+              (select)="getAssemblyTable()" placeholder="Select Assembly" optionValueField="id" optionTextField="constituencyName"></ngx-select>
+          </div>
+        </div>
+        <div class="card-body pt-0">
+          <div class="table-responsive">
+            <table class="table table-hover border">
+              <thead>
+                <tr>
+                  <th>Sr. No.</th>
+                  <th>Assembly Name</th>
+                  <!-- <th>State Name</th> -->
+                  <th>District Name</th>
+                  <th>Taluka Name</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr  *ngFor="let assemblyArr of assembyTableConvertArr  | paginate : { itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalCount }; let i = index">
+                  <td [attr.rowspan]="getRowSpan('constituencyName',i)" [style.display]="getRowSpan('constituencyName',i)?'':'none'">{{assemblyArr.srNo}}</td>
+                  <td [attr.rowspan]="getRowSpan('constituencyName',i)" [style.display]="getRowSpan('constituencyName', i)?'': 'none'"> {{ assemblyArr.constituencyName ? assemblyArr.constituencyName : '-' }}</td>
+                  <!-- <td>{{ assemblyArr.stateName ? assemblyArr.stateName : '-' }}</td> -->
+                  <td [attr.rowspan]="getRowSpan('districtName',i)" [style.display]="getRowSpan('districtName',i)?'':'none'">{{ assemblyArr.districtName ? assemblyArr.districtName : '-' }} </td>
+                  <td [attr.rowspan]="getRowSpan('districtName',i)" [style.display]="getRowSpan('districtName',i)?'':'none'">{{ assemblyArr.taltaltal ? assemblyArr.taltaltal : '-' }}</td>
+                  <td [attr.rowspan]="getRowSpan('constituencyName',i)" [style.display]="getRowSpan('constituencyName',i)?'':'none'">
+                    <div class="btn-group">
+                      <button type="button" title="Edit Assembly" class="btn btn-sm btn-light text-edit me-1 rounded" data-bs-toggle="modal" data-bs-target="#AddTalukaToAssembly" (click)="editFlag=true;getAllAssembly('update');getAllState();editAssembly(assemblyArr)"> <i class="far fa-edit"></i></button>
+                      <button type="button" title="Delete Assembly" class="btn btn-sm btn-light text-danger rounded" (click)="deleteConfirmModel(assemblyArr.assemblyId)">
+                        <i class="fas fa-trash-alt"></i> </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="alert alert-danger py-2 text-center" role="alert" *ngIf="assembyTableConvertArr?.length == 0">
+            No Results Found!</div>
+          <pagination-controls *ngIf="assembyTableConvertArr?.length != 0" previousLabel="" nextLabel="" (pageChange)="onClickPagintion($event)"></pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Add Update Modal Start Here-->
+  <div class="modal fade" id="AddTalukaToAssembly" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="SelectFamilyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <p class="modal-title" id="SelectFamilyModalLabel">{{editFlag?'Update Assigned Taluka To Assembly':'Assign Taluka To Assembly'}}</p>
+          <button type="button" #closeModal class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="clearAssemblyForm()"></button>
+        </div>
+        <form [formGroup]="assignTalukaForm" (ngSubmit)="onSubmitAssembly()">
+          <div class="modal-body" style="max-height: 66vh;">
+            <div class="row chartbox">
+              <div class="col-sm-6 border-end">
+                <div class="form-container">
+                    <div class="form-container">
+                        <div class="row mb-2">
+                          <div class="col-sm-6">
+                            <label for="" class="form-label">Assembly</label>
+                            <ngx-select [allowClear]="true" [items]="assemblyArray" [disabled]="assemblyDisabledFlag || assemblyArray?.length == 1" formControlName="assembly"
+                              optionValueField="id" optionTextField="constituencyName" placeholder="Select Assembly" [ngClass]="{'is-invalid': submitted && f.assembly.errors}">
+                              <div *ngIf="submitted && f.assembly.errors" class="invalid-feedback">
+                                <span *ngIf="f.assembly.errors.required"> Assembly is Required </span>
+                              </div>
+                            </ngx-select>
+                          </div>
+                          <div class="col-sm-6">
+                            <label class="form-label">State</label>
+                            <ngx-select [allowClear]="true" [items]="stateArray" formControlName="stateId" [disabled]="stateArray?.length == 1" (select)="getAllDistrict()"
+                              placeholder="Select State" optionValueField="id" optionTextField="stateName" [ngClass]="{ 'is-invalid': submitted && f.stateId.errors}"></ngx-select>
+                            <div *ngIf="submitted && f.stateId.errors" class="invalid-feedback"> State is Required </div>
+                          </div>
+                        </div>
+                        <div class="card card-body border shadow-none p-2">
+                            <div class="row g-1 mb-2">
+                              <div class="col-sm-12">
+                                <label for="" class="form-label"> District </label>
+                                <ngx-select [allowClear]="true" [items]="districtArray" formControlName="districtId" [disabled]="!f['stateId'].value"
+                                  optionValueField="districtId" optionTextField="districtName" (select)="getTaluka()" (remove)="talukaArray=[]" placeholder="Select District"[ngClass]="{'is-invalid':submitted && f.districtId.errors}"></ngx-select>
+                                <div *ngIf="submitted && f.districtId.errors" class="invalid-feedback"> District is Required</div>
+                              </div>
+                              <div class="col-sm-12">
+                                <label for="txtSearchAssembly" class="form-label">Taluka</label>
+                                <div class="card border shadow-none mb-2">
+                                  <div class="card-header border-bottom p-1">
+                                    <input type="text" formControlName="talukaId" [(ngModel)]="talukaobjResult" placeholder="Search Taluka"
+                                      class="form-control form-control-sm border-0"/>
+                                  </div>
+                                  <div class="card-body py-2 form-height ChekBox" *ngIf="talukaArray | filter : talukaobjResult as talukaArrayResult">
+                                    <div class="form-check" *ngFor="let talukaObj of talukaArrayResult">
+                                      <input class="form-check-input" type="checkbox" (change)="onClickCheckBox($event, talukaObj)" [checked]="talukaObj.checked == true"/>
+                                      <label class="form-check-label" for="flexCheckDefault">{{ talukaObj.talukaName }}</label>
+                                    </div>
+                                    <div *ngIf="talukaArrayResult.length === 0">
+                                      <div class="alert alert-danger text-center py-2"> No Results Found!</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="text-end">
+                                <button type="button" class="btn btn-outline-primary btn-sm h-100" (click)="assemblyDisabledFlag=true;assignSubTaluka()">
+                                  Add</button>
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+              </div>
+              <div class="col-sm-6 chartbox">
+                <table class="table table-hover mb-0">
+                    <thead>
+                      <tr>
+                        <th>Sr.No.</th>
+                        <th>District</th>
+                        <th>Taluka</th>
+                        <th>Delete</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor=" let subTaluka of subTalukaTableArray;let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ subTaluka.districtName }}</td>
+                        <td class="flex-wrap">{{ subTaluka.talukaName }}</td>
+                        <td>
+                          <button type="button" title="Delete" class="btn btn-light text-danger btn-sm ms-1" (click)="deleteSubTaluka(i)">
+                            <i class="fas fa-trash-alt"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="alert alert-danger p-2 mt-2 text-center"  role="alert"  *ngIf="subTalukaTableArray?.length == 0">
+                    No Results Found! </div>
+              </div>
+              
+            </div>
+          </div>
+          <div class="modal-footer py-2">
+            <button type="button" class="btn btn-main float-end" (click)="clearAssemblyForm()">Clear</button>
+            <button type="submit" class="btn btn-main float-end">{{editFlag?'Update':'Submit'}}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

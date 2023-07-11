@@ -32,28 +32,28 @@
         </div> -->
         <div class="col-lg-2 col-6">
             <div class="card card-body bg-green">
-                <i class="fab fa-apple"></i>
+                <i class="fas fa-layer-group"></i>
                 <p>Total Committees</p>
                 <h3>{{TotalWorkAndIosCount?.TotalCommittees ? TotalWorkAndIosCount?.TotalCommittees : '0'}}</h3>
             </div>
         </div>
         <div class="col-lg-2 col-6">
             <div class="card card-body bg-blue">
-                <i class="fab fa-android"></i>
+                <i class="fas fa-users"></i>
                 <p>Total Members</p>
                 <h3>{{TotalWorkAndIosCount?.TotalExecutives ? TotalWorkAndIosCount?.TotalExecutives : '0'}}</h3>
             </div>
         </div>
         <div class="col-lg-2 col-6">
             <div class="card card-body bg-gold">
-                <i class="fab fa-android"></i>
+                <i class="fas fa-user-check"></i>
                 <p>Active Members</p>
                 <h3>{{TotalWorkAndIosCount?._ActiveMember ? TotalWorkAndIosCount?._ActiveMember : '0'}}</h3>
             </div>
         </div>
         <div class="col-lg-4 col-12">
             <div class="card card-body bg-voilet">
-                <i class="fab fa-android"></i>
+                <i class="fas fa-user-times"></i>
                 <p>Non Active Members</p>
                 <h3>{{TotalWorkAndIosCount?._InActiveMember ? TotalWorkAndIosCount?._InActiveMember : '0'}}</h3>
             </div>
@@ -66,7 +66,8 @@
                 <div class="card-body comm-list">
                     <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
                         <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
-                            <li class="mat-tree-node" (click)="openSubCommittees(node.CommitteeId,node?.CommitteeName,node.BodyLevelCommittee)"
+                            <li class="mat-tree-node"
+                                (click)="openSubCommittees(node.CommitteeId,node?.CommitteeName,node.BodyLevelCommittee)"
                                 [class.active]="node.CommitteeId == HighlightRowTree">
                                 <button mat-icon-button disabled></button>
                                 {{node.CommitteeName | titlecase}}
@@ -109,133 +110,133 @@
             </div>
 
             <div class="d-lg-none d-sm-block">
-            <div class="card mb-3 " role="alert">
-                <div class="card-header row">
-                    <div class="col-sm-6">
-                        <h6 class="text-main">{{subCommitteeName | titlecase}}</h6>
-                    </div>
-                    <div class="col-sm-6 text-end">
+                <div class="card mb-3 " role="alert">
+                    <div class="card-header row">
+                        <div class="col-sm-6">
+                            <h6 class="text-main">{{subCommitteeName | titlecase}}</h6>
+                        </div>
+                        <div class="col-sm-6 text-end">
                             <button title="Add Designation" class="rounded btn btn-sm btn-main   mx-1 ng-star-inserted"
                                 (click)="openDialogAddCommittee()"><small>Add Sub Committee</small></button>
+                        </div>
                     </div>
-                </div>
-                <div class="card-body pt-0 pb-0">
-                    <div class="row mb-3 g-2" id="dash-stats">
-                        <div class="col-sm-3 col-6">
-                            <div class="card card-body bg-cyan h-100">
-                                <i class="fas fa-network-wired"></i>
-                                <p>Work Done</p>
-                                <h3>{{TotalWorkAndIosCount?.IndividualTotalWork ?
-                                    TotalWorkAndIosCount?.IndividualTotalWork : '0'}}</h3>
+                    <div class="card-body pt-0 pb-0">
+                        <div class="row mb-3 g-2" id="dash-stats">
+                            <div class="col-sm-3 col-6">
+                                <div class="card card-body bg-cyan h-100">
+                                    <i class="fas fa-network-wired"></i>
+                                    <p>Work Done</p>
+                                    <h3>{{TotalWorkAndIosCount?.IndividualTotalWork ?
+                                        TotalWorkAndIosCount?.IndividualTotalWork : '0'}}</h3>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-3 col-6">
-                            <div class="card card-body bg-blue h-100">
-                                <i class="fab fa-android"></i>
-                                <p>Total Members</p>
-                                <h3>{{TotalWorkAndIosCount?.IndividualTotalExecutives ?
-                                    TotalWorkAndIosCount?.IndividualTotalExecutives : '0'}}</h3>
+                            <div class="col-sm-3 col-6">
+                                <div class="card card-body bg-blue h-100">
+                                    <i class="fab fa-android"></i>
+                                    <p>Total Members</p>
+                                    <h3>{{TotalWorkAndIosCount?.IndividualTotalExecutives ?
+                                        TotalWorkAndIosCount?.IndividualTotalExecutives : '0'}}</h3>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-3 col-6">
-                            <div class="card card-body bg-green h-100">
-                                <i class="fab fa-apple"></i>
-                                <p>Active</p>
-                                <h3>{{TotalWorkAndIosCount?._IndiActiveMember ?
-                                    TotalWorkAndIosCount?._IndiActiveMember : '0'}}</h3>
+                            <div class="col-sm-3 col-6">
+                                <div class="card card-body bg-green h-100">
+                                    <i class="fab fa-apple"></i>
+                                    <p>Active</p>
+                                    <h3>{{TotalWorkAndIosCount?._IndiActiveMember ?
+                                        TotalWorkAndIosCount?._IndiActiveMember : '0'}}</h3>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-3 col-6">
-                            <div class="card card-body bg-voilet h-100">
-                                <i class="fab fa-apple"></i>
-                                <p>Non Active </p>
-                                <h3>{{TotalWorkAndIosCount?._IndiInActiveMember ?
-                                    TotalWorkAndIosCount?._IndiInActiveMember : '0'}}</h3>
+                            <div class="col-sm-3 col-6">
+                                <div class="card card-body bg-voilet h-100">
+                                    <i class="fab fa-apple"></i>
+                                    <p>Non Active </p>
+                                    <h3>{{TotalWorkAndIosCount?._IndiInActiveMember ?
+                                        TotalWorkAndIosCount?._IndiInActiveMember : '0'}}</h3>
+                                </div>
                             </div>
-                        </div>
-                        <!-- <div class="col-sm-3">
+                            <!-- <div class="col-sm-3">
                         <div class="card card-body bg-gold">
                             <i class="fab fa-android"></i>
                             <p>Total Members</p>
                             <h3>{{TotalWorkAndIosCount?.TotalMembers ? TotalWorkAndIosCount?.TotalMembers : '0'}}</h3>
                         </div>
                     </div> -->
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- Current Designated Members -->
-            <div class="card mb-3">
-                <div class="card-header pb-0">
-                    Current Designated Members
-                    <span class="float-end">
-                        <button title="Add Designation" class="rounded btn btn-sm btn-main   mx-1 ng-star-inserted"
-                            (click)="addDesignated()"><small>Add Designation</small></button>
-                    </span>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <div class="card card-body shadow-none border py-2 px-3 mb-2 mem-list"
-                            *ngFor="let designatedMembers of allDesignatedMembers">
-                            <div class="mb-0 fw-bold mt-1 text-danger" *ngIf="designatedMembers.MemberName == ''">
-                                <p class="mem-name">No Member Assigned</p>
-                                <p class="mem-desi">{{designatedMembers?.DesignationName}}</p>
-                                <small
-                                    *ngIf="designatedMembers?.MobileNo !='' && designatedMembers?.MobileNo != null">{{designatedMembers?.MobileNo}}</small>
-                            </div>
-                            <div *ngIf="designatedMembers.MemberName != ''">
-                                <p class="mem-name text-primary"><a
-                                        (click)="redToMemberProfile(designatedMembers.UserId, designatedMembers.MemberName)">{{designatedMembers?.MemberName}}
-                                        <small class="mem-no">[{{designatedMembers?.MobileNo}}]</small></a></p>
-                                <div class="mem-desi">
-                                    {{designatedMembers?.DesignationName}}
-                                    <small class="mem-no">[{{designatedMembers.PostFromDate}}]</small>
+                <!-- Current Designated Members -->
+                <div class="card mb-3">
+                    <div class="card-header pb-0">
+                        Current Designated Members
+                        <span class="float-end">
+                            <button title="Add Designation" class="rounded btn btn-sm btn-main   mx-1 ng-star-inserted"
+                                (click)="addDesignated()"><small>Add Designation</small></button>
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <div class="card card-body shadow-none border py-2 px-3 mb-2 mem-list"
+                                *ngFor="let designatedMembers of allDesignatedMembers">
+                                <div class="mb-0 fw-bold mt-1 text-danger" *ngIf="designatedMembers.MemberName == ''">
+                                    <p class="mem-name">No Member Assigned</p>
+                                    <p class="mem-desi">{{designatedMembers?.DesignationName}}</p>
+                                    <small
+                                        *ngIf="designatedMembers?.MobileNo !='' && designatedMembers?.MobileNo != null">{{designatedMembers?.MobileNo}}</small>
                                 </div>
-                                <div *ngIf="designatedMembers?.DeviceType==1" class="mem-dev">
-                                    <img src="assets\images\dashboard-images\Android_robot.svg">
+                                <div *ngIf="designatedMembers.MemberName != ''">
+                                    <p class="mem-name text-primary"><a
+                                            (click)="redToMemberProfile(designatedMembers.UserId, designatedMembers.MemberName)">{{designatedMembers?.MemberName}}
+                                            <small class="mem-no">[{{designatedMembers?.MobileNo}}]</small></a></p>
+                                    <div class="mem-desi">
+                                        {{designatedMembers?.DesignationName}}
+                                        <small class="mem-no">[{{designatedMembers.PostFromDate}}]</small>
+                                    </div>
+                                    <div *ngIf="designatedMembers?.DeviceType==1" class="mem-dev">
+                                        <img src="assets\images\dashboard-images\Android_robot.svg">
+                                    </div>
+                                    <div *ngIf="designatedMembers?.DeviceType==2" class="mem-dev">
+                                        <img src="assets\images\dashboard-images\Apple_logo.svg">
+                                    </div>
+                                    <div *ngIf="designatedMembers?.DeviceType==0" class="mem-dev">
+                                        <img src="assets\images\dashboard-images\no-cellphone.svg">
+                                    </div>
                                 </div>
-                                <div *ngIf="designatedMembers?.DeviceType==2" class="mem-dev">
-                                    <img src="assets\images\dashboard-images\Apple_logo.svg">
-                                </div>
-                                <div *ngIf="designatedMembers?.DeviceType==0" class="mem-dev">
-                                    <img src="assets\images\dashboard-images\no-cellphone.svg">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12 text-end">
-                                    <div class="btn-group btn-group-sm" role="group" aria-label="Action Buttons">
-                                        <button *ngIf="designatedMembers.MemberName"
-                                            [disabled]="designatedMembers.UserId == loggedInUserId"
-                                            (click)="addEditMember(designatedMembers,'Edit')"
-                                            class="btn btn-sm btn-light rounded"> <i
-                                                class="fas fa-pencil-alt"></i></button>
-                                        <button
-                                            *ngIf="!designatedMembers.MemberName || designatedMembers.IsMultiple == 1 && designatedMembers.LastaddedUser == 1"
-                                            (click)="addEditMember(designatedMembers,'Add')"
-                                            class="rounded btn btn-sm btn-light mx-1"> <i
-                                                class="fas fa-plus"></i></button>
-                                        <button title="Edit Member"
-                                            class="btn btn-sm btn-light text-danger mx-1 rounded"
-                                            *ngIf="designatedMembers.MemberName" data-bs-toggle="modal"
-                                            (click)="getUserPostBodyId(designatedMembers.userpostbodyId)"
-                                            data-bs-target="#DeleteModal"
-                                            [disabled]="designatedMembers.UserId == loggedInUserId"> <i
-                                                class="fas fa-trash-alt"></i></button>
-                                        <button title="Remove Designation" data-bs-toggle="modal"
-                                            data-bs-target="#AddMemberModal" #addMemberModal
-                                            style="display: none;"></button>
+                                <div class="row">
+                                    <div class="col-sm-12 text-end">
+                                        <div class="btn-group btn-group-sm" role="group" aria-label="Action Buttons">
+                                            <button *ngIf="designatedMembers.MemberName"
+                                                [disabled]="designatedMembers.UserId == loggedInUserId"
+                                                (click)="addEditMember(designatedMembers,'Edit')"
+                                                class="btn btn-sm btn-light rounded"> <i
+                                                    class="fas fa-pencil-alt"></i></button>
+                                            <button
+                                                *ngIf="!designatedMembers.MemberName || designatedMembers.IsMultiple == 1 && designatedMembers.LastaddedUser == 1"
+                                                (click)="addEditMember(designatedMembers,'Add')"
+                                                class="rounded btn btn-sm btn-light mx-1"> <i
+                                                    class="fas fa-plus"></i></button>
+                                            <button title="Edit Member"
+                                                class="btn btn-sm btn-light text-danger mx-1 rounded"
+                                                *ngIf="designatedMembers.MemberName" data-bs-toggle="modal"
+                                                (click)="getUserPostBodyId(designatedMembers.userpostbodyId)"
+                                                data-bs-target="#DeleteModal"
+                                                [disabled]="designatedMembers.UserId == loggedInUserId"> <i
+                                                    class="fas fa-trash-alt"></i></button>
+                                            <button title="Remove Designation" data-bs-toggle="modal"
+                                                data-bs-target="#AddMemberModal" #addMemberModal
+                                                style="display: none;"></button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div *ngIf="allDesignatedMembers?.length == 0">
-                            <td colspan="7">
-                                <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
-                            </td>
+                            <div *ngIf="allDesignatedMembers?.length == 0">
+                                <td colspan="7">
+                                    <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
+                                </td>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
 
             <!-- recent activity  section start here  -->
@@ -334,8 +335,8 @@
                             <h6 class="text-main">{{subCommitteeName | titlecase}}</h6>
                         </div>
                         <div class="col-sm text-end">
-                                <button title="Add Designation" class="rounded btn btn-sm btn-main   mx-1 ng-star-inserted"
-                                    (click)="openDialogAddCommittee()"><small>Add Sub Committee</small></button>
+                            <button title="Add Designation" class="rounded btn btn-sm btn-main   mx-1 ng-star-inserted"
+                                (click)="openDialogAddCommittee()"><small>Add Sub Committee</small></button>
                         </div>
                     </div>
                     <div class="card-body pt-0 pb-0">
@@ -350,7 +351,7 @@
                             </div> -->
                             <div class="col-sm-3 col-6">
                                 <div class="card card-body bg-blue h-100">
-                                    <i class="fab fa-android"></i>
+                                    <i class="fas fa-users"></i>
                                     <p>Total Members</p>
                                     <h3>{{TotalWorkAndIosCount?.IndividualTotalExecutives ?
                                         TotalWorkAndIosCount?.IndividualTotalExecutives : '0'}}</h3>
@@ -358,7 +359,7 @@
                             </div>
                             <div class="col-sm-3 col-6">
                                 <div class="card card-body bg-green h-100">
-                                    <i class="fab fa-apple"></i>
+                                    <i class="fas fa-user-check"></i>
                                     <p>Active</p>
                                     <h3>{{TotalWorkAndIosCount?._IndiActiveMember ?
                                         TotalWorkAndIosCount?._IndiActiveMember : '0'}}</h3>
@@ -366,7 +367,7 @@
                             </div>
                             <div class="col-sm-3 col-6">
                                 <div class="card card-body bg-voilet h-100">
-                                    <i class="fab fa-apple"></i>
+                                    <i class="fas fa-user-times"></i>
                                     <p>Non Active </p>
                                     <h3>{{TotalWorkAndIosCount?._IndiInActiveMember ?
                                         TotalWorkAndIosCount?._IndiInActiveMember : '0'}}</h3>
@@ -673,8 +674,8 @@
                 </div>
             </div> -->
 
-                    <!-- Work in a Year -->
-                    <!-- <div class="card mb-3">
+            <!-- Work in a Year -->
+            <!-- <div class="card mb-3">
                 <div class="card-header">Work in a Year</div>
                 <div class="card-body">
                     <div class="card-body recentActivityGraph chartfont h-400">
@@ -686,45 +687,47 @@
     </div>
 
     <!-- Modal for Add/Update/Delete Member for any Designation -->
-    <div class="modal fade" id="AddMemberModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="AddMemberModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <form [formGroup]="bodyMember">
-                    <div class="modal-header">
-                        <p class="modal-title" id="AddMemberModalLabel">{{addMemberFlag}} Member</p>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" #closeAddMemberModal
-                            aria-label="Close" (click)="closeModelAddEditMember()"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-container">
-                            <div class="mb-2">
-                                <label for="txtBodyName" class="form-label">Committee Name</label>
-                                <input type="text" class="form-control" readonly formControlName="BodyName" />
+            <div class="modal fade" id="AddMemberModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="AddMemberModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <form [formGroup]="bodyMember">
+                            <div class="modal-header">
+                                <p class="modal-title" id="AddMemberModalLabel">{{addMemberFlag}} Member</p>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" #closeAddMemberModal
+                                    aria-label="Close" (click)="closeModelAddEditMember()"></button>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-6" *ngIf="bodyMember.value.prevMember">
+                            <div class="modal-body">
+                                <div class="form-container">
                                     <div class="mb-2">
-                                        <label for="txtBodyName" class="form-label">Current Member Name</label>
-                                        <input type="text" class="form-control" readonly formControlName="prevMember" />
+                                        <label for="txtBodyName" class="form-label">Committee Name</label>
+                                        <input type="text" class="form-control" readonly formControlName="BodyName" />
                                     </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="mb-2">
-                                        <label for="txtBodyName" class="form-label">Designation</label>
-                                        <input type="text" class="form-control" readonly
-                                            formControlName="currentDesignation" />
-                                        <!-- <button  class="rounded btn btn-sm btn-light mx-1 ng-star-inserted" (click)="addDesignated()"><i class="fas fa-plus"></i></button> -->
-                                    </div>
-                                </div>
-                                <!-- </div>
+                                    <div class="row">
+                                        <div class="col-sm-6" *ngIf="bodyMember.value.prevMember">
+                                            <div class="mb-2">
+                                                <label for="txtBodyName" class="form-label">Current Member Name</label>
+                                                <input type="text" class="form-control" readonly
+                                                    formControlName="prevMember" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="mb-2">
+                                                <label for="txtBodyName" class="form-label">Designation</label>
+                                                <input type="text" class="form-control" readonly
+                                                    formControlName="currentDesignation" />
+                                                <!-- <button  class="rounded btn btn-sm btn-light mx-1 ng-star-inserted" (click)="addDesignated()"><i class="fas fa-plus"></i></button> -->
+                                            </div>
+                                        </div>
+                                        <!-- </div>
                         <div class="row"> -->
-                                <div class="col-sm-12">
-                                    <div class="mb-2">
-                                        <label for="txtMemberName" class="form-label required-field">Search Mobile Number</label>
-                                        <div class="input-group">
+                                        <div class="col-sm-12">
+                                            <div class="mb-2">
+                                                <label for="txtMemberName" class="form-label required-field">Search
+                                                    Mobile Number</label>
+                                                <div class="input-group">
 
-                                            <!-- <ngx-select [allowClear]="true" [items]="resAllMember"
+                                                    <!-- <ngx-select [allowClear]="true" [items]="resAllMember"
                                                 formControlName="bodyId" optionValueField="id"
                                                 optionTextField="fullname" (change)="getMemberValue($event)"
                                                 (select)="getBodyMemberDetails(this.bodyMember.value.bodyId)"
@@ -732,98 +735,106 @@
                                                 [ngClass]="{ 'is-invalid': submitted && f.bodyId.errors }"
                                                 style="width: 85%;">
                                             </ngx-select> -->
-                                            
 
-                                            <div class="col-sm">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" formControlName="mobileNo" [maxlength]="10"
-                                                        placeholder="Search MobileNo..." (keyup)="filterByMember()" (keypress)="acceptedOnlyNumbers($event)" [ngClass]="{ 'is-invalid': submitted && f.mobileNo.errors }"
-                                                        style="width: 85%;" />
+
+                                                    <div class="col-sm">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control"
+                                                                formControlName="mobileNo" [maxlength]="10"
+                                                                placeholder="Search MobileNo..."
+                                                                (keyup)="filterByMember()"
+                                                                (keypress)="acceptedOnlyNumbers($event)"
+                                                                [ngClass]="{ 'is-invalid': submitted && f.mobileNo.errors }"
+                                                                style="width: 85%;" />
+                                                        </div>
+                                                    </div>
+                                                    <button (click)="addNewMember('Add',0,bodyMember.value.mobileNo)"
+                                                        class="rounded btn btn-sm btn-light ms-1 ng-star-inserted"><i
+                                                            class="fas fa-plus"></i></button>
                                                 </div>
+                                                <div *ngIf="submitted && f.mobileNo.errors" class="invalid-feedback">
+                                                    <div *ngIf="f.mobileNo.errors.required">Mobile Number is required
+                                                    </div>
+                                                    <div *ngIf="f.mobileNo.errors.pattern">Valid Mobile Number is
+                                                        required </div>
+                                                </div>
+
                                             </div>
-                                                <button (click)="addNewMember('Add',0,bodyMember.value.mobileNo)"
-                                                class="rounded btn btn-sm btn-light ms-1 ng-star-inserted"><i
-                                                    class="fas fa-plus"></i></button>
-                                        </div>
-                                        <div *ngIf="submitted && f.mobileNo.errors" class="invalid-feedback">
-                                            <div *ngIf="f.mobileNo.errors.required">Mobile Number is required </div>
-                                            <div *ngIf="f.mobileNo.errors.pattern">Valid Mobile Number is required </div>
                                         </div>
 
                                     </div>
-                                </div>
+                                    <div class="mb-3 chartbox" *ngIf="hideMemberDetailsField">
+                                        <div class="card" *ngIf="bodyMemberDetails?.length != 0">
+                                            <div class="card-header pb-0">Member Details</div>
+                                            <div class="card-body pt-0">
+                                                <label class="form-label mb-0">Email ID</label>
+                                                <div class="form-control-plaintext py-0">
+                                                    {{bodyMemberDetails?.Emailid}}</div>
+                                                <label class="form-label mb-0">Contact No.</label>
+                                                <div class="form-control-plaintext py-0">
+                                                    {{bodyMemberDetails?.MobileNo}}</div>
 
+                                                <label class="form-label mb-0">Location</label>
+                                                <div class="form-control-plaintext py-0"
+                                                    *ngIf="(bodyMemberDetails?.DistrictName || bodyMemberDetails?.TalukaName || bodyMemberDetails?.VillageName) ; else otherContent">
+                                                    {{bodyMemberDetails?.DistrictName}}<span
+                                                        *ngIf="bodyMemberDetails?.TalukaName">,</span>{{bodyMemberDetails?.TalukaName}}<span
+                                                        *ngIf="bodyMemberDetails?.VillageName">,</span>{{bodyMemberDetails?.VillageName}}
+                                                </div>
+                                                <ng-template #otherContent>
+                                                    <div class="form-control-plaintext py-0">-</div>
+                                                </ng-template>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-2 text-end" *ngIf="bodyMemberDetails?.length == 0">
+                                            <div class="alert alert-danger text-center py-2">No Data Found..!
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
                             </div>
-                            <div class="mb-3 chartbox" *ngIf="hideMemberDetailsField">
-                                <div class="card" *ngIf="bodyMemberDetails?.length != 0">
-                                    <div class="card-header pb-0">Member Details</div>
-                                    <div class="card-body pt-0">
-                                        <label class="form-label mb-0">Email ID</label>
-                                        <div class="form-control-plaintext py-0">
-                                            {{bodyMemberDetails?.Emailid}}</div>
-                                        <label class="form-label mb-0">Contact No.</label>
-                                        <div class="form-control-plaintext py-0">
-                                            {{bodyMemberDetails?.MobileNo}}</div>
-
-                                        <label class="form-label mb-0">Location</label>
-                                        <div class="form-control-plaintext py-0"
-                                            *ngIf="(bodyMemberDetails?.DistrictName || bodyMemberDetails?.TalukaName || bodyMemberDetails?.VillageName) ; else otherContent">
-                                            {{bodyMemberDetails?.DistrictName}}<span
-                                                *ngIf="bodyMemberDetails?.TalukaName">,</span>{{bodyMemberDetails?.TalukaName}}<span
-                                                *ngIf="bodyMemberDetails?.VillageName">,</span>{{bodyMemberDetails?.VillageName}}
-                                        </div>
-                                        <ng-template #otherContent>
-                                            <div class="form-control-plaintext py-0">-</div>
-                                        </ng-template>
-
-                                    </div>
-                                </div>
-
-                                <div class="mt-2 text-end" *ngIf="bodyMemberDetails?.length == 0">
-                                    <div class="alert alert-danger text-center py-2">No Data Found..!
-                                    </div>
-                                </div>
-
-
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-main" (click)="onSubmit()">Assign
+                                    Member</button>
                             </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Delete Confirmation modal pop up -->
+            <div class="modal fade" id="DeleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="DeleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-transparent border-bottom-0">
+                            <!-- <h5 class="modal-title" id="DeleteModalLabel">Modal title</h5> -->
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center pb-5">
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                                <circle class="path circle" fill="none" stroke="#D06079" stroke-width="6"
+                                    stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1" />
+                                <line class="path line" fill="none" stroke="#D06079" stroke-width="6"
+                                    stroke-linecap="round" stroke-miterlimit="10" x1="34.4" y1="37.9" x2="95.8"
+                                    y2="92.3" />
+                                <line class="path line" fill="none" stroke="#D06079" stroke-width="6"
+                                    stroke-linecap="round" stroke-miterlimit="10" x1="95.8" y1="38" x2="34.4"
+                                    y2="92.2" />
+                            </svg>
+                            <h3 class="my-3">Are You Sure?</h3>
+                            <p class="mb-4">Do you really want to delete this record? This process can not be undone.
+                            </p>
+                            <button class="btn btn-secondary me-2" data-bs-dismiss="modal" type="button">Cancel</button>
+                            <button class="btn btn-danger" type="button" (click)="deleteMember()"
+                                data-bs-dismiss="modal" type="button">Delete</button>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-main" (click)="onSubmit()">Assign
-                            Member</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-
-    <!-- Delete Confirmation modal pop up -->
-    <div class="modal fade" id="DeleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="DeleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-transparent border-bottom-0">
-                    <!-- <h5 class="modal-title" id="DeleteModalLabel">Modal title</h5> -->
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center pb-5">
-                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
-                        <circle class="path circle" fill="none" stroke="#D06079" stroke-width="6" stroke-miterlimit="10"
-                            cx="65.1" cy="65.1" r="62.1" />
-                        <line class="path line" fill="none" stroke="#D06079" stroke-width="6" stroke-linecap="round"
-                            stroke-miterlimit="10" x1="34.4" y1="37.9" x2="95.8" y2="92.3" />
-                        <line class="path line" fill="none" stroke="#D06079" stroke-width="6" stroke-linecap="round"
-                            stroke-miterlimit="10" x1="95.8" y1="38" x2="34.4" y2="92.2" />
-                    </svg>
-                    <h3 class="my-3">Are You Sure?</h3>
-                    <p class="mb-4">Do you really want to delete this record? This process can not be undone.
-                    </p>
-                    <button class="btn btn-secondary me-2" data-bs-dismiss="modal" type="button">Cancel</button>
-                    <button class="btn btn-danger" type="button" (click)="deleteMember()" data-bs-dismiss="modal"
-                        type="button">Delete</button>
                 </div>
             </div>
-        </div>
-    </div>

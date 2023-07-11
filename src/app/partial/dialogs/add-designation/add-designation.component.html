@@ -47,13 +47,11 @@
                         <div class="card-body p-0">
                             <div class="row bg-light border-bottom g-1 px-2 py-2 mb-2">
                                 <div class="col-sm-2 col-2">
-                                    Sr. No.
+                                    <small>Sr. No.</small>
                                 </div>
                                 <div class="col-sm-8 col-8">
-                                    Designation
+                                    <small>Designation</small>
                                 </div>
-
-
                                 <div class="col-sm-2 col-2"></div>
                             </div>
                             <div cdkDropList class="example-list fs-80rem"
@@ -61,13 +59,13 @@
                                 <div class="row example-box g-1 py-1 px-2 d-flex align-items-center"
                                     *ngFor="let bodyAssignedDesignation of allBodyAssignedDesignation" cdkDrag
                                     [class.active]="bodyAssignedDesignation.SrNo == heightedRow">
-                                    <div class="col-sm-1 col-1">
+                                    <div class="col-sm-2 col-2">
                                         {{bodyAssignedDesignation.SrNo}}
                                     </div>
                                     <div class="col-sm-8 col-8">
                                         {{bodyAssignedDesignation.DesignationName}}
                                     </div>
-                                    <div class="col-sm-3 col-3">
+                                    <div class="col-sm-2 col-2">
                                         <button class="btn btn-sm btn-light ng-star-inserted" style="font-size:12px"
                                             (click)=" editDesignationForm(bodyAssignedDesignation) "
                                             [disabled]="bodyAssignedDesignation.DesignationId == loggedInDesId"><i

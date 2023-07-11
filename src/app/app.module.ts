@@ -51,7 +51,7 @@ import { LightboxModule } from '@ngx-gallery/lightbox';
     ActivityDetailsComponent,
     RecentPostDetailsComponent,
     AddCommitteeComponent,
-    GeoFanceComponent,
+    GeoFanceComponent
   ],
   imports: [
     BrowserModule,

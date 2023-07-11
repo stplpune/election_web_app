@@ -62,6 +62,7 @@ const routes: Routes = [
       { path: 'committees-on-map', loadChildren: () => import('./partial/committees-on-map/committees-on-map.module').then(m => m.CommitteesOnMapModule), data: { title: 'Committees On Map', allowedRoles: ['1', '2', '7', '8'] } },
       { path: 'committee-dashboard', loadChildren: () => import('./partial/committee-dashboard/committee-dashboard.module').then(m => m.CommitteeDashboardModule), data: { title: 'Committee Dashboard', allowedRoles: ['1', '2', '7', '8'] } },
       { path: 'local-govt-body', loadChildren: () => import('./partial/booth-management/local-govt-body/local-govt-body.module').then(m => m.LocalGovtBodyModule), data: { title: 'Local Government Body' } },
+      { path: 'assign-taluka-to-assembly', loadChildren: () => import('./partial/booth-management/assign-taluka-to-assembly/assign-taluka-to-assembly.module').then(m => m.AssignTalukaToAssemblyModule), data: { title: 'Assign Taluka to Assembly', allowedRoles: ['1', '2', '7', '8'] } },
     ]
   },
   { path: '500', component: ServerErrorComponent },

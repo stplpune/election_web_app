@@ -27,13 +27,15 @@ body {
     .main-content {
         margin-left: 0 !important;
     }
+
     /* mycss */
     /* @media screen and (max-width: 420px) { */
-        .committeesonmap2 .mapsvg svg {
-          width: 280px !important;
-          min-height: 200px !important;
-        }
-      /* } */
+    .committeesonmap2 .mapsvg svg {
+        width: 280px !important;
+        min-height: 200px !important;
+    }
+
+    /* } */
 }
 
 .bg-main {
@@ -228,6 +230,7 @@ a.text-main:hover {
     border-right: none !important;
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
+    padding-block: 5px;
 }
 
 #pageheader .input-group .form-control:focus {
@@ -476,13 +479,11 @@ a.text-main:hover {
 }
 
 .invalid-feedback {
-    /* position: absolute; */
-    /* margin-top: -1px; */
     width: auto;
     font-size: 70%;
     color: #dc3545;
     display: flex;
-    margin-top: 0;
+    margin-top: 2px;
 }
 
 .ngx-select__toggle,
@@ -809,4 +810,8 @@ input::-ms-clear {
     .committeesonmap2>div:last-child {
         top: 210px;
     }
+}
+
+#mapsvg1 svg {
+    transform: scale(1) !important;
 }
