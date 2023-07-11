@@ -230,6 +230,7 @@ a.text-main:hover {
     border-right: none !important;
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
+    padding-block: 5px;
 }
 
 #pageheader .input-group .form-control:focus {
