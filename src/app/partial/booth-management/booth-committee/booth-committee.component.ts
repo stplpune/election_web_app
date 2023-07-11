@@ -26,15 +26,8 @@ export class BoothCommitteeComponent implements OnInit {
   voterAreaArray: any;
   villageDropdown: any;
   dataNotFound: boolean = false;
-
-
   missingAreaData: any;
   assignVoterObj: any;
-
-
-
-
-
   filterForm!: FormGroup;
   stateArray: any;
   divisionArray: any;
@@ -201,9 +194,9 @@ export class BoothCommitteeComponent implements OnInit {
 
   getCommitteMemberTypewise() {  // Main Api For Table
     // this.nullishFilterForm();
-    this.spinner.show();
+    this.spinner.show();  
     let obj = this.localStorageData?.ClientId + '&TalukaId=' + (this.filterForm.value.TalukaId || 0)
-      + '&VillageId=' + (this.filterForm.value.village || 0) + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&AreaId=' + 0
+      + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&AreaId=' + 0
       + '&IsPresident=' + 0 + '&CommitteeTypeId=' + this.boothCommitteeType + '&pageno=' + this.paginationNo + '&pagesize=' + this.pageSize
     this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/GetBoothWiseCommitteMemberCommitteeTypewiseState?ClientId=' + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
