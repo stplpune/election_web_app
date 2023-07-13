@@ -20,6 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteComponent } from '../dialogs/delete/delete.component';
 import { AddMemberComponent } from '../dialogs/add-member/add-member.component';
 import { ChartComponent } from "ng-apexcharts";
+import { log } from 'console';
 
 @Component({
   selector: 'app-committee-dashboard',
@@ -91,7 +92,7 @@ export class CommitteeDashboardComponent implements OnInit {
 
   @ViewChild("chart") chart: ChartComponent | undefined;
   chartOptions: any;
-  talukaPresidentDashObj!:object;
+  talukaPresidentDashObj:object | any;
   BarchartOptions:any
   talukaPresidentDashArray=new Array();
   talukaIMPleaderArray=new Array();
@@ -217,7 +218,15 @@ export class CommitteeDashboardComponent implements OnInit {
         this.presidentDetailsObj=res?.responseData;
         this.talukaPresidentDashObj = res?.responseData1;
         this.impLeadersArray=res?.responseData2;
-        this.constructPieChart(this.talukaPresidentDashObj)
+        if (this.talukaPresidentDashObj) { 
+         let totalBoothComity:any = ((this.talukaPresidentDashObj?.totalBoothCommittee / this.talukaPresidentDashObj?.totalBooths) * 100)?.toFixed(2) ;
+         let remainingBoothComity:any = (100 - totalBoothComity)?.toFixed(2);
+         this.talukaPresidentDashObj['totalBooths'] = Number(remainingBoothComity);
+         this.talukaPresidentDashObj['totalBoothCommittee'] = Number(totalBoothComity);
+         this.constructPieChart(this.talukaPresidentDashObj);
+        }
+
+   
       } else {
         this.talukaPresidentDashObj = [];
         this.presidentDetailsObj=[];
@@ -242,7 +251,8 @@ export class CommitteeDashboardComponent implements OnInit {
         width: 300,
         type: "pie"
       },
-      labels: ["Total Booth Committee", "Total Booths", ],
+      // labels: ["Total Booth Committee", "Total Booths", ],
+      labels: ["Completed", "Remaining", ],
       colors:['#f89e14','#297af0'], 
       responsive: [
         {
