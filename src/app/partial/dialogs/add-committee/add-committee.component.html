@@ -59,8 +59,10 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <label class="form-label"
+                        <!-- <label class="form-label required-field"
                             [ngClass]="{ 'required-field': submitted && f.DistrictId.errors }">Select
+                            District</label> -->
+                        <label class="form-label required-field">Select
                             District</label>
                         <ngx-select [allowClear]="false" (remove)="clearselOption('District')" [items]="allDistrict"
                             formControlName="DistrictId"
@@ -78,7 +80,9 @@
 
                 <div class="row mb-3">
                     <div class="col-sm-6">
-                        <label class="form-label" [ngClass]="{'required-field': submitted && f.TalukaId.errors}">
+                        <!-- <label class="form-label required-field" [ngClass]="{'required-field': submitted && f.TalukaId.errors}">
+                            Select Taluka</label> -->
+                        <label class="form-label required-field">
                             Select Taluka</label>
                         <ngx-select [allowClear]="false" (remove)="clearselOption('TalukaId')"
                             [items]="getTalkaByDistrict"
