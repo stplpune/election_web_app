@@ -32,7 +32,7 @@ import { SearchPipe } from 'src/app/pipes/search.pipe';
   selector: 'app-organization-details',
   templateUrl: './organization-details.component.html',
   styleUrls: ['./organization-details.component.css', '../../partial.component.css'],
-  providers: [ SearchPipe ]
+  providers: [SearchPipe]
 })
 export class OrganizationDetailsComponent implements OnInit {
 
@@ -102,17 +102,17 @@ export class OrganizationDetailsComponent implements OnInit {
   actPageSize: number = 10;
   actTotal: any;
   @ViewChild('tree') tree: any;
-  avtivityId:any;
-  mobileNoCheckFlag:boolean = false;
-  mobileNoValue:any;
+  avtivityId: any;
+  mobileNoCheckFlag: boolean = false;
+  mobileNoValue: any;
   ActivityId: any;
   bodylevelId: any;
   BodyLevelCommitteeId: any;
   subject: Subject<any> = new Subject();
   searchFilter = "";
-  hideMemberDetailsField : boolean = false;
+  hideMemberDetailsField: boolean = false;
   UserIdForRegMobileNo = '';
- // memberValue: any;
+  // memberValue: any;
 
   constructor(private fb: FormBuilder, private searchPipe: SearchPipe, private callAPIService: CallAPIService,
     private router: Router, private route: ActivatedRoute,
@@ -133,7 +133,7 @@ export class OrganizationDetailsComponent implements OnInit {
     // this.defaultFilterForm()
     this.defaultBodyMemForm();
     // this.getAllBodyMember();
-    
+
     this.getBodyMemberFilterDetails(this.bodyId);
     this.getCurrentDesignatedMembers(this.bodyId);
     //this.getBodyMemeberActivities(this.bodyId);
@@ -166,8 +166,8 @@ export class OrganizationDetailsComponent implements OnInit {
 
   }
 
-  openSubCommittees(bodyId: any, committeeName: any,BodyLevelCommittee:any) {
-    this.BodyLevelCommitteeId=BodyLevelCommittee;
+  openSubCommittees(bodyId: any, committeeName: any, BodyLevelCommittee: any) {
+    this.BodyLevelCommitteeId = BodyLevelCommittee;
     this.subCommittessId = 1;
     this.bodyId = bodyId;
     this.HighlightRowTree = this.bodyId;
@@ -315,16 +315,16 @@ export class OrganizationDetailsComponent implements OnInit {
     this.subject
       .pipe(debounceTime(700))
       .subscribe(() => {
-         if(this.bodyMember.value.mobileNo.length == 10 && !this.bodyMember.invalid){
+        if (this.bodyMember.value.mobileNo.length == 10 && !this.bodyMember.invalid) {
           this.searchFilter = this.bodyMember.value.mobileNo;
           this.getAllBodyMemberDetail();
-         }else{
-            this.bodyMemberDetails = [];
-         }
+        } else {
+          this.bodyMemberDetails = [];
+        }
       });
   }
 
-  closeModelAddEditMember(){
+  closeModelAddEditMember() {
     this.defaultBodyMemForm();
     this.bodyMemberDetails = [];
     this.hideMemberDetailsField = false;
@@ -345,7 +345,7 @@ export class OrganizationDetailsComponent implements OnInit {
 
 
 
- 
+
 
   getBodyMemberFilterDetails(id: any) {
     this.spinner.show();
@@ -366,7 +366,7 @@ export class OrganizationDetailsComponent implements OnInit {
 
 
   redToAddMember(memberValue: any) {
-    if(!parseFloat(memberValue)){
+    if (!parseFloat(memberValue)) {
       this.toastrService.error('Invalid Mobile No.');
       this.mobileNoValue = '';
       return
@@ -562,7 +562,7 @@ export class OrganizationDetailsComponent implements OnInit {
       chart.legend.position = 'top'
       chart.legend.paddingBottom = 10
       chart.legend.labels.template.maxWidth = 20
-      
+
 
       let xAxis = chart.xAxes.push(new am4charts.CategoryAxis())
       xAxis.dataFields.category = 'MemberName'
@@ -650,20 +650,20 @@ export class OrganizationDetailsComponent implements OnInit {
     sessionStorage.setItem('memberId', JSON.stringify(obj));
     // this.router.navigate(['../../../profile'])
   }
-  
-  addNewMember(flag: any, id: any,mobileNo:any) {
-    this.mobileNoValue = mobileNo;
-    if(this.mobileNoValue){
-      const isNumeric:any = (val: string) : boolean => { return !isNaN(Number(val))}
 
-      if(this.mobileNoValue.length != 10 || (isNumeric(this.mobileNoValue) != true)){
+  addNewMember(flag: any, id: any, mobileNo: any) {
+    this.mobileNoValue = mobileNo;
+    if (this.mobileNoValue) {
+      const isNumeric: any = (val: string): boolean => { return !isNaN(Number(val)) }
+
+      if (this.mobileNoValue.length != 10 || (isNumeric(this.mobileNoValue) != true)) {
         this.toastrService.error('Invalid Mobile No.');
         this.mobileNoValue = '';
         return
       }
       sessionStorage.setItem('memberValue', JSON.stringify(this.mobileNoValue));
     }
-   
+
     this.addEditMemberModal('close');
     let obj = { "formStatus": this.addMemberFlag, 'Id': id, 'CommitteeName': this.bodyId, 'Designation': this.dataAddEditMember.DesignationId, 'userpostbodyId': this.userPostBodyId };
     const dialogRef = this.dialog.open(AddMemberComponent, {
@@ -713,11 +713,11 @@ export class OrganizationDetailsComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    else if(this.bodyMemberDetails?.MobileNo !=  this.bodyMember.value.mobileNo){
+    else if (this.bodyMemberDetails?.MobileNo != this.bodyMember.value.mobileNo) {
       this.toastrService.error("Please Add Member......!!!");
       return;
     }
-    else{
+    else {
       let UserPostBodyId: any;
       this.addMemberFlag == 'Add' ? UserPostBodyId = 0 : UserPostBodyId = this.dataAddEditMember.userpostbodyId;
       let fromData = new FormData();
@@ -827,7 +827,7 @@ export class OrganizationDetailsComponent implements OnInit {
   addDesignated() {
     this.addEditMemberModal('close');
     const dialogRefaddEditMember = this.dialog.open(AddDesignationComponent, {
-      // width: '1024px',
+      width: '1024px',
       data: { committeeId: this.bodyId, committeeName: this.subCommitteeName, currentModalName: 'Add Designation' }
     });
     dialogRefaddEditMember.afterClosed().subscribe(result => {
@@ -873,9 +873,9 @@ export class OrganizationDetailsComponent implements OnInit {
     });
   }
 
-  abuseInsertLikes(LikeTypeId:any) {
+  abuseInsertLikes(LikeTypeId: any) {
     this.spinner.show();
-   this.callAPIService.setHttp('get', 'InsertLikes_1_0?UserId=' + this.commonService.loggedInUserId() + '&ActivityId=' + this.ActivityId + '&LikeTypeId=' + LikeTypeId, false, false, false, 'electionServiceForWeb');
+    this.callAPIService.setHttp('get', 'InsertLikes_1_0?UserId=' + this.commonService.loggedInUserId() + '&ActivityId=' + this.ActivityId + '&LikeTypeId=' + LikeTypeId, false, false, false, 'electionServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         //this.toastrService.success(res.data1[0].Msg);
@@ -893,13 +893,13 @@ export class OrganizationDetailsComponent implements OnInit {
   }
 
   onClickPagintion(pageNo: number) {
-    window.scroll(0,0);
+    window.scroll(0, 0);
     this.paginationNo = pageNo;
     // this.dashboardActivities();
   }
 
   // -------------------------------------- Activity del on  click ----------------------------- //
-  delConfirmCanActivity(avtivityId:any) {
+  delConfirmCanActivity(avtivityId: any) {
     this.avtivityId = avtivityId;
     const dialogRef = this.dialog.open(DeleteComponent);
     dialogRef.afterClosed().subscribe(result => {
@@ -930,8 +930,8 @@ export class OrganizationDetailsComponent implements OnInit {
   openDialogAddCommittee() {
     this.BodyLevelCommitteeId = this.BodyLevelCommitteeId || this.bodylevelId
     const dialogRefActivityDetails = this.dialog.open(AddCommitteeComponent, {
-      width: '1024px',
-       data: { bodyId : this.bodyId, bodylevelId : this.BodyLevelCommitteeId}
+      width: '550px',
+      data: { bodyId: this.bodyId, bodylevelId: this.BodyLevelCommitteeId }
     });
     dialogRefActivityDetails.afterClosed().subscribe(result => {
       if (result == 'Yes') {
@@ -939,12 +939,12 @@ export class OrganizationDetailsComponent implements OnInit {
       this.subCommittess(this.bodyId);
     });
   }
-  
-  checkBodyId(flag:any,event:any):any{
-    let filterData =   this.searchPipe.transform(this.resAllMember,[event], 'pipeFilter');
-   return  this.resAllMember = filterData;
 
-  // this.resAllMember = s;
-  // console.log(this.resAllMember)
+  checkBodyId(flag: any, event: any): any {
+    let filterData = this.searchPipe.transform(this.resAllMember, [event], 'pipeFilter');
+    return this.resAllMember = filterData;
+
+    // this.resAllMember = s;
+    // console.log(this.resAllMember)
   }
 }
