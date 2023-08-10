@@ -305,6 +305,9 @@ export class BoothCommitteeComponent implements OnInit {
         "voterNo": ele?.voterNo
       }
       this.pushVoterListArray.push(obj);
+      this.pushVoterListArray.map((ele:any)=>{
+        ele['designation'] = this.designationArray.find((e:any)=> e.id== obj.designationId);
+   })
     })
   }
 
