@@ -98,9 +98,11 @@
                                                 <table class="dashboard-table table mb-0 border-bottom-0">
                                                     <thead>
                                                         <tr>
-                                                            <th class="w-70 ">Voter No.</th>
+                                                            <th class="w-70">Sr. No.</th>
                                                             <th>Committee Member Name</th>
                                                             <th class="w-170">Mobile No.</th>
+                                                            <th class="w-70">Voter No.</th>
+                                                            <th class="w-170">Designation Name</th>
                                                             <th class="w-170">Total Assigned Voters</th>
                                                             <th class="w-170">Actions</th>
                                                         </tr>
@@ -121,9 +123,8 @@
                                                     <table class="dashboard-table table">
                                                         <tbody>
                                                             <tr
-                                                                *ngFor="let generalBCMember of boothComityGenerl_Female?.boothcommitteeMembers">
-                                                                <td title="Voter No" class="w-70">
-                                                                    {{generalBCMember?.voterNo}}</td>
+                                                                *ngFor="let generalBCMember of boothComityGenerl_Female?.boothcommitteeMembers;let i = index">
+                                                                <td title="Sr. No" class="w-70">{{i+1}}</td>
                                                                 <td>
                                                                     <p class="mb-0 fw-bold">
                                                                         {{generalBCMember?.voterName}}
@@ -137,7 +138,13 @@
                                                                 <td class="w-170" title="Mobile No">
                                                                     {{generalBCMember?.mobileNo ?
                                                                     generalBCMember?.mobileNo
-                                                                    : '-'}}</td>
+                                                                    : '-'}}</td> 
+                                                                    <td class="w-70" title="Voter No">
+                                                                        {{generalBCMember?.voterNo ?
+                                                                        generalBCMember?.voterNo : '-'}}</td> 
+                                                                    <td class="w-170" title="Designation Name">
+                                                                        {{generalBCMember?.designationName ?
+                                                                        generalBCMember?.designationName : '-'}}</td>
                                                                 <td class="w-170" title="Total Assigned Voter">
                                                                     {{generalBCMember?.totalAssignedVoter ?
                                                                     generalBCMember?.totalAssignedVoter : '-'}}</td>
