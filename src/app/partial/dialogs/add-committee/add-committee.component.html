@@ -11,7 +11,7 @@
                     <label class="form-label required-field">Select Committee Level</label>
                     <ngx-select [allowClear]="false" (remove)="selectLevelClear()" [items]="allLevels"
                         formControlName="BodyLevelId" placeholder="Select Level" optionValueField="Id"
-                        optionTextField="LevelName"
+                        optionTextField="LevelName" [disabled]="addCommitteeForm.value.BodyLevelId"
                         (select)="selectLevel(this.addCommitteeForm.value.BodyLevelId);getCommitteeByLevel(this.addCommitteeForm.value.BodyLevelId)"
                         [ngClass]="{ 'is-invalid': submitted && f.BodyLevelId.errors }">
                     </ngx-select>
@@ -26,7 +26,8 @@
                         formControlName="SubParentCommitteeId" placeholder="Select Parent Committee"
                         optionValueField="Id" optionTextField="BodyOrgCellName"
                         (remove)="clearselOption('committeeName')"
-                        [disabled]="!this.addCommitteeForm.value.BodyLevelId || this.addCommitteeForm.value.BodyLevelId == 2"
+                        [disabled]="!this.addCommitteeForm.value.BodyLevelId || this.addCommitteeForm.value.BodyLevelId == 2 || 
+                        addCommitteeForm.value.SubParentCommitteeId"
                         [ngClass]="{ 'is-invalid': submitted && f.SubParentCommitteeId.errors}">
                     </ngx-select>
                     <div *ngIf="submitted && f.SubParentCommitteeId.errors" class="invalid-feedback">
