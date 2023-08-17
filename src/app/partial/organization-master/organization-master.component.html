@@ -176,9 +176,13 @@
                             </tbody>
                         </table> -->
                     </div>
+                    <div class="mt-2 text-end" *ngIf="!organizationRes?.length">
+                        <div class="alert alert-danger text-center py-2">No Data Found..!
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-12 col-12 text-end">
-                            <div class="mt-2" *ngIf="organizationRes?.length != 0">
+                            <div class="mt-2" *ngIf="organizationRes?.length">
                                 <pagination-controls previousLabel="" nextLabel=""
                                     (pageChange)="onClickPagintion(pageSize = $event)"> </pagination-controls>
                                 <!-- <pagination-controls previousLabel="" nextLabel="" (pageChange)="pageSize = $event" (click)="onClickPagintion(pageSize)"> </pagination-controls> -->
@@ -232,7 +236,7 @@
                         <div class="mb-2">
                             <label for="txtBodyName" class="form-label required-field">Committee Name</label>
                             <input type="text" class="form-control" id="txtBodyName" placeholder="Committee Name"
-                                formControlName="BodyOrgCellName"
+                                formControlName="BodyOrgCellName" (keypress)="commonService.noFirstSpaceAllow($event)"
                                 [ngClass]="{ 'is-invalid': submitted && f.BodyOrgCellName.errors }">
                             <div *ngIf="submitted && f.BodyOrgCellName.errors" class="invalid-feedback">
                                 <div *ngIf="f.BodyOrgCellName.errors.required">Committee name is required</div>

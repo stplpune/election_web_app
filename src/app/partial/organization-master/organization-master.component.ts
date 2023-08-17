@@ -84,7 +84,7 @@ export class OrganizationMasterComponent implements OnInit {
   @ViewChild('closeewCommitteeModal') closeewCommitteeModal: any;
 
   constructor(private callAPIService: CallAPIService, private router: Router, private fb: FormBuilder,
-    private toastrService: ToastrService, private commonService: CommonService, public dialog: MatDialog,
+    private toastrService: ToastrService, public commonService: CommonService, public dialog: MatDialog,
     private spinner: NgxSpinnerService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
