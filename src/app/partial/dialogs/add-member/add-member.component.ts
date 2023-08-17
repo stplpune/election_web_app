@@ -285,7 +285,8 @@ export class AddMemberComponent implements OnInit, OnDestroy {
       let fromData = new FormData();
       let FullName = this.editProfileForm.value.FName + " " + this.editProfileForm.value.MName + " " + this.editProfileForm.value.LName;
       this.editProfileForm.value.Name = FullName;
-      this.editProfileForm.value.PostfromDate = this.datePipe.transform(this.editProfileForm.value.PostfromDate, 'dd/MM/YYYY');
+
+      this.editProfileForm.value.PostfromDate = (this.editProfileForm.value.PostfromDate).toString()?.length > 10 ? this.datePipe.transform(this.editProfileForm.value.PostfromDate, 'dd/MM/YYYY') : this.editProfileForm.value.PostfromDate;
       this.data.userpostbodyId == "" ||  this.data.userpostbodyId == 0 || this.data.formStatus == 'Add' ? this.editProfileForm.value.UserPostBodyId = 0 : this.editProfileForm.value.UserPostBodyId =this.data.userpostbodyId;
       Object.keys(this.editProfileForm.value).forEach((cr: any, ind: any) => {
         let value: any = Object.values(this.editProfileForm.value)[ind] != null ? Object.values(this.editProfileForm.value)[ind] : 0;
