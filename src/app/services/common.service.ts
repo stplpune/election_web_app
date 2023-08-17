@@ -317,16 +317,15 @@ export class CommonService {
         return !maskSeperator.test(event.key);
     }
 
-       emailRegex(event: any) { //Email Validation
+    emailRegex(event: any) { //Email Validation
         if (!this.noSpacesAtStart(event)) return false; // First Space not Accept
-        if(event.currentTarget.value.split('..').length-1 == 1 && (event.keyCode==46)) return false;  // double .Dot not accept
-        if(event.currentTarget.value.split('@').length-1 == 1 && (event.keyCode==64)) return false;  // double @ not accept
-        if (event.target.selectionStart === 0 && (event.keyCode==46)) return false;  // starting .Dot not accept
-        if (event.target.selectionStart === 0 && (event.keyCode==64)) return false;  // starting @ not accept
-        let key = parseInt(event.key); if (event.target.selectionStart === 0 && (!isNaN(key))) return false; // starting Number not accept
-        const maskSeperator = new RegExp('^([a-zA-Z0-9 .@])', 'g'); // only Accept A-Z & 0-9 & .@ 
+        if (event.currentTarget.value.split('..').length - 1 == 1 && (event.keyCode == 46)) return false;  // double .Dot not accept
+        if (event.currentTarget.value.split('@').length - 1 == 1 && (event.keyCode == 64)) return false;  // double @ not accept
+        if (event.target.selectionStart === 0 && (event.keyCode == 46)) return false;  // starting .Dot not accept
+        if (event.target.selectionStart === 0 && (event.keyCode == 64)) return false;  // starting @ not accept
+        const maskSeperator = new RegExp('^([a-zA-Z0-9 .@_-])', 'g'); // only Accept A-Z & 0-9 & .@
         return maskSeperator.test(event.key);
-    }
+      }
 
     noSpaceAllow(event: any) {  // for Space Not Allow
         if (event.code === 'Space') {

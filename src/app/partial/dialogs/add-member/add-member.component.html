@@ -147,10 +147,10 @@
                     <div class="mb-3 row">
                         <div class="col-sm-4 d-none d-lg-block d-sm-none">
                             <label for="txtEmailID" class="form-label">Email ID</label>
-                            <input type="email" class="form-control" placeholder="Email ID" formControlName="EmailId">
+                            <input type="email" class="form-control" placeholder="Email ID" formControlName="EmailId"
+                            (keypress)="commonService.emailRegex($event)">
                             <div *ngIf="submitted && f.EmailId.errors" class="invalid-feedback">
-                                <div *ngIf="f.EmailId.errors.email">Enter Valid email id
-                                </div>
+                                <div *ngIf="f.EmailId.errors.pattern">Enter Valid email id </div>
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -173,7 +173,7 @@
                                         [value]="category.id" name="IsRural"
                                         (change)='onRadioChangeCategory(category.name)'>
                                     <label class="form-check-label" for="rblRural">{{category.name}}</label>
-                                </div>
+                                </div> 
                             </div>
                         </div>
                     </div>
@@ -199,13 +199,15 @@
                                     (select)="getVillageOrCity(this.editProfileForm.value.TalukaId, villageCityLabel)">
                                 </ngx-select>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-4"> 
                                 <label for="ddlVillageTown" class="form-label">{{villageCityLabel}}</label>
                                 <ngx-select [allowClear]="true" [items]="resultVillageOrCity"
                                     placeholder="Select {{villageCityLabel}}" [optionValueField]="setVillOrCityId"
                                     formControlName="VillageId" [optionTextField]="setVillOrcityName"
-                                    [disabled]="villageDisabled">
+                                    [disabled]="(this.editProfileForm.value.IsRural == 1 && !this.editProfileForm.value.TalukaId) || 
+                                    (this.editProfileForm.value.IsRural == 0 && !this.editProfileForm.value.DistrictId)">
                                 </ngx-select>
+                                <!-- [disabled]="!this.editProfileForm.value.TalukaId || villageDisabled" -->
                             </div>
                         </div>
                         <div class="row mb-2">

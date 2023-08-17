@@ -344,8 +344,11 @@
                                                             <ng-container *ngIf="voterObj?.isdeleted != 1">
                                                             <td>{{voterObj?.voterNo}}</td>
                                                             <td>{{voterObj?.fullName}}</td>
-                                                            <!-- <td *ngFor="let design of designationArray"><span *ngIf="design?.id == voterObj?.designationId">{{design?.designationName}}</span></td> -->
-                                                            <td>{{voterObj?.designation.designationName}}</td>
+                                                            <td>
+                                                                <ng-container *ngFor="let design of designationArray">
+                                                                    <span *ngIf="design?.id == voterObj?.designationId">{{design?.designationName}}</span>
+                                                                </ng-container>
+                                                            </td>
                                                             <td>{{voterObj?.mobileNo}}</td>
                                                             <td>
                                                                 <div class="btn-group">

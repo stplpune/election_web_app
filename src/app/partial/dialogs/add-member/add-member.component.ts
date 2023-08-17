@@ -3,7 +3,7 @@ import { Component, ElementRef, EventEmitter, Inject, OnDestroy, OnInit, Output,
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
-import { debug } from 'console';
+import { debug, log } from 'console';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
@@ -25,7 +25,7 @@ export class AddMemberComponent implements OnInit, OnDestroy {
     private callAPIService: CallAPIService,
     private spinner: NgxSpinnerService,
     private toastrService: ToastrService,
-    private commonService: CommonService,
+    public commonService: CommonService,
     private fb: FormBuilder,
     private datePipe: DatePipe,
     public dialog: MatDialog,
@@ -125,7 +125,7 @@ export class AddMemberComponent implements OnInit, OnDestroy {
       LName: ['',Validators.compose([Validators.required ,Validators.pattern(/^\S*$/),this.commonService.onlyEnglish])],
       IsRural: [1],
       Gender: [''],
-      EmailId: ['', [Validators.email]],
+      EmailId: ['', [Validators.email, Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9._-]+[a-zA-Z0-9]+@([a-zA-Z.]+[.])+[a-zA-Z]{2,5}$')]],
       CreatedBy: [this.commonService.loggedInUserId()],
       DesignationId: ['', Validators.required],
       PostfromDate: [new Date(), Validators.required],
@@ -363,7 +363,8 @@ export class AddMemberComponent implements OnInit, OnDestroy {
     this.myInputVariable.nativeElement.value = '';
   }
 
-  onRadioChangeCategory(category: any) {
+  onRadioChangeCategory(category: any) { 
+    this.editProfileForm.controls['TalukaId'].setValue('');
     if (category == "Rural") {
       this.villageDisabled = true;
       this.villageCityLabel = "Village", this.setVillOrCityId = "VillageId", this.setVillOrcityName = "VillageName";
