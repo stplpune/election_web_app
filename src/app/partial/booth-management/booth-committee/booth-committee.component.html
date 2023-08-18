@@ -61,7 +61,7 @@
                                 <button class="nav-link" [class.active]="boothCommitteeType == 1"
                                     id="pills-BCommmitee-tab" data-bs-toggle="pill" data-bs-target="#pills-migrated"
                                     type="button" role="tab"
-                                    (click)="boothCommitteeType = 1;getCommitteMemberTypewise()"
+                                    (click)="comitteeType('general')"
                                     aria-controls="pills-migrated" aria-selected="true">
                                     General Booth Committee
                                 </button>
@@ -70,7 +70,7 @@
                                 <button class="nav-link" [class.active]="boothCommitteeType == 2"
                                     id="pills-pending-tab" data-bs-toggle="pill" data-bs-target="#pills-pending"
                                     type="button" role="tab"
-                                    (click)="boothCommitteeType = 2;getCommitteMemberTypewise()"
+                                    (click)="comitteeType('female')"
                                     aria-controls="pills-pending" aria-selected="false">
                                     Female Booth Committee
                                 </button>
@@ -254,7 +254,7 @@
                                                 </div>
                                             </div>
                                             <div class="card-body"> 
-                                                <div class="form-data text-end" (click)="addNewRecord()"> <a class="text-main" [ngClass]="{'text-secondary text-decoration-none': !disableBCFormValue}">Add New</a></div>
+                                                <!-- <div class="form-data text-end" (click)="addNewRecord()"> <a class="text-main" [ngClass]="{'text-secondary text-decoration-none': !disableBCFormValue}">Add New</a></div> -->
                                                 <div class="fixed-height1">
                                                     <table class="table dashboard-table mb-0">
                                                         <thead>
@@ -295,7 +295,7 @@
                                             </div>
                                             <div class="card-body">
                                                 <form [formGroup]="boothCommitteeForm">
-                                                <div [class.disable]="disableBCFormValue">
+                                                <div>
                                                 <div class="row mb-3">
                                                     <!-- <div class="col-sm-6">Name : {{voterClickObj?.englishName}}</div> 
                                                     <div class="col-sm-3">VoterNo : {{voterClickObj?.voterNo}}</div>

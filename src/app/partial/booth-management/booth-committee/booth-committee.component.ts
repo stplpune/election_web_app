@@ -192,6 +192,11 @@ export class BoothCommitteeComponent implements OnInit {
     }
   }
 
+  comitteeType(flag:any){
+    flag == 'general' ? (this.boothCommitteeType = 1,this.getCommitteMemberTypewise()) : (this.boothCommitteeType = 2,this.getCommitteMemberTypewise());
+    this.boothCommitteeType == 1 ? this.b['gender'].setValue(1) : this.b['gender'].setValue(2);
+  }
+
   getCommitteMemberTypewise() {  // Main Api For Table
     // this.nullishFilterForm();
     this.spinner.show();  
@@ -284,8 +289,8 @@ export class BoothCommitteeComponent implements OnInit {
         "fName": fullName[0],
         "mName": fullName?.length == 3 ? fullName[1] : '',
         "lName": fullName?.length == 3 ? fullName[2] : fullName[1],
-        "gender": 0,
-        "age": 0,
+        "gender": ele?.gender,
+        "age": ele?.age,
         "boothId": ele?.boothId,
         "designationId": ele?.designationId,
         "voterId": ele?.voterId,
@@ -362,7 +367,7 @@ export class BoothCommitteeComponent implements OnInit {
   @ViewChild('addCommitteeMemberModel') addCommitteeMemberModel: any;
   saveUpdateFlag: any;
   voterClickObj: any;
-  disableBCFormValue:boolean = true;
+  // disableBCFormValue:boolean = true;
   pushVoterListArray: any[] = [];
   GenderArray = [{ id: 1, name: "Male" }, { id: 2, name: "Female" }];
 
@@ -382,10 +387,9 @@ export class BoothCommitteeComponent implements OnInit {
     })
   }
 
-  addNewRecord(){
-    this.disableBCFormValue = false;
-    this.boothCommitteeForm.controls['designationId'].setValue(10);
-  }
+  // addNewRecord(){ 
+  //   this.disableBCFormValue = false;
+  // }
 
   addBCMemberForm() {
     this.submitted = true;
@@ -451,15 +455,17 @@ export class BoothCommitteeComponent implements OnInit {
   }
 
   clearBCForm() {
-    this.disableBCFormValue = true;
+    // this.disableBCFormValue = true;
     this.submitted = false;
     this.defaultBoothComityForm();
     this.voterClickObj = '';
+    this.boothCommitteeType == 1 ? this.b['gender'].setValue(1) : this.b['gender'].setValue(2);
   }
 
   clearBCDetail() {
     this.submitted = false;
     this.defaultBoothComityForm();
+    this.boothCommitteeType == 1 ? this.b['gender'].setValue(1) : this.b['gender'].setValue(2);
     this.pushVoterListArray = [];
     this.voterClickObj = '';
     this.voterSearch.setValue('');
@@ -475,8 +481,8 @@ export class BoothCommitteeComponent implements OnInit {
 
   AddVoterDetail(voterObj: any) {  // Add BoothCommittee Model
     this.voterClickObj = voterObj;
-    this.disableBCFormValue = false;
-    this.boothCommitteeForm.controls['designationId'].setValue(10);
+    // this.disableBCFormValue = false;
+    // this.boothCommitteeForm.controls['designationId'].setValue(10);
     if(voterObj) {
       this.getDesignationMaster();
       // this.btnTextBoothComity = 'Submit';
@@ -495,7 +501,7 @@ export class BoothCommitteeComponent implements OnInit {
   }
 
   removeBindData() {
-    this.disableBCFormValue = true;
+    // this.disableBCFormValue = true;
     this.defaultBoothComityForm();
     this.submitted = false;
   }
