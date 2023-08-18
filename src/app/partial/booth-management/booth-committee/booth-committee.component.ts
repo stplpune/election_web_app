@@ -52,7 +52,7 @@ export class BoothCommitteeComponent implements OnInit {
     private callAPIService: CallAPIService,
     private toastrService: ToastrService,
     private fb: FormBuilder,
-    public commonService: CommonService,
+    public commonService: CommonService,  
     private router: Router,
     private route: ActivatedRoute,
     public dialog: MatDialog,
@@ -198,7 +198,7 @@ export class BoothCommitteeComponent implements OnInit {
     let obj = this.localStorageData?.ClientId + '&TalukaId=' + (this.filterForm.value.TalukaId || 0)
       + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&AreaId=' + 0
       + '&IsPresident=' + 0 + '&CommitteeTypeId=' + this.boothCommitteeType + '&pageno=' + this.paginationNo + '&pagesize=' + this.pageSize
-    this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/GetBoothWiseCommitteMemberCommitteeTypewiseState?ClientId=' + obj, false, false, false, 'electionMicroSerApp');
+    this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/GetBoothWiseCommitteMemberCommitteeTypewiseState_1_0?ClientId=' + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
@@ -275,8 +275,8 @@ export class BoothCommitteeComponent implements OnInit {
     this.getVoterAreaList(obj?.boothId);
     this.areaObjforAdd = '';
 
-    obj?.boothcommitteeMembers?.map((ele: any) => {
-      let fullName = ele?.voterName?.trim().split(' ');
+    obj.boothcommitteeMembers.map((ele: any) => {
+      let fullName = ele?.voterName ? ele?.voterName?.trim().split(' ') : [];
       let obj = {
         "id": 0,
         "fullName": ele?.voterName,
@@ -285,6 +285,7 @@ export class BoothCommitteeComponent implements OnInit {
         "mName": fullName?.length == 3 ? fullName[1] : '',
         "lName": fullName?.length == 3 ? fullName[2] : fullName[1],
         "gender": 0,
+        "age": 0,
         "boothId": ele?.boothId,
         "designationId": ele?.designationId,
         "voterId": ele?.voterId,
@@ -305,9 +306,9 @@ export class BoothCommitteeComponent implements OnInit {
         "voterNo": ele?.voterNo
       }
       this.pushVoterListArray.push(obj);
-      this.pushVoterListArray.map((ele:any)=>{
-        ele['designation'] = this.designationArray.find((e:any)=> e.id== obj.designationId);
-   })
+  //     this.pushVoterListArray.map((ele:any)=>{
+  //       ele['designation'] = this.designationArray.find((e:any)=> e.id== obj.designationId).designationName;
+  //  })
     })
   }
 
@@ -361,7 +362,9 @@ export class BoothCommitteeComponent implements OnInit {
   @ViewChild('addCommitteeMemberModel') addCommitteeMemberModel: any;
   saveUpdateFlag: any;
   voterClickObj: any;
+  disableBCFormValue:boolean = true;
   pushVoterListArray: any[] = [];
+  GenderArray = [{ id: 1, name: "Male" }, { id: 2, name: "Female" }];
 
   get b() { return this.boothCommitteeForm.controls };
 
@@ -370,28 +373,41 @@ export class BoothCommitteeComponent implements OnInit {
       id: [0],
       mobileNo: ['', [Validators.required, Validators.pattern('[6-9]\\d{9}')]],
       designationId: ['', Validators.required],
+
+      fName: ['', [Validators.required, Validators.pattern('^[^\\s0-9\\[\\[`&._@#%*!+,|"\-\'\/\\]\\]{}][a-zA-Z]+$')]],
+      mName: ['', [Validators.pattern(/^[A-Za-z]+$/)]],
+      lName: ['', [Validators.required, Validators.pattern('^[^\\s0-9\\[\\[`&._@#%*!+,|"\-\'\/\\]\\]{}][a-zA-Z]+$')]],
+      age: ['', Validators.required],
+      gender: ['', Validators.required],
     })
+  }
+
+  addNewRecord(){
+    this.disableBCFormValue = false;
+    this.boothCommitteeForm.controls['designationId'].setValue(10);
   }
 
   addBCMemberForm() {
     this.submitted = true;
     if (this.boothCommitteeForm.invalid) {
       return;
-    } else if (!this.voterClickObj) {
-      this.toastrService.error('Please Select Voter');
-    } else {
-
-      let formData = this.boothCommitteeForm.value
-      let fullName = this.voterClickObj?.englishName?.trim().split(' ');
+    } 
+    // else if (!this.voterClickObj) {
+    //   this.toastrService.error('Please Select Voter');
+    // } 
+    else {
+      let formData = this.boothCommitteeForm.value;
+      let fullName = formData.fName + ' ' + formData.mName + ' ' + formData.lName;
 
       let obj = {
         "id": formData.id,
-        "fullName": this.voterClickObj?.englishName,
+        "fullName": fullName,
         "mobileNo": formData.mobileNo,
-        "fName": fullName[0],
-        "mName": fullName?.length == 3 ? fullName[1] : '',
-        "lName": fullName?.length == 3 ? fullName[2] : fullName[1],
-        "gender": 0,
+        "fName": formData.fName,
+        "mName": formData.mName,
+        "lName": formData.lName,
+        "gender": formData.gender,
+        "age": formData.age,
         "boothId": this.boothComityListObj?.boothId || 0,
         "designationId": formData.designationId,
         "voterId": this.voterClickObj?.voterId,
@@ -435,6 +451,7 @@ export class BoothCommitteeComponent implements OnInit {
   }
 
   clearBCForm() {
+    this.disableBCFormValue = true;
     this.submitted = false;
     this.defaultBoothComityForm();
     this.voterClickObj = '';
@@ -458,19 +475,27 @@ export class BoothCommitteeComponent implements OnInit {
 
   AddVoterDetail(voterObj: any) {  // Add BoothCommittee Model
     this.voterClickObj = voterObj;
+    this.disableBCFormValue = false;
     this.boothCommitteeForm.controls['designationId'].setValue(10);
-    if (voterObj?.length) {
+    if(voterObj) {
       this.getDesignationMaster();
-      this.btnTextBoothComity = 'Submit';
+      // this.btnTextBoothComity = 'Submit';
+      let fullName = voterObj?.englishName?.trim().split(' ');
       this.boothCommitteeForm.patchValue({
         id: 0,
         mobileNo: voterObj?.mobileNo1 || '',
-        designationId: this.boothCommitteeForm.value.designationId
+        designationId: this.boothCommitteeForm.value.designationId,
+
+        fName: fullName[0],
+        mName: fullName?.length == 3 ? fullName[1] : '',
+        lName: fullName?.length == 3 ? fullName[2] : fullName[1],
+        age: voterObj?.age,
       })
     }
   }
 
   removeBindData() {
+    this.disableBCFormValue = true;
     this.defaultBoothComityForm();
     this.submitted = false;
   }
@@ -479,16 +504,20 @@ export class BoothCommitteeComponent implements OnInit {
     return this.pushVoterListArray.some(item => item.isdeleted != 1);
   }
 
+  checkAgeYear(){
+    this.boothCommitteeForm.value?.age > 120 ? (this.b['age'].setValue(''),this.toastrService.error('Please Enter Valid Age')) : '';
+  }
+
   onSubmitForm() {
     if (this.voterAvailableOrNotinList() == false) {
       this.toastrService.error('Please Add Member');
       return;
     } else {
       this.spinner.show();
-      let url = this.saveUpdateFlag == 'update' ? 'ClientMasterApp/BoothCommittee/UpdateBoothCommitteeAreaUserState' : 'ClientMasterApp/BoothCommittee/CreateBoothCommitteeAreaUserState';
+      let url = this.saveUpdateFlag == 'update' ? 'ClientMasterApp/BoothCommittee/UpdateBoothCommitteeAreaUserState_1_0' : 'ClientMasterApp/BoothCommittee/CreateBoothCommitteeAreaUserState_1_0';
       this.callAPIService.setHttp('POST', url, false, this.pushVoterListArray, false, 'electionMicroSerApp');
       this.callAPIService.getHttp().subscribe((res: any) => {
-        if (res.responseData != null && res.statusCode == "200") {
+        if (res.responseData != null && res.statusCode == "200") {  
           this.spinner.hide();
           this.toastrService.success(res.statusMessage);
           this.addCommitteeMemberModel.nativeElement.click();

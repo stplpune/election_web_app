@@ -526,4 +526,10 @@ export class CommonService {
         return this.regions_m;
     }
 
+    onlyAlphabets(event: any) {
+        if (!this.noSpacesAtStart(event)) { return false }
+        const maskSeperator = new RegExp('^([a-zA-Z])', 'g');
+        return maskSeperator.test(event.key);
+    }
+
 }

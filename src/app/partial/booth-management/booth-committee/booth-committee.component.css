@@ -76,3 +76,8 @@
   padding: 5px;
   border-bottom: none;
 }
+
+.disable{
+  pointer-events: none;
+  opacity: 0.6;
+}
