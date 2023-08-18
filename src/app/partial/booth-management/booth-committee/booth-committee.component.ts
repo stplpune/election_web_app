@@ -387,18 +387,19 @@ export class BoothCommitteeComponent implements OnInit {
     })
   }
 
-  // addNewRecord(){ 
-  //   this.disableBCFormValue = false;
-  // }
+  checkPersidantAvail(){
+    return this.pushVoterListArray?.some(item => (item?.isdeleted == 0 && item?.designationId == 10 && this.b['designationId'].value == 10));
+  }
 
   addBCMemberForm() {
     this.submitted = true;
     if (this.boothCommitteeForm.invalid) {
       return;
     } 
-    // else if (!this.voterClickObj) {
-    //   this.toastrService.error('Please Select Voter');
-    // } 
+    else if (this.checkPersidantAvail() == true) {
+      this.toastrService.error('You Select Only One Persident Please Select Different');
+      return;
+    } 
     else {
       let formData = this.boothCommitteeForm.value;
       let fullName = formData.fName + ' ' + formData.mName + ' ' + formData.lName;
@@ -511,7 +512,7 @@ export class BoothCommitteeComponent implements OnInit {
   }
 
   checkAgeYear(){
-    this.boothCommitteeForm.value?.age > 120 ? (this.b['age'].setValue(''),this.toastrService.error('Please Enter Valid Age')) : '';
+    (this.boothCommitteeForm.value?.age > 120) ? (this.b['age'].setValue(''),this.toastrService.error('Please Enter Valid Age')) : '';
   }
 
   onSubmitForm() {
