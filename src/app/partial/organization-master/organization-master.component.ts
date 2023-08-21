@@ -290,8 +290,22 @@ export class OrganizationMasterComponent implements OnInit {
     this.updateValueAndValidityMF(levelId);
   }
 
+  setDefaultState(){
+    this.orgMasterForm.controls['StateId'].setValue(1);
+  }
+
   clearselOption(flag: any) { // on click select option close icon
-    if (flag == 'State') {
+    if(flag == 'committeeName'){
+      this.disableFlagDivi = true;
+      this.disableFlagDist = true;
+      this.disableFlagTal = true;
+      this.disableFlagVill = true;
+      this.orgMasterForm.controls["StateId"].setValue("");
+      this.orgMasterForm.controls["DivisionId"].setValue("");
+      this.orgMasterForm.controls["DistrictId"].setValue("");
+      this.orgMasterForm.controls["TalukaId"].setValue("");
+      this.orgMasterForm.controls["VillageId"].setValue("");
+    } else if (flag == 'State') {
       this.disableFlagDivi = true;
       this.disableFlagDist = true;
       this.disableFlagTal = true;

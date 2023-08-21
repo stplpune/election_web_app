@@ -224,6 +224,7 @@
                             <label class="form-label required-field">Parent Committee</label>
                             <ngx-select [allowClear]="true" [items]="resCommitteeByLevel"
                                 formControlName="SubParentCommitteeId" placeholder="Select Parent Committee"
+                                (select)="setDefaultState();getDivision(this.orgMasterForm.value.StateId)"
                                 optionValueField="Id" optionTextField="BodyOrgCellName"
                                 (remove)="clearselOption('committeeName')"
                                 [disabled]="!this.orgMasterForm.value.BodyLevelId || this.orgMasterForm.value.BodyLevelId == 2"
@@ -249,10 +250,11 @@
                             <div class="col-sm-6">
                                 <label class="form-label required-field">Select State</label>
                                 <ngx-select [allowClear]="true" (remove)="clearselOption('State')" [items]="allStates"
-                                    formControlName="StateId" (select)="getDivision(this.orgMasterForm.value.StateId);"
+                                    formControlName="StateId"
                                     placeholder="Select State" optionValueField="Id" optionTextField="StateName"
                                     [ngClass]="{ 'is-invalid': submitted && f.StateId.errors }"
-                                    [disabled]="!this.orgMasterForm.value.SubParentCommitteeId && this.orgMasterForm.value.BodyLevelId != 2">
+                                    [disabled]="(!this.orgMasterForm.value.SubParentCommitteeId && this.orgMasterForm.value.BodyLevelId != 2) ||
+                                    orgMasterForm.value.StateId">
                                 </ngx-select>
                                 <div *ngIf="submitted && f.StateId.errors" class="invalid-feedback">
                                     <div *ngIf="f.StateId.errors.required">State is required</div>
