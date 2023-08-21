@@ -187,6 +187,7 @@ export class OrganizationMasterComponent implements OnInit {
   }
 
   selectLevel(levelId: any, flag: any) {
+    this.selectLevelClear();
     console.log(levelId, flag)
     this.globalLevelId = levelId;
     if (levelId == 2) {
@@ -527,6 +528,7 @@ export class OrganizationMasterComponent implements OnInit {
   }
 
   getDistrict(divisionId: any, stateId: any) {
+    (this.orgMasterForm.value.BodyLevelId == 3) || (this.orgMasterForm.value.BodyLevelId == 4) ? (this.disableFlagDist = false) : this.disableFlagDist = true;
     //this.spinner.show();
     // this.callAPIService.setHttp('get', 'Web_GetDistrict_1_0_Committee?StateId=' + 1 +'&UserId='+this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb'); // old API Web_GetDistrict_1_0
     this.callAPIService.setHttp('get', 'Web_GetDistrict_2_0_Committee?DivisionId=' + divisionId + '&StateId=' + stateId +'&UserId='+this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb'); // old API Web_GetDistrict_1_0

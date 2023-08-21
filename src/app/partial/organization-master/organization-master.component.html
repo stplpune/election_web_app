@@ -266,8 +266,7 @@
                                     Division</label>
                                 <ngx-select [allowClear]="true" (remove)="clearselOption('Division')"
                                     [items]="allDivision" formControlName="DivisionId"
-                                    (select)="getDistrict(this.orgMasterForm.value.DivisionId, this.orgMasterForm.value.StateId);
-                                    disableFlagDist = false;"
+                                    (select)="getDistrict(this.orgMasterForm.value.DivisionId, this.orgMasterForm.value.StateId);"
                                     placeholder="Select Division" optionValueField="DivisionId"
                                     optionTextField="DivisionName"
                                     [ngClass]="{ 'is-invalid': submitted && f.DivisionId.errors }"
