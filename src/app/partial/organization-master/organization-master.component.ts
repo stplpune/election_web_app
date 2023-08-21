@@ -455,6 +455,15 @@ export class OrganizationMasterComponent implements OnInit {
     this.orgMasterForm.controls["VillageId"].setValue("");
     this.orgMasterForm.controls["SubParentCommitteeId"].setValue("");
     this.submitted = false;
+
+    this.orgMasterForm.controls['DivisionId'].clearValidators();
+    this.orgMasterForm.controls["DivisionId"].updateValueAndValidity();
+    this.orgMasterForm.controls['DistrictId'].clearValidators();
+    this.orgMasterForm.controls["DistrictId"].updateValueAndValidity();
+    this.orgMasterForm.controls['TalukaId'].clearValidators();
+    this.orgMasterForm.controls["TalukaId"].updateValueAndValidity();
+    this.orgMasterForm.controls['VillageId'].clearValidators();
+    this.orgMasterForm.controls['VillageId'].updateValueAndValidity();
   }
 
   getCommitteeByLevel(bodyLevelId:any) {
