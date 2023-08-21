@@ -330,7 +330,7 @@
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <label class="form-label required-field">Age</label>
-                                                        <input class="form-control" type="text" placeholder="Age" (input)="checkAgeYear()"
+                                                        <input class="form-control" type="text" placeholder="Age"
                                                             formControlName="age" (keypress)="commonService.acceptedOnlyNumbers($event)" maxlength="3"
                                                             [ngClass]="{ 'is-invalid': submitted && b.age.errors }">
                                                         <div *ngIf="submitted && b.age.errors" class="invalid-feedback">

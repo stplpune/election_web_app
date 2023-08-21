@@ -395,8 +395,10 @@ export class BoothCommitteeComponent implements OnInit {
     this.submitted = true;
     if (this.boothCommitteeForm.invalid) {
       return;
-    } 
-    else if (this.checkPersidantAvail() == true) {
+    } else if(this.boothCommitteeForm.value?.age < 18 || this.boothCommitteeForm.value?.age > 120){
+      this.b['age'].setValue(''),this.toastrService.error('Please Enter Valid Age');
+      return;
+    } else if (this.checkPersidantAvail() == true) {
       this.toastrService.error('You Select Only One Persident Please Select Different');
       return;
     } 
@@ -509,10 +511,6 @@ export class BoothCommitteeComponent implements OnInit {
 
   voterAvailableOrNotinList(){
     return this.pushVoterListArray.some(item => item.isdeleted != 1);
-  }
-
-  checkAgeYear(){
-    (this.boothCommitteeForm.value?.age > 120) ? (this.b['age'].setValue(''),this.toastrService.error('Please Enter Valid Age')) : '';
   }
 
   onSubmitForm() {
