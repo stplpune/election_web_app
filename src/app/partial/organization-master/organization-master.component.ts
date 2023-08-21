@@ -171,6 +171,8 @@ export class OrganizationMasterComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.allLevels = res.data1;
+        console.log(this.allLevels,'levels');
+        
         this.spinner.hide();
       } else {
         this.spinner.hide();
@@ -316,31 +318,31 @@ export class OrganizationMasterComponent implements OnInit {
       this.orgMasterForm.controls["TalukaId"].setValue("");
       this.orgMasterForm.controls["VillageId"].setValue("");
     }else if (flag == 'Division') {
-      this.disableFlagDivi = true;
+      // this.disableFlagDivi = true;
       this.disableFlagDist = true;
       this.disableFlagTal = true;
       this.disableFlagVill = true;
-      this.orgMasterForm.controls["DivisionId"].setValue("");
+      // this.orgMasterForm.controls["DivisionId"].setValue("");
       this.orgMasterForm.controls["DistrictId"].setValue("");
       this.orgMasterForm.controls["TalukaId"].setValue("");
       this.orgMasterForm.controls["VillageId"].setValue("");
-      this.orgMasterForm.controls["SubParentCommitteeId"].setValue("");
+      // this.orgMasterForm.controls["SubParentCommitteeId"].setValue("");
     }else if (flag == 'District') {
-      this.disableFlagDivi = true;
-      this.disableFlagDist = true;
+      // this.disableFlagDivi = true;
+      // this.disableFlagDist = true;
       this.disableFlagTal = true;
       this.disableFlagVill = true;
-      this.orgMasterForm.controls["DistrictId"].setValue("");
+      // this.orgMasterForm.controls["DistrictId"].setValue("");
       this.orgMasterForm.controls["TalukaId"].setValue("");
       this.orgMasterForm.controls["VillageId"].setValue("");
-      this.orgMasterForm.controls["SubParentCommitteeId"].setValue("");
+      // this.orgMasterForm.controls["SubParentCommitteeId"].setValue("");
     } else if (flag == 'Taluka') {
-      this.disableFlagDist = true;
-      this.disableFlagTal = true;
+      // this.disableFlagDist = true;
+      // this.disableFlagTal = true;
       this.disableFlagVill = false;
-      this.orgMasterForm.controls["TalukaId"].setValue("");
+      // this.orgMasterForm.controls["TalukaId"].setValue("");
       this.orgMasterForm.controls["VillageId"].setValue("");
-      this.orgMasterForm.controls["SubParentCommitteeId"].setValue("");
+      // this.orgMasterForm.controls["SubParentCommitteeId"].setValue("");
     } else if (flag == 'Village') {
       this.orgMasterForm.controls["VillageId"].setValidators(Validators.required);
       this.orgMasterForm.controls["VillageId"].setValue("");
@@ -572,6 +574,7 @@ export class OrganizationMasterComponent implements OnInit {
   }
 
   getTaluka(districtId: any) {
+    this.orgMasterForm.value.BodyLevelId==4 ? this.disableFlagTal = false : '';
     this.globalDistrictId = districtId;
     //this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_GetTaluka_1_0_Committee?DistrictId=' + districtId+'&UserId='+this.commonService.loggedInUserId(), false, false, false, 'electionServiceForWeb'); //old API Web_GetTaluka_1_0

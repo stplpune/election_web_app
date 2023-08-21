@@ -266,7 +266,8 @@
                                     Division</label>
                                 <ngx-select [allowClear]="true" (remove)="clearselOption('Division')"
                                     [items]="allDivision" formControlName="DivisionId"
-                                    (select)="getDistrict(this.orgMasterForm.value.DivisionId, this.orgMasterForm.value.StateId);"
+                                    (select)="getDistrict(this.orgMasterForm.value.DivisionId, this.orgMasterForm.value.StateId);
+                                    disableFlagDist = false;"
                                     placeholder="Select Division" optionValueField="DivisionId"
                                     optionTextField="DivisionName"
                                     [ngClass]="{ 'is-invalid': submitted && f.DivisionId.errors }"
@@ -291,7 +292,7 @@
                                     District</label>
                                 <ngx-select [allowClear]="true" (remove)="clearselOption('District')"
                                     [items]="allDistrict" formControlName="DistrictId"
-                                    (select)="districtEvent(this.orgMasterForm.value.BodyLevelId, this.orgMasterForm.value.DistrictId)"
+                                    (select)="districtEvent(this.orgMasterForm.value.BodyLevelId, this.orgMasterForm.value.DistrictId);"
                                     [disabled]="disableFlagDist || !this.orgMasterForm.value.DivisionId"
                                     (select)="getTaluka(this.orgMasterForm.value.DistrictId)"
                                     optionValueField="DistrictId" optionTextField="DistrictName"
