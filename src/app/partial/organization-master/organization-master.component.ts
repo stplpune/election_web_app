@@ -171,8 +171,6 @@ export class OrganizationMasterComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.allLevels = res.data1;
-        console.log(this.allLevels,'levels');
-        
         this.spinner.hide();
       } else {
         this.spinner.hide();
@@ -188,7 +186,6 @@ export class OrganizationMasterComponent implements OnInit {
 
   selectLevel(levelId: any, flag: any) {
     this.selectLevelClear();
-    console.log(levelId, flag)
     this.globalLevelId = levelId;
     if (levelId == 2) {
       this.disableFlagDivi = true;
