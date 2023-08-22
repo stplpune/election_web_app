@@ -208,6 +208,15 @@
             <div class="modal-body">
                 <form [formGroup]="orgMasterForm" (ngSubmit)="onSubmit()">
                     <div class="form-container">
+                        <!-- <div class="mb-2">
+                            <div class="form-check" *ngFor="let contituencies of selectContituencyArray">
+                                <input class="form-check-input" formControlName="continentalId" type="radio" id="flexRadioDefault1" 
+                                [value]="contituencies.id">
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                  {{contituencies.val}}
+                                </label>
+                              </div>
+                        </div> -->
                         <div class="mb-2">
                             <label class="form-label required-field">Select Committee Level</label>
                             <ngx-select [allowClear]="true" (remove)="selectLevelClear()" [items]="allLevels"
@@ -334,6 +343,16 @@
                                 </div>
                             </div> -->
                         </div>
+                        <!-- <div class="col-sm-6">
+                            <label class="form-label">
+                                Select Constituency</label>
+                            <ngx-select [allowClear]="true"
+                                [items]="selectContituencyArray"
+                                optionValueField="" optionTextField=""
+                                placeholder="Select Constituency"
+                                [ngClass]="{ 'is-invalid': submitted && f.TalukaId.errors }">
+                            </ngx-select>
+                        </div> -->
 
                         <div class="my-4">
                             <div class="row">

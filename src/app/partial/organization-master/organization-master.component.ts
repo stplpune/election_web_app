@@ -24,6 +24,7 @@ export class OrganizationMasterComponent implements OnInit {
   orgMasterForm!: FormGroup;
   AddDesignationForm!: FormGroup;
   filterForm!: FormGroup;
+  // selectContituencyArray:any[]=[{id:1,val:'Parliamentary Constituency'},{id:2,val:'Assembly Constituency'},{id:3,val:'District'}]
   categoryArray = [{ id: 1, name: "Rural" }, { id: 0, name: "Urban" }];
   IsMultiple = [{ id: 1, name: "Yes" }, { id: 0, name: "No" }];
   allotedDesignationArray = [{ id: 0, name: "All" }, { id: 2, name: "No" }, { id: 5, name: "1 To 5" }, { id: 10, name: "5 To 10" }, , { id: 11, name: "Above 10" }];
@@ -162,6 +163,7 @@ export class OrganizationMasterComponent implements OnInit {
       BodyLevelId: ['', Validators.required],
       SubParentCommitteeId:[''],
       CreatedBy: [this.commonService.loggedInUserId()],
+      // continentalId:[2]
     })
   }
 
@@ -454,14 +456,14 @@ export class OrganizationMasterComponent implements OnInit {
     val != 'parentCommittee' ? this.orgMasterForm.controls["SubParentCommitteeId"].setValue("") : '';
     this.submitted = false;
 
-    this.orgMasterForm.controls['DivisionId'].clearValidators();
-    this.orgMasterForm.controls["DivisionId"].updateValueAndValidity();
-    this.orgMasterForm.controls['DistrictId'].clearValidators();
-    this.orgMasterForm.controls["DistrictId"].updateValueAndValidity();
-    this.orgMasterForm.controls['TalukaId'].clearValidators();
-    this.orgMasterForm.controls["TalukaId"].updateValueAndValidity();
-    this.orgMasterForm.controls['VillageId'].clearValidators();
-    this.orgMasterForm.controls['VillageId'].updateValueAndValidity();
+    // !this.orgMasterForm.value.DivisionId ? this.orgMasterForm.controls['DivisionId'].clearValidators() : '';
+    // this.orgMasterForm.controls["DivisionId"].updateValueAndValidity();
+    // this.orgMasterForm.controls['DistrictId'].clearValidators();
+    // this.orgMasterForm.controls["DistrictId"].updateValueAndValidity();
+    // this.orgMasterForm.controls['TalukaId'].clearValidators();
+    // this.orgMasterForm.controls["TalukaId"].updateValueAndValidity();
+    // this.orgMasterForm.controls['VillageId'].clearValidators();
+    // this.orgMasterForm.controls['VillageId'].updateValueAndValidity();
   }
 
   getCommitteeByLevel(bodyLevelId:any) {
