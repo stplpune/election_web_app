@@ -292,6 +292,7 @@ export class OrganizationMasterComponent implements OnInit {
 
   setDefaultState(){
     this.orgMasterForm.controls['StateId'].setValue(1);
+    this.disableFlagDivi = false;
   }
 
   clearselOption(flag: any) { // on click select option close icon
