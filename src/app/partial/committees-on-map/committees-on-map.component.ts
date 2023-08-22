@@ -337,9 +337,10 @@ export class CommitteesOnMapComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   redToMemberProfile(memberId:any,FullName:any){
+    console.log(memberId,'-',FullName);
     let obj = {'memberId':memberId, 'FullName':FullName}
     sessionStorage.setItem('memberId', JSON.stringify(obj));
-    this.router.navigate(['/profile'], {relativeTo:this.route})
+    this.router.navigate(['/my-profile'], {relativeTo:this.route})
   }
 
   comActiveClass(flag: any) { // 0 - false 1 - true
@@ -725,6 +726,7 @@ export class CommitteesOnMapComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   get f() { return this.bodyMember.controls };
+  get fg(){return this.bodyMember.controls} // by using get() one can get controls of forms
 
   getAllBodyMemberDetail() {
     this.spinner.show();
