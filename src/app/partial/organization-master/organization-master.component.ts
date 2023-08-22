@@ -441,17 +441,17 @@ export class OrganizationMasterComponent implements OnInit {
     // }
   }
 
-  selectLevelClear() {
-    this.disableFlagDivi = true;
+  selectLevelClear(val?:any) {
+    val != 'parentCommittee' ? this.disableFlagDivi = true : '';
     this.disableFlagDist = true;
     this.disableFlagTal = true;
     this.disableFlagVill = true;
-    this.orgMasterForm.controls["StateId"].setValue("");
+    val != 'parentCommittee' ? this.orgMasterForm.controls["StateId"].setValue("") : '';
     this.orgMasterForm.controls["DivisionId"].setValue("");
     this.orgMasterForm.controls["DistrictId"].setValue("");
     this.orgMasterForm.controls["TalukaId"].setValue("");
     this.orgMasterForm.controls["VillageId"].setValue("");
-    this.orgMasterForm.controls["SubParentCommitteeId"].setValue("");
+    val != 'parentCommittee' ? this.orgMasterForm.controls["SubParentCommitteeId"].setValue("") : '';
     this.submitted = false;
 
     this.orgMasterForm.controls['DivisionId'].clearValidators();
