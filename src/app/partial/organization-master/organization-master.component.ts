@@ -457,6 +457,7 @@ export class OrganizationMasterComponent implements OnInit {
     this.submitted = false;
 
     // !this.orgMasterForm.value.DivisionId ? this.orgMasterForm.controls['DivisionId'].clearValidators() : '';
+    this.orgMasterForm.controls['DivisionId'].clearValidators();
     this.orgMasterForm.controls["DivisionId"].updateValueAndValidity();
     this.orgMasterForm.controls['DistrictId'].clearValidators();
     this.orgMasterForm.controls["DistrictId"].updateValueAndValidity();
