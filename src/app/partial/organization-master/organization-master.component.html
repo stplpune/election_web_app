@@ -233,7 +233,7 @@
                             <label class="form-label required-field">Parent Committee</label>
                             <ngx-select [allowClear]="true" [items]="resCommitteeByLevel"
                                 formControlName="SubParentCommitteeId" placeholder="Select Parent Committee"
-                                (select)="setDefaultState();getDivision(this.orgMasterForm.value.StateId);selectLevelClear('parentCommittee');"
+                                (select)="setDefaultState();getDivision(this.orgMasterForm.value.StateId);"
                                 optionValueField="Id" optionTextField="BodyOrgCellName"
                                 (remove)="clearselOption('committeeName')"
                                 [disabled]="!this.orgMasterForm.value.BodyLevelId || this.orgMasterForm.value.BodyLevelId == 2"
