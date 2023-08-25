@@ -67,6 +67,7 @@ const routes: Routes = [
       { path: 'assign-taluka-to-assembly', loadChildren: () => import('./partial/booth-management/assign-taluka-to-assembly/assign-taluka-to-assembly.module').then(m => m.AssignTalukaToAssemblyModule), data: { title: 'Assign Taluka to Assembly', allowedRoles: ['1', '2', '7', '8'] } },
     ]
   },
+  { path: 'committee-dashboard1', loadChildren: () => import('./partial/committee-dashboard1/committee-dashboard1.module').then(m => m.CommitteeDashboard1Module) },
   { path: '500', component: ServerErrorComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
