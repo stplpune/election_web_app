@@ -163,6 +163,7 @@ export class OrganizationMasterComponent implements OnInit {
       BodyLevelId: ['', Validators.required],
       SubParentCommitteeId:[''],
       CreatedBy: [this.commonService.loggedInUserId()],
+      IsAllowBoothCommittee:['']
       // continentalId:[2]
     })
   }
@@ -656,11 +657,17 @@ export class OrganizationMasterComponent implements OnInit {
       this.spinner.hide();
       return;
     }
+    else if (this.orgMasterForm.value.IsAllowBoothCommittee == false) {
+      this.toastrService.error("Allow Booth Committee must be checked");
+      this.spinner.hide();
+      return;
+    }
     else {
       // //this.spinner.show();
       let fromData: any = new FormData();
       this.orgMasterForm.value.BodyLevelId == 6 ? this.orgMasterForm.value.IsRural = 0 : this.orgMasterForm.value.IsRural = 1;
       this.orgMasterForm.value.VillageId = 0;
+      this.orgMasterForm.value.IsAllowBoothCommittee = (this.orgMasterForm.value.IsAllowBoothCommittee == true) ? 1 : 0;
 
       Object.keys(this.orgMasterForm.value).forEach((cr: any, ind: any) => {
         let value = Object.values(this.orgMasterForm.value)[ind] != null ? Object.values(this.orgMasterForm.value)[ind] : 0;
@@ -745,7 +752,8 @@ export class OrganizationMasterComponent implements OnInit {
           DistrictId: this.selEditOrganization.DistrictId,
           IsRural: this.selEditOrganization.IsRural,
           BodyLevelId: this.selEditOrganization.BodyLevel,
-          CreatedBy: this.commonService.loggedInUserId()
+          CreatedBy: this.commonService.loggedInUserId(),
+          IsAllowBoothCommittee: this.selEditOrganization.IsAllowBoothCommittee == 1 ? true : false
         })
       } else {
         // //this.toastrService.error("Data is not available");
