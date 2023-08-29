@@ -365,7 +365,7 @@ export class CommitteeDashboard1Component implements OnInit {
   setSVGPath(filteredDistrict:any, status:string, filterTal?:any){
     if(status=='dist'){
       var path = 'assets/mapSvg/' + filteredDistrict[0]?.districtName + '.svg';
-      // this.showTalukaSvgMap(this.commonService.mapRegions(), path);
+      this.showTalukaSvgMap(this.commonService.mapRegions(), path);
     }
     this.bindPieChartDataForTalukaPresident(this.selectedDistrictId, (filterTal? filterTal[0]?.talukaId:0)); 
   }
