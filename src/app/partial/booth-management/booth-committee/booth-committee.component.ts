@@ -254,7 +254,14 @@ export class BoothCommitteeComponent implements OnInit {
       this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/IsMobileNoExists?ClientId=' + this.localStorageData?.ClientId + obj, false, false, false, 'electionMicroSerApp');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.responseData != null && res.statusCode == "200") {
-          res.responseData?.id == 0 ? (this.toastrService.error(res.responseData?.msg), this.b['mobileNo'].setValue('')) : ''
+          if (res.responseData?.userId == -1) {
+            (this.toastrService.error("Mobile Number Already Registerd"), this.b['mobileNo'].setValue(''));
+          } else if (res.responseData?.userId > 1) {
+            this.confornModelMsg = res.responseData.msg;
+            this.CommityMemberconfModel.nativeElement.click();
+          } else {
+            this.finalAddBCMemberForm();
+          }
         } else {
         }
       }, (error: any) => { this.router.navigate(['../500'], { relativeTo: this.route }) })
@@ -370,6 +377,8 @@ export class BoothCommitteeComponent implements OnInit {
   // disableBCFormValue:boolean = true;
   pushVoterListArray: any[] = [];
   GenderArray = [{ id: 1, name: "Male" }, { id: 2, name: "Female" }];
+  @ViewChild('CommityMemberconfModel') CommityMemberconfModel: any;
+  confornModelMsg:any;
 
   get b() { return this.boothCommitteeForm.controls };
 
@@ -391,9 +400,14 @@ export class BoothCommitteeComponent implements OnInit {
     return this.pushVoterListArray?.some(item => (item?.isdeleted == 0 && item?.designationId == 10 && this.b['designationId'].value == 10));
   }
 
+  checkMobileNo(){  return this.pushVoterListArray?.some(item => (item?.mobileNo == this.b['mobileNo'].value))}
+
   addBCMemberForm() {
     this.submitted = true;
     if (this.boothCommitteeForm.invalid) {
+      return;
+    } else if(this.checkMobileNo() == true){
+      this.b['mobileNo'].setValue(''),this.toastrService.error('Mobile Number Already in list Please Enter Different');
       return;
     } else if(this.boothCommitteeForm.value?.age < 18 || this.boothCommitteeForm.value?.age > 120){
       this.b['age'].setValue(''),this.toastrService.error('Please Enter Valid Age');
@@ -403,7 +417,12 @@ export class BoothCommitteeComponent implements OnInit {
       return;
     } 
     else {
-      let formData = this.boothCommitteeForm.value;
+      this.isMobileNoExists();
+    }
+  }
+
+  finalAddBCMemberForm(){
+    let formData = this.boothCommitteeForm.value;
       let fullName = formData.fName + ' ' + formData.mName + ' ' + formData.lName;
 
       let obj = {
@@ -439,7 +458,6 @@ export class BoothCommitteeComponent implements OnInit {
       this.removeSelectedMissingArea('add',this.voterClickObj?.areaId);
       this.getSearchVoterBCGeneralAndFemale(this.boothIdforAdd); // (purpose) show only disable selected Voter
       this.clearBCForm();
-    }
   }
 
   removeSelectedMissingArea(flag: any,areaid:any) {
