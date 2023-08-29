@@ -657,11 +657,11 @@ export class OrganizationMasterComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    else if (this.orgMasterForm.value.IsAllowBoothCommittee == false) {
-      this.toastrService.error("Allow Booth Committee must be checked");
-      this.spinner.hide();
-      return;
-    }
+    // else if (this.orgMasterForm.value.IsAllowBoothCommittee == false) {
+    //   this.toastrService.error("Allow Booth Committee must be checked");
+    //   this.spinner.hide();
+    //   return;
+    // }
     else {
       // //this.spinner.show();
       let fromData: any = new FormData();
