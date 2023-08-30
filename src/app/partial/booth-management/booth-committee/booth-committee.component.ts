@@ -255,10 +255,11 @@ export class BoothCommitteeComponent implements OnInit {
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.responseData != null && res.statusCode == "200") {
           if (res.responseData?.userId == -1) {
-            (this.toastrService.error("Mobile Number Already Registerd"), this.b['mobileNo'].setValue(''));
+            this.toastrService.error("Mobile Number Already Registerd"), this.b['mobileNo'].setValue('');
           } else if (res.responseData?.userId > 1) {
             this.confornModelMsg = res.responseData.msg;
-            this.CommityMemberconfModel.nativeElement.click();
+            this.toastrService.error("Mobile Number Already Registerd"), this.b['mobileNo'].setValue('');
+            // this.CommityMemberconfModel.nativeElement.click();
           } else {
             this.finalAddBCMemberForm();
           }
@@ -377,7 +378,7 @@ export class BoothCommitteeComponent implements OnInit {
   // disableBCFormValue:boolean = true;
   pushVoterListArray: any[] = [];
   GenderArray = [{ id: 1, name: "Male" }, { id: 2, name: "Female" }];
-  @ViewChild('CommityMemberconfModel') CommityMemberconfModel: any;
+  // @ViewChild('CommityMemberconfModel') CommityMemberconfModel: any;
   confornModelMsg:any;
 
   get b() { return this.boothCommitteeForm.controls };
