@@ -1,0 +1,35 @@
+<svg id="Parliamentary_Constituency" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="39.629" height="39.629" viewBox="0 0 39.629 39.629">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="path2772" d="M0-682.665H39.629v39.629H0Z" transform="translate(0 682.665)" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="g2768" transform="translate(0 0)">
+    <g id="g2770" clip-path="url(#clip-path)">
+      <g id="g2776" transform="translate(0.58 35.937)">
+        <path id="path2778" d="M-18.265-50.482H17.949a1.13,1.13,0,0,0,1.128-1.128v-.856a1.132,1.132,0,0,0-1.128-1.128H-18.265a1.131,1.131,0,0,0-1.126,1.128v.856A1.13,1.13,0,0,0-18.265-50.482Z" transform="translate(19.391 53.593)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      </g>
+      <g id="g2780" transform="translate(3.023 15.421)">
+        <path id="path2782" d="M-107.266,0h-5.485a1.13,1.13,0,0,0-1.125,1.128V2.359h33.584V1.128A1.13,1.13,0,0,0-81.421,0h-5.485" transform="translate(113.877)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      </g>
+      <g id="g2784" transform="translate(0.58 17.779)">
+        <path id="path2786" d="M-18.265-74.833H17.949a1.13,1.13,0,0,0,1.128-1.128V-78.32a1.13,1.13,0,0,0-1.128-1.125H-18.265a1.129,1.129,0,0,0-1.126,1.125v2.359A1.13,1.13,0,0,0-18.265-74.833Z" transform="translate(19.391 79.445)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      </g>
+      <g id="g2788" transform="translate(9.365 7.332)">
+        <path id="path2790" d="M-76.079-28.089A10.383,10.383,0,0,1-70.32-29.82,10.448,10.448,0,0,1-59.872-19.372h-20.9a10.4,10.4,0,0,1,2.7-7.005" transform="translate(80.768 29.82)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      </g>
+      <g id="g2792" transform="translate(1.706 22.391)">
+        <path id="path2794" d="M0-88.574v-5.459H36.214v13.546H0v-5.459" transform="translate(0 94.033)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      </g>
+      <g id="g2796" transform="translate(19.813 0.58)">
+        <path id="path2798" d="M0-109.546V-116.3" transform="translate(0 116.297)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      </g>
+      <g id="g2800" transform="translate(19.813 0.58)">
+        <path id="path2802" d="M0,0H6.959L5.744,2.014,6.959,4.03H0Z" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      </g>
+      <g id="g2804" transform="translate(4.337 25.72)">
+        <path id="path2806" d="M-216.988-165.8v-7.813a2.411,2.411,0,0,0-2.4-2.4,2.411,2.411,0,0,0-2.4,2.4v7.813Zm8.565,0v-7.813a2.411,2.411,0,0,0-2.4-2.4,2.411,2.411,0,0,0-2.4,2.4v7.813Zm8.565,0v-7.813a2.411,2.411,0,0,0-2.4-2.4,2.412,2.412,0,0,0-2.4,2.4v7.813Zm-25.694,0v-7.813a2.413,2.413,0,0,0-2.4-2.4,2.411,2.411,0,0,0-2.4,2.4v7.813Z" transform="translate(230.361 176.013)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      </g>
+    </g>
+  </g>
+</svg>

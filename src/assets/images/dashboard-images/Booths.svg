@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="39.656" height="39.656" viewBox="0 0 39.656 39.656">
+  <g id="Booth" transform="translate(1 1)">
+    <rect id="XMLID_197_" width="24.592" height="11.527" transform="translate(13.064 26.129)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
+    <path id="XMLID_193_" d="M28.247,19.216h0a4.227,4.227,0,0,0-4.227,4.227V24.6h8.453V23.443A4.227,4.227,0,0,0,28.247,19.216Z" transform="translate(2.108 1.533)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
+    <ellipse id="XMLID_192_" cx="2.305" cy="2.305" rx="2.305" ry="2.305" transform="translate(28.05 16.138)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
+    <path id="XMLID_191_" d="M17.952,19.216h0a4.227,4.227,0,0,0-4.227,4.227V24.6h8.453V23.443A4.227,4.227,0,0,0,17.952,19.216Z" transform="translate(0.876 1.533)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
+    <ellipse id="XMLID_190_" cx="2.305" cy="2.305" rx="2.305" ry="2.305" transform="translate(16.523 16.138)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
+    <rect id="XMLID_189_" width="13.064" height="7.685" transform="translate(3.842 4.611)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
+    <rect id="XMLID_188_" width="13.064" height="7.685" transform="translate(20.749 4.611)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
+    <path id="XMLID_187_" d="M38.34,26.812V.684A116.1,116.1,0,0,1,.684.684V36.034A113.354,113.354,0,0,1,13.748,34.64" transform="translate(-0.684 -0.684)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/>
+  </g>
+</svg>
