@@ -1,4 +1,4 @@
-<div class="container-fluid commitees">
+<!-- <div class="container-fluid commitees">
   <div id="pageheader" class="px-3">
     <span class="page-name">Committees Dashboard</span>
   </div>
@@ -9,10 +9,11 @@
           <div class="col-sm-6 border-end map-height">
             <div class="card card-body shadow-none p-0">
               <div class="committeesonmap2">
-                <div class="text-end fw-bold text-primary">{{filteredDistrict[0]?.districtName  + (filteredTal.length ? (' (' + filteredTal[0]?.talukaName +')'):'')}}</div>
-                <!--   -->
-                <div  id="mapsvg1" (click)="svgMapClick('mapClick')"></div>
-                <div [class]="previousDistSelected=='9' ? 'm-5' : 'm-4'" id="mapsvg2" (click)="svgMapClick1('mapClick')"></div>
+                <div class="text-end fw-bold text-primary">{{filteredDistrict[0]?.districtName + (filteredTal.length ?
+                  (' (' + filteredTal[0]?.talukaName +')'):'')}}</div>
+                <div id="mapsvg1" (click)="svgMapClick('mapClick')"></div>
+                <div [class]="previousDistSelected=='9' ? 'm-5' : 'm-4'" id="mapsvg2"
+                  (click)="svgMapClick1('mapClick')"></div>
               </div>
             </div>
           </div>
@@ -132,7 +133,6 @@
   </div>
 </div>
 
-<!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
   data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
@@ -174,4 +174,609 @@
       </div>
     </div>
   </div>
+</div> -->
+
+<div class="container-fluid">
+    <div class="row mb-3" id="topheader">
+        <div class="col-sm-12">
+            <div class="d-flex justify-content-between">
+                <div class="d-flex align-items-center gap-2 w-75">
+                    <img src="assets/images/home.svg">
+                    <div class="input-group w-50">
+                        <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" class="form-control">
+                    </div>
+                    <button type="submit" role="search" class="btn btn-main">Search</button>
+                </div>
+                <div class="d-flex align-items-center gap-2 fw-bold w-25 justify-content-end">
+                    <p class="mb-0 text-main">Maharashtra</p>
+                    <i class="fas fa-angle-double-right text-main"></i>
+                    <p class="mb-0 warning">Satara</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <div class="card card-body" id="stats">
+                <div class="row g-2">
+                    <div class="col-sm">
+                        <div class="card card-body pink h-100">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="image-bg">
+                                        <img src="assets/images/dashboard-images/Parliamentary_Constituency.svg"
+                                            alt="...">
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-2">
+                                    <p>Parliamentary Constituency</p>
+                                    <h3>01</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="card card-body voilet h-100">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="image-bg">
+                                        <img src="assets/images/dashboard-images/Assembly Constituency.svg" alt="...">
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-2">
+                                    <p>Assembly Constituency</p>
+                                    <h3>08</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="card card-body orange h-100">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="image-bg">
+                                        <img src="assets/images/dashboard-images/Voters.svg" alt="...">
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-2">
+                                    <p>Voters</p>
+                                    <h3>8,74,540</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="card card-body blue h-100">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="image-bg">
+                                        <img src="assets/images/dashboard-images/Booths.svg" alt="...">
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-2">
+                                    <p>Booths</p>
+                                    <h3>5,120</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="card card-body green h-100">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="image-bg">
+                                        <img src="assets/images/dashboard-images/Booth_Committee.svg" alt="...">
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-2">
+                                    <p>Booth Committee</p>
+                                    <h3>1,569</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3 chartbox g-3 form-container">
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-header">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                            value="option1">
+                        <label class="form-check-label" for="inlineRadio1">Parliamentary Cons.</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
+                            value="option2">
+                        <label class="form-check-label" for="inlineRadio2">Assembly Cons.</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
+                            value="option3">
+                        <label class="form-check-label" for="inlineRadio3">District</label>
+                    </div>
+                </div>
+                <div class="card-header">
+                    <div class="input-group">
+                        <label class="input-group-text" for="inputGroupSelect01">
+                            <i class="fas fa-search"></i>
+                        </label>
+                        <select class="form-select" id="inputGroupSelect01">
+                            <option selected>Select District</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <img src="assets/images/Maharashtra_Wahlkreise_Lok_Sabha.svg" class="img-fluid">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="card card-body mb-3" id="president">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="flex-shrink-0">
+                        <img src="assets/images/dashboard-images/President.svg" alt="...">
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span>President :</span>
+                            <img src="assets/images/dashboard-images/Profile_dummy.svg">
+                            <h6 class="mb-0 fw-bold">Ravikant Patil</h6>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-1 ms-3">
+                        <p class="mb-0 text-secondary">
+                            <span>Mobile No. :</span>
+                            <span class="fw-bold ms-2">7458965485</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-header text-main">
+                            Booth Committee Performance
+                        </div>
+                        <div class="card-body">
+                            <div class="card-height">
+                                pie chart
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6" id="leaders">
+                    <div class="card">
+                        <div class="card-header text-main">
+                            Important Leaders
+                        </div>
+                        <div class="card-body pt-0">
+                            <div class="card-height">
+                                <div class="d-flex align-items-center leader">
+                                    <div class="flex-shrink-0">
+                                        <div class="profile">
+                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
+                                                class="leader-img">
+                                            <img src="assets/images/logos/bjp.png" class="party">
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <p>Udyanraje Pratapsinha Bhosale</p>
+                                        <div class="d-flex justify-content-between contacts">
+                                            <div class="green">
+                                                <i class="fas fa-phone-alt"></i>
+                                                9988776556
+                                            </div>
+                                            <div class="orange">
+                                                <i class="fas fa-award"></i>
+                                                MP
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center leader">
+                                    <div class="flex-shrink-0">
+                                        <div class="profile">
+                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
+                                                class="leader-img">
+                                            <img src="assets/images/logos/bjp.png" class="party">
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <p>Udyanraje Pratapsinha Bhosale</p>
+                                        <div class="d-flex justify-content-between contacts">
+                                            <div class="green">
+                                                <i class="fas fa-phone-alt"></i>
+                                                9988776556
+                                            </div>
+                                            <div class="orange">
+                                                <i class="fas fa-award"></i>
+                                                MP
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center leader">
+                                    <div class="flex-shrink-0">
+                                        <div class="profile">
+                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
+                                                class="leader-img">
+                                            <img src="assets/images/logos/bjp.png" class="party">
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <p>Udyanraje Pratapsinha Bhosale</p>
+                                        <div class="d-flex justify-content-between contacts">
+                                            <div class="green">
+                                                <i class="fas fa-phone-alt"></i>
+                                                9988776556
+                                            </div>
+                                            <div class="orange">
+                                                <i class="fas fa-award"></i>
+                                                MP
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center leader">
+                                    <div class="flex-shrink-0">
+                                        <div class="profile">
+                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
+                                                class="leader-img">
+                                            <img src="assets/images/logos/bjp.png" class="party">
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <p>Udyanraje Pratapsinha Bhosale</p>
+                                        <div class="d-flex justify-content-between contacts">
+                                            <div class="green">
+                                                <i class="fas fa-phone-alt"></i>
+                                                9988776556
+                                            </div>
+                                            <div class="orange">
+                                                <i class="fas fa-award"></i>
+                                                MP
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center leader">
+                                    <div class="flex-shrink-0">
+                                        <div class="profile">
+                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
+                                                class="leader-img">
+                                            <img src="assets/images/logos/bjp.png" class="party">
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <p>Udyanraje Pratapsinha Bhosale</p>
+                                        <div class="d-flex justify-content-between contacts">
+                                            <div class="green">
+                                                <i class="fas fa-phone-alt"></i>
+                                                9988776556
+                                            </div>
+                                            <div class="orange">
+                                                <i class="fas fa-award"></i>
+                                                MP
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center leader">
+                                    <div class="flex-shrink-0">
+                                        <div class="profile">
+                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
+                                                class="leader-img">
+                                            <img src="assets/images/logos/bjp.png" class="party">
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <p>Udyanraje Pratapsinha Bhosale</p>
+                                        <div class="d-flex justify-content-between contacts">
+                                            <div class="green">
+                                                <i class="fas fa-phone-alt"></i>
+                                                9988776556
+                                            </div>
+                                            <div class="orange">
+                                                <i class="fas fa-award"></i>
+                                                MP
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center leader">
+                                    <div class="flex-shrink-0">
+                                        <div class="profile">
+                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
+                                                class="leader-img">
+                                            <img src="assets/images/logos/bjp.png" class="party">
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <p>Udyanraje Pratapsinha Bhosale</p>
+                                        <div class="d-flex justify-content-between contacts">
+                                            <div class="green">
+                                                <i class="fas fa-phone-alt"></i>
+                                                9988776556
+                                            </div>
+                                            <div class="orange">
+                                                <i class="fas fa-award"></i>
+                                                MP
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center leader">
+                                    <div class="flex-shrink-0">
+                                        <div class="profile">
+                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
+                                                class="leader-img">
+                                            <img src="assets/images/logos/bjp.png" class="party">
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <p>Udyanraje Pratapsinha Bhosale</p>
+                                        <div class="d-flex justify-content-between contacts">
+                                            <div class="green">
+                                                <i class="fas fa-phone-alt"></i>
+                                                9988776556
+                                            </div>
+                                            <div class="orange">
+                                                <i class="fas fa-award"></i>
+                                                MP
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center leader">
+                                    <div class="flex-shrink-0">
+                                        <div class="profile">
+                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
+                                                class="leader-img">
+                                            <img src="assets/images/logos/bjp.png" class="party">
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <p>Udyanraje Pratapsinha Bhosale</p>
+                                        <div class="d-flex justify-content-between contacts">
+                                            <div class="green">
+                                                <i class="fas fa-phone-alt"></i>
+                                                9988776556
+                                            </div>
+                                            <div class="orange">
+                                                <i class="fas fa-award"></i>
+                                                MP
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center leader">
+                                    <div class="flex-shrink-0">
+                                        <div class="profile">
+                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
+                                                class="leader-img">
+                                            <img src="assets/images/logos/bjp.png" class="party">
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <p>Udyanraje Pratapsinha Bhosale</p>
+                                        <div class="d-flex justify-content-between contacts">
+                                            <div class="green">
+                                                <i class="fas fa-phone-alt"></i>
+                                                9988776556
+                                            </div>
+                                            <div class="orange">
+                                                <i class="fas fa-award"></i>
+                                                MP
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center leader">
+                                    <div class="flex-shrink-0">
+                                        <div class="profile">
+                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
+                                                class="leader-img">
+                                            <img src="assets/images/logos/bjp.png" class="party">
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <p>Udyanraje Pratapsinha Bhosale</p>
+                                        <div class="d-flex justify-content-between contacts">
+                                            <div class="green">
+                                                <i class="fas fa-phone-alt"></i>
+                                                9988776556
+                                            </div>
+                                            <div class="orange">
+                                                <i class="fas fa-award"></i>
+                                                MP
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row chartbox mb-3">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">Constituency Wise Past Election Summary</div>
+                <div class="card-body">
+                    <h6 class="text-orange fw-bold mb-3">Parliamentary Constituency Election Summary 2019</h6>
+                    <table class="dash-table mb-3">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Constituency</th>
+                                <th>Winner</th>
+                                <th>Party</th>
+                                <th>Votes</th>
+                                <th>Winning Margin</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>43 - Madha</td>
+                                <td>
+                                    <a href="#">Ramesh Gavade</a>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span>BJP</span>
+                                        <img src="assets/images/logos/bjp.png" class="party">
+                                    </div>
+                                </td>
+                                <td>1,78,458</td>
+                                <td>21,690</td>
+                                <td>
+                                    <i class="fas fa-info-circle info"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>43 - Madha</td>
+                                <td>
+                                    <a href="#">Ramesh Gavade</a>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span>BJP</span>
+                                        <img src="assets/images/logos/bjp.png" class="party">
+                                    </div>
+                                </td>
+                                <td>1,78,458</td>
+                                <td>21,690</td>
+                                <td>
+                                    <i class="fas fa-info-circle info"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h6 class="text-orange fw-bold mb-3">Assembly Constituency Election Summary 2019</h6>
+                    <table class="dash-table">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Constituency</th>
+                                <th>Winner</th>
+                                <th>Party</th>
+                                <th>Votes</th>
+                                <th>Winning Margin</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>43 - Madha</td>
+                                <td>
+                                    <a href="#">Ramesh Gavade</a>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span>BJP</span>
+                                        <img src="assets/images/logos/bjp.png" class="party">
+                                    </div>
+                                </td>
+                                <td>1,78,458</td>
+                                <td>21,690</td>
+                                <td>
+                                    <i class="fas fa-info-circle info"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>43 - Madha</td>
+                                <td>
+                                    <a href="#">Ramesh Gavade</a>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span>BJP</span>
+                                        <img src="assets/images/logos/bjp.png" class="party">
+                                    </div>
+                                </td>
+                                <td>1,78,458</td>
+                                <td>21,690</td>
+                                <td>
+                                    <i class="fas fa-info-circle info"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row chartbox mb-3">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header text-main">Talukawise Booth Committee Formation progress</div>
+                <div class="card-body">
+                    chart
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row chartbox">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header text-main">Taluka Wise Important Leaders</div>
+                <div class="card-body">
+                    <table class="dash-table">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Taluka</th>
+                                <th>Taluka President</th>
+                                <th>Moible No.</th>
+                                <th>Important Leaders</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Karad</td>
+                                <td>
+                                    <a href="#">Ramesh Gavade</a>
+                                </td>
+                                <td>9876554310</td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <img src="assets/images/logos/bjp.png" class="party">
+                                        <a href="#">Shamrao Pandurang Patil (7856412395)</a>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <img src="assets/images/logos/bjp.png" class="party">
+                                        <a href="#">Shamrao Pandurang Patil (7856412395)</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
