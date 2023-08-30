@@ -201,7 +201,7 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <p class="modal-title" id="AddNewCommitteeLabel">Add New Committee</p>
+                <p class="modal-title" id="AddNewCommitteeLabel">{{btnText=="Update Committee"? "Update Committee" : "Add New Committee"}}</p>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                     #closeewCommitteeModal (click)="clearForm()"></button>
             </div>
