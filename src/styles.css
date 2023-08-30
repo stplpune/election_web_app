@@ -105,6 +105,12 @@ a.text-main:hover {
     border-radius: 5px;
 }
 
+.form-container .input-group .input-group-text {
+    background-color: transparent;
+    border: none;
+}
+
+.form-container .input-group .form-select,
 .form-container .input-group .form-control:focus,
 .form-container .input-group .form-control {
     border: none !important;
