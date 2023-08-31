@@ -1,0 +1,14 @@
+.leader-img {
+    position: relative;
+}
+
+.leader-img .leader {
+    width: 100%;
+}
+
+.leader-img .party {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 60px;
+}
