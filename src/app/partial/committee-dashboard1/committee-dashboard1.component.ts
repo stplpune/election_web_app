@@ -10,6 +10,7 @@ import { DateTimeAdapter } from 'ng-pick-datetime';
 import { DatePipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { ChartComponent } from "ng-apexcharts";
+import { log } from 'console';
 declare var $: any;
 
 @Component({
@@ -27,8 +28,6 @@ export class CommitteeDashboard1Component implements OnInit {
   boothComitySummary:any;
   graphInstance: any;
   graphInstance1: any;
-  onClickFlag:boolean = false; ///
-  hideComityGraph : boolean = false; ///
 
   @ViewChild("chart") chart: ChartComponent | undefined;
   chartOptions: any;
@@ -48,6 +47,18 @@ export class CommitteeDashboard1Component implements OnInit {
   topFilter:FormGroup | any;
   bCFormationDropArray:any;
   bCFormationCountArray:any;
+  selectedTalId: any;
+
+  getTotalPC: any;
+  paginationNoPC: number = 1;
+  pageSizePC: number = 10;
+
+  getTotalAC: any;
+  paginationNoAC: number = 1;
+  pageSizeAC: number = 10;
+  pastPCArray: any;
+  pastACArray: any;
+  viewDetailAC_DCArray: any;
 
   constructor(
     private commonService: CommonService,
@@ -87,18 +98,24 @@ export class CommitteeDashboard1Component implements OnInit {
     } else if(typeId == 2){
       this.showSvgMapAssembly(this.commonService.mapRegions());
     } else if(typeId == 3){
-      this.showSvgMap(this.commonService.mapRegions());
-      this.addClasscommitteeWise();
+      this.firstTimeCallM_Svg();
     }
     this.getBCFormation_Map_Consituency();
   }
 
+  firstTimeCallM_Svg(){
+    this.selectedDistrictId = '';
+    this.showSvgMap(this.commonService.mapRegions());
+    this.addClasscommitteeWise();
+  }
+
   selectDropdown() {
+    this.firstTimeCallM_Svg();
     this.getBCFormation_Map_Count();
     this.selectedDistrictId = this.topFilter.value.FilterId;
-    this.toggleClassActive(this.selectedDistrictId);
     this.filteredDistrict = this.allDistrict.filter((x: any) => x.districtId == this.selectedDistrictId);
-    this.setSVGPath(this.filteredDistrict,'dist')
+    this.setSVGPath(this.filteredDistrict,'dist');
+    this.toggleClassActive(this.selectedDistrictId);
   }
 
   svgMapColorReset(){ $('#mapsvg1 path').css('fill', '#7289da')}
@@ -106,8 +123,6 @@ export class CommitteeDashboard1Component implements OnInit {
   ngAfterViewInit(){
       this.callSVGMap() // default call SVG MAP
       $(document).on('click', '#mapsvg1  path', (e: any) => { // add on SVG Map
-      this.hideComityGraph= false;
-      this.onClickFlag = true;
       let getClickedId = e.currentTarget;
       let distrctId = $(getClickedId).attr('id');
       this.selectedDistrictId = distrctId;
@@ -122,14 +137,14 @@ export class CommitteeDashboard1Component implements OnInit {
     setTimeout(() => {
       this.allDistrict.find((element: any) => {
         $('#mapsvg1  path[id="' + element.districtId + '"]').addClass('clicked');
-        $('#mapsvg1  #'+element.districtName).text(element.boothCommittee )
+        $('#mapsvg1  #'+element.districtName).text(element.boothCommittee)
       });
     }, 500);
   }
 
   toggleClassActive(distrctId: any){
     let checksvgDistrictActive = $('#mapsvg1  path').hasClass("svgDistrictActive");
-    checksvgDistrictActive == true ? ($('#mapsvg1  path').removeClass('svgDistrictActive'), $('#mapsvg1  path#' + distrctId).addClass('svgDistrictActive')) : $('#mapsvg1  path#' + distrctId).addClass('svgDistrictActive');;
+    checksvgDistrictActive == true ? ($('#mapsvg1  path').removeClass('svgDistrictActive'), $('#mapsvg1  path#' + distrctId).addClass('svgDistrictActive')) : $('#mapsvg1  path#' + distrctId).addClass('svgDistrictActive');
   }
 
   ngOnDestroy() {
@@ -137,13 +152,23 @@ export class CommitteeDashboard1Component implements OnInit {
     this.graphInstance1 ? this.graphInstance1.destroy() : '';
   }
 
-  boothCommittee_Summary(){    
-    let obj = '&ClientId=' + this.localStorageData?.ClientId + '&StateId=' + this.localStorageData?.StateId + '&DistictId=' + (this.localStorageData?.DistictId || 0);
+  boothCommittee_Summary() {
+    let FTypeId = this.topFilter.value.FilterTypeId;
+    let FilterId = this.topFilter.value.FilterId || 0;
+    let obj = '&ClientId=' + this.localStorageData?.ClientId + '&StateId=' + this.localStorageData?.StateId + '&DistictId=' + (FTypeId == 3 ? FilterId : 0 || 0)
+      + '&TalukaId=' + (this.selectedTalId || 0) + '&PCId=' + (FTypeId == 1 ? FilterId : 0 || 0) + '&ACId=' + (FTypeId == 2 ? FilterId : 0 || 0);
     this.callAPIService.setHttp('get', 'api/BoothCommitteeDashboard/Get_BoothCommittee_Dashboard_Summary?UserId=' + this.commonService.loggedInUserId() + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.boothComitySummary = res.responseData;
-      } else { this.boothComitySummary = [];}
+        if (this.boothComitySummary) { // Add manually pie chart graph
+          let obj = { 'totalBooths': 0, 'totalBoothCommittee': 0 };
+          let totalBoothComity: any = ((this.boothComitySummary?.totalCommittee / this.boothComitySummary?.totalBooths) * 100)?.toFixed(2);
+          let remainingBoothComity: any = (100 - totalBoothComity)?.toFixed(2);
+          obj['totalBooths'] = Number(remainingBoothComity); obj['totalBoothCommittee'] = Number(totalBoothComity);
+          this.constructPieChart(obj);
+        }
+      } else { this.boothComitySummary = []; }
     }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
   }
 
@@ -176,14 +201,53 @@ export class CommitteeDashboard1Component implements OnInit {
       this.spinner.hide();
       if (res?.responseData && res?.responseData.length != 0) {
         this.allDistrict = res.responseData;
-        this.selectedDistrictId=3;//this.allDistrict[0]?.districtId  
-        this.svgMapClick('Default');
+        // this.selectedDistrictId=3;
+        // this.svgMapClick('Default');
         this.addClasscommitteeWise(); 
-        this.selectedDistrictId ? $('path#' + this.selectedDistrictId).addClass('svgDistrictActive') : this.toggleClassActive(0);
+        // this.selectedDistrictId ? $('path#' + this.selectedDistrictId).addClass('svgDistrictActive') : this.toggleClassActive(0);
       }
     }, (error: any) => {this.spinner.hide();
       if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route });}})
   }
+
+  getPast_PC(){    
+    let formData = this.topFilter.value;
+    let obj = '&ClientId=' + this.localStorageData?.ClientId + '&StateId=' + this.localStorageData?.StateId + '&FilterTypeId=' + formData?.FilterTypeId
+    + '&FilterId=' + (formData?.FilterId || 0) + '&pageno=' + this.paginationNoPC + '&pagesize=' + this.pageSizePC;
+    this.callAPIService.setHttp('get', 'api/BoothCommitteeDashboard/Get_BoothCommittee_Dashboard_Past_PC_Election_Summary?UserId=' + this.commonService.loggedInUserId() + obj, false, false, false, 'electionMicroSerApp');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
+        this.pastPCArray = res.responseData[0];
+        this.getTotalPC = res.responseData1.totalPages * this.pageSizePC;
+      } else { this.pastPCArray = [];}
+    }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
+  }  // this.pastPCArray?.electionResults
+
+  getPast_AC(){    
+    let formData = this.topFilter.value;
+    let obj = '&ClientId=' + this.localStorageData?.ClientId + '&StateId=' + this.localStorageData?.StateId + '&FilterTypeId=' + formData?.FilterTypeId
+    + '&FilterId=' + (formData?.FilterId || 0) + '&pageno=' + this.paginationNoAC + '&pagesize=' + this.pageSizeAC;
+    this.callAPIService.setHttp('get', 'api/BoothCommitteeDashboard/Get_BoothCommittee_Dashboard_Past_AC_Election_Summary?UserId=' + this.commonService.loggedInUserId() + obj, false, false, false, 'electionMicroSerApp');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
+        this.pastACArray = res.responseData[0];
+        this.getTotalAC = res.responseData1.totalPages * this.pageSizeAC;
+      } else { this.pastACArray = [];}
+    }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
+  }  // this.pastACArray?.electionResults
+
+  viewDetailAC_DC(){    
+    let formData = this.topFilter.value;
+    let obj = '&ClientId=' + this.localStorageData?.ClientId + '&StateId=' + this.localStorageData?.StateId 
+    + '&IsPc=' + 0 + '&ConstituencyId=' + 0 + '&ElctionId=' + 0 ;
+    this.callAPIService.setHttp('get', 'api/BoothCommitteeDashboard/Get_BoothCommittee_Dashboard_PastElection_Summary_All?UserId=' + this.commonService.loggedInUserId() + obj, false, false, false, 'electionMicroSerApp');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
+        this.viewDetailAC_DCArray = res.responseData;
+      } else { this.viewDetailAC_DCArray = [];}
+    }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
+  }  // this.pastACArray?.electionResults
+
 
 //------------  get Pie Chart Details --------------------------------
 
@@ -195,17 +259,17 @@ export class CommitteeDashboard1Component implements OnInit {
       this.spinner.hide();
       if (res.statusCode == '200') {
         this.presidentDetailsObj=res?.responseData;
-        this.talukaPresidentDashObj = res?.responseData1;
+        // this.talukaPresidentDashObj = res?.responseData1;
         this.impLeadersArray=res?.responseData2;
         if (this.talukaPresidentDashObj) { 
-         let totalBoothComity:any = ((this.talukaPresidentDashObj?.totalBoothCommittee / this.talukaPresidentDashObj?.totalBooths) * 100)?.toFixed(2) ;
-         let remainingBoothComity:any = (100 - totalBoothComity)?.toFixed(2);
-         this.talukaPresidentDashObj['totalBooths'] = Number(remainingBoothComity);
-         this.talukaPresidentDashObj['totalBoothCommittee'] = Number(totalBoothComity);
-         this.constructPieChart(this.talukaPresidentDashObj);
+        //  let totalBoothComity:any = ((this.talukaPresidentDashObj?.totalBoothCommittee / this.talukaPresidentDashObj?.totalBooths) * 100)?.toFixed(2) ;
+        //  let remainingBoothComity:any = (100 - totalBoothComity)?.toFixed(2);
+        //  this.talukaPresidentDashObj['totalBooths'] = Number(remainingBoothComity);
+        //  this.talukaPresidentDashObj['totalBoothCommittee'] = Number(totalBoothComity);
+        //  this.constructPieChart(this.talukaPresidentDashObj);
         }
       } else {
-        this.talukaPresidentDashObj = [];
+        // this.talukaPresidentDashObj = [];
         this.presidentDetailsObj=[];
         this.impLeadersArray=[];
         this.pieChartShow=false;
@@ -243,6 +307,47 @@ export class CommitteeDashboard1Component implements OnInit {
         position: 'bottom'
       },
     };
+  }
+
+  pieChart11(){
+      this.chartOptions = {
+        series: [44, 55],
+        chart: {
+        width: 380,
+        type: 'donut',
+      },
+      plotOptions: {
+        pie: {
+          startAngle: -90,
+          endAngle: 270
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      fill: {
+        type: 'gradient',
+      },
+      legend: {
+        formatter: function(val:any, opts:any) {
+          return val + " - " + opts.w.globals.series[opts.seriesIndex]
+        }
+      },
+      title: {
+        text: 'Gradient Donut with custom Start-angle'
+      },
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200
+          },
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }]
+      };
   }
 
   // --------------------------------------- Maharashtra SVG MAP ----------------------------------------------- //
@@ -330,10 +435,9 @@ export class CommitteeDashboard1Component implements OnInit {
     });
   }
 
-  svgMapClick(status:string){
+  svgMapClick(){
     this.filteredTal=[];
     this.previousTalSelected='';
-    if(status=='mapClickDistrict'){
       $(document).on('click', '#mapsvg1  path', (e: any) => {
         if(this.previousDistSelected != e.currentTarget.id || this.mapselected!='dist'){
           this.mapselected='dist';
@@ -342,21 +446,17 @@ export class CommitteeDashboard1Component implements OnInit {
           this.filteredDistrict = this.allDistrict.filter((x: any) => x.districtId == e.currentTarget.id);
          this.setSVGPath(this.filteredDistrict, 'dist');
         }
-       
       })
-    }else{
-      this.filteredDistrict = this.allDistrict.filter((x: any) => x.districtId == this.selectedDistrictId)
-      this.setSVGPath(this.filteredDistrict,'dist')
-    }
   }
 
   svgMapClick1(status:string){
     this.mapselected='tal';
       $(document).on('click', '#mapsvg2  path', (e: any) => {
         let selectedTalId = ((e.currentTarget.id).split('d')[((e.currentTarget.id).split('d').length-1)]);
+        this.selectedTalId = selectedTalId;
         if(this.previousTalSelected != selectedTalId){
           this.previousTalSelected =selectedTalId;
-          this.filteredTal = this.talukaByDistrictId.filter((x: any) => x.talukaId == Number(selectedTalId))
+          this.filteredTal = this.talukaByDistrictId.filter((x: any) => x.talukaId == Number(selectedTalId));
          this.setSVGPath(this.selectedDistrictId,'tal', this.filteredTal );
         }
       })
@@ -481,15 +581,6 @@ export class CommitteeDashboard1Component implements OnInit {
 
   //........................................................  Assembly SVG Map Code Start Here .....................................//
 
-  svgMapClickLokSabha(){ 
-    this.filteredTal=[];
-    this.previousTalSelected='';
-
-      $(document).on('click', '#mapSvgAssembly  path', (e: any) => { 
-       
-      })
-  }
-
   showSvgMapAssembly(regions_m: any){
     if (this.graphInstance) {
       this.graphInstance.destroy();
@@ -576,13 +667,6 @@ export class CommitteeDashboard1Component implements OnInit {
   //........................................................  Assembly SVG Map Code End Here .....................................//
 
   //.....................................................  Parliamentary SVG Map Code Start Here ..............................//
-
-  svgMapClickParli(){ 
-    this.filteredTal=[];
-    this.previousTalSelected='';
-      $(document).on('click', '#mapSvgParli  path', (e: any) => { 
-      })
-  }
 
   showSvgMapParli(regions_m?: any){
     if (this.graphInstance) {

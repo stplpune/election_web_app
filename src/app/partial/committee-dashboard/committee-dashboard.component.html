@@ -1,181 +1,3 @@
-<!-- <div class="container-fluid commitees">
-  <div id="pageheader" class="px-3">
-    <span class="page-name">Committees Dashboard</span>
-  </div>
-  <div class="row chartbox mb-3">
-    <div class="col-md-12">
-      <div class="card card-body" id="committeesonmap">
-        <div class="row gy-4">
-          <div class="col-sm-6 border-end map-height">
-            <div class="card card-body shadow-none p-0">
-              <div class="committeesonmap2">
-                <div class="text-end fw-bold text-primary">{{filteredDistrict[0]?.districtName + (filteredTal.length ?
-                  (' (' + filteredTal[0]?.talukaName +')'):'')}}</div>
-                <div id="mapsvg1" (click)="svgMapClick('mapClick')"></div>
-                <div [class]="previousDistSelected=='9' ? 'm-5' : 'm-4'" id="mapsvg2"
-                  (click)="svgMapClick1('mapClick')"></div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="card card-body shadow-none border py-2 mb-2">
-              <div class="d-flex gap-4 justify-content-between text-success">
-                <p class="mb-0 small">President : <span class="fw-bold">{{presidentDetailsObj?.fullName ?
-                    presidentDetailsObj?.fullName :'-'}}</span></p>
-                <p class="mb-0 small">Mobile No : <span class="fw-bold">{{presidentDetailsObj?.mobileNo ?
-                    presidentDetailsObj?.mobileNo :'-'}}</span></p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-6 border-end">
-                <p class="bold">Booth Committee Performance</p>
-                <div id="chart" *ngIf="pieChartShow">
-                  <apx-chart [series]="chartOptions?.series" [chart]="chartOptions?.chart"
-                    [labels]="chartOptions?.labels" [responsive]="chartOptions?.responsive"
-                    [legend]="chartOptions?.legend" [colors]="chartOptions?.colors"></apx-chart>
-                  <div class="mt-2 text-center">
-                  </div>
-                </div>
-                <div *ngIf="!pieChartShow" class=" card-body">
-                  <div class="alert alert-danger text-center py-2 mb-0 small">No Data Found..!
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="card shadow-none border-0">
-                  <div class="card-header py-1 px-0 border-bottom">
-                    <span class="text-main">Important Leaders</span>
-                  </div>
-                  <div class="card-body p-0 fix-height">
-                    <div class="list-group list-group-flush">
-                      <a class="list-group-item list-group-item-action border-0 border-bottom px-2 " href="#"
-                        *ngFor="let impLeaders of impLeadersArray" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                        (click)="impLeaderDetails=impLeaders">
-                        <p class="mb-0 fw-bold mt-1"> {{impLeaders?.voterName}} </p>
-                        <span class="small">{{impLeaders?.mobileNo1}}</span>
-
-                      </a>
-                      <div *ngIf="impLeadersArray.length==0" class=" card-body">
-                        <div class="alert alert-danger text-center py-2 mb-0 small">No Data Found..!
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-12">
-            <div *ngIf="barChartShow" class="mt-5">
-              <div id="chart">
-                <apx-chart [series]="BarchartOptions?.series" [chart]="BarchartOptions?.chart"
-                  [dataLabels]="BarchartOptions?.dataLabels" [plotOptions]="BarchartOptions?.plotOptions"
-                  [yaxis]="BarchartOptions?.yaxis" [legend]="BarchartOptions?.legend" [fill]="BarchartOptions?.fill"
-                  [stroke]="BarchartOptions?.stroke" [tooltip]="BarchartOptions?.tooltip"
-                  [xaxis]="BarchartOptions?.xaxis" [dataLabels]="BarchartOptions?.dataLabels"></apx-chart>
-              </div>
-              <div class="text-center fw-bold mb-2">Talukawise Booth Committee Formation progress</div>
-            </div>
-            <div *ngIf="!barChartShow" class=" card-body">
-              <div class="alert alert-danger text-center py-2 mb-0 small mt-5">No Data Found..!
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-12" *ngIf="mapselected=='dist'">
-            <div class="row">
-              <div class="col-sm-3 border-end">
-                <div class="card shadow-none border-0">
-                  <div class="card-header py-1 px-0 border-bottom">
-                    <span class="text-main">Taluka President</span>
-                  </div>
-                  <div class="card-body p-0 fix-height">
-                    <div class="list-group-item list-group-item-action border-0 border-bottom px-2"
-                      *ngFor="let presidents of talukaPresidentDataArray">
-                      <span class="mb-0 fw-bold mt-1"> {{ presidents?.talukaName}} </span>
-                      {{ ' : '+
-                      (presidents?.memberName ? presidents?.memberName:'-')}}
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-              <div class="col-sm-9">
-                <div class="imp_leaders">
-                  <div class="card shadow-none border-0">
-                    <div class="card-header py-1 px-0 border-bottom">
-                      <span class="text-main">Talukawise Important Leaders</span>
-                    </div>
-                    <div class="card-body fix-height">
-                      <div class="row gy-2">
-                        <div class="col-sm-6" *ngFor="let taluka of talukaIMPleaderArray">
-                          <span class="fw-bold text-main">{{taluka?.talukaName}}</span>
-                          <div class="list-group list-group-flush mb-3">
-                            <div
-                              class="list-group-item list-group-item-action px-0 d-flex border-0 border-bottom justify-content-between align-items-center"
-                              *ngFor="let impLeader of taluka?.talukaWiseIMPLeaders" type="button"
-                              data-bs-toggle="modal" data-bs-target="#exampleModal"
-                              (click)="impLeaderDetails=impLeader">
-                              <p class="mb-0 fw-bold mt-1">{{impLeader?.voterName | titlecase}} </p>
-                              <span class="small">{{impLeader?.mobileNo1}}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-  data-bs-backdrop="static" data-bs-keyboard="false">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Important Leader Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body form-container">
-        <div class="profile-party">
-          <div class="position-relative">
-            <img [src]="impLeaderDetails?.profilePhoto" alt="profilePhoto" srcset="" class="profilepic">
-            <img [src]="impLeaderDetails?.partyIconImage" alt="profilePhoto" width="40" height="40" srcset=""
-              class="party-pic">
-          </div>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-            <div>Leader Name</div>
-            <div class="fw-bold">{{impLeaderDetails?.voterName}}</div>
-          </li>
-          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-            <div>Designation</div>
-            <div class="fw-bold">{{impLeaderDetails?.designation}}</div>
-          </li>
-          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-            <div>Mobile No.</div>
-            <div class="fw-bold">{{impLeaderDetails?.mobileNo1}}</div>
-          </li>
-          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-            <div>Address</div>
-            <div class="fw-bold">{{impLeaderDetails?.address}}</div>
-          </li>
-          <li class="list-group-item px-0">
-            <div>Remarks </div>
-            <div class="fw-bold">{{impLeaderDetails?.remark}}</div>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div> -->
-
 <div class="container-fluid">
     <div class="row mb-3" id="topheader">
         <div class="col-sm-12">
@@ -214,7 +36,7 @@
                                 </div>
                                 <div class="flex-grow-1 ms-2">
                                     <p>Parliamentary Constituency</p>
-                                    <h3>01</h3>
+                                    <h3>{{boothComitySummary?.totalPC}}</h3>
                                 </div>
                             </div>
                         </div>
@@ -229,7 +51,7 @@
                                 </div>
                                 <div class="flex-grow-1 ms-2">
                                     <p>Assembly Constituency</p>
-                                    <h3>08</h3>
+                                    <h3>{{boothComitySummary?.totalAC}}</h3>
                                 </div>
                             </div>
                         </div>
@@ -244,7 +66,7 @@
                                 </div>
                                 <div class="flex-grow-1 ms-2">
                                     <p>Voters</p>
-                                    <h3>8,74,540</h3>
+                                    <h3>{{boothComitySummary?.totalVoter}}</h3>
                                 </div>
                             </div>
                         </div>
@@ -259,7 +81,7 @@
                                 </div>
                                 <div class="flex-grow-1 ms-2">
                                     <p>Booths</p>
-                                    <h3>5,120</h3>
+                                    <h3>{{boothComitySummary?.totalBooths}}</h3>
                                 </div>
                             </div>
                         </div>
@@ -274,7 +96,7 @@
                                 </div>
                                 <div class="flex-grow-1 ms-2">
                                     <p>Booth Committee</p>
-                                    <h3>1,569</h3>
+                                    <h3>{{boothComitySummary?.totalCommittee}}</h3>
                                 </div>
                             </div>
                         </div>
@@ -285,45 +107,36 @@
     </div>
 
     <div class="row mb-3 chartbox g-3 form-container">
-        <div class="col-sm-4">
+        <div class="col-sm-5">
             <div class="card">
+                <form [formGroup]="topFilter">
                 <div class="card-header">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
-                            value="option1">
-                        <label class="form-check-label" for="inlineRadio1">Parliamentary Cons.</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
-                            value="option2">
-                        <label class="form-check-label" for="inlineRadio2">Assembly Cons.</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
-                            value="option3">
-                        <label class="form-check-label" for="inlineRadio3">District</label>
+                    <div class="d-block">
+                        <div class="form-check form-check-inline" *ngFor="let mapFilter of mapFilterTypeArray">
+                            <input class="form-check-input" type="radio" formControlName="FilterTypeId" [value]="mapFilter.id" name="FilterTypeId"
+                            (change)="changeFilterType()">
+                            <label class="form-check-label" for="check">{{mapFilter.value}}</label>
+                        </div>
                     </div>
                 </div>
                 <div class="card-header">
-                    <div class="input-group">
-                        <label class="input-group-text" for="inputGroupSelect01">
-                            <i class="fas fa-search"></i>
-                        </label>
-                        <select class="form-select" id="inputGroupSelect01">
-                            <option selected>Select District</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                    </div>
+                        <ngx-select [allowClear]="true" [items]="bCFormationDropArray" formControlName="FilterId" optionValueField="constituenciesId" optionTextField="constituencyName"
+                        (select)="selectDropdown()" (remove)="firstTimeCallM_Svg()"
+                            placeholder="{{topFilter.value.FilterTypeId == 1 ? 'Select Parliamentary Constituency' : topFilter.value.FilterTypeId == 2 ? 'Select Assembly Constituency' : topFilter.value.FilterTypeId == 3 ? 'Select District' : ''}}">
+                        </ngx-select>
                 </div>
-                <div class="card-body">
-                    <img src="assets/images/Maharashtra_Wahlkreise_Lok_Sabha.svg" class="img-fluid">
+            </form>
+                <div class="card-body committeesonmap2"> 
+                    <div  id="mapSvgAssembly"></div>
+                    <div  id="mapSvgParli"></div>
+                    <div id="mapsvg1" (click)="svgMapClick()"></div>
+                    <div [ngClass]="{'d-none': (topFilter.value.FilterTypeId != 3 || selectedDistrictId == '')}"
+                     [class]="previousDistSelected=='9' ? 'm-5' : 'm-4'" id="mapsvg2" (click)="svgMapClick1('mapClick')"></div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-8">
-            <div class="card card-body mb-3" id="president">
+        <div class="col-sm-7">
+            <div class="card card-body mb-3" id="president" *ngIf="presidentDetailObj?.fullName">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="flex-shrink-0">
                         <img src="assets/images/dashboard-images/President.svg" alt="...">
@@ -332,13 +145,13 @@
                         <div class="d-flex align-items-center gap-2">
                             <span>President :</span>
                             <img src="assets/images/dashboard-images/Profile_dummy.svg">
-                            <h6 class="mb-0 fw-bold">Ravikant Patil</h6>
+                            <h6 class="mb-0 fw-bold">{{presidentDetailObj?.fullName}}</h6>
                         </div>
                     </div>
                     <div class="flex-shrink-1 ms-3">
                         <p class="mb-0 text-secondary">
                             <span>Mobile No. :</span>
-                            <span class="fw-bold ms-2">7458965485</span>
+                            <span class="fw-bold ms-2">{{presidentDetailObj?.mobileNo}}</span>
                         </p>
                     </div>
                 </div>
@@ -352,7 +165,17 @@
                         </div>
                         <div class="card-body">
                             <div class="card-height">
-                                pie chart
+                                <div id="chart" *ngIf="pieChartShow">
+                                    <apx-chart [series]="chartOptions?.series" [chart]="chartOptions?.chart"
+                                      [labels]="chartOptions?.labels" [responsive]="chartOptions?.responsive"
+                                      [legend]="chartOptions?.legend" [colors]="chartOptions?.colors"></apx-chart>
+                                    <div class="mt-2 text-center">
+                                    </div>
+                                  </div>
+                                  <div *ngIf="!pieChartShow" class="card-body">
+                                    <div class="alert alert-danger text-center py-2 mb-0 small">No Data Found..!
+                                    </div>
+                                  </div>
                             </div>
                         </div>
                     </div>
@@ -364,248 +187,31 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="card-height">
-                                <div class="d-flex align-items-center leader">
+
+                                <div class="d-flex align-items-center leader" *ngFor="let impLeader of importantLeadersArray">
                                     <div class="flex-shrink-0">
                                         <div class="profile">
-                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
-                                                class="leader-img">
-                                            <img src="assets/images/logos/bjp.png" class="party">
+                                            <img [src]="impLeader?.profilePhoto" alt="..." class="leader-img" *ngIf="impLeader?.profilePhoto">
+                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..." class="leader-img" *ngIf="!impLeader?.profilePhoto">
+                                            <img [src]="impLeader?.partyIconImage" class="party" *ngIf="impLeader?.partyIconImage">
+                                            <img src="assets/images/logos/bjp.png" class="party" *ngIf="!impLeader?.partyIconImage">
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <p>Udyanraje Pratapsinha Bhosale</p>
+                                        <p>{{impLeader?.leaderName ? impLeader?.leaderName : '-'}}</p>
                                         <div class="d-flex justify-content-between contacts">
                                             <div class="green">
                                                 <i class="fas fa-phone-alt"></i>
-                                                9988776556
+                                                {{impLeader?.mobileNo ? impLeader?.mobileNo : '-'}}
                                             </div>
                                             <div class="orange">
                                                 <i class="fas fa-award"></i>
-                                                MP
+                                                {{impLeader?.designation ? impLeader?.designation : '-'}}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="d-flex align-items-center leader">
-                                    <div class="flex-shrink-0">
-                                        <div class="profile">
-                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
-                                                class="leader-img">
-                                            <img src="assets/images/logos/bjp.png" class="party">
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <p>Udyanraje Pratapsinha Bhosale</p>
-                                        <div class="d-flex justify-content-between contacts">
-                                            <div class="green">
-                                                <i class="fas fa-phone-alt"></i>
-                                                9988776556
-                                            </div>
-                                            <div class="orange">
-                                                <i class="fas fa-award"></i>
-                                                MP
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center leader">
-                                    <div class="flex-shrink-0">
-                                        <div class="profile">
-                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
-                                                class="leader-img">
-                                            <img src="assets/images/logos/bjp.png" class="party">
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <p>Udyanraje Pratapsinha Bhosale</p>
-                                        <div class="d-flex justify-content-between contacts">
-                                            <div class="green">
-                                                <i class="fas fa-phone-alt"></i>
-                                                9988776556
-                                            </div>
-                                            <div class="orange">
-                                                <i class="fas fa-award"></i>
-                                                MP
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center leader">
-                                    <div class="flex-shrink-0">
-                                        <div class="profile">
-                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
-                                                class="leader-img">
-                                            <img src="assets/images/logos/bjp.png" class="party">
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <p>Udyanraje Pratapsinha Bhosale</p>
-                                        <div class="d-flex justify-content-between contacts">
-                                            <div class="green">
-                                                <i class="fas fa-phone-alt"></i>
-                                                9988776556
-                                            </div>
-                                            <div class="orange">
-                                                <i class="fas fa-award"></i>
-                                                MP
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center leader">
-                                    <div class="flex-shrink-0">
-                                        <div class="profile">
-                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
-                                                class="leader-img">
-                                            <img src="assets/images/logos/bjp.png" class="party">
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <p>Udyanraje Pratapsinha Bhosale</p>
-                                        <div class="d-flex justify-content-between contacts">
-                                            <div class="green">
-                                                <i class="fas fa-phone-alt"></i>
-                                                9988776556
-                                            </div>
-                                            <div class="orange">
-                                                <i class="fas fa-award"></i>
-                                                MP
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center leader">
-                                    <div class="flex-shrink-0">
-                                        <div class="profile">
-                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
-                                                class="leader-img">
-                                            <img src="assets/images/logos/bjp.png" class="party">
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <p>Udyanraje Pratapsinha Bhosale</p>
-                                        <div class="d-flex justify-content-between contacts">
-                                            <div class="green">
-                                                <i class="fas fa-phone-alt"></i>
-                                                9988776556
-                                            </div>
-                                            <div class="orange">
-                                                <i class="fas fa-award"></i>
-                                                MP
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center leader">
-                                    <div class="flex-shrink-0">
-                                        <div class="profile">
-                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
-                                                class="leader-img">
-                                            <img src="assets/images/logos/bjp.png" class="party">
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <p>Udyanraje Pratapsinha Bhosale</p>
-                                        <div class="d-flex justify-content-between contacts">
-                                            <div class="green">
-                                                <i class="fas fa-phone-alt"></i>
-                                                9988776556
-                                            </div>
-                                            <div class="orange">
-                                                <i class="fas fa-award"></i>
-                                                MP
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center leader">
-                                    <div class="flex-shrink-0">
-                                        <div class="profile">
-                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
-                                                class="leader-img">
-                                            <img src="assets/images/logos/bjp.png" class="party">
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <p>Udyanraje Pratapsinha Bhosale</p>
-                                        <div class="d-flex justify-content-between contacts">
-                                            <div class="green">
-                                                <i class="fas fa-phone-alt"></i>
-                                                9988776556
-                                            </div>
-                                            <div class="orange">
-                                                <i class="fas fa-award"></i>
-                                                MP
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center leader">
-                                    <div class="flex-shrink-0">
-                                        <div class="profile">
-                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
-                                                class="leader-img">
-                                            <img src="assets/images/logos/bjp.png" class="party">
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <p>Udyanraje Pratapsinha Bhosale</p>
-                                        <div class="d-flex justify-content-between contacts">
-                                            <div class="green">
-                                                <i class="fas fa-phone-alt"></i>
-                                                9988776556
-                                            </div>
-                                            <div class="orange">
-                                                <i class="fas fa-award"></i>
-                                                MP
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center leader">
-                                    <div class="flex-shrink-0">
-                                        <div class="profile">
-                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
-                                                class="leader-img">
-                                            <img src="assets/images/logos/bjp.png" class="party">
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <p>Udyanraje Pratapsinha Bhosale</p>
-                                        <div class="d-flex justify-content-between contacts">
-                                            <div class="green">
-                                                <i class="fas fa-phone-alt"></i>
-                                                9988776556
-                                            </div>
-                                            <div class="orange">
-                                                <i class="fas fa-award"></i>
-                                                MP
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center leader">
-                                    <div class="flex-shrink-0">
-                                        <div class="profile">
-                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
-                                                class="leader-img">
-                                            <img src="assets/images/logos/bjp.png" class="party">
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <p>Udyanraje Pratapsinha Bhosale</p>
-                                        <div class="d-flex justify-content-between contacts">
-                                            <div class="green">
-                                                <i class="fas fa-phone-alt"></i>
-                                                9988776556
-                                            </div>
-                                            <div class="orange">
-                                                <i class="fas fa-award"></i>
-                                                MP
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -618,8 +224,10 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">Constituency Wise Past Election Summary</div>
-                <div class="card-body">
-                    <h6 class="text-orange fw-bold mb-3">Parliamentary Constituency Election Summary 2019</h6>
+                <div class="card-body">  
+                    <!-- (click()="electionIdPC = pcEleName?.electionId; electionTypeIdPC = pcEleName?.electionTypeId"  -->
+                    <h6 class="text-orange fw-bold mb-3"><span *ngFor="let pcEleName of electionNamePCArray">{{pcEleName?.electionName}}</span></h6>
+                   <!-- PC code Start Here -->
                     <table class="dash-table mb-3">
                         <thead>
                             <tr>
@@ -633,47 +241,37 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>43 - Madha</td>
+                            <tr *ngFor="let pcData of pastPCArray  | paginate: {itemsPerPage: pageSizePC, 
+                                currentPage: paginationNoPC, totalItems:getTotalPC}; let i = index">
+                                <td>{{((paginationNoPC + 1) * 10 + i + 1)-20}}</td>
+                                <td>{{pcData?.constituencyNo}}-{{pcData?.constituenciesName}}</td>
                                 <td>
-                                    <a href="#">Ramesh Gavade</a>
+                                    <a class="text-decoration-none">{{pcData?.candidateName ? pcData?.candidateName : '-'}}</a>
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
-                                        <span>BJP</span>
-                                        <img src="assets/images/logos/bjp.png" class="party">
+                                        <span>{{pcData?.partyName ? pcData?.partyName : '-'}}</span>
                                     </div>
                                 </td>
-                                <td>1,78,458</td>
-                                <td>21,690</td>
+                                <td>{{pcData?.totalVotes}}</td>
+                                <td>{{pcData?.winningMargin ? pcData?.winningMargin : '-'}}</td>
                                 <td>
-                                    <i class="fas fa-info-circle info"></i>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>43 - Madha</td>
-                                <td>
-                                    <a href="#">Ramesh Gavade</a>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span>BJP</span>
-                                        <img src="assets/images/logos/bjp.png" class="party">
-                                    </div>
-                                </td>
-                                <td>1,78,458</td>
-                                <td>21,690</td>
-                                <td>
-                                    <i class="fas fa-info-circle info"></i>
+                                    <i class="fas fa-info-circle info" (click)="viewDetailAC_DC(0,pcData?.constituenciesId,pcData?.electionId)" data-bs-toggle="modal" data-bs-target="#MaptableDetailShow"></i>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-
-                    <h6 class="text-orange fw-bold mb-3">Assembly Constituency Election Summary 2019</h6>
-                    <table class="dash-table">
+                    <div class="mt-2 text-end" *ngIf="pastPCArray?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Results Found!
+                        </div>
+                    </div>
+                    <pagination-controls *ngIf="pastPCArray?.length != 0" previousLabel="" nextLabel=""
+                        (pageChange)="onClickPagintionPC($event)">
+                    </pagination-controls>
+                   <!-- (click()="electionIdAC = acEleName?.electionId; electionTypeIdAC = acEleName?.electionTypeId"  -->
+                    <h6 class="text-orange fw-bold mb-3"><span *ngFor="let acEleName of electionNameACArray">{{acEleName?.electionName}}</span></h6>
+                    <!-- AC code Start Here -->
+                    <table class="dash-table mb-3">
                         <thead>
                             <tr>
                                 <th>Sr. No.</th>
@@ -686,44 +284,74 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>43 - Madha</td>
+                            <tr *ngFor="let acData of pastACArray  | paginate: {itemsPerPage: pageSizeAC, 
+                                currentPage: paginationNoAC, totalItems:getTotalAC}; let i = index">
+                                <td>{{((paginationNoAC + 1) * 10 + i + 1)-20}}</td>
+                                <td>{{acData?.constituencyNo}}-{{acData?.constituenciesName}}</td>
                                 <td>
-                                    <a href="#">Ramesh Gavade</a>
+                                    <a class="text-decoration-none">{{acData?.candidateName ? acData?.candidateName : '-'}}</a>
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
-                                        <span>BJP</span>
-                                        <img src="assets/images/logos/bjp.png" class="party">
+                                        <span>{{acData?.partyName ? acData?.partyName : '-'}}</span>
                                     </div>
                                 </td>
-                                <td>1,78,458</td>
-                                <td>21,690</td>
+                                <td>{{acData?.totalVotes}}</td>
+                                <td>{{acData?.winningMargin ? acData?.winningMargin : '-'}}</td>
                                 <td>
-                                    <i class="fas fa-info-circle info"></i>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>43 - Madha</td>
-                                <td>
-                                    <a href="#">Ramesh Gavade</a>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span>BJP</span>
-                                        <img src="assets/images/logos/bjp.png" class="party">
-                                    </div>
-                                </td>
-                                <td>1,78,458</td>
-                                <td>21,690</td>
-                                <td>
-                                    <i class="fas fa-info-circle info"></i>
+                                    <i class="fas fa-info-circle info" (click)="viewDetailAC_DC(1,acData?.constituenciesId,acData?.electionId)" data-bs-toggle="modal" data-bs-target="#MaptableDetailShow"></i>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <div class="mt-2 text-end" *ngIf="pastACArray?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Results Found!
+                        </div>
+                    </div>
+                    <pagination-controls *ngIf="pastACArray?.length != 0" previousLabel="" nextLabel=""
+                        (pageChange)="onClickPagintionAC($event)">
+                    </pagination-controls>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <div class="row chartbox mb-3" *ngIf="topFilter.value.FilterTypeId == 2 && topFilter.value.FilterId && assemblyPieChartListArray?.length">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header text-main">Taluka Committee Formation progress</div>
+                <div class="card-body pb-0">
+                    <div class="row ">
+                        <div class="col-sm-5">
+                            <div class="list-group list-group-flush" *ngFor="let assemblyPieList of assemblyPieChartListArray"
+                             (click)="assemblyVillagePieChart(assemblyPieList)">
+                                <a class="list-group-item list-group-item-action border-0 border-bottom" aria-current="true" [class.active]="assemblyPieList.constituenciesId == HighlightRowAssemblyPieList">
+                                  {{assemblyPieList?.constituencyName}} {{assemblyPieList?.constituencyName ? 'Booth Committee' : ''}}
+                                </a>
+                              </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class=" d-flex justify-content-center align-items-center">
+                            <div *ngIf="AssemblypieChartShow" class="">
+                                <div id="chart">
+                                    <apx-chart [series]="AssemblyPiechartOptions.series" [chart]="AssemblyPiechartOptions.chart"
+                                    [labels]="AssemblyPiechartOptions.labels" [responsive]="AssemblyPiechartOptions.responsive"
+                                  ></apx-chart>
+                                  <!-- <apx-chart [series]="BarchartOptions?.series" [chart]="BarchartOptions?.chart"
+                                    [dataLabels]="BarchartOptions?.dataLabels" [plotOptions]="BarchartOptions?.plotOptions"
+                                    [yaxis]="BarchartOptions?.yaxis" [legend]="BarchartOptions?.legend" [fill]="BarchartOptions?.fill"
+                                    [stroke]="BarchartOptions?.stroke" [tooltip]="BarchartOptions?.tooltip"
+                                    [xaxis]="BarchartOptions?.xaxis" [dataLabels]="BarchartOptions?.dataLabels"></apx-chart> -->
+                                </div>
+                                <div class="text-center fw-bold mb-2">Taluka Committee Formation progress</div>
+                              </div>
+                              <div *ngIf="!AssemblypieChartShow" class=" card-body">
+                                <div class="alert alert-danger text-center py-2 mb-0 small mt-5">No Data Found..!
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -734,11 +362,25 @@
             <div class="card">
                 <div class="card-header text-main">Talukawise Booth Committee Formation progress</div>
                 <div class="card-body">
-                    chart
+                    <div *ngIf="barChartShow" class="mt-5">
+                        <div id="chart">
+                          <apx-chart [series]="BarchartOptions?.series" [chart]="BarchartOptions?.chart"
+                            [dataLabels]="BarchartOptions?.dataLabels" [plotOptions]="BarchartOptions?.plotOptions"
+                            [yaxis]="BarchartOptions?.yaxis" [legend]="BarchartOptions?.legend" [fill]="BarchartOptions?.fill"
+                            [stroke]="BarchartOptions?.stroke" [tooltip]="BarchartOptions?.tooltip"
+                            [xaxis]="BarchartOptions?.xaxis" [dataLabels]="BarchartOptions?.dataLabels"></apx-chart>
+                        </div>
+                        <div class="text-center fw-bold mb-2">Talukawise Booth Committee Formation progress</div>
+                      </div>
+                      <div *ngIf="!barChartShow" class=" card-body">
+                        <div class="alert alert-danger text-center py-2 mb-0 small mt-5">No Data Found..!
+                        </div>
+                      </div>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="row chartbox">
         <div class="col-sm-12">
             <div class="card">
@@ -755,27 +397,78 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Karad</td>
+                            <tr *ngFor="let talukaPer of talukaPresidentArray  | paginate: {itemsPerPage: 10, 
+                                currentPage: paginationNoTalukaPer, totalItems:getTotalTalukaPer}; let i = index">
+                                <td>{{((paginationNoTalukaPer + 1) * 10 + i + 1)-20}}</td>
+                                <td>{{talukaPer?.talukaName}}</td>
                                 <td>
-                                    <a href="#">Ramesh Gavade</a>
+                                    <a class="text-decoration-none">{{talukaPer?.presidentName?.split('-')[0] ? talukaPer?.presidentName?.split('-')[0] : '-'}}</a>
                                 </td>
-                                <td>9876554310</td>
+                                <td>{{talukaPer?.presidentName?.split('-')[1] ? talukaPer?.presidentName?.split('-')[1] : '-'}}</td>
                                 <td>
+                                    <ng-container *ngFor="let impLeader of talukaPer?._IMPLeaderDetailsState">
                                     <div class="d-flex align-items-center gap-2">
-                                        <img src="assets/images/logos/bjp.png" class="party">
-                                        <a href="#">Shamrao Pandurang Patil (7856412395)</a>
+                                        <a class="text-decoration-none">{{impLeader?.leaderName}} <span *ngIf="impLeader?.mobileNo">({{impLeader?.mobileNo ? impLeader?.mobileNo : ''}})</span></a>
                                     </div>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <img src="assets/images/logos/bjp.png" class="party">
-                                        <a href="#">Shamrao Pandurang Patil (7856412395)</a>
-                                    </div>
+                                </ng-container>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <div class="mt-2 text-end" *ngIf="talukaPresidentArray?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Results Found!
+                        </div>
+                    </div>
+                    <pagination-controls *ngIf="talukaPresidentArray?.length != 0" previousLabel="" nextLabel=""
+                        (pageChange)="onClickPagintionTalukaPer($event)">
+                    </pagination-controls>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal  -->
+<div class="modal fade" id="MaptableDetailShow" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="MapSelectModalLabel1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="modal-title" id="MapSelectModalLabel1">{{viewDetailAC_DCArray[0]?.electionName}}</p>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" #searchAddressModel aria-label="Close"></button>
+            </div>
+            <div class="modal-body mt-20 py-2">
+
+                <table class="dash-table mb-3">
+                    <thead>
+                        <tr>
+                            <th>Sr. No.</th>
+                            <th>Candidate Name</th>
+                            <th>Party</th>
+                            <th>Votes</th>
+                            <th>Winning Margin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let viewData of viewDetailAC_DCArray; let i = index">
+                            <td>{{i + 1}}</td>
+                            <td>
+                                <a class="primary">{{viewData?.candidateName ? viewData?.candidateName : '-'}}</a>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span>{{viewData?.partyName ? viewData?.partyName : '-'}}</span>
+                                </div>
+                            </td>
+                            <td>{{viewData?.totalVotes}}</td>
+                            <td>{{viewData?.winningMargin ? viewData?.winningMargin : '-'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="mt-2 text-end" *ngIf="viewDetailAC_DCArray?.length == 0">
+                    <div class="alert alert-danger text-center py-2">No Results Found!
+                    </div>
+                </div>
+  
             </div>
         </div>
     </div>
