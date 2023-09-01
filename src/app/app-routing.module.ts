@@ -66,7 +66,7 @@ const routes: Routes = [
       { path: 'local-govt-body', loadChildren: () => import('./partial/booth-management/local-govt-body/local-govt-body.module').then(m => m.LocalGovtBodyModule), data: { title: 'Local Government Body' } },
       { path: 'assign-taluka-to-assembly', loadChildren: () => import('./partial/booth-management/assign-taluka-to-assembly/assign-taluka-to-assembly.module').then(m => m.AssignTalukaToAssemblyModule), data: { title: 'Assign Taluka to Assembly', allowedRoles: ['1', '2', '7', '8'] } },
 
-      { path: 'leader-details', loadChildren: () => import('./partial/committee-dashboard/leader-details/leader-details.module').then(m => m.LeaderDetailsModule), data: { title: 'Important Leader Details' } },
+      { path: 'leader-details/:id', loadChildren: () => import('./partial/committee-dashboard/leader-details/leader-details.module').then(m => m.LeaderDetailsModule), data: { title: 'Important Leader Details', allowedRoles: ['1', '2', '7', '8'] }  },
     ]
   },
   { path: '500', component: ServerErrorComponent },

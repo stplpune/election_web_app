@@ -188,7 +188,7 @@
                         <div class="card-body pt-0">
                             <div class="card-height">
 
-                                <div class="d-flex align-items-center leader" *ngFor="let impLeader of importantLeadersArray">
+                                <div class="d-flex align-items-center leader" *ngFor="let impLeader of importantLeadersArray" (click)="redirectToleaderDetailsPage(impLeader?.leaderId)">
                                     <div class="flex-shrink-0">
                                         <div class="profile">
                                             <img [src]="impLeader?.profilePhoto" alt="..." class="leader-img" *ngIf="impLeader?.profilePhoto">

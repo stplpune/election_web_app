@@ -286,15 +286,6 @@ export class CommitteeDashboardComponent implements OnInit {
       }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
     }
 
-    getByIdImp_Leaders(id:any) { 
-      this.callAPIService.setHttp('get', 'api/BoothCommitteeDashboard/GetImporatntLeaderGetById?LeaderId=' + id, false, false, false, 'electionMicroSerApp');
-      this.callAPIService.getHttp().subscribe((res: any) => {
-        if (res.responseData != null && res.statusCode == "200") {
-          this.getByIdImp_LeadersArray = res.responseData;
-        } else { this.getByIdImp_LeadersArray = []; }
-      }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
-    }
-
   //............................................ Important Leaders Code Start Here ...............................................//
 
   //..................................................  Maharastra/Taluka Map Code Start Here .............................................//
@@ -904,6 +895,11 @@ export class CommitteeDashboardComponent implements OnInit {
   }
 
   //............................................ Taluka Wise Important Leaders Code Start Here ...............................................//
+
+
+  redirectToleaderDetailsPage(id: any) { //Redirect leader Details Page
+    window.open('../leader-details/' + id);
+  } 
 
 }
 
