@@ -112,7 +112,28 @@ export class CommitteeDashboardComponent implements OnInit {
     } else if (typeId == 3) {
       this.firstTimeCallM_Svg();
     }
-    this.getBCFormation_Map_Consituency();
+    this.getBCFormation_Map_Consituency(); //dropdown api
+    this.callAllCommonApi();
+  }
+
+  selectDropdown() {
+    if(this.topFilter.value.FilterTypeId == 3 && this.topFilter.value.FilterId){
+      this.firstTimeCallM_Svg();
+      this.getBCFormation_Map_Count();
+      this.selectedDistrictId = this.topFilter.value.FilterId;
+      this.filteredDistrict = this.bCFormationCountArray?.filter((x: any) => x.constituenciesId == this.selectedDistrictId);
+      this.setSVGPath(this.filteredDistrict, 'dist');
+      this.toggleClassActive(this.selectedDistrictId);
+    }
+      this.callAllCommonApi();
+  }
+
+  callAllCommonApi(){
+    this.boothCommittee_Summary();
+    this.getImp_Leaders();
+    this.getPastElectionName();
+    this.getBarChartApi_Booths_vs_Boothcommittee();
+    this.getTalukaPresident();
   }
 
   firstTimeCallM_Svg() {
@@ -247,7 +268,7 @@ export class CommitteeDashboardComponent implements OnInit {
     }, (error: any) => { this.barChartShow = false; if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
   }
 
-  talukaCirclceClick(villageId:any) { //taluka circle click, taluka svg map click
+  talukaCircle_MapClick(villageId:any) { //taluka circle click, taluka svg map click
     var obj = this.commonService.loggedInUserId() + '&ClientId=' + this.commonService.getlocalStorageData().ClientId 
     + '&DistrictId=' + (this.selectedDistrictId || 0) + '&TalukaId=' + villageId ;
     this.spinner.show();
@@ -269,7 +290,7 @@ export class CommitteeDashboardComponent implements OnInit {
     })
   }
 
-    //............................................ Important Leaders Code Start Here ...............................................//
+    //............................................ Important Leaders Top Code Start Here ...............................................//
     
     importantLeadersArray:any;
     getByIdImp_LeadersArray:any;
@@ -277,7 +298,7 @@ export class CommitteeDashboardComponent implements OnInit {
     getImp_Leaders() {
       let formData = this.topFilter.value;
       let obj = '&ClientId=' + this.localStorageData?.ClientId + '&StateId=' + this.localStorageData?.StateId + '&FilterTypeId='
-        + formData?.FilterTypeId + '&FilterId=' + (formData?.FilterId || 0) + '&TalukaId=' + 0 ;
+        + formData?.FilterTypeId + '&FilterId=' + (formData?.FilterId || 0) + '&TalukaId=' +  (this.selectedTalId || 0);
       this.callAPIService.setHttp('get', 'api/BoothCommitteeDashboard/Get_BoothCommittee_Dashboard_Imp_Leaders?UserId=' + this.commonService.loggedInUserId() + obj, false, false, false, 'electionMicroSerApp');
       this.callAPIService.getHttp().subscribe((res: any) => {
         if (res.responseData != null && res.statusCode == "200") {
@@ -286,23 +307,9 @@ export class CommitteeDashboardComponent implements OnInit {
       }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
     }
 
-  //............................................ Important Leaders Code Start Here ...............................................//
+  //............................................ Important Leaders Top Code Start Here ...............................................//
 
   //..................................................  Maharastra/Taluka Map Code Start Here .............................................//
-
-  selectDropdown() {
-    this.firstTimeCallM_Svg();
-    this.getBCFormation_Map_Count();
-    this.selectedDistrictId = this.topFilter.value.FilterId;
-    this.filteredDistrict = this.bCFormationCountArray?.filter((x: any) => x.constituenciesId == this.selectedDistrictId);
-    this.setSVGPath(this.filteredDistrict, 'dist');
-    this.toggleClassActive(this.selectedDistrictId);
-
-    this.boothCommittee_Summary();
-    this.getPastElectionName();
-    this.getBarChartApi_Booths_vs_Boothcommittee();
-    this.getTalukaPresident();
-  }
 
   onClickPagintionPC(pageNo: number) {
     this.paginationNoPC = pageNo;
@@ -440,7 +447,9 @@ export class CommitteeDashboardComponent implements OnInit {
         this.selectedDistrictId = e.currentTarget.id;
         this.previousDistSelected = this.selectedDistrictId;
         this.filteredDistrict = this.bCFormationCountArray?.filter((x: any) => x.constituenciesId == e.currentTarget.id);
+        this.topFilter.controls['FilterId'].setValue(this.filteredDistrict[0]?.constituenciesId);
         this.setSVGPath(this.filteredDistrict, 'dist');
+        this.callAllCommonApi();
       }
     })
   }
@@ -454,6 +463,8 @@ export class CommitteeDashboardComponent implements OnInit {
         this.previousTalSelected = selectedTalId;
         this.filteredTal = this.talukaByDistrictId.filter((x: any) => x.constituenciesId == Number(selectedTalId));
         this.setSVGPath(this.selectedDistrictId, 'tal', this.filteredTal);
+        this.callAllCommonApi();
+        this.talukaCircle_MapClick(Number(selectedTalId));
       }
     })
   }
@@ -555,7 +566,7 @@ export class CommitteeDashboardComponent implements OnInit {
     setTimeout(() => {
       arr.find((element: any) => { //talukaId
         $('#mapsvg2  path[id="' + element?.constituenciesId + '"]').addClass('clicked');
-        $('#mapsvg2  #' + element?.constituenciesId).text(element?.totalBoothCommittee)
+        $('#mapsvg2  #' + element?.constituenciesId).text(element?.totalBooths)
       });
     }, 500);
   }
@@ -679,7 +690,7 @@ export class CommitteeDashboardComponent implements OnInit {
       chart: { width: 350,type: "donut",
       events: {
         click: ()=> {
-          this.talukaCirclceClick(this.HighlightRowAssemblyPieList);
+          this.talukaCircle_MapClick(this.HighlightRowAssemblyPieList);
         }}},
       labels: ["Completed", "Remaining",],
       colors: ['#6f42c1', '#297af0'],
@@ -875,6 +886,7 @@ export class CommitteeDashboardComponent implements OnInit {
   paginationNoTalukaPer: number = 1;
   pageSizeTalukaPer: number = 10;
   talukaPresidentArray:any;
+  impLeadersData:any;
 
   getTalukaPresident() {
     let formData = this.topFilter.value;

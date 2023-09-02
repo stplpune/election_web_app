@@ -241,7 +241,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let pcData of pastPCArray  | paginate: {itemsPerPage: pageSizePC, 
+                            <tr *ngFor="let pcData of pastPCArray  | paginate: {id:'pastPCId',itemsPerPage: pageSizePC, 
                                 currentPage: paginationNoPC, totalItems:getTotalPC}; let i = index">
                                 <td>{{((paginationNoPC + 1) * 10 + i + 1)-20}}</td>
                                 <td>{{pcData?.constituencyNo}}-{{pcData?.constituenciesName}}</td>
@@ -265,7 +265,7 @@
                         <div class="alert alert-danger text-center py-2">No Results Found!
                         </div>
                     </div>
-                    <pagination-controls *ngIf="pastPCArray?.length != 0" previousLabel="" nextLabel=""
+                    <pagination-controls id="pastPCId" *ngIf="pastPCArray?.length != 0" previousLabel="" nextLabel=""
                         (pageChange)="onClickPagintionPC($event)">
                     </pagination-controls>
                    <!-- (click()="electionIdAC = acEleName?.electionId; electionTypeIdAC = acEleName?.electionTypeId"  -->
@@ -284,7 +284,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let acData of pastACArray  | paginate: {itemsPerPage: pageSizeAC, 
+                            <tr *ngFor="let acData of pastACArray  | paginate: {id: 'pastACId',itemsPerPage: pageSizeAC, 
                                 currentPage: paginationNoAC, totalItems:getTotalAC}; let i = index">
                                 <td>{{((paginationNoAC + 1) * 10 + i + 1)-20}}</td>
                                 <td>{{acData?.constituencyNo}}-{{acData?.constituenciesName}}</td>
@@ -308,7 +308,7 @@
                         <div class="alert alert-danger text-center py-2">No Results Found!
                         </div>
                     </div>
-                    <pagination-controls *ngIf="pastACArray?.length != 0" previousLabel="" nextLabel=""
+                    <pagination-controls id="pastACId" *ngIf="pastACArray?.length != 0" previousLabel="" nextLabel=""
                         (pageChange)="onClickPagintionAC($event)">
                     </pagination-controls>
                 </div>
@@ -394,10 +394,11 @@
                                 <th>Taluka President</th>
                                 <th>Moible No.</th>
                                 <th>Important Leaders</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let talukaPer of talukaPresidentArray  | paginate: {itemsPerPage: 10, 
+                            <tr *ngFor="let talukaPer of talukaPresidentArray  | paginate: {id: 'talukaPerImpLeaderId',itemsPerPage: 10, 
                                 currentPage: paginationNoTalukaPer, totalItems:getTotalTalukaPer}; let i = index">
                                 <td>{{((paginationNoTalukaPer + 1) * 10 + i + 1)-20}}</td>
                                 <td>{{talukaPer?.talukaName}}</td>
@@ -406,11 +407,12 @@
                                 </td>
                                 <td>{{talukaPer?.presidentName?.split('-')[1] ? talukaPer?.presidentName?.split('-')[1] : '-'}}</td>
                                 <td>
-                                    <ng-container *ngFor="let impLeader of talukaPer?._IMPLeaderDetailsState">
                                     <div class="d-flex align-items-center gap-2">
-                                        <a class="text-decoration-none">{{impLeader?.leaderName}} <span *ngIf="impLeader?.mobileNo">({{impLeader?.mobileNo ? impLeader?.mobileNo : ''}})</span></a>
+                                        <a class="text-decoration-none">{{talukaPer?._IMPLeaderDetailsState[0]?.leaderName}} <span *ngIf="talukaPer?._IMPLeaderDetailsState[0]?.mobileNo">({{talukaPer?._IMPLeaderDetailsState[0]?.mobileNo ? talukaPer?._IMPLeaderDetailsState[0]?.mobileNo : ''}})</span></a>
                                     </div>
-                                </ng-container>
+                                </td>
+                                <td>
+                                    <i class="fas fa-info-circle info" (click)="impLeadersData = talukaPer?._IMPLeaderDetailsState" data-bs-toggle="modal" data-bs-target="#viewDetailsImpLeaders"></i>
                                 </td>
                             </tr>
                         </tbody>
@@ -419,7 +421,7 @@
                         <div class="alert alert-danger text-center py-2">No Results Found!
                         </div>
                     </div>
-                    <pagination-controls *ngIf="talukaPresidentArray?.length != 0" previousLabel="" nextLabel=""
+                    <pagination-controls id="talukaPerImpLeaderId" *ngIf="talukaPresidentArray?.length != 0" previousLabel="" nextLabel=""
                         (pageChange)="onClickPagintionTalukaPer($event)">
                     </pagination-controls>
                 </div>
@@ -428,7 +430,43 @@
     </div>
 </div>
 
-<!-- Modal  -->
+<!-- Modal viewDetailsImpLeaders -->
+<div class="modal fade" id="viewDetailsImpLeaders" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ImpLeaders" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="modal-title" id="ImpLeaders">Important Leaders</p>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" #ImpLeaders aria-label="Close"></button>
+            </div>
+            <div class="modal-body mt-20 py-2"> 
+
+                <table class="dash-table mb-3">
+                    <thead>
+                        <tr>
+                            <th>Sr. No.</th>
+                            <th>Candidate Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let impObj of impLeadersData; let i = index">
+                            <td>{{i + 1}}</td>
+                            <td>
+                                <a class="text-decoration-none">{{impObj?.leaderName}} <span *ngIf="impObj?.mobileNo">({{impObj?.mobileNo ? impObj?.mobileNo : ''}})</span></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="mt-2 text-end" *ngIf="impLeadersData?.length == 0">
+                    <div class="alert alert-danger text-center py-2">No Results Found!
+                    </div>
+                </div>
+  
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal viewDetailAC_DC -->
 <div class="modal fade" id="MaptableDetailShow" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="MapSelectModalLabel1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
@@ -436,7 +474,7 @@
                 <p class="modal-title" id="MapSelectModalLabel1">{{viewDetailAC_DCArray[0]?.electionName}}</p>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" #searchAddressModel aria-label="Close"></button>
             </div>
-            <div class="modal-body mt-20 py-2">
+            <div class="modal-body mt-20 py-2"> 
 
                 <table class="dash-table mb-3">
                     <thead>
@@ -452,7 +490,7 @@
                         <tr *ngFor="let viewData of viewDetailAC_DCArray; let i = index">
                             <td>{{i + 1}}</td>
                             <td>
-                                <a class="primary">{{viewData?.candidateName ? viewData?.candidateName : '-'}}</a>
+                                <a class="text-decoration-none">{{viewData?.candidateName ? viewData?.candidateName : '-'}}</a>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
@@ -473,3 +511,4 @@
         </div>
     </div>
 </div>
+
