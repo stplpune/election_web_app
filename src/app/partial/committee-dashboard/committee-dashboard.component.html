@@ -129,9 +129,9 @@
                 <div class="card-body committeesonmap2"> 
                     <div  id="mapSvgAssembly"></div>
                     <div  id="mapSvgParli"></div>
-                    <div id="mapsvg1" (click)="svgMapClick()"></div>
+                    <div id="mapsvg1" (click)="svgMaharastraMapClick()"></div>
                     <div [ngClass]="{'d-none': (topFilter.value.FilterTypeId != 3 || selectedDistrictId == '')}"
-                     [class]="previousDistSelected=='9' ? 'm-5' : 'm-4'" id="mapsvg2" (click)="svgMapClick1('mapClick')"></div>
+                     [class]="previousDistSelected=='9' ? 'm-5' : 'm-4'" id="mapsvg2" (click)="svgVillageMapClick('mapClick')"></div>
                 </div>
             </div>
         </div>
@@ -360,7 +360,7 @@
     <div class="row chartbox mb-3">
         <div class="col-sm-12">
             <div class="card">
-                <div class="card-header text-main">Talukawise Booth Committee Formation progress</div>
+                <div class="card-header text-main">{{columnChartHeadingName}} </div>
                 <div class="card-body">
                     <div *ngIf="barChartShow" class="mt-5">
                         <div id="chart">
@@ -370,7 +370,7 @@
                             [stroke]="BarchartOptions?.stroke" [tooltip]="BarchartOptions?.tooltip"
                             [xaxis]="BarchartOptions?.xaxis" [dataLabels]="BarchartOptions?.dataLabels"></apx-chart>
                         </div>
-                        <div class="text-center fw-bold mb-2">Talukawise Booth Committee Formation progress</div>
+                        <div class="text-center fw-bold mb-2">{{columnChartHeadingName}}</div>
                       </div>
                       <div *ngIf="!barChartShow" class=" card-body">
                         <div class="alert alert-danger text-center py-2 mb-0 small mt-5">No Data Found..!

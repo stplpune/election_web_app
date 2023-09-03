@@ -66,6 +66,7 @@ export class CommitteeDashboardComponent implements OnInit {
   AssemblypieChartShow: boolean = false;
   AssemblyPiechartOptions:any;
   presidentDetailObj:any;
+  columnChartHeadingName:any;
 
 
   constructor(
@@ -109,14 +110,17 @@ export class CommitteeDashboardComponent implements OnInit {
       this.showSvgMapParli();
     } else if (typeId == 2) {
       this.showSvgMapAssembly(this.commonService.mapRegions());
+      // this.talukaCircle_MapClick();
     } else if (typeId == 3) {
       this.firstTimeCallM_Svg();
     }
+    this.selectedTalId = 0;
     this.getBCFormation_Map_Consituency(); //dropdown api
     this.callAllCommonApi();
   }
 
   selectDropdown() {
+    this.selectedTalId = 0;
     if(this.topFilter.value.FilterTypeId == 3 && this.topFilter.value.FilterId){
       this.firstTimeCallM_Svg();
       this.getBCFormation_Map_Count();
@@ -125,6 +129,7 @@ export class CommitteeDashboardComponent implements OnInit {
       this.setSVGPath(this.filteredDistrict, 'dist');
       this.toggleClassActive(this.selectedDistrictId);
     }
+    // this.topFilter.value.FilterTypeId == 2 ? this.selectedTalId = (this.topFilter.value.FilterId || 0) : '';
       this.callAllCommonApi();
   }
 
@@ -133,7 +138,9 @@ export class CommitteeDashboardComponent implements OnInit {
     this.getImp_Leaders();
     this.getPastElectionName();
     this.getBarChartApi_Booths_vs_Boothcommittee();
-    this.getTalukaPresident();
+    this.getTalukaPresident(); //Taluka Wise Important Leaders Api
+    // this.topFilter.value.FilterTypeId == 2 ? this.talukaCircle_MapClick(this.selectedTalId || 0) : '';
+    this.columnChartHeadingName = this.topFilter.value.FilterTypeId == 1 ? 'Assembly Constituency Wise Committee Formation progress' : this.topFilter.value.FilterTypeId == 3 ? 'Talukawise Booth Committee Formation progress' : '';
   }
 
   firstTimeCallM_Svg() {
@@ -210,7 +217,7 @@ export class CommitteeDashboardComponent implements OnInit {
     let formData = this.topFilter.value;
     let obj = '&ClientId=' + this.localStorageData?.ClientId + '&StateId=' + this.localStorageData?.StateId + '&FilterTypeId='
       + formData?.FilterTypeId + '&FilterId=' + (formData?.FilterId || 0) + '&pageno=' + this.paginationNoPC + '&pagesize=' + this.pageSizePC
-      + '&ElectionId=' + (electionId || 0) + '&ElectionTypeId=' + (electionTypeId || 0);
+      + '&ElectionId=' + (electionId || 0) + '&ElectionTypeId=' + (electionTypeId || 0) + '&TalukaId=' + (this.selectedTalId || 0);
     this.callAPIService.setHttp('get', 'api/BoothCommitteeDashboard/Get_BoothCommittee_Dashboard_Past_Election_Summary?UserId=' + this.commonService.loggedInUserId() + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
@@ -224,7 +231,7 @@ export class CommitteeDashboardComponent implements OnInit {
     let formData = this.topFilter.value;
     let obj = '&ClientId=' + this.localStorageData?.ClientId + '&StateId=' + this.localStorageData?.StateId + '&FilterTypeId='
       + formData?.FilterTypeId + '&FilterId=' + (formData?.FilterId || 0) + '&pageno=' + this.paginationNoAC + '&pagesize=' + this.pageSizeAC
-      + '&ElectionId=' + (electionId || 0) + '&ElectionTypeId=' + (electionTypeId || 0);
+      + '&ElectionId=' + (electionId || 0) + '&ElectionTypeId=' + (electionTypeId || 0) + '&TalukaId=' + (this.selectedTalId || 0);
     this.callAPIService.setHttp('get', 'api/BoothCommitteeDashboard/Get_BoothCommittee_Dashboard_Past_Election_Summary?UserId=' + this.commonService.loggedInUserId() + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
@@ -258,9 +265,11 @@ export class CommitteeDashboardComponent implements OnInit {
         this.addClasscommitteeWise1(this.barChartBooths_vs_BoothcomityArray); // Village Svg map
         this.selectedDistrictId ? $('path#' + this.selectedDistrictId).addClass('svgDistrictActive') : this.toggleClassActive(0);
 
-        const barchartBoothDataObj = this.barChartBooths_vs_BoothcomityArray.find((x: any) => x.totalBooths > 1 || x.totalBoothCommittee > 1) // Bar Chart
-        this.barChartShow = barchartBoothDataObj ? true : false;
-        this.constructBarChart(this.barChartBooths_vs_BoothcomityArray);
+        if(this.topFilter.value.FilterTypeId != 2){
+          const barchartBoothDataObj = this.barChartBooths_vs_BoothcomityArray.find((x: any) => x.totalBooths > 1 || x.totalBoothCommittee > 1) // Bar Chart
+          this.barChartShow = barchartBoothDataObj ? true : false;
+          this.constructBarChart(this.barChartBooths_vs_BoothcomityArray);
+        }
 
         this.barChartBooths_vs_BoothcomityArray ? this.AssemblyPieChartCheck(this.barChartBooths_vs_BoothcomityArray) : ''; // pass Data For Assembly Pie Chart
 
@@ -268,9 +277,9 @@ export class CommitteeDashboardComponent implements OnInit {
     }, (error: any) => { this.barChartShow = false; if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
   }
 
-  talukaCircle_MapClick(villageId:any) { //taluka circle click, taluka svg map click
+  talukaCircle_MapClick(villageId?:any) { //taluka circle click, taluka svg map click
     var obj = this.commonService.loggedInUserId() + '&ClientId=' + this.commonService.getlocalStorageData().ClientId 
-    + '&DistrictId=' + (this.selectedDistrictId || 0) + '&TalukaId=' + villageId ;
+    + '&DistrictId=' + (this.selectedDistrictId || 0) + '&TalukaId=' + (villageId || 0) ;
     this.spinner.show();
     this.callAPIService.setHttp('get', 'api/BoothCommitteeDashboard/GetWebTalukaWiseBoothCommitteeDashbordState?UserId=' + obj, false, false, false, 'electionMicroSerApp'); //old API  Web_GetDistrict_1_0_Committee
     this.callAPIService.getHttp().subscribe((res: any) => {
@@ -438,7 +447,7 @@ export class CommitteeDashboardComponent implements OnInit {
     });
   }
 
-  svgMapClick() {
+  svgMaharastraMapClick() {
     this.filteredTal = [];
     this.previousTalSelected = '';
     $(document).on('click', '#mapsvg1  path', (e: any) => {
@@ -454,7 +463,7 @@ export class CommitteeDashboardComponent implements OnInit {
     })
   }
 
-  svgMapClick1(status: string) {
+  svgVillageMapClick(status: string) {
     this.mapselected = 'tal';
     $(document).on('click', '#mapsvg2  path', (e: any) => {
       let selectedTalId = ((e.currentTarget.id).split('d')[((e.currentTarget.id).split('d').length - 1)]);
@@ -690,6 +699,7 @@ export class CommitteeDashboardComponent implements OnInit {
       chart: { width: 350,type: "donut",
       events: {
         click: ()=> {
+          this.columnChartHeadingName =  obj?.constituencyName + 'Booth Committee Formation progress';
           this.talukaCircle_MapClick(this.HighlightRowAssemblyPieList);
         }}},
       labels: ["Completed", "Remaining",],
@@ -891,7 +901,7 @@ export class CommitteeDashboardComponent implements OnInit {
   getTalukaPresident() {
     let formData = this.topFilter.value;
     let obj = '&ClientId=' + this.localStorageData?.ClientId + '&StateId=' + this.localStorageData?.StateId + '&FilterTypeId='
-      + formData?.FilterTypeId + '&FilterId=' + (formData?.FilterId || 0) + '&pageno=' + this.paginationNoTalukaPer + '&pagesize=' + this.pageSizeTalukaPer
+      + formData?.FilterTypeId + '&FilterId=' + (formData?.FilterId || 0) + '&pageno=' + this.paginationNoTalukaPer + '&pagesize=' + this.pageSizeTalukaPer + '&TalukaId=' +  (this.selectedTalId || 0);
     this.callAPIService.setHttp('get', 'api/BoothCommitteeDashboard/GetWebTalukaPresidentsDashbordState?UserId=' + this.commonService.loggedInUserId() + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
