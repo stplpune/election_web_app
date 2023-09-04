@@ -278,9 +278,9 @@ export class CommitteeDashboardComponent implements OnInit {
   }
 
   talukaCircle_MapClick(villageId?:any) { //taluka circle click, taluka svg map click
+    this.spinner.show();
     var obj = this.commonService.loggedInUserId() + '&ClientId=' + this.commonService.getlocalStorageData().ClientId 
     + '&DistrictId=' + (this.selectedDistrictId || 0) + '&TalukaId=' + (villageId || 0) ;
-    this.spinner.show();
     this.callAPIService.setHttp('get', 'api/BoothCommitteeDashboard/GetWebTalukaWiseBoothCommitteeDashbordState?UserId=' + obj, false, false, false, 'electionMicroSerApp'); //old API  Web_GetDistrict_1_0_Committee
     this.callAPIService.getHttp().subscribe((res: any) => {
       this.spinner.hide();
@@ -291,10 +291,11 @@ export class CommitteeDashboardComponent implements OnInit {
         this.barChartShow = barchartBoothDataObj ? true : false;
         this.constructBarChart(this.talukaWiseBoothCommitteArray);
       } else{
+        this.spinner.hide();
         this.talukaWiseBoothCommitteArray = [];
         this.barChartShow = false;
       }
-    }, (error: any) => {
+    }, (error: any) => { this.spinner.hide();
       if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }); }
     })
   }
@@ -895,7 +896,7 @@ export class CommitteeDashboardComponent implements OnInit {
   getTotalTalukaPer: any;
   paginationNoTalukaPer: number = 1;
   pageSizeTalukaPer: number = 10;
-  talukaPresidentArray:any;
+  talukaPresidentArray:any[] = [];
   impLeadersData:any;
 
   getTalukaPresident() {
