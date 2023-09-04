@@ -294,6 +294,7 @@ export class OrganizationMasterComponent implements OnInit {
   }
 
   setDefaultState(){
+    this.getState();
     this.orgMasterForm.controls['StateId'].setValue(1);
     this.disableFlagDivi = false;
   }

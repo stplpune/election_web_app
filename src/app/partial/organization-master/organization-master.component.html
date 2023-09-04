@@ -122,7 +122,8 @@
                                         Division</label>
                                     <ngx-select [allowClear]="true" (remove)="clearselOption('Division')"
                                         [items]="allDivision" formControlName="DivisionId"
-                                        (select)="getDistrict(this.orgMasterForm.value.DivisionId, this.orgMasterForm.value.StateId);"
+                                        (select)="getDistrict(this.orgMasterForm.value.DivisionId, this.orgMasterForm.value.StateId);
+                                        orgMasterForm.controls['TalukaId'].setValue('');"
                                         placeholder="Select Division" optionValueField="DivisionId"
                                         optionTextField="DivisionName"
                                         [ngClass]="{ 'is-invalid': submitted && f.DivisionId.errors }"
