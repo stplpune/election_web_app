@@ -15,7 +15,7 @@
                 <div class="d-flex align-items-center gap-2 fw-bold w-25 justify-content-end">
                     <p class="mb-0 text-main">Maharashtra</p>
                     <i class="fas fa-angle-double-right text-main"></i>
-                    <p class="mb-0 warning">Satara</p>
+                    <p class="mb-0 warning">{{selectedDropdownNameValue ? selectedDropdownNameValue : ''}}</p>
                 </div>
             </div>
         </div>
@@ -104,7 +104,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>  
 
     <div class="row mb-3 chartbox g-3 form-container">
         <div class="col-sm-5">
@@ -121,7 +121,7 @@
                 </div>
                 <div class="card-header">
                         <ngx-select [allowClear]="true" [items]="bCFormationDropArray" formControlName="FilterId" optionValueField="constituenciesId" optionTextField="constituencyName"
-                        (select)="selectDropdown()" (remove)="firstTimeCallM_Svg()"
+                        (select)="selectDropdown();" (remove)="firstTimeCallM_Svg()"
                             placeholder="{{topFilter.value.FilterTypeId == 1 ? 'Select Parliamentary Constituency' : topFilter.value.FilterTypeId == 2 ? 'Select Assembly Constituency' : topFilter.value.FilterTypeId == 3 ? 'Select District' : ''}}">
                         </ngx-select>
                 </div>
@@ -187,7 +187,8 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="card-height">
-                                <div class="d-flex align-items-center leader" *ngFor="let impLeader of importantLeadersArray" (click)="redirectToleaderDetailsPage(impLeader?.leaderId)">
+                                <div class="d-flex align-items-center leader" *ngFor="let impLeader of importantLeadersArray" 
+                                (click)="redirectToleaderDetailsPage(impLeader?.leaderId)" [class.active]="impLeader?.leaderId == impLeader_Highlight">
                                     <div class="flex-shrink-0">
                                         <div class="profile">
                                             <img [src]="impLeader?.profilePhoto" alt="..." class="leader-img" *ngIf="impLeader?.profilePhoto">
@@ -259,7 +260,8 @@
                                 <td>{{pcData?.totalVotes}}</td>
                                 <td>{{pcData?.winningMargin ? pcData?.winningMargin : '-'}}</td>
                                 <td>
-                                    <i class="fas fa-info-circle info" (click)="viewDetailAC_DC(0,pcData?.constituenciesId,pcData?.electionId)" data-bs-toggle="modal" data-bs-target="#MaptableDetailShow"></i>
+                                    <i class="fas fa-info-circle info" (click)="viewDetailAC_DC(0,pcData?.constituenciesId,pcData?.electionId)"
+                                  data-bs-toggle="modal" data-bs-target="#MaptableDetailShow"></i>
                                 </td>
                             </tr>
                         </tbody>

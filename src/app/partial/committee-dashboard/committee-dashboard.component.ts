@@ -10,7 +10,6 @@ import { DateTimeAdapter } from 'ng-pick-datetime';
 import { DatePipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { ChartComponent } from "ng-apexcharts";
-import { log } from 'console';
 declare var $: any;
 
 @Component({
@@ -23,6 +22,7 @@ export class CommitteeDashboardComponent implements OnInit {
 
   localStorageData = this.commonService.getlocalStorageData();
   selectedDistrictId: any;
+  selectedDropdownNameValue:any;
 
   boothComitySummary: any;
   graphInstance: any;
@@ -51,10 +51,13 @@ export class CommitteeDashboardComponent implements OnInit {
   getTotalPC: any;
   paginationNoPC: number = 1;
   pageSizePC: number = 10;
+  // PC_Highlight:any;
 
   getTotalAC: any;
   paginationNoAC: number = 1;
   pageSizeAC: number = 10;
+  // AC_Highlight:any;
+
   pastPCArray: any;
   pastACArray: any;
   viewDetailAC_DCArray: any[]=[];
@@ -105,6 +108,7 @@ export class CommitteeDashboardComponent implements OnInit {
 
   changeFilterType() {
     this.topFilter.controls['FilterId'].setValue('');
+    this.selectedDropdownNameValue = '';
     let typeId = this.topFilter.value.FilterTypeId;
     if (typeId == 1) {
       this.showSvgMapParli();
@@ -120,6 +124,7 @@ export class CommitteeDashboardComponent implements OnInit {
   }
 
   selectDropdown() {
+    this.selectedDropdownNameValue = this.bCFormationDropArray?.find((x: any) => x.constituenciesId == this.topFilter.value.FilterId)?.constituencyName; // get Dropdown Value Name
     this.selectedTalId = 0;
     if(this.topFilter.value.FilterTypeId == 3 && this.topFilter.value.FilterId){
       this.firstTimeCallM_Svg();
@@ -134,6 +139,7 @@ export class CommitteeDashboardComponent implements OnInit {
   }
 
   callAllCommonApi(){
+    this.impLeader_Highlight = '';
     this.boothCommittee_Summary();
     this.getImp_Leaders();
     this.getPastElectionName();
@@ -242,6 +248,7 @@ export class CommitteeDashboardComponent implements OnInit {
   }
 
   viewDetailAC_DC(isPc:any,ConstituencyId:any,electionId:any) {//view Detail Table Data
+    // this.PC_Highlight = ConstituencyId;
     this.viewDetailAC_DCArray = [];
     let obj = '&ClientId=' + this.localStorageData?.ClientId + '&StateId=' + this.localStorageData?.StateId
       + '&IsPc=' + isPc + '&ConstituencyId=' + ConstituencyId + '&ElctionId=' + electionId;
@@ -304,6 +311,7 @@ export class CommitteeDashboardComponent implements OnInit {
     
     importantLeadersArray:any[] = [];
     getByIdImp_LeadersArray:any;
+    impLeader_Highlight:any;
 
     getImp_Leaders() {
       let formData = this.topFilter.value;
@@ -316,6 +324,11 @@ export class CommitteeDashboardComponent implements OnInit {
         } else { this.importantLeadersArray = []; }
       }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
     }
+
+    redirectToleaderDetailsPage(id: any) { //Redirect leader Details Page
+      this.impLeader_Highlight = id;
+      window.open('../leader-details/' + id);
+    } 
 
   //............................................ Important Leaders Top Code Start Here ...............................................//
 
@@ -918,11 +931,6 @@ export class CommitteeDashboardComponent implements OnInit {
   }
 
   //............................................ Taluka Wise Important Leaders Code Start Here ...............................................//
-
-
-  redirectToleaderDetailsPage(id: any) { //Redirect leader Details Page
-    window.open('../leader-details/' + id);
-  } 
 
 }
 
