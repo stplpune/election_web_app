@@ -907,7 +907,7 @@ export class CommitteeDashboardComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.talukaPresidentArray = res.responseData?.responseData1;
-        this.getTotalTalukaPer = res.responseData.responseData2.totalCount * this.pageSizeTalukaPer;
+        this.getTotalTalukaPer = res.responseData.responseData2.totalPages * this.pageSizeTalukaPer;
       } else { this.talukaPresidentArray = []; }
     }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
   }
