@@ -69,7 +69,7 @@ export class CommitteeDashboardComponent implements OnInit {
   AssemblypieChartShow: boolean = false;
   AssemblyPiechartOptions:any;
   presidentDetailObj:any;
-  columnChartHeadingName:any;
+  columnChartHeadingName = 'Talukawise Booth Committee Formation progress';
 
 
   constructor(
@@ -113,6 +113,7 @@ export class CommitteeDashboardComponent implements OnInit {
     if (typeId == 1) {
       this.showSvgMapParli();
     } else if (typeId == 2) {
+      this.barChartBooths_vs_BoothcomityArray = [];
       this.showSvgMapAssembly(this.commonService.mapRegions());
       // this.talukaCircle_MapClick();
     } else if (typeId == 3) {
@@ -136,6 +137,12 @@ export class CommitteeDashboardComponent implements OnInit {
     }
     // this.topFilter.value.FilterTypeId == 2 ? this.selectedTalId = (this.topFilter.value.FilterId || 0) : '';
       this.callAllCommonApi();
+  }
+
+  removeDropdownValue(){
+    this.callAllCommonApi();
+    this.firstTimeCallM_Svg();
+    this.selectedDropdownNameValue = '';
   }
 
   callAllCommonApi(){
@@ -278,7 +285,7 @@ export class CommitteeDashboardComponent implements OnInit {
           this.constructBarChart(this.barChartBooths_vs_BoothcomityArray);
         }
 
-        this.barChartBooths_vs_BoothcomityArray ? this.AssemblyPieChartCheck(this.barChartBooths_vs_BoothcomityArray) : ''; // pass Data For Assembly Pie Chart
+        (this.barChartBooths_vs_BoothcomityArray && this.topFilter.value.FilterTypeId == 2) ? this.AssemblyPieChartCheck(this.barChartBooths_vs_BoothcomityArray) : ''; // pass Data For Assembly Pie Chart
 
       } else { this.barChartBooths_vs_BoothcomityArray = []; this.barChartShow = false; }
     }, (error: any) => { this.barChartShow = false; if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
@@ -638,7 +645,7 @@ export class CommitteeDashboardComponent implements OnInit {
           data: array.map((x: any) => x.totalBooths)
         },
         {
-          name: "Booth Committee's",
+          name: "Booth Committee",
           data: array.map((x: any) => x.totalBoothCommittee)
         },
       ],
@@ -706,15 +713,18 @@ export class CommitteeDashboardComponent implements OnInit {
       }
 
     assemblyVillagePieChart(obj:any){
+      this.selectedTalId = '';
+      this.columnChartHeadingName =  obj.constituencyName +' '+'Booth Committee Formation progress';
       this.HighlightRowAssemblyPieList = obj?.constituenciesId;
     this.AssemblypieChartShow = (obj?.totalBoothCommittee > 1 || obj?.totalBooths > 1) ? true : false;
     this.AssemblyPiechartOptions = {
       series: [obj?.totalBoothCommittee, obj?.totalBooths],
       chart: { width: 350,type: "donut",
       events: {
-        click: ()=> {
-          this.columnChartHeadingName =  obj?.constituencyName + 'Booth Committee Formation progress';
+        click: ()=> { // whwe pie chart click then call
+          this.columnChartHeadingName =  obj?.constituencyName +' '+'Booth Committee Formation progress';
           this.talukaCircle_MapClick(this.HighlightRowAssemblyPieList);
+          this.selectedTalId = obj?.constituenciesId; this.getTalukaPresident(); 
         }}},
       labels: ["Completed", "Remaining",],
       colors: ['#6f42c1', '#297af0'],
@@ -920,7 +930,7 @@ export class CommitteeDashboardComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.talukaPresidentArray = res.responseData?.responseData1;
-        this.getTotalTalukaPer = res.responseData.responseData2.totalPages * this.pageSizeTalukaPer;
+        this.getTotalTalukaPer = res.responseData.responseData2.totalPages * this.pageSizeTalukaPer;   
       } else { this.talukaPresidentArray = []; }
     }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
   }
