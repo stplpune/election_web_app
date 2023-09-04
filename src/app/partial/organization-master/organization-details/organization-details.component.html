@@ -12,186 +12,779 @@
             </div>
         </div>
     </div>
-        <div class="row mb-3">
-            <div class="col-sm-12">
-                <div class="card card-body" id="stats">
-                    <div class="row gx-5">
-                        <div class="col-sm">
-                            <div class="card card-body primary h-100">
-                                <i class="fas fa-layer-group"></i>
-                                <p>Total Committees</p>
-                                <h3>{{TotalWorkAndIosCount?.TotalCommittees ? TotalWorkAndIosCount?.TotalCommittees
-                                    : '0'}}</h3>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="card card-body velvet h-100">
-                                <i class="fas fa-users"></i>
-                                <p>Total Members</p>
-                                <h3>{{TotalWorkAndIosCount?.TotalExecutives ? TotalWorkAndIosCount?.TotalExecutives : '0'}}
-                                </h3>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="card card-body green h-100">
-                                <i class="fas fa-user-check"></i>
-                                <p>Active Members</p>
-                                <h3>{{TotalWorkAndIosCount?._ActiveMember ? TotalWorkAndIosCount?._ActiveMember : '0'}}</h3>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="card card-body red h-100">
-                                <i class="fas fa-user-times"></i>
-                                <p>Non Active Members</p>
-                                <h3>{{TotalWorkAndIosCount?._InActiveMember ? TotalWorkAndIosCount?._InActiveMember : '0'}}
-                                </h3>
-                            </div>
-                        </div>
-    
-                    </div>
-                </div>
+    <div class="row mb-3 g-2" id="dash-stats">
+        <div class="col-lg-2 col-6">
+            <div class="card card-body bg-green">
+                <i class="fas fa-layer-group"></i>
+                <p>Total Committees</p>
+                <h3>{{TotalWorkAndIosCount?.TotalCommittees ? TotalWorkAndIosCount?.TotalCommittees : '0'}}</h3>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-4">
-                <div class="card plain-card commitee-list">
-                    <div class="card-header bg-main">
-                        Committee List
-                    </div>
-                    <div class="card-body">
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" formControlName="Search" placeholder="Search"/>
-                            <button type="button" class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
-                        </div>
-                        <ol>
-                            <li>Maharashtra Pradesh Karyakarani</li>
-                            <li>Chandrapur District Committee</li>
-                            <li>Ahmednagar District Committee</li>
-                            <li>Amaravati District Committee</li>
-                            <li>Aurangabad District Committee</li>
-                            <li>Maharashtra Pradesh Karyakarani</li>
-                        </ol>
-                    </div>
+        <div class="col-lg-2 col-6">
+            <div class="card card-body bg-blue">
+                <i class="fas fa-users"></i>
+                <p>Total Members</p>
+                <h3>{{TotalWorkAndIosCount?.TotalExecutives ? TotalWorkAndIosCount?.TotalExecutives : '0'}}</h3>
+            </div>
+        </div>
+        <div class="col-lg-2 col-6">
+            <div class="card card-body bg-gold">
+                <i class="fas fa-user-check"></i>
+                <p>Active Members</p>
+                <h3>{{TotalWorkAndIosCount?._ActiveMember ? TotalWorkAndIosCount?._ActiveMember : '0'}}</h3>
+            </div>
+        </div>
+        <div class="col-lg-4 col-12">
+            <div class="card card-body bg-voilet">
+                <i class="fas fa-user-times"></i>
+                <p>Non Active Members</p>
+                <h3>{{TotalWorkAndIosCount?._InActiveMember ? TotalWorkAndIosCount?._InActiveMember : '0'}}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row chartbox">
+        <div class="col-sm-4">
+            <div class="card mb-3">
+                <div class="card-body comm-list">
+                    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+                        <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                            <li class="mat-tree-node"
+                                (click)="openSubCommittees(node.CommitteeId,node?.CommitteeName,node.BodyLevelCommittee)"
+                                [class.active]="node.CommitteeId == HighlightRowTree">
+                                <button mat-icon-button disabled></button>
+                                {{node.CommitteeName | titlecase}}
+                            </li>
+                        </mat-tree-node>
+                        <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                            <li>
+                                <div class="mat-tree-node"
+                                    (click)="openSubCommittees(node.CommitteeId,node?.CommitteeName,node.BodyLevelCommittee)"
+                                    [class.active]="node.CommitteeId == HighlightRowTree">
+                                    <button mat-icon-button matTreeNodeToggle
+                                        [attr.aria-label]="'toggle ' + node.CommitteeName">
+                                        <mat-icon class="mat-icon-rtl-mirror">
+                                            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                        </mat-icon>
+                                    </button>
+                                    {{node.CommitteeName}}
+                                </div>
+                                <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                                    <ng-container matTreeNodeOutlet></ng-container>
+                                </ul>
+                            </li>
+                        </mat-nested-tree-node>
+                    </mat-tree>
+                    <ng-template #noSubCommittee>
+                        <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                    </ng-template>
                 </div>
             </div>
-            <div class="col-sm-8">
-                <div class="card palin-card form-container ">
-                    <div class="card-header bg-main">
-                        Maharashtra Pradesh Karyakarani
+
+            <div class="d-lg-none d-sm-block">
+                <div class="card mb-3 " role="alert">
+                    <div class="card-header row">
+                        <div class="col-sm-6">
+                            <h6 class="text-main">{{subCommitteeName | titlecase}}</h6>
+                        </div>
+                        <div class="col-sm-6 text-end">
+                            <button title="Add Designation" class="rounded btn btn-sm btn-main   mx-1 ng-star-inserted"
+                                (click)="openDialogAddCommittee()"><small>Add Sub Committee</small></button>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="card  mb-3">
-                            <div class="card-header border-bottom bg-transparent text-center">
-                                <i class="fas fa-users"></i>
-                                 Total Members
-                                 <span class="form-data">2</span>
-                            </div>
-                            <div class="card-body p-3 texxt-center p-0">
-                                <div class="row text-center">
-                                    <div class="col-sm-6 border-end">
-                                        <i class="fas fa-user-check"></i>
-                                         Active Members 
-                                         <span class="form-data">2</span>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <i class="fas fa-user-times"></i>
-                                         In-Active Members
-                                         <span class="form-data">2</span>
-                                    </div>
+                    <div class="card-body pt-0 pb-0">
+                        <div class="row mb-3 g-2" id="dash-stats">
+                            <div class="col-sm-3 col-6">
+                                <div class="card card-body bg-cyan h-100">
+                                    <i class="fas fa-network-wired"></i>
+                                    <p>Work Done</p>
+                                    <h3>{{TotalWorkAndIosCount?.IndividualTotalWork ?
+                                        TotalWorkAndIosCount?.IndividualTotalWork : '0'}}</h3>
                                 </div>
                             </div>
+                            <div class="col-sm-3 col-6">
+                                <div class="card card-body bg-blue h-100">
+                                    <i class="fab fa-android"></i>
+                                    <p>Total Members</p>
+                                    <h3>{{TotalWorkAndIosCount?.IndividualTotalExecutives ?
+                                        TotalWorkAndIosCount?.IndividualTotalExecutives : '0'}}</h3>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-6">
+                                <div class="card card-body bg-green h-100">
+                                    <i class="fab fa-apple"></i>
+                                    <p>Active</p>
+                                    <h3>{{TotalWorkAndIosCount?._IndiActiveMember ?
+                                        TotalWorkAndIosCount?._IndiActiveMember : '0'}}</h3>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-6">
+                                <div class="card card-body bg-voilet h-100">
+                                    <i class="fab fa-apple"></i>
+                                    <p>Non Active </p>
+                                    <h3>{{TotalWorkAndIosCount?._IndiInActiveMember ?
+                                        TotalWorkAndIosCount?._IndiInActiveMember : '0'}}</h3>
+                                </div>
+                            </div>
+
                         </div>
-                      <div class="mb-3">
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-header pb-0">
                         Current Designated Members
                         <span class="float-end">
                             <button title="Add Designation" class="rounded btn btn-sm btn-main   mx-1 ng-star-inserted"
-                                (click)="addDesignated()"><small>Add Designation</small></button> </span>
-                      </div>
-                        <div class="card mb-2 card-body shadow-none">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0">
-                                  <img src="../../../../assets/images/user.png" alt="..." height="50px">
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                 <h6>Sanjay Shinde</h6>
-                                 <div class="row form-container">
-                                    <div class="col-sm-4">
-                                        <span><i class="fas fa-phone-alt"></i> 9596979899</span>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="d-flex gap-2">
-                                            <i class="fas fa-phone-alt"></i>
-                                            <div class="form-label"> president </div>
-                                        <div class="form-data">
-                                            - hello
-                                        </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="d-flex gap-2">
-                                            <i class="fas fa-calendar-alt"></i>
-                                        <div class="form-data">
-                                            12/02-2023
-                                        </div>
-                                        </div>
-                                    </div>
-                                 </div>
-                                 <div class="d-flex gap-2 justify-content-end">
-                                    <div class="btn-group">
-                                        <button type="button" title="Edit Booth Details" class="btn btn-sm btn-light text-edit mx-1 rounded"><i
-                                                class="far fa-edit"></i></button>
-                                        <button type="button" title="Delete Booth Details"  class="btn btn-sm btn-light text-danger rounded">
-                                            <i class="fas fa-trash-alt"></i></button>
-                                    </div>
-                                 </div>
-                                </div>
-                              </div>
-                                    
-                        </div>
-                        <div class="card mb-2 card-body shadow-none">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0">
-                                  <img src="../../../../assets/images/user.png" alt="..." height="50px">
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                 <h6>Sanjay Shinde</h6>
-                                 <div class="row form-container">
-                                    <div class="col-sm-4">
-                                        <span><i class="fas fa-phone-alt"></i> 9596979899</span>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="d-flex gap-2">
-                                            <i class="fas fa-phone-alt"></i>
-                                            <div class="form-label"> president </div>
-                                        <div class="form-data">
-                                            - hello
-                                        </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="d-flex gap-2">
-                                            <i class="fas fa-calendar-alt"></i>
-                                        <div class="form-data">
-                                            12/02-2023
-                                        </div>
-                                        </div>
-                                    </div>
-                                 </div>
-                                 <div class="d-flex gap-2 justify-content-end">
-                                    <div class="btn-group">
-                                        <button type="button" title="Edit Booth Details" class="btn btn-sm btn-light text-edit mx-1 rounded"><i
-                                                class="far fa-edit"></i></button>
-                                        <button type="button" title="Delete Booth Details"  class="btn btn-sm btn-light text-danger rounded">
-                                            <i class="fas fa-trash-alt"></i></button>
-                                    </div>
-                                 </div>
-                                </div>
-                              </div>
-                                    
-                        </div>
-                        
+                                (click)="addDesignated()"><small>Add Designation</small></button>
+                        </span>
                     </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <div class="card card-body shadow-none border py-2 px-3 mb-2 mem-list"
+                                *ngFor="let designatedMembers of allDesignatedMembers">
+                                <div class="mb-0 fw-bold mt-1 text-danger" *ngIf="designatedMembers.MemberName == ''">
+                                    <p class="mem-name">No Member Assigned</p>
+                                    <p class="mem-desi">{{designatedMembers?.DesignationName}}</p>
+                                    <small
+                                        *ngIf="designatedMembers?.MobileNo !='' && designatedMembers?.MobileNo != null">{{designatedMembers?.MobileNo}}</small>
+                                </div>
+                                <div *ngIf="designatedMembers.MemberName != ''">
+                                    <p class="mem-name text-primary"><a
+                                            (click)="redToMemberProfile(designatedMembers.UserId, designatedMembers.MemberName)">{{designatedMembers?.MemberName}}
+                                            <small class="mem-no">[{{designatedMembers?.MobileNo}}]</small></a></p>
+                                    <div class="mem-desi">
+                                        {{designatedMembers?.DesignationName}}
+                                        <small class="mem-no">[{{designatedMembers.PostFromDate}}]</small>
+                                    </div>
+                                    <div *ngIf="designatedMembers?.DeviceType==1" class="mem-dev">
+                                        <img src="assets\images\dashboard-images\Android_robot.svg">
+                                    </div>
+                                    <div *ngIf="designatedMembers?.DeviceType==2" class="mem-dev">
+                                        <img src="assets\images\dashboard-images\Apple_logo.svg">
+                                    </div>
+                                    <div *ngIf="designatedMembers?.DeviceType==0" class="mem-dev">
+                                        <img src="assets\images\dashboard-images\no-cellphone.svg">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 text-end">
+                                        <div class="btn-group btn-group-sm" role="group" aria-label="Action Buttons">
+                                            <button *ngIf="designatedMembers.MemberName"
+                                                [disabled]="designatedMembers.UserId == loggedInUserId"
+                                                (click)="addEditMember(designatedMembers,'Edit')"
+                                                class="btn btn-sm btn-light rounded"> <i
+                                                    class="fas fa-pencil-alt"></i></button>
+                                            <button
+                                                *ngIf="!designatedMembers.MemberName || designatedMembers.IsMultiple == 1 && designatedMembers.LastaddedUser == 1"
+                                                (click)="addEditMember(designatedMembers,'Add')"
+                                                class="rounded btn btn-sm btn-light mx-1"> <i
+                                                    class="fas fa-plus"></i></button>
+                                            <button title="Edit Member"
+                                                class="btn btn-sm btn-light text-danger mx-1 rounded"
+                                                *ngIf="designatedMembers.MemberName" data-bs-toggle="modal"
+                                                (click)="getUserPostBodyId(designatedMembers.userpostbodyId)"
+                                                data-bs-target="#DeleteModal"
+                                                [disabled]="designatedMembers.UserId == loggedInUserId"> <i
+                                                    class="fas fa-trash-alt"></i></button>
+                                            <button title="Remove Designation" data-bs-toggle="modal"
+                                                data-bs-target="#AddMemberModal" #addMemberModal
+                                                style="display: none;"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="allDesignatedMembers?.length == 0">
+                                <td colspan="7">
+                                    <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
+                                </td>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- recent activity  section start here  -->
+            <!-- <div class="card mb-3">
+                <div class="card-header pb-0">
+                    <span class="fw-bold active">Committee Activities</span>
+                </div>
+                <div class="card-body pt-0  recent-posts">
+                    <div class="member-posts"
+                        *ngFor="let dashboardActivities of resDashboardActivities  | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index">
+                        <a data-bs-toggle="modal" data-bs-toggle="modal" data-bs-target="#PostDetailModal"
+                            class="card card-body shadow-none border-0 p-2">
+                            <div class="row g-3">
+                                <div class="col-3">
+
+                                    <img *ngIf="dashboardActivities?.ImagePath"
+                                        src="{{dashboardActivities?.ImagePath.split(',')[0]}}" class="post-image"
+                                        alt="...">
+                                    <img *ngIf="!dashboardActivities?.ImagePath"
+                                        src="assets/images/dashboard-images/ncp-default.png" class="post-image"
+                                        alt="...">
+                                </div>
+                                <div class="col-9">
+                                    <div class="row mb-2">
+                                        <div class="col-sm-8 col-auto">
+                                            <span class="post-type">{{dashboardActivities?.Category}}</span>
+                                            <span class="post-date"><i
+                                                    class="far fa-clock me-1"></i>{{dashboardActivities?.CreatedDate}}
+                                                {{dashboardActivities?.CreatedTime}}</span>
+                                        </div>
+                                        <div class="col-sm-4 text-end col">
+                                            <div class="button-group action-buttons">
+                                                <button type="button"
+                                                    (click)="openRecentPostDetails(dashboardActivities)"
+                                                    class="btn btn-sm py-0 px-2 text-dark"><i
+                                                        class="fas fa-info-circle"></i></button>
+                                                <button type="button"
+                                                    (click)="delConfirmCanActivity(dashboardActivities.Id)"
+                                                    class="btn btn-sm py-0 px-2 text-danger"><i
+                                                        class="fas fa-trash-alt"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="post-title fw-bold">{{dashboardActivities?.UserFName | titlecase}}
+                                        {{dashboardActivities?.UserMName | titlecase}} {{dashboardActivities?.UserLName
+                                        | titlecase}}
+                                    </p>
+                                    <small class="small text-muted" *ngIf="dashboardActivities.IsCurrent == 0"><span class="badge bg-danger">Ex</span> {{dashboardActivities?.Designation}}</small>
+                                    <small class="small text-muted" *ngIf="dashboardActivities.IsCurrent != 0">{{dashboardActivities?.Designation}}</small>
+                                    
+                                    <p class="post-title mt-1">{{dashboardActivities?.Title | titlecase}}</p>
+                                    <div class="post-details">
+                                        <p class="post-title text-muted">{{dashboardActivities?.Description |
+                                            titlecase}}</p>
+                                        <div class="row small text-muted">
+                                            <div class="col-sm-3 col"><i
+                                                    class="far fa-thumbs-up me-2"></i>{{dashboardActivities?.Likes}}
+                                            </div>
+                                            <div class="col-sm-3 col"><i
+                                                    class="far fa-comments me-2"></i>{{dashboardActivities?.Comments}}
+                                            </div>
+                                            <div class="col-sm-3 col"><i
+                                                    class="far fa-share-square me-2"></i>{{dashboardActivities?.Shares}}
+                                            </div>
+                                            <div class="col-sm-3"><i
+                                                    class="fas fa-eye me-2"></i>{{dashboardActivities?.Views}}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <hr class="my-2">
+                    </div>
+
+                    <div *ngIf="resDashboardActivities?.length == 0">
+                        <div class="alert alert-danger text-center py-2 mx-3">No Data Found..!</div>
+                    </div>
+                </div>
+                <div class="mt-2 text-end p-2" *ngIf="resDashboardActivities?.length != 0">
+                    <pagination-controls previousLabel="" nextLabel=""
+                        (pageChange)="onClickPagintion(pageSize = $event)">
+                    </pagination-controls>
+                </div>
+            </div> -->
+
+
+        </div>
+
+        <div class="col-sm-8">
+            <div class="d-none d-lg-block d-sm-none">
+                <div class="card mb-3 " role="alert">
+                    <div class="card-header row">
+                        <div class="col-sm-9">
+                            <h6 class="text-main">{{subCommitteeName | titlecase}}</h6>
+                        </div>
+                        <!-- <div class="col-sm text-end">
+                            <button title="Add Designation" class="rounded btn btn-sm btn-main   mx-1 ng-star-inserted"
+                                (click)="openDialogAddCommittee()"><small>Add Sub Committee</small></button>
+                        </div> -->
+                    </div>
+                    <div class="card-body pt-0 pb-0">
+                        <div class="row mb-3 g-2" id="dash-stats">
+                            <div class="col-sm-3 col-6">
+                                <div class="card card-body bg-blue h-100">
+                                    <i class="fas fa-users"></i>
+                                    <p>Total Members</p>
+                                    <h3>{{TotalWorkAndIosCount?.IndividualTotalExecutives ?
+                                        TotalWorkAndIosCount?.IndividualTotalExecutives : '0'}}</h3>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-6">
+                                <div class="card card-body bg-green h-100">
+                                    <i class="fas fa-user-check"></i>
+                                    <p>Active</p>
+                                    <h3>{{TotalWorkAndIosCount?._IndiActiveMember ?
+                                        TotalWorkAndIosCount?._IndiActiveMember : '0'}}</h3>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-6">
+                                <div class="card card-body bg-voilet h-100">
+                                    <i class="fas fa-user-times"></i>
+                                    <p>Non Active </p>
+                                    <h3>{{TotalWorkAndIosCount?._IndiInActiveMember ?
+                                        TotalWorkAndIosCount?._IndiInActiveMember : '0'}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Current Designated Members -->
+                <div class="card mb-3">
+                    <div class="card-header pb-0">
+                        Current Designated Members
+                        <span class="float-end">
+                            <button title="Add Designation" class="rounded btn btn-sm btn-main   mx-1 ng-star-inserted"
+                                (click)="addDesignated()"><small>Add Designation</small></button>
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <div class="card card-body shadow-none border py-2 px-3 mb-2 mem-list"
+                                *ngFor="let designatedMembers of allDesignatedMembers">
+                                <div class="mb-0 fw-bold mt-1 text-danger" *ngIf="designatedMembers.MemberName == ''">
+                                    <p class="mem-name">No Member Assigned</p>
+                                    <p class="mem-desi">{{designatedMembers?.DesignationName}}</p>
+                                    <small
+                                        *ngIf="designatedMembers?.MobileNo !='' && designatedMembers?.MobileNo != null">{{designatedMembers?.MobileNo}}</small>
+                                </div>
+                                <div *ngIf="designatedMembers.MemberName != ''">
+                                    <p class="mem-name text-primary"><a
+                                            (click)="redToMemberProfile(designatedMembers.UserId, designatedMembers.MemberName)">{{designatedMembers?.MemberName}}
+                                            <small class="mem-no">[{{designatedMembers?.MobileNo}}]</small></a></p>
+                                    <div class="mem-desi">
+                                        {{designatedMembers?.DesignationName}}
+                                        <small class="mem-no">[{{designatedMembers.PostFromDate}}]</small>
+                                    </div>
+                                    <div *ngIf="designatedMembers?.DeviceType==1" class="mem-dev">
+                                        <img src="assets\images\dashboard-images\Android_robot.svg">
+                                    </div>
+                                    <div *ngIf="designatedMembers?.DeviceType==2" class="mem-dev">
+                                        <img src="assets\images\dashboard-images\Apple_logo.svg">
+                                    </div>
+                                    <div *ngIf="designatedMembers?.DeviceType==0" class="mem-dev">
+                                        <img src="assets\images\dashboard-images\no-cellphone.svg">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 text-end">
+                                        <div class="btn-group btn-group-sm" role="group" aria-label="Action Buttons">
+                                            <button *ngIf="designatedMembers.MemberName"
+                                                [disabled]="designatedMembers.UserId == loggedInUserId"
+                                                (click)="addEditMember(designatedMembers,'Edit')"
+                                                class="btn btn-sm btn-light rounded"> <i
+                                                    class="fas fa-pencil-alt"></i></button>
+                                            <button
+                                                *ngIf="!designatedMembers.MemberName || designatedMembers.IsMultiple == 1 && designatedMembers.LastaddedUser == 1"
+                                                (click)="addEditMember(designatedMembers,'Add')"
+                                                class="rounded btn btn-sm btn-light mx-1"> <i
+                                                    class="fas fa-plus"></i></button>
+                                            <button title="Edit Member"
+                                                class="btn btn-sm btn-light text-danger mx-1 rounded"
+                                                *ngIf="designatedMembers.MemberName" data-bs-toggle="modal"
+                                                (click)="getUserPostBodyId(designatedMembers.userpostbodyId)"
+                                                data-bs-target="#DeleteModal"
+                                                [disabled]="designatedMembers.UserId == loggedInUserId"> <i
+                                                    class="fas fa-trash-alt"></i></button>
+                                            <button title="Remove Designation" data-bs-toggle="modal"
+                                                data-bs-target="#AddMemberModal" #addMemberModal
+                                                style="display: none;"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="allDesignatedMembers?.length == 0">
+                                <td colspan="7">
+                                    <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
+                                </td>
+                            </div>
+
+
+
+
+
+
+
+                            <!-- <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No.</th>
+                                    <th>Member Name</th>
+                                    <th>Designation</th>
+                                    <th>Mobile No.</th>
+                                    <th>Appointed On</th>
+                                    <th>Device</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let designatedMembers of allDesignatedMembers; let i = index"
+                                    [class.active]="designatedMembers.SrNo == HighlightRow">
+                                    <td>{{designatedMembers.SrNo}}</td>
+                                    <td>
+                                        <ng-container *ngIf="designatedMembers.MemberName else memberNotAssign">
+                                            <a (click)="redToMemberProfile(designatedMembers.UserId, designatedMembers.MemberName)"
+                                                class="text-primary">{{designatedMembers.MemberName | titlecase}}</a>
+                                        </ng-container>
+                                        <ng-template #memberNotAssign><span class="text-danger">Member Not Assign</span>
+                                        </ng-template>
+
+
+                                    </td>
+                                    <td>{{designatedMembers.DesignationName}} </td>
+                                    <td>{{designatedMembers.MobileNo}} </td>
+                                    <td>{{designatedMembers.PostFromDate}}</td>
+                                    <td *ngIf="designatedMembers?.DeviceType==1">
+                                        <img src="assets\images\dashboard-images\Android_robot.svg">
+                                    </td>
+                                    <td *ngIf="designatedMembers?.DeviceType==2">
+                                        <img src="assets\images\dashboard-images\Apple_logo.svg">
+                                    </td>
+                                    <td *ngIf="designatedMembers?.DeviceType==0">
+                                        -
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="btn-group" role="group" aria-label="Action Buttons">
+                                            <button *ngIf="designatedMembers.MemberName"
+                                                [disabled]="designatedMembers.UserId == loggedInUserId"
+                                                (click)="addEditMember(designatedMembers,'Edit')"
+                                                class="btn btn-sm btn-light rounded"> <i
+                                                    class="fas fa-pencil-alt"></i></button>
+                                            <button
+                                                *ngIf="!designatedMembers.MemberName || designatedMembers.IsMultiple == 1 && designatedMembers.LastaddedUser == 1"
+                                                (click)="addEditMember(designatedMembers,'Add')"
+                                                class="rounded btn btn-sm btn-light mx-1"> <i
+                                                    class="fas fa-plus"></i></button>
+                                            <button title="Edit Member"
+                                                class="btn btn-sm btn-light text-danger mx-1 rounded"
+                                                *ngIf="designatedMembers.MemberName" data-bs-toggle="modal"
+                                                (click)="getUserPostBodyId(designatedMembers.userpostbodyId)"
+                                                data-bs-target="#DeleteModal"
+                                                [disabled]="designatedMembers.UserId == loggedInUserId"> <i
+                                                    class="fas fa-trash-alt"></i></button>
+                                            <button title="Remove Designation" data-bs-toggle="modal"
+                                                data-bs-target="#AddMemberModal" #addMemberModal
+                                                style="display: none;"></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="allDesignatedMembers?.length == 0">
+                                    <td colspan="7">
+                                        <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Previous Designated Members -->
+            <!-- <div class="card mb-3" *ngIf="getPreDesMembersArray.length !=0 "> -->
+            <!-- <div class="card mb-3">
+                <div class="card-header pb-0">
+                    Previous Designated Members
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No.</th>
+                                    <th>Designation Name</th>
+                                    <th>Member Name</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let desMembers of getPreDesMembersArray; let m = index">
+                                    <ng-container>
+                                        <td>{{m+1}}</td>
+                                        <td>
+                                            <div>{{desMembers.DesignationName}}</div>
+                                        </td>
+                                        <td>
+                                            <a (click)="redToMemberProfile(desMembers.DesignationId, desMembers.MemberName)"
+                                                class="text-primary">{{desMembers.MemberName}}</a>
+                                        </td>
+                                        <td>
+                                            <div>{{desMembers.PostFromDate}} - {{desMembers.PostToDate == null ? 'Till
+                                                Date' : desMembers.PostToDate}}
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                                <tr *ngIf="getPreDesMembersArray?.length == 0">
+                                    <td colspan="4">
+                                        <div class="alert alert-danger text-center py-2">No Data Found..!</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- Individual Members Progress -->
+            <!-- <div class="card mb-3">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-12 mb-2">
+                            Individual Members Progress
+                        </div>
+                        <div class="col-sm-12">
+                            <form [formGroup]="filter">
+                                <div class="row g-2 form-container">
+                                    <div class="col-sm-4">
+                                        <ngx-select [allowClear]="true" (remove)="clearFilter('member')"
+                                            (select)="filterData()" [items]="bodyMemberFilterDetails"
+                                            optionValueField="ID" optionTextField="FullName"
+                                            formControlName="memberName" placeholder="Select Member Name">
+                                        </ngx-select>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <ngx-select [allowClear]="true" (remove)="clearFilter('workType')"
+                                            (select)="filterData()" [items]="resWorkcategory" optionValueField="Id"
+                                            optionTextField="Category" formControlName="workType"
+                                            placeholder="Select Work Type">
+                                        </ngx-select>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="input-group">
+                                            <input [owlDateTime]="dt1" (dateTimeChange)="getweekRage($event)"
+                                                class="form-control" [max]="maxDate" [selectMode]="'range'"
+                                                [owlDateTimeTrigger]="dt1" placeholder="Select range"
+                                                formControlName="fromTodate">
+                                            <button class="btn btn-light border btn-sm" type="button"
+                                                [owlDateTimeTrigger]="dt1" *ngIf="!defaultCloseBtn">
+                                                <i class="fas fa-calendar-alt"></i></button>
+                                            <button class="btn btn-light border btn-sm" type="button"
+                                                (click)="clearFilter('datepicker')" *ngIf="defaultCloseBtn">
+                                                <i class="fas fa-times"></i></button>
+
+                                        </div>
+                                        <owl-date-time #dt1 [pickerType]="'calendar'"></owl-date-time>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="h-400 membersProBarChart chartfont"></div>
+                    <div class="table-responsive">
+                        <table class="table table-hover mt-3 mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Sr. No.</th>
+                                    <th scope="col">Work Date</th>
+                                    <th scope="col">Member Name</th>
+                                    <th scope="col">Work Type</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let bodyMemActivity of resBodyMemAct | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:total}; let i = index"
+                                    [class.active]="bodyMemActivity.Id == indiMembersProgHighlight">
+                                    <td>{{(+(paginationNo-1+"0")+i+1)}}</td>
+                                    <td>{{bodyMemActivity.ActivityDate}}</td>
+                                    <td>
+                                        <a (click)="redToMemberProfile(bodyMemActivity.MemberId, bodyMemActivity.FullName)"
+                                            class="text-primary">{{bodyMemActivity.FullName}}</a>
+                                    </td>
+                                    <td><span class="text-ellipsis-150px" [appTooltip]
+                                            title="{{bodyMemActivity.Category}}">{{bodyMemActivity.Category}}</span>
+                                    </td>
+                                    <td><span class="text-ellipsis-150px" [appTooltip]
+                                            title="{{bodyMemActivity.Title}}">{{bodyMemActivity.Title}}</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-light"
+                                            (click)="getBodyMemeberActivitiesDetails(bodyMemActivity.Id)"><i
+                                                class="far fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="resBodyMemAct?.length == 0">
+                                    <td colspan="7">
+                                        <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-2 text-right float-lg-end" *ngIf="resBodyMemAct?.length != 0">
+                        <pagination-controls previousLabel="" nextLabel=""
+                            (pageChange)="onClickPagintion(pageSize = $event)"> </pagination-controls>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- Work in a Year -->
+            <!-- <div class="card mb-3">
+                <div class="card-header">Work in a Year</div>
+                <div class="card-body">
+                    <div class="card-body recentActivityGraph chartfont h-400">
+                    </div>
+                </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Modal for Add/Update/Delete Member for any Designation -->
+            <div class="modal fade" id="AddMemberModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="AddMemberModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <form [formGroup]="bodyMember">
+                            <div class="modal-header">
+                                <p class="modal-title" id="AddMemberModalLabel">{{addMemberFlag}} Member</p>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" #closeAddMemberModal
+                                    aria-label="Close" (click)="closeModelAddEditMember()"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-container">
+                                    <div class="mb-2">
+                                        <label for="txtBodyName" class="form-label">Committee Name</label>
+                                        <input type="text" class="form-control" readonly formControlName="BodyName" />
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6" *ngIf="bodyMember.value.prevMember">
+                                            <div class="mb-2">
+                                                <label for="txtBodyName" class="form-label">Current Member Name</label>
+                                                <input type="text" class="form-control" readonly
+                                                    formControlName="prevMember" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="mb-2">
+                                                <label for="txtBodyName" class="form-label">Designation</label>
+                                                <input type="text" class="form-control" readonly
+                                                    formControlName="currentDesignation" />
+                                                <!-- <button  class="rounded btn btn-sm btn-light mx-1 ng-star-inserted" (click)="addDesignated()"><i class="fas fa-plus"></i></button> -->
+                                            </div>
+                                        </div>
+                                        <!-- </div>
+                        <div class="row"> -->
+                                        <div class="col-sm-12">
+                                            <div class="mb-2">
+                                                <label for="txtMemberName" class="form-label required-field">Search
+                                                    Mobile Number</label>
+                                                <div class="input-group">
+
+                                                    <!-- <ngx-select [allowClear]="true" [items]="resAllMember"
+                                                formControlName="bodyId" optionValueField="id"
+                                                optionTextField="fullname" (change)="getMemberValue($event)"
+                                                (select)="getBodyMemberDetails(this.bodyMember.value.bodyId)"
+                                                placeholder="Select Member Name"
+                                                [ngClass]="{ 'is-invalid': submitted && f.bodyId.errors }"
+                                                style="width: 85%;">
+                                            </ngx-select> -->
+
+
+                                                    <div class="col-sm">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control"
+                                                                formControlName="mobileNo" [maxlength]="10"
+                                                                placeholder="Search MobileNo..."
+                                                                (keyup)="filterByMember()"
+                                                                (keypress)="acceptedOnlyNumbers($event)"
+                                                                [ngClass]="{ 'is-invalid': submitted && f.mobileNo.errors }"
+                                                                style="width: 85%;" />
+                                                        </div>
+                                                    </div>
+                                                    <button (click)="addNewMember('Add',0,bodyMember.value.mobileNo)"
+                                                        class="rounded btn btn-sm btn-light ms-1 ng-star-inserted"><i
+                                                            class="fas fa-plus"></i></button>
+                                                </div>
+                                                <div *ngIf="submitted && f.mobileNo.errors" class="invalid-feedback">
+                                                    <div *ngIf="f.mobileNo.errors.required">Mobile Number is required
+                                                    </div>
+                                                    <div *ngIf="f.mobileNo.errors.pattern">Valid Mobile Number is
+                                                        required </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="mb-3 chartbox" *ngIf="hideMemberDetailsField">
+                                        <div class="card" *ngIf="bodyMemberDetails?.length != 0">
+                                            <div class="card-header pb-0">Member Details</div>
+                                            <div class="card-body pt-0">
+                                                <label class="form-label mb-0">Email ID</label>
+                                                <div class="form-control-plaintext py-0">
+                                                    {{bodyMemberDetails?.Emailid}}</div>
+                                                <label class="form-label mb-0">Contact No.</label>
+                                                <div class="form-control-plaintext py-0">
+                                                    {{bodyMemberDetails?.MobileNo}}</div>
+
+                                                <label class="form-label mb-0">Location</label>
+                                                <div class="form-control-plaintext py-0"
+                                                    *ngIf="(bodyMemberDetails?.DistrictName || bodyMemberDetails?.TalukaName || bodyMemberDetails?.VillageName) ; else otherContent">
+                                                    {{bodyMemberDetails?.DistrictName}}<span
+                                                        *ngIf="bodyMemberDetails?.TalukaName">,</span>{{bodyMemberDetails?.TalukaName}}<span
+                                                        *ngIf="bodyMemberDetails?.VillageName">,</span>{{bodyMemberDetails?.VillageName}}
+                                                </div>
+                                                <ng-template #otherContent>
+                                                    <div class="form-control-plaintext py-0">-</div>
+                                                </ng-template>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-2 text-end" *ngIf="bodyMemberDetails?.length == 0">
+                                            <div class="alert alert-danger text-center py-2">No Data Found..!
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-main" (click)="onSubmit()">Assign
+                                    Member</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Delete Confirmation modal pop up -->
+            <div class="modal fade" id="DeleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="DeleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-transparent border-bottom-0">
+                            <!-- <h5 class="modal-title" id="DeleteModalLabel">Modal title</h5> -->
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center pb-5">
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                                <circle class="path circle" fill="none" stroke="#D06079" stroke-width="6"
+                                    stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1" />
+                                <line class="path line" fill="none" stroke="#D06079" stroke-width="6"
+                                    stroke-linecap="round" stroke-miterlimit="10" x1="34.4" y1="37.9" x2="95.8"
+                                    y2="92.3" />
+                                <line class="path line" fill="none" stroke="#D06079" stroke-width="6"
+                                    stroke-linecap="round" stroke-miterlimit="10" x1="95.8" y1="38" x2="34.4"
+                                    y2="92.2" />
+                            </svg>
+                            <h3 class="my-3">Are You Sure?</h3>
+                            <p class="mb-4">Do you really want to delete this record? This process can not be undone.
+                            </p>
+                            <button class="btn btn-secondary me-2" data-bs-dismiss="modal" type="button">Cancel</button>
+                            <button class="btn btn-danger" type="button" (click)="deleteMember()"
+                                data-bs-dismiss="modal" type="button">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
