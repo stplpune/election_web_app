@@ -302,7 +302,7 @@ export class CommitteeDashboardComponent implements OnInit {
 
     //............................................ Important Leaders Top Code Start Here ...............................................//
     
-    importantLeadersArray:any;
+    importantLeadersArray:any[] = [];
     getByIdImp_LeadersArray:any;
 
     getImp_Leaders() {

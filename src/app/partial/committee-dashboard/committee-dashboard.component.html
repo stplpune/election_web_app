@@ -187,7 +187,6 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="card-height">
-
                                 <div class="d-flex align-items-center leader" *ngFor="let impLeader of importantLeadersArray" (click)="redirectToleaderDetailsPage(impLeader?.leaderId)">
                                     <div class="flex-shrink-0">
                                         <div class="profile">
@@ -211,6 +210,10 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div *ngIf="importantLeadersArray?.length == 0" class="card-body">
+                                    <div class="alert alert-danger text-center py-2 mb-0 small">No Data Found..!
+                                    </div>
+                                  </div>
 
                             </div>
                         </div>
