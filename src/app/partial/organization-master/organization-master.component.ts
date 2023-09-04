@@ -82,6 +82,7 @@ export class OrganizationMasterComponent implements OnInit {
   resCommitteeByLevel:any;
   result:any;
   allDistrictByCommittee:any;
+  talukaRemovalFlag:boolean = false;
   @ViewChild('closeewCommitteeModal') closeewCommitteeModal: any;
 
   constructor(private callAPIService: CallAPIService, private router: Router, private fb: FormBuilder,
@@ -604,7 +605,7 @@ export class OrganizationMasterComponent implements OnInit {
             this.orgMasterForm.controls["TalukaId"].setValue(null);
           }
         }
-        if (this.btnText == "Update Committee" && this.globalLevelId == 4) {
+        if (this.btnText == "Update Committee" && this.globalLevelId == 4 && !this.talukaRemovalFlag) {
           this.orgMasterForm.patchValue({ TalukaId: this.selEditOrganization.TalukaId });
         }
         this.spinner.hide();
@@ -618,6 +619,8 @@ export class OrganizationMasterComponent implements OnInit {
       }
     })
   }
+
+  
 
   getVillageOrCity(talukaID: any, selType: any) {
     //this.spinner.show();
@@ -707,6 +710,7 @@ export class OrganizationMasterComponent implements OnInit {
     this.HighlightRow = null;
     this.submitted = false;
     this.paginationNo = 1;
+    this.talukaRemovalFlag = false;
     // this.orgMasterForm.reset({ IsRural: 1});
     this.customForm();
     // this.getOrganizationList();
@@ -863,6 +867,7 @@ export class OrganizationMasterComponent implements OnInit {
           this.AlreadyAssignedDesignations(this.desBodyId);
           this.spinner.hide();
           this.getOrganizationList();
+          this.talukaRemovalFlag = false;
         } else {
           this.toastrService.error("Members is not available");
         }
