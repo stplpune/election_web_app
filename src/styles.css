@@ -791,11 +791,18 @@ input::-ms-clear {
     position: absolute;
     right: 0 !important;
     display: block;
-    /* top: 280px; */
-    top: 250px;
+    top: 215px;
     max-width: 270px;
+    /* position: absolute;
+    right: 24px !important;
+    display: block; */
+    /* top: 280px; */
+    /* top: 194px; */
+    /* max-width: 245px; */
 }
-
+#mapsvg2{
+    background-color: transparent !important;
+}
 .committeesonmap2 .mapsvg svg {
     /* width: 500px; */
     width: 450px;

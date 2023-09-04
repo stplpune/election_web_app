@@ -194,7 +194,7 @@
                                             <img [src]="impLeader?.profilePhoto" alt="..." class="leader-img" *ngIf="impLeader?.profilePhoto">
                                             <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..." class="leader-img" *ngIf="!impLeader?.profilePhoto">
                                             <img [src]="impLeader?.partyIconImage" class="party" *ngIf="impLeader?.partyIconImage">
-                                            <img src="assets/images/logos/bjp.png" class="party" *ngIf="!impLeader?.partyIconImage">
+                                            <img src="assets/images/logos/otr.png" class="party" *ngIf="!impLeader?.partyIconImage">
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
@@ -229,50 +229,6 @@
             <div class="card">
                 <div class="card-header">Constituency Wise Past Election Summary</div>
                 <div class="card-body">  
-                    <!-- (click()="electionIdPC = pcEleName?.electionId; electionTypeIdPC = pcEleName?.electionTypeId"  -->
-                    <h6 class="text-orange fw-bold mb-3"><span *ngFor="let pcEleName of electionNamePCArray">{{pcEleName?.electionName}}</span></h6>
-                   <!-- PC code Start Here -->
-                    <table class="dash-table mb-3">
-                        <thead>
-                            <tr>
-                                <th>Sr. No.</th>
-                                <th>Constituency</th>
-                                <th>Winner</th>
-                                <th>Party</th>
-                                <th>Votes</th>
-                                <th>Winning Margin</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let pcData of pastPCArray  | paginate: {id:'pastPCId',itemsPerPage: pageSizePC, 
-                                currentPage: paginationNoPC, totalItems:getTotalPC}; let i = index">
-                                <td>{{((paginationNoPC + 1) * 10 + i + 1)-20}}</td>
-                                <td>{{pcData?.constituencyNo}}-{{pcData?.constituenciesName}}</td>
-                                <td>
-                                    <a class="text-decoration-none">{{pcData?.candidateName ? pcData?.candidateName : '-'}}</a>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span>{{pcData?.partyName ? pcData?.partyName : '-'}}</span>
-                                    </div>
-                                </td>
-                                <td>{{pcData?.totalVotes}}</td>
-                                <td>{{pcData?.winningMargin ? pcData?.winningMargin : '-'}}</td>
-                                <td>
-                                    <i class="fas fa-info-circle info" (click)="viewDetailAC_DC(0,pcData?.constituenciesId,pcData?.electionId)"
-                                  data-bs-toggle="modal" data-bs-target="#MaptableDetailShow"></i>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="mt-2 text-end" *ngIf="pastPCArray?.length == 0">
-                        <div class="alert alert-danger text-center py-2">No Results Found!
-                        </div>
-                    </div>
-                    <pagination-controls id="pastPCId" *ngIf="pastPCArray?.length != 0" previousLabel="" nextLabel=""
-                        (pageChange)="onClickPagintionPC($event)">
-                    </pagination-controls>
                    <!-- (click()="electionIdAC = acEleName?.electionId; electionTypeIdAC = acEleName?.electionTypeId"  -->
                     <h6 class="text-orange fw-bold mb-3 mt-2"><span *ngFor="let acEleName of electionNameACArray">{{acEleName?.electionName}}</span></h6>
                     <!-- AC code Start Here -->
@@ -316,6 +272,51 @@
                     <pagination-controls id="pastACId" *ngIf="pastACArray?.length != 0" previousLabel="" nextLabel=""
                         (pageChange)="onClickPagintionAC($event)">
                     </pagination-controls>
+  <!-- (click()="electionIdPC = pcEleName?.electionId; electionTypeIdPC = pcEleName?.electionTypeId"  -->
+  <h6 class="text-orange fw-bold mb-3"><span *ngFor="let pcEleName of electionNamePCArray">{{pcEleName?.electionName}}</span></h6>
+  <!-- PC code Start Here -->
+   <table class="dash-table mb-3">
+       <thead>
+           <tr>
+               <th>Sr. No.</th>
+               <th>Constituency</th>
+               <th>Winner</th>
+               <th>Party</th>
+               <th>Votes</th>
+               <th>Winning Margin</th>
+               <th></th>
+           </tr>
+       </thead>
+       <tbody>
+           <tr *ngFor="let pcData of pastPCArray  | paginate: {id:'pastPCId',itemsPerPage: pageSizePC, 
+               currentPage: paginationNoPC, totalItems:getTotalPC}; let i = index">
+               <td>{{((paginationNoPC + 1) * 10 + i + 1)-20}}</td>
+               <td>{{pcData?.constituencyNo}}-{{pcData?.constituenciesName}}</td>
+               <td>
+                   <a class="text-decoration-none">{{pcData?.candidateName ? pcData?.candidateName : '-'}}</a>
+               </td>
+               <td>
+                   <div class="d-flex align-items-center gap-2">
+                       <span>{{pcData?.partyName ? pcData?.partyName : '-'}}</span>
+                   </div>
+               </td>
+               <td>{{pcData?.totalVotes}}</td>
+               <td>{{pcData?.winningMargin ? pcData?.winningMargin : '-'}}</td>
+               <td>
+                   <i class="fas fa-info-circle info" (click)="viewDetailAC_DC(0,pcData?.constituenciesId,pcData?.electionId)"
+                 data-bs-toggle="modal" data-bs-target="#MaptableDetailShow"></i>
+               </td>
+           </tr>
+       </tbody>
+   </table>
+   <div class="mt-2 text-end" *ngIf="pastPCArray?.length == 0">
+       <div class="alert alert-danger text-center py-2">No Results Found!
+       </div>
+   </div>
+   <pagination-controls id="pastPCId" *ngIf="pastPCArray?.length != 0" previousLabel="" nextLabel=""
+       (pageChange)="onClickPagintionPC($event)">
+   </pagination-controls>
+
                 </div>
             </div>
         </div>
@@ -324,14 +325,14 @@
     <div class="row chartbox mb-3" *ngIf="topFilter.value.FilterTypeId == 2 && topFilter.value.FilterId && assemblyPieChartListArray?.length">
         <div class="col-sm-12">
             <div class="card">
-                <div class="card-header text-main">{{columnChartHeadingName}}</div>
+                <div class="card-header text-main">Taluka Booth Committee Formation progress</div>
                 <div class="card-body pb-0">
                     <div class="row ">
                         <div class="col-sm-5">
                             <div class="list-group list-group-flush" *ngFor="let assemblyPieList of assemblyPieChartListArray"
                              (click)="assemblyVillagePieChart(assemblyPieList)">
                                 <a class="list-group-item list-group-item-action border-0 border-bottom" aria-current="true" [class.active]="assemblyPieList.constituenciesId == HighlightRowAssemblyPieList">
-                                  {{assemblyPieList?.constituencyName}} {{assemblyPieList?.constituencyName ? 'Booth Committee' : ''}}
+                                  {{assemblyPieList?.constituencyName}}
                                 </a>
                               </div>
                         </div>
@@ -342,13 +343,8 @@
                                     <apx-chart [series]="AssemblyPiechartOptions.series" [chart]="AssemblyPiechartOptions.chart"
                                     [labels]="AssemblyPiechartOptions.labels" [responsive]="AssemblyPiechartOptions.responsive"
                                   ></apx-chart>
-                                  <!-- <apx-chart [series]="BarchartOptions?.series" [chart]="BarchartOptions?.chart"
-                                    [dataLabels]="BarchartOptions?.dataLabels" [plotOptions]="BarchartOptions?.plotOptions"
-                                    [yaxis]="BarchartOptions?.yaxis" [legend]="BarchartOptions?.legend" [fill]="BarchartOptions?.fill"
-                                    [stroke]="BarchartOptions?.stroke" [tooltip]="BarchartOptions?.tooltip"
-                                    [xaxis]="BarchartOptions?.xaxis" [dataLabels]="BarchartOptions?.dataLabels"></apx-chart> -->
                                 </div>
-                                <div class="text-center fw-bold mb-2">{{columnChartHeadingName}}</div>
+                                <!-- <div class="text-center fw-bold mb-2">{{columnChartHeadingName}}</div> -->
                               </div>
                               <div *ngIf="!AssemblypieChartShow" class=" card-body">
                                 <div class="alert alert-danger text-center py-2 mb-0 small mt-5">No Data Found..!
@@ -362,7 +358,8 @@
         </div>
     </div>
 
-    <div class="row chartbox mb-3" *ngIf="topFilter.value.FilterTypeId != 2  || (topFilter.value.FilterTypeId == 2 && topFilter.value.FilterId && selectedTalId)">
+    <!-- *ngIf="topFilter.value.FilterTypeId != 2  || (topFilter.value.FilterTypeId == 2 && topFilter.value.FilterId && selectedTalId)" -->
+    <div class="row chartbox mb-3">
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header text-main">{{columnChartHeadingName}} </div>

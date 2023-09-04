@@ -23,6 +23,7 @@ export class CommitteeDashboardComponent implements OnInit {
   localStorageData = this.commonService.getlocalStorageData();
   selectedDistrictId: any;
   selectedDropdownNameValue:any;
+  topVilageName_MapClicked:any;
 
   boothComitySummary: any;
   graphInstance: any;
@@ -53,7 +54,7 @@ export class CommitteeDashboardComponent implements OnInit {
   pageSizePC: number = 10;
   // PC_Highlight:any;
 
-  getTotalAC: any;
+  getTotalAC: any;  
   paginationNoAC: number = 1;
   pageSizeAC: number = 10;
   // AC_Highlight:any;
@@ -113,7 +114,6 @@ export class CommitteeDashboardComponent implements OnInit {
     if (typeId == 1) {
       this.showSvgMapParli();
     } else if (typeId == 2) {
-      this.barChartBooths_vs_BoothcomityArray = [];
       this.showSvgMapAssembly(this.commonService.mapRegions());
       // this.talukaCircle_MapClick();
     } else if (typeId == 3) {
@@ -140,20 +140,23 @@ export class CommitteeDashboardComponent implements OnInit {
   }
 
   removeDropdownValue(){
+    this.selectedTalId = 0;
     this.callAllCommonApi();
-    this.firstTimeCallM_Svg();
+    this.topFilter.value.FilterTypeId == 3 ? (this.firstTimeCallM_Svg(),this.getBCFormation_Map_Count()) : '';
     this.selectedDropdownNameValue = '';
+    this.paginationNoTalukaPer = 1;
   }
 
-  callAllCommonApi(){
+  callAllCommonApi(flag?:any){
     this.impLeader_Highlight = '';
     this.boothCommittee_Summary();
     this.getImp_Leaders();
-    this.getPastElectionName();
-    this.getBarChartApi_Booths_vs_Boothcommittee();
-    this.getTalukaPresident(); //Taluka Wise Important Leaders Api
+    this.paginationNoPC = 1; this.paginationNoAC = 1;this.getPastElectionName();
+    flag == 'talukaClick' ? '' : this.getBarChartApi_Booths_vs_Boothcommittee();
+    this.paginationNoTalukaPer = 1;this.getTalukaPresident(); //Taluka Wise Important Leaders Api
     // this.topFilter.value.FilterTypeId == 2 ? this.talukaCircle_MapClick(this.selectedTalId || 0) : '';
-    this.columnChartHeadingName = this.topFilter.value.FilterTypeId == 1 ? 'Assembly Constituency Wise Committee Formation progress' : this.topFilter.value.FilterTypeId == 3 ? 'Talukawise Booth Committee Formation progress' : '';
+    this.columnChartHeadingName = this.topFilter.value.FilterTypeId == 1 ? 'Assembly Constituency Wise Committee Formation progress' : this.topFilter.value.FilterTypeId == 3 ? 'Talukawise Booth Committee Formation progress' : 
+    (this.topFilter.value.FilterTypeId == 2 && !this.topFilter.value.FilterId) ? this.columnChartHeadingName = 'Booth Committee Formation progress' : '';
   }
 
   firstTimeCallM_Svg() {
@@ -279,14 +282,11 @@ export class CommitteeDashboardComponent implements OnInit {
         this.addClasscommitteeWise1(this.barChartBooths_vs_BoothcomityArray); // Village Svg map
         this.selectedDistrictId ? $('path#' + this.selectedDistrictId).addClass('svgDistrictActive') : this.toggleClassActive(0);
 
-        if(this.topFilter.value.FilterTypeId != 2){
           const barchartBoothDataObj = this.barChartBooths_vs_BoothcomityArray.find((x: any) => x.totalBooths > 1 || x.totalBoothCommittee > 1) // Bar Chart
           this.barChartShow = barchartBoothDataObj ? true : false;
           this.constructBarChart(this.barChartBooths_vs_BoothcomityArray);
-        }
 
-        (this.barChartBooths_vs_BoothcomityArray && this.topFilter.value.FilterTypeId == 2) ? this.AssemblyPieChartCheck(this.barChartBooths_vs_BoothcomityArray) : ''; // pass Data For Assembly Pie Chart
-
+        (this.topFilter.value.FilterTypeId == 2 && this.topFilter.value.FilterId) ? this.AssemblyPieChartCheck(this.barChartBooths_vs_BoothcomityArray) : ''; // pass Data For Assembly Pie Chart
       } else { this.barChartBooths_vs_BoothcomityArray = []; this.barChartShow = false; }
     }, (error: any) => { this.barChartShow = false; if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
   }
@@ -337,7 +337,7 @@ export class CommitteeDashboardComponent implements OnInit {
       window.open('../leader-details/' + id);
     } 
 
-  //............................................ Important Leaders Top Code Start Here ...............................................//
+  //............................................ Important Leaders Top Code End Here ...............................................//
 
   //..................................................  Maharastra/Taluka Map Code Start Here .............................................//
 
@@ -390,7 +390,7 @@ export class CommitteeDashboardComponent implements OnInit {
       this.graphInstance.destroy();
     }
     this.graphInstance = $("#mapsvg1").mapSvg({
-      width: 550,
+      width: 450,
       height: 430,
       colors: {
         baseDefault: "#bfddff",
@@ -401,7 +401,7 @@ export class CommitteeDashboardComponent implements OnInit {
         status: {}
       },
       regions: regions_m,
-      viewBox: [0, 0, 763.614, 599.92],
+      viewBox: [0, 0, 700, 599],
       cursor: "pointer",
       zoom: {
         on: false,
@@ -471,12 +471,14 @@ export class CommitteeDashboardComponent implements OnInit {
   svgMaharastraMapClick() {
     this.filteredTal = [];
     this.previousTalSelected = '';
+    this.selectedTalId = 0;
     $(document).on('click', '#mapsvg1  path', (e: any) => {
       if (this.previousDistSelected != e.currentTarget.id || this.mapselected != 'dist') {
         this.mapselected = 'dist';
         this.selectedDistrictId = e.currentTarget.id;
         this.previousDistSelected = this.selectedDistrictId;
         this.filteredDistrict = this.bCFormationCountArray?.filter((x: any) => x.constituenciesId == e.currentTarget.id);
+        this.selectedDropdownNameValue = this.filteredDistrict[0]?.constituencyName; // set only selected dropdown Name Value
         this.topFilter.controls['FilterId'].setValue(this.filteredDistrict[0]?.constituenciesId);
         this.setSVGPath(this.filteredDistrict, 'dist');
         this.callAllCommonApi();
@@ -484,16 +486,18 @@ export class CommitteeDashboardComponent implements OnInit {
     })
   }
 
-  svgVillageMapClick(status: string) {
+  svgVillageMapClick(status: string) { 
     this.mapselected = 'tal';
     $(document).on('click', '#mapsvg2  path', (e: any) => {
       let selectedTalId = ((e.currentTarget.id).split('d')[((e.currentTarget.id).split('d').length - 1)]);
       this.selectedTalId = selectedTalId;
       if (this.previousTalSelected != selectedTalId) { //constituenciesId == talukaId
         this.previousTalSelected = selectedTalId;
-        this.filteredTal = this.talukaByDistrictId.filter((x: any) => x.constituenciesId == Number(selectedTalId));
+        this.filteredTal = this.barChartBooths_vs_BoothcomityArray.filter((x: any) => x.constituenciesId == Number(selectedTalId));
         this.setSVGPath(this.selectedDistrictId, 'tal', this.filteredTal);
-        this.callAllCommonApi();
+        this.callAllCommonApi('talukaClick');
+        this.topVilageName_MapClicked = this.filteredTal[0]?.constituencyName;
+        this.columnChartHeadingName =  this.filteredTal[0]?.constituencyName +' '+'Booth Committee Formation progress';
         this.talukaCircle_MapClick(Number(selectedTalId));
       }
     })
@@ -708,25 +712,29 @@ export class CommitteeDashboardComponent implements OnInit {
           obj['constituencyName'] = ele?.constituencyName; obj['constituenciesId'] = ele?.constituenciesId;
           this.assemblyPieChartListArray?.push(obj);
         })
-        this.assemblyVillagePieChart(this.assemblyPieChartListArray[0]);
-        this.HighlightRowAssemblyPieList = this.assemblyPieChartListArray[0]?.constituenciesId;
+        this.assemblyVillagePieChart(this.assemblyPieChartListArray[0]);  
       }
 
     assemblyVillagePieChart(obj:any){
       this.selectedTalId = '';
-      this.columnChartHeadingName =  obj.constituencyName +' '+'Booth Committee Formation progress';
+      this.columnChartHeadingName =  obj?.constituencyName +' '+'Booth Committee Formation progress';
       this.HighlightRowAssemblyPieList = obj?.constituenciesId;
+      this.talukaCircle_MapClick(this.HighlightRowAssemblyPieList);
+      this.selectedTalId = obj?.constituenciesId; this.getTalukaPresident();
+
+
     this.AssemblypieChartShow = (obj?.totalBoothCommittee > 1 || obj?.totalBooths > 1) ? true : false;
     this.AssemblyPiechartOptions = {
       series: [obj?.totalBoothCommittee, obj?.totalBooths],
       chart: { width: 350,type: "donut",
-      events: {
-        click: ()=> { // whwe pie chart click then call
-          this.columnChartHeadingName =  obj?.constituencyName +' '+'Booth Committee Formation progress';
-          this.talukaCircle_MapClick(this.HighlightRowAssemblyPieList);
-          this.selectedTalId = obj?.constituenciesId; this.getTalukaPresident(); 
-        }}},
-      labels: ["Completed", "Remaining",],
+      // events: {
+      //   click: ()=> { // whwe pie chart click then call
+      //     this.columnChartHeadingName =  obj?.constituencyName +' '+'Booth Committee Formation progress';
+      //     this.talukaCircle_MapClick(this.HighlightRowAssemblyPieList);
+      //     this.selectedTalId = obj?.constituenciesId; this.getTalukaPresident(); 
+      //   }}
+      },
+      labels: ["Completed", "Remaining"],
       colors: ['#6f42c1', '#297af0'],
       responsive: [
         {
