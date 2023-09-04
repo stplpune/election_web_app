@@ -282,11 +282,13 @@ export class CommitteeDashboardComponent implements OnInit {
         this.addClasscommitteeWise1(this.barChartBooths_vs_BoothcomityArray); // Village Svg map
         this.selectedDistrictId ? $('path#' + this.selectedDistrictId).addClass('svgDistrictActive') : this.toggleClassActive(0);
 
-          const barchartBoothDataObj = this.barChartBooths_vs_BoothcomityArray.find((x: any) => x.totalBooths > 1 || x.totalBoothCommittee > 1) // Bar Chart
-          this.barChartShow = barchartBoothDataObj ? true : false;
-          this.constructBarChart(this.barChartBooths_vs_BoothcomityArray);
-
-        (this.topFilter.value.FilterTypeId == 2 && this.topFilter.value.FilterId) ? this.AssemblyPieChartCheck(this.barChartBooths_vs_BoothcomityArray) : ''; // pass Data For Assembly Pie Chart
+      if(this.topFilter.value.FilterTypeId == 2 && this.topFilter.value.FilterId){
+        this.AssemblyPieChartCheck(this.barChartBooths_vs_BoothcomityArray); // pass Data For Assembly Pie Chart
+      } else{
+        const barchartBoothDataObj = this.barChartBooths_vs_BoothcomityArray.find((x: any) => x.totalBooths > 1 || x.totalBoothCommittee > 1) // Bar Chart
+        this.barChartShow = barchartBoothDataObj ? true : false;
+        this.constructBarChart(this.barChartBooths_vs_BoothcomityArray);
+      } 
       } else { this.barChartBooths_vs_BoothcomityArray = []; this.barChartShow = false; }
     }, (error: any) => { this.barChartShow = false; if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
   }
