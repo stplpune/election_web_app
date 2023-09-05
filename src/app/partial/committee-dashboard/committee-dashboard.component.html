@@ -414,15 +414,15 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header text-main">{{(topFilter.value.FilterTypeId == 2 && topFilter.value.FilterId &&
-                    selectedTalId) ? 'Political Unit Wise Important Leaders' : 'Taluka Wise Important Leaders'}}</div>
+                    selectedTalId || topFilter.value.FilterTypeId == 3 && topFilter.value.FilterId && selectedTalId) ? 'Political Unit Wise Important Leaders' : 'Taluka Wise Important Leaders'}}</div>
                 <div class="card-body">
                     <table class="dash-table">
                         <thead>
                             <tr>
                                 <th>Sr. No.</th>
-                                <th>{{topFilter.value.FilterTypeId == 2 ? 'Gat Name' : 'Taluka'}}</th>
-                                <th *ngIf="topFilter.value.FilterTypeId != 2">Taluka President</th>
-                                <th *ngIf="topFilter.value.FilterTypeId != 2">Moible No.</th>
+                                <th>{{topFilter.value.FilterTypeId == 2 || topFilter.value.FilterTypeId == 3 && topFilter.value.FilterId && selectedTalId ? 'Gat Name' : 'Taluka'}}</th>
+                                <th *ngIf="!selectedTalId">Taluka President</th>
+                                <th *ngIf="!selectedTalId">Moible No.</th>
                                 <th>Important Leaders</th>
                                 <th></th>
                             </tr>
@@ -432,11 +432,11 @@
                                 currentPage: paginationNoTalukaPer, totalItems:getTotalTalukaPer}; let i = index">
                                 <td>{{((paginationNoTalukaPer + 1) * 10 + i + 1)-20}}</td>
                                 <td>{{talukaPer?.talukaName}}</td>
-                                <td *ngIf="topFilter.value.FilterTypeId != 2">
+                                <td *ngIf="!selectedTalId">
                                     <a class="text-decoration-none">{{talukaPer?.presidentName?.split('-')[0] ?
                                         talukaPer?.presidentName?.split('-')[0] : '-'}}</a>
                                 </td>
-                                <td *ngIf="topFilter.value.FilterTypeId != 2">{{talukaPer?.presidentName?.split('-')[1]
+                                <td *ngIf="!selectedTalId">{{talukaPer?.presidentName?.split('-')[1]
                                     ? talukaPer?.presidentName?.split('-')[1] : '-'}}</td>
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
