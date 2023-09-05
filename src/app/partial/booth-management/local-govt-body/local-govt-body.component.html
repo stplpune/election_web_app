@@ -171,7 +171,7 @@
                         </div>
                         <div class="col-sm-3">
                             <ngx-select [allowClear]="true" [items]="categoryArray" formControlName="categoryId" optionValueField="id"
-                                optionTextField="categoryType" (remove)="clearFilter('category')" placeholder="Select Category">
+                                optionTextField="categoryType" (select)="clearFilter()" (remove)="clearFilter()" placeholder="Select Category">
                             </ngx-select>
                         </div>
                         <div class="col-sm-3">
