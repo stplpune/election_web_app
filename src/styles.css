@@ -800,6 +800,10 @@ input::-ms-clear {
     /* top: 194px; */
     /* max-width: 245px; */
 }
+.border-outline{
+    border: 1px solid var(--main-color) !important;
+    border-radius: 10px;
+}
 #mapsvg2{
     background-color: transparent !important;
 }

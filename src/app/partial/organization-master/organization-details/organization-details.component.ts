@@ -828,6 +828,7 @@ export class OrganizationDetailsComponent implements OnInit {
     this.addEditMemberModal('close');
     const dialogRefaddEditMember = this.dialog.open(AddDesignationComponent, {
       width: '1024px',
+      height: '600px',
       data: { committeeId: this.bodyId, committeeName: this.subCommitteeName, currentModalName: 'Add Designation' }
     });
     dialogRefaddEditMember.afterClosed().subscribe(result => {

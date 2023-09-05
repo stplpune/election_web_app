@@ -114,26 +114,34 @@
                     Maharashtra Pradesh Karyakarani
                 </div>
                 <div class="card-body">
-                    <div class="card  mb-3">
+                    <div class="card dashboard-outline-card  mb-3">
                         <div class="card-header border-bottom bg-transparent text-center">
-                            <i class="fas fa-users"></i>
-                             Total Members
-                             <span class="form-data">{{TotalWorkAndIosCount?.IndividualTotalExecutives ?
-                                TotalWorkAndIosCount?.IndividualTotalExecutives : '0'}}</span>
+                           <div class="d-flex align-items-center justify-content-center">
+                            <i class="fas fa-users me-2"></i>
+                            <h6 class="mb-0">Total Members</h6>
+                            <span class="form-data fw-bold ms-3">{{TotalWorkAndIosCount?.IndividualTotalExecutives ?
+                               TotalWorkAndIosCount?.IndividualTotalExecutives : '0'}}</span>
+                           </div>
                         </div>
-                        <div class="card-body p-3 texxt-center p-0">
+                        <div class="card-body  texxt-center p-0">
                             <div class="row text-center">
-                                <div class="col-sm-6 border-end">
-                                    <i class="fas fa-user-check"></i>
-                                     Active Members 
-                                     <span class="form-data">{{TotalWorkAndIosCount?._IndiActiveMember ?
+                                <div class="col-sm-6 left-content">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <i class="fas fa-user-check me-2"></i>
+                                    <h6 class="mb-0"> Active Members </h6>
+                                     <span class="form-data ms-3">{{TotalWorkAndIosCount?._IndiActiveMember ?
                                         TotalWorkAndIosCount?._IndiActiveMember : '0'}}</span>
+                                    </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <i class="fas fa-user-times"></i>
-                                     In-Active Members
-                                     <span class="form-data">{{TotalWorkAndIosCount?._IndiInActiveMember ?
+                                <div class="col-sm-6 right-content">
+                                   <div class="d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-user-times me-2"></i>
+                                    <h6 class="mb-0">
+                                        In-Active Members
+                                    </h6>
+                                     <span class="form-data fw-bold ms-3">{{TotalWorkAndIosCount?._IndiInActiveMember ?
                                         TotalWorkAndIosCount?._IndiInActiveMember : '0'}}</span>
+                                   </div>
                                 </div>
                             </div>
                         </div>
@@ -154,63 +162,67 @@
                                 <small
                                     *ngIf="designatedMembers?.MobileNo !='' && designatedMembers?.MobileNo != null">{{designatedMembers?.MobileNo}}</small>
                             </div>
-                            <div *ngIf="designatedMembers.MemberName != ''">
-                                <p class="mem-name text-primary"><a
-                                        (click)="redToMemberProfile(designatedMembers.UserId, designatedMembers.MemberName)">{{designatedMembers?.MemberName}}
-                                        <small class="mem-no">[{{designatedMembers?.MobileNo}}]</small></a></p>
-                                <div class="mem-desi">
-                                    {{designatedMembers?.DesignationName}}
-                                    <small class="mem-no">[{{designatedMembers.PostFromDate}}]</small>
-                                </div>
-                                <div *ngIf="designatedMembers?.DeviceType==1" class="mem-dev">
-                                    <img src="assets\images\dashboard-images\Android_robot.svg">
-                                </div>
-                                <div *ngIf="designatedMembers?.DeviceType==2" class="mem-dev">
-                                    <img src="assets\images\dashboard-images\Apple_logo.svg">
-                                </div>
-                                <div *ngIf="designatedMembers?.DeviceType==0" class="mem-dev">
-                                    <img src="assets\images\dashboard-images\no-cellphone.svg">
-                                </div>
-                            </div>
                             <div class="row">
-                                <div class="col-sm-12 text-end">
-                                    <div class="btn-group btn-group-sm" role="group" aria-label="Action Buttons">
-                                        <button *ngIf="designatedMembers.MemberName"
-                                            [disabled]="designatedMembers.UserId == loggedInUserId"
-                                            (click)="addEditMember(designatedMembers,'Edit')"
-                                            class="btn btn-sm btn-light rounded"> <i
-                                                class="fas fa-pencil-alt"></i></button>
-                                        <button
-                                            *ngIf="!designatedMembers.MemberName || designatedMembers.IsMultiple == 1 && designatedMembers.LastaddedUser == 1"
-                                            (click)="addEditMember(designatedMembers,'Add')"
-                                            class="rounded btn btn-sm btn-light mx-1"> <i
-                                                class="fas fa-plus"></i></button>
-                                        <button title="Edit Member"
-                                            class="btn btn-sm btn-light text-danger mx-1 rounded"
-                                            *ngIf="designatedMembers.MemberName" data-bs-toggle="modal"
-                                            (click)="getUserPostBodyId(designatedMembers.userpostbodyId)"
-                                            data-bs-target="#DeleteModal"
-                                            [disabled]="designatedMembers.UserId == loggedInUserId"> <i
-                                                class="fas fa-trash-alt"></i></button>
-                                        <button title="Remove Designation" data-bs-toggle="modal"
-                                            data-bs-target="#AddMemberModal" #addMemberModal
-                                            style="display: none;"></button>
+                                <div class="col-md-2" >
+                                    <div class="flex-shrink-0" *ngIf="designatedMembers.MemberName != ''">
+                                        <div class="image-bg">
+                                            <img class="company" [src]="designatedMembers?.ProfilePhoto" alt="profile photo" srcset="">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                                <div class="col-md-6">
+                                    <div *ngIf="designatedMembers.MemberName != ''">
+                                        <p class="mem-name text-primary"><a
+                                                (click)="redToMemberProfile(designatedMembers.UserId, designatedMembers.MemberName)">{{designatedMembers?.MemberName}}
+                                                <small class="mem-no">[{{designatedMembers?.MobileNo}}]</small></a></p>
+                                        <div class="mem-desi">
+                                            {{designatedMembers?.DesignationName}}
+                                            <small class="mem-no">[{{designatedMembers.PostFromDate}}]</small>
+                                        </div>
+                                        <div *ngIf="designatedMembers?.DeviceType==1" class="mem-dev">
+                                            <img src="assets\images\dashboard-images\Android_robot.svg">
+                                        </div>
+                                        <div *ngIf="designatedMembers?.DeviceType==2" class="mem-dev">
+                                            <img src="assets\images\dashboard-images\Apple_logo.svg">
+                                        </div>
+                                        <div *ngIf="designatedMembers?.DeviceType==0" class="mem-dev">
+                                            <img src="assets\images\dashboard-images\no-cellphone.svg">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="col-sm-12 text-end">
+                                        <div class="btn-group btn-group-sm" role="group" aria-label="Action Buttons">
+                                            <button *ngIf="designatedMembers.MemberName"
+                                                [disabled]="designatedMembers.UserId == loggedInUserId"
+                                                (click)="addEditMember(designatedMembers,'Edit')"
+                                                class="btn btn-sm btn-light rounded"> <i
+                                                    class="fas fa-pencil-alt"></i></button>
+                                            <button
+                                                *ngIf="!designatedMembers.MemberName || designatedMembers.IsMultiple == 1 && designatedMembers.LastaddedUser == 1"
+                                                (click)="addEditMember(designatedMembers,'Add')"
+                                                class="rounded btn btn-sm btn-light mx-1"> <i
+                                                    class="fas fa-plus"></i></button>
+                                            <button title="Edit Member"
+                                                class="btn btn-sm btn-light text-danger mx-1 rounded"
+                                                *ngIf="designatedMembers.MemberName" data-bs-toggle="modal"
+                                                (click)="getUserPostBodyId(designatedMembers.userpostbodyId)"
+                                                data-bs-target="#DeleteModal"
+                                                [disabled]="designatedMembers.UserId == loggedInUserId"> <i
+                                                    class="fas fa-trash-alt"></i></button>
+                                            <button title="Remove Designation" data-bs-toggle="modal"
+                                                data-bs-target="#AddMemberModal" #addMemberModal
+                                                style="display: none;"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
                         </div>
                         <div *ngIf="allDesignatedMembers?.length == 0">
                             <td colspan="7">
                                 <div class="alert alert-danger text-center py-2 mb-0">No Data Found..!</div>
                             </td>
                         </div>
-
-
-
-
-
-
-
                         <!-- <table class="table table-hover mb-0">
                         <thead>
                             <tr>
@@ -283,6 +295,7 @@
                     </table> -->
                     </div>
                 </div>
+                
                     <!-- <div class="card mb-2 card-body shadow-none">
                         <div class="d-flex">
                             <div class="flex-shrink-0">
