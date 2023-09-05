@@ -75,7 +75,47 @@
     line-height: 2rem;
 }
 
-
+.dashboard-outline-card{
+    border: 1px solid var(--main-color);
+    border-radius: 10px;
+}
+.dashboard-outline-card .card-header{
+    border-bottom: 1px solid var(--main-color) !important;
+    padding: 15px;
+}
+.dashboard-outline-card .card-header h6{
+   color: var(--main-color);
+}
+.dashboard-outline-card .card-header i,
+.dashboard-outline-card .left-content i,
+.dashboard-outline-card .right-content i{
+   background-color: #2E5EE1;
+   padding: 10px;
+   border-radius: 50%;
+   color: #ffff;
+}
+.dashboard-outline-card .left-content{
+    border-right: 1px solid var(--main-color) !important;
+    padding-block: 15px;
+}
+.dashboard-outline-card .left-content i{
+    background-color: #6D7E00;
+}
+.dashboard-outline-card .left-content h6{
+    color: #6D7E00;
+}
+.dashboard-outline-card .right-content{
+    padding-block: 15px;
+}
+.dashboard-outline-card .right-content i{
+    background-color: #FE5656;
+}
+.dashboard-outline-card .right-content h6{
+    color: #FE5656;
+}
+.mem-list .mem-dev img {
+    width: 22px;
+}
 agm-map {
     height: 300px;
 }
@@ -267,3 +307,11 @@ agm-map {
 .mem-list .mem-dev img {
     width: 22px;
 }
+
+.company{
+    border-radius: 50%;
+    height:70pt;
+    width:70pt;
+    float: left;
+    padding:5px;
+  }
