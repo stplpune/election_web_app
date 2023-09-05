@@ -46,6 +46,7 @@ export class BoothCommitteeComponent implements OnInit {
   boothCommitteeType = 1;
   boothComitySearchVoterArray: any;
   designationArray: any;
+  urlCommityDashboardData:any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -56,15 +57,32 @@ export class BoothCommitteeComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     public dialog: MatDialog,
-  ) { }
+  ) { 
+    let ReceiveDataSnapshot: any = this.route.snapshot.params.id;
+    if (ReceiveDataSnapshot) {
+      ReceiveDataSnapshot = ReceiveDataSnapshot.split('.');
+      this.urlCommityDashboardData = { 'stateId': +ReceiveDataSnapshot[0], 'divisionId': +ReceiveDataSnapshot[1], 'districtId': +ReceiveDataSnapshot[2], 'talukaId': +ReceiveDataSnapshot[3] }
+    }
+  }
 
   ngOnInit(): void {
     this.defaultFilterForm();
     this.getState();
-
     this.defaultBoothComityForm();
     this.getDesignationMaster();
     this.searchVoterData();
+
+    if (this.urlCommityDashboardData) { // URL data Get then Call
+        this.filterForm.controls['StateId'].setValue(1);
+        this.filterForm.controls['DivisionId'].setValue(this.urlCommityDashboardData.divisionId);
+        this.filterForm.controls['DistrictId'].setValue(this.urlCommityDashboardData.districtId)
+        this.filterForm.controls['TalukaId'].setValue(this.urlCommityDashboardData.talukaId)
+
+        this.getDivision();
+        this.getDistrict();
+        this.getTaluka();
+        this.filterForm.value.TalukaId > 0 ? (this.getCommitteMemberTypewise(),this.getVillage(),this.getBooth(),this.dataNotFound = true) : '';
+      }
   }
 
   get f() { return this.filterForm.controls };
@@ -85,7 +103,7 @@ export class BoothCommitteeComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.stateArray = res.responseData;
-        this.stateArray?.length == 1 ? (this.f['StateId'].setValue(this.stateArray[0]?.id), this.getDivision()) : '';
+        this.stateArray?.length == 1 && !this.urlCommityDashboardData ? (this.f['StateId'].setValue(this.stateArray[0]?.id), this.getDivision()) : '';
       } else {
         this.stateArray = [];
       }
@@ -97,7 +115,7 @@ export class BoothCommitteeComponent implements OnInit {
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.divisionArray = res.responseData;
-        this.divisionArray?.length == 1 ? (this.f['DivisionId'].setValue(this.divisionArray[0]?.divisionId), this.getDistrict()) : '';
+        this.divisionArray?.length == 1 && !this.urlCommityDashboardData ? (this.f['DivisionId'].setValue(this.divisionArray[0]?.divisionId), this.getDistrict()) : '';
       } else {
         this.divisionArray = [];
       }

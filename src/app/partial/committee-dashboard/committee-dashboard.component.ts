@@ -659,6 +659,15 @@ export class CommitteeDashboardComponent implements OnInit {
         type: "bar",
         height: 350,
         toolbar: { show: false },
+        events: {
+        click:(event:any)=>{
+          var dataPointIndex = parseInt(event.target.getAttribute("j"));
+          if(isNaN(dataPointIndex)){
+          } else{
+            let obj = array.at(dataPointIndex);
+            this.redirectToBoothCommitteePage(obj);
+          }
+      }}
       },
       plotOptions: {
         bar: {
@@ -948,6 +957,10 @@ export class CommitteeDashboardComponent implements OnInit {
   onClickPagintionTalukaPer(pageNo: number) {
     this.paginationNoTalukaPer = pageNo;
     this.getTalukaPresident();
+  }
+
+  redirectToBoothCommitteePage(obj: any) { //Redirect Booth Committee Page
+    window.open('../booth-committee/' + obj.stateId + '.' + obj.divisionId + '.' + obj.districtId + '.' + obj.talukaId);
   }
 
   //............................................ Taluka Wise Important Leaders Code Start Here ...............................................//
