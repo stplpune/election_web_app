@@ -16,6 +16,9 @@
                     <p class="mb-0 text-main">Maharashtra</p>
                     <i class="fas fa-angle-double-right text-main"></i>
                     <p class="mb-0 warning">{{selectedDropdownNameValue ? selectedDropdownNameValue : ''}}</p>
+                    <ng-container *ngIf="topVilageName_MapClicked && this.selectedTalId && topFilter.value.FilterTypeId == 3">
+                    <i class="fas fa-angle-double-right text-main"></i><p class="mb-0 warning">{{topVilageName_MapClicked ? topVilageName_MapClicked : ''}}</p>
+                    </ng-container>
                 </div>
             </div>
         </div>
