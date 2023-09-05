@@ -152,8 +152,6 @@
                         <button title="Add Designation" class="rounded btn btn-sm btn-main   mx-1 ng-star-inserted"
                             (click)="addDesignated()"><small>Add Designation</small></button> </span>
                   </div>
-                  <div class="card-body">
-                    <div class="table-responsive">
                         <div class="card border-outline card-body shadow-none border py-2 px-3 mb-2 mem-list"
                             *ngFor="let designatedMembers of allDesignatedMembers">
                             <div class="mb-0 fw-bold mt-1 text-danger" *ngIf="designatedMembers.MemberName == ''">
@@ -293,8 +291,6 @@
                             </tr>
                         </tbody>
                     </table> -->
-                    </div>
-                </div>
                 
                     <!-- <div class="card mb-2 card-body shadow-none">
                         <div class="d-flex">
