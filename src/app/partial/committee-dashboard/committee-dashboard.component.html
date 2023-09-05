@@ -16,8 +16,10 @@
                     <p class="mb-0 text-main">Maharashtra</p>
                     <i class="fas fa-angle-double-right text-main"></i>
                     <p class="mb-0 warning">{{selectedDropdownNameValue ? selectedDropdownNameValue : ''}}</p>
-                    <ng-container *ngIf="topVilageName_MapClicked && this.selectedTalId && topFilter.value.FilterTypeId == 3">
-                    <i class="fas fa-angle-double-right text-main"></i><p class="mb-0 warning">{{topVilageName_MapClicked ? topVilageName_MapClicked : ''}}</p>
+                    <ng-container
+                        *ngIf="topVilageName_MapClicked && this.selectedTalId && topFilter.value.FilterTypeId == 3">
+                        <i class="fas fa-angle-double-right text-main"></i>
+                        <p class="mb-0 warning">{{topVilageName_MapClicked ? topVilageName_MapClicked : ''}}</p>
                     </ng-container>
                 </div>
             </div>
@@ -107,34 +109,36 @@
                 </div>
             </div>
         </div>
-    </div>  
+    </div>
 
     <div class="row mb-3 chartbox g-3 form-container">
         <div class="col-sm-5">
             <div class="card">
                 <form [formGroup]="topFilter">
-                <div class="card-header">
-                    <div class="d-block">
-                        <div class="form-check form-check-inline" *ngFor="let mapFilter of mapFilterTypeArray">
-                            <input class="form-check-input" type="radio" formControlName="FilterTypeId" [value]="mapFilter.id" name="FilterTypeId"
-                            (change)="changeFilterType()">
-                            <label class="form-check-label" for="check">{{mapFilter.value}}</label>
+                    <div class="card-header">
+                        <div class="d-block">
+                            <div class="form-check form-check-inline" *ngFor="let mapFilter of mapFilterTypeArray">
+                                <input class="form-check-input" type="radio" formControlName="FilterTypeId"
+                                    [value]="mapFilter.id" name="FilterTypeId" (change)="changeFilterType()">
+                                <label class="form-check-label" for="check">{{mapFilter.value}}</label>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-header">
-                        <ngx-select [allowClear]="true" [items]="bCFormationDropArray" formControlName="FilterId" optionValueField="constituenciesId" optionTextField="constituencyName"
-                        (select)="selectDropdown();" (remove)="removeDropdownValue()"
+                    <div class="card-header">
+                        <ngx-select [allowClear]="true" [items]="bCFormationDropArray" formControlName="FilterId"
+                            optionValueField="constituenciesId" optionTextField="constituencyName"
+                            (select)="selectDropdown();" (remove)="removeDropdownValue()"
                             placeholder="{{topFilter.value.FilterTypeId == 1 ? 'Select Parliamentary Constituency' : topFilter.value.FilterTypeId == 2 ? 'Select Assembly Constituency' : topFilter.value.FilterTypeId == 3 ? 'Select District' : ''}}">
                         </ngx-select>
-                </div>
-            </form>
-                <div class="card-body committeesonmap2"> 
-                    <div  id="mapSvgAssembly"></div>
-                    <div  id="mapSvgParli"></div>
+                    </div>
+                </form>
+                <div class="card-body committeesonmap2">
+                    <div id="mapSvgAssembly"></div>
+                    <div id="mapSvgParli"></div>
                     <div id="mapsvg1" (click)="svgMaharastraMapClick()"></div>
                     <div [ngClass]="{'d-none': (topFilter.value.FilterTypeId != 3 || selectedDistrictId == '')}"
-                     [class]="previousDistSelected=='9' ? 'm-5' : 'm-4'" id="mapsvg2" (click)="svgVillageMapClick('mapClick')"></div>
+                        [class]="previousDistSelected=='9' ? 'm-5' : 'm-4'" id="mapsvg2"
+                        (click)="svgVillageMapClick('mapClick')"></div>
                 </div>
             </div>
         </div>
@@ -170,15 +174,15 @@
                             <div class="card-height">
                                 <div id="chart" *ngIf="pieChartShow">
                                     <apx-chart [series]="chartOptions?.series" [chart]="chartOptions?.chart"
-                                      [labels]="chartOptions?.labels" [responsive]="chartOptions?.responsive"
-                                      [legend]="chartOptions?.legend" [colors]="chartOptions?.colors"></apx-chart>
+                                        [labels]="chartOptions?.labels" [responsive]="chartOptions?.responsive"
+                                        [legend]="chartOptions?.legend" [colors]="chartOptions?.colors"></apx-chart>
                                     <div class="mt-2 text-center">
                                     </div>
-                                  </div>
-                                  <div *ngIf="!pieChartShow" class="card-body">
+                                </div>
+                                <div *ngIf="!pieChartShow" class="card-body">
                                     <div class="alert alert-danger text-center py-2 mb-0 small">No Data Found..!
                                     </div>
-                                  </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -190,14 +194,20 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="card-height">
-                                <div class="d-flex align-items-center leader" *ngFor="let impLeader of importantLeadersArray" 
-                                (click)="redirectToleaderDetailsPage(impLeader?.leaderId)" [class.active]="impLeader?.leaderId == impLeader_Highlight">
+                                <div class="d-flex align-items-center leader"
+                                    *ngFor="let impLeader of importantLeadersArray"
+                                    (click)="redirectToleaderDetailsPage(impLeader?.leaderId)"
+                                    [class.active]="impLeader?.leaderId == impLeader_Highlight">
                                     <div class="flex-shrink-0">
                                         <div class="profile">
-                                            <img [src]="impLeader?.profilePhoto" alt="..." class="leader-img" *ngIf="impLeader?.profilePhoto">
-                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..." class="leader-img" *ngIf="!impLeader?.profilePhoto">
-                                            <img [src]="impLeader?.partyIconImage" class="party" *ngIf="impLeader?.partyIconImage">
-                                            <img src="assets/images/logos/otr.png" class="party" *ngIf="!impLeader?.partyIconImage">
+                                            <img [src]="impLeader?.profilePhoto" alt="..." class="leader-img"
+                                                *ngIf="impLeader?.profilePhoto">
+                                            <img src="assets/images/dashboard-images/Profile_dummy.svg" alt="..."
+                                                class="leader-img" *ngIf="!impLeader?.profilePhoto">
+                                            <img [src]="impLeader?.partyIconImage" class="party"
+                                                *ngIf="impLeader?.partyIconImage">
+                                            <img src="assets/images/logos/otr.png" class="party"
+                                                *ngIf="!impLeader?.partyIconImage">
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
@@ -217,7 +227,7 @@
                                 <div *ngIf="importantLeadersArray?.length == 0" class="card-body">
                                     <div class="alert alert-danger text-center py-2 mb-0 small">No Data Found..!
                                     </div>
-                                  </div>
+                                </div>
 
                             </div>
                         </div>
@@ -231,9 +241,10 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">Constituency Wise Past Election Summary</div>
-                <div class="card-body">  
-                   <!-- (click()="electionIdAC = acEleName?.electionId; electionTypeIdAC = acEleName?.electionTypeId"  -->
-                    <h6 class="text-orange fw-bold mb-3 mt-2"><span *ngFor="let acEleName of electionNameACArray">{{acEleName?.electionName}}</span></h6>
+                <div class="card-body">
+                    <!-- (click()="electionIdAC = acEleName?.electionId; electionTypeIdAC = acEleName?.electionTypeId"  -->
+                    <h6 class="text-orange fw-bold mb-3 mt-2"><span
+                            *ngFor="let acEleName of electionNameACArray">{{acEleName?.electionName}}</span></h6>
                     <!-- AC code Start Here -->
                     <table class="dash-table mb-3">
                         <thead>
@@ -253,7 +264,8 @@
                                 <td>{{((paginationNoAC + 1) * 10 + i + 1)-20}}</td>
                                 <td>{{acData?.constituencyNo}}-{{acData?.constituenciesName}}</td>
                                 <td>
-                                    <a class="text-decoration-none">{{acData?.candidateName ? acData?.candidateName : '-'}}</a>
+                                    <a class="text-decoration-none">{{acData?.candidateName ? acData?.candidateName :
+                                        '-'}}</a>
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
@@ -263,7 +275,9 @@
                                 <td>{{acData?.totalVotes}}</td>
                                 <td>{{acData?.winningMargin ? acData?.winningMargin : '-'}}</td>
                                 <td>
-                                    <i class="fas fa-info-circle info" (click)="viewDetailAC_DC(1,acData?.constituenciesId,acData?.electionId)" data-bs-toggle="modal" data-bs-target="#MaptableDetailShow"></i>
+                                    <i class="fas fa-info-circle info"
+                                        (click)="viewDetailAC_DC(1,acData?.constituenciesId,acData?.electionId)"
+                                        data-bs-toggle="modal" data-bs-target="#MaptableDetailShow"></i>
                                 </td>
                             </tr>
                         </tbody>
@@ -275,84 +289,92 @@
                     <pagination-controls id="pastACId" *ngIf="pastACArray?.length != 0" previousLabel="" nextLabel=""
                         (pageChange)="onClickPagintionAC($event)">
                     </pagination-controls>
-  <!-- (click()="electionIdPC = pcEleName?.electionId; electionTypeIdPC = pcEleName?.electionTypeId"  -->
-  <h6 class="text-orange fw-bold mb-3"><span *ngFor="let pcEleName of electionNamePCArray">{{pcEleName?.electionName}}</span></h6>
-  <!-- PC code Start Here -->
-   <table class="dash-table mb-3">
-       <thead>
-           <tr>
-               <th>Sr. No.</th>
-               <th>Constituency</th>
-               <th>Winner</th>
-               <th>Party</th>
-               <th>Votes</th>
-               <th>Winning Margin</th>
-               <th></th>
-           </tr>
-       </thead>
-       <tbody>
-           <tr *ngFor="let pcData of pastPCArray  | paginate: {id:'pastPCId',itemsPerPage: pageSizePC, 
+                    <!-- (click()="electionIdPC = pcEleName?.electionId; electionTypeIdPC = pcEleName?.electionTypeId"  -->
+                    <h6 class="text-orange fw-bold mb-3"><span
+                            *ngFor="let pcEleName of electionNamePCArray">{{pcEleName?.electionName}}</span></h6>
+                    <!-- PC code Start Here -->
+                    <table class="dash-table mb-3">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Constituency</th>
+                                <th>Winner</th>
+                                <th>Party</th>
+                                <th>Votes</th>
+                                <th>Winning Margin</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let pcData of pastPCArray  | paginate: {id:'pastPCId',itemsPerPage: pageSizePC, 
                currentPage: paginationNoPC, totalItems:getTotalPC}; let i = index">
-               <td>{{((paginationNoPC + 1) * 10 + i + 1)-20}}</td>
-               <td>{{pcData?.constituencyNo}}-{{pcData?.constituenciesName}}</td>
-               <td>
-                   <a class="text-decoration-none">{{pcData?.candidateName ? pcData?.candidateName : '-'}}</a>
-               </td>
-               <td>
-                   <div class="d-flex align-items-center gap-2">
-                       <span>{{pcData?.partyName ? pcData?.partyName : '-'}}</span>
-                   </div>
-               </td>
-               <td>{{pcData?.totalVotes}}</td>
-               <td>{{pcData?.winningMargin ? pcData?.winningMargin : '-'}}</td>
-               <td>
-                   <i class="fas fa-info-circle info" (click)="viewDetailAC_DC(0,pcData?.constituenciesId,pcData?.electionId)"
-                 data-bs-toggle="modal" data-bs-target="#MaptableDetailShow"></i>
-               </td>
-           </tr>
-       </tbody>
-   </table>
-   <div class="mt-2 text-end" *ngIf="pastPCArray?.length == 0">
-       <div class="alert alert-danger text-center py-2">No Results Found!
-       </div>
-   </div>
-   <pagination-controls id="pastPCId" *ngIf="pastPCArray?.length != 0" previousLabel="" nextLabel=""
-       (pageChange)="onClickPagintionPC($event)">
-   </pagination-controls>
+                                <td>{{((paginationNoPC + 1) * 10 + i + 1)-20}}</td>
+                                <td>{{pcData?.constituencyNo}}-{{pcData?.constituenciesName}}</td>
+                                <td>
+                                    <a class="text-decoration-none">{{pcData?.candidateName ? pcData?.candidateName :
+                                        '-'}}</a>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span>{{pcData?.partyName ? pcData?.partyName : '-'}}</span>
+                                    </div>
+                                </td>
+                                <td>{{pcData?.totalVotes}}</td>
+                                <td>{{pcData?.winningMargin ? pcData?.winningMargin : '-'}}</td>
+                                <td>
+                                    <i class="fas fa-info-circle info"
+                                        (click)="viewDetailAC_DC(0,pcData?.constituenciesId,pcData?.electionId)"
+                                        data-bs-toggle="modal" data-bs-target="#MaptableDetailShow"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="mt-2 text-end" *ngIf="pastPCArray?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Results Found!
+                        </div>
+                    </div>
+                    <pagination-controls id="pastPCId" *ngIf="pastPCArray?.length != 0" previousLabel="" nextLabel=""
+                        (pageChange)="onClickPagintionPC($event)">
+                    </pagination-controls>
 
                 </div>
             </div>
         </div>
     </div>
- 
-    <div class="row chartbox mb-3" *ngIf="topFilter.value.FilterTypeId == 2 && topFilter.value.FilterId && assemblyPieChartListArray?.length">
+
+    <div class="row chartbox mb-3"
+        *ngIf="topFilter.value.FilterTypeId == 2 && topFilter.value.FilterId && assemblyPieChartListArray?.length">
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header text-main">Taluka Booth Committee Formation progress</div>
                 <div class="card-body pb-0">
                     <div class="row ">
                         <div class="col-sm-5">
-                            <div class="list-group list-group-flush" *ngFor="let assemblyPieList of assemblyPieChartListArray"
-                             (click)="assemblyVillagePieChart(assemblyPieList)">
-                                <a class="list-group-item list-group-item-action border-0 border-bottom" aria-current="true" [class.active]="assemblyPieList.constituenciesId == HighlightRowAssemblyPieList">
-                                  {{assemblyPieList?.constituencyName}}
+                            <div class="list-group list-group-flush"
+                                *ngFor="let assemblyPieList of assemblyPieChartListArray"
+                                (click)="assemblyVillagePieChart(assemblyPieList)">
+                                <a class="list-group-item list-group-item-action border-0 border-bottom"
+                                    aria-current="true"
+                                    [class.active]="assemblyPieList.constituenciesId == HighlightRowAssemblyPieList">
+                                    {{assemblyPieList?.constituencyName}}
                                 </a>
-                              </div>
+                            </div>
                         </div>
                         <div class="col-sm-7">
                             <div class=" d-flex justify-content-center align-items-center">
-                            <div *ngIf="AssemblypieChartShow" class="">
-                                <div id="chart">
-                                    <apx-chart [series]="AssemblyPiechartOptions.series" [chart]="AssemblyPiechartOptions.chart"
-                                    [labels]="AssemblyPiechartOptions.labels" [responsive]="AssemblyPiechartOptions.responsive"
-                                  ></apx-chart>
+                                <div *ngIf="AssemblypieChartShow" class="">
+                                    <div id="chart">
+                                        <apx-chart [series]="AssemblyPiechartOptions.series"
+                                            [chart]="AssemblyPiechartOptions.chart"
+                                            [labels]="AssemblyPiechartOptions.labels"
+                                            [responsive]="AssemblyPiechartOptions.responsive"></apx-chart>
+                                    </div>
+                                    <!-- <div class="text-center fw-bold mb-2">{{columnChartHeadingName}}</div> -->
                                 </div>
-                                <!-- <div class="text-center fw-bold mb-2">{{columnChartHeadingName}}</div> -->
-                              </div>
-                              <div *ngIf="!AssemblypieChartShow" class=" card-body">
-                                <div class="alert alert-danger text-center py-2 mb-0 small mt-5">No Data Found..!
+                                <div *ngIf="!AssemblypieChartShow" class=" card-body">
+                                    <div class="alert alert-danger text-center py-2 mb-0 small mt-5">No Data Found..!
+                                    </div>
                                 </div>
-                              </div>
                             </div>
                         </div>
                     </div>
@@ -369,27 +391,30 @@
                 <div class="card-body">
                     <div *ngIf="barChartShow" class="mt-5">
                         <div id="chart">
-                          <apx-chart [series]="BarchartOptions?.series" [chart]="BarchartOptions?.chart"
-                            [dataLabels]="BarchartOptions?.dataLabels" [plotOptions]="BarchartOptions?.plotOptions"
-                            [yaxis]="BarchartOptions?.yaxis" [legend]="BarchartOptions?.legend" [fill]="BarchartOptions?.fill"
-                            [stroke]="BarchartOptions?.stroke" [tooltip]="BarchartOptions?.tooltip"
-                            [xaxis]="BarchartOptions?.xaxis" [dataLabels]="BarchartOptions?.dataLabels"></apx-chart>
+                            <apx-chart [series]="BarchartOptions?.series" [chart]="BarchartOptions?.chart"
+                                [dataLabels]="BarchartOptions?.dataLabels" [plotOptions]="BarchartOptions?.plotOptions"
+                                [yaxis]="BarchartOptions?.yaxis" [legend]="BarchartOptions?.legend"
+                                [fill]="BarchartOptions?.fill" [stroke]="BarchartOptions?.stroke"
+                                [tooltip]="BarchartOptions?.tooltip" [xaxis]="BarchartOptions?.xaxis"
+                                [dataLabels]="BarchartOptions?.dataLabels"></apx-chart>
                         </div>
                         <div class="text-center fw-bold mb-2">{{columnChartHeadingName}}</div>
-                      </div>
-                      <div *ngIf="!barChartShow" class=" card-body">
+                    </div>
+                    <div *ngIf="!barChartShow" class=" card-body">
                         <div class="alert alert-danger text-center py-2 mb-0 small mt-5">No Data Found..!
                         </div>
-                      </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row chartbox" *ngIf="(topFilter.value.FilterTypeId != 2 && topFilter.value.FilterId) || (topFilter.value.FilterTypeId == 2 && topFilter.value.FilterId && selectedTalId)">
+    <div class="row chartbox"
+        *ngIf="(topFilter.value.FilterTypeId != 2 && topFilter.value.FilterId) || (topFilter.value.FilterTypeId == 2 && topFilter.value.FilterId && selectedTalId)">
         <div class="col-sm-12">
             <div class="card">
-                <div class="card-header text-main">{{(topFilter.value.FilterTypeId == 2 && topFilter.value.FilterId && selectedTalId) ? 'Political Unit Wise Important Leaders' : 'Taluka Wise Important Leaders'}}</div>
+                <div class="card-header text-main">{{(topFilter.value.FilterTypeId == 2 && topFilter.value.FilterId &&
+                    selectedTalId) ? 'Political Unit Wise Important Leaders' : 'Taluka Wise Important Leaders'}}</div>
                 <div class="card-body">
                     <table class="dash-table">
                         <thead>
@@ -408,16 +433,23 @@
                                 <td>{{((paginationNoTalukaPer + 1) * 10 + i + 1)-20}}</td>
                                 <td>{{talukaPer?.talukaName}}</td>
                                 <td *ngIf="topFilter.value.FilterTypeId != 2">
-                                    <a class="text-decoration-none">{{talukaPer?.presidentName?.split('-')[0] ? talukaPer?.presidentName?.split('-')[0] : '-'}}</a>
+                                    <a class="text-decoration-none">{{talukaPer?.presidentName?.split('-')[0] ?
+                                        talukaPer?.presidentName?.split('-')[0] : '-'}}</a>
                                 </td>
-                                <td *ngIf="topFilter.value.FilterTypeId != 2">{{talukaPer?.presidentName?.split('-')[1] ? talukaPer?.presidentName?.split('-')[1] : '-'}}</td>
+                                <td *ngIf="topFilter.value.FilterTypeId != 2">{{talukaPer?.presidentName?.split('-')[1]
+                                    ? talukaPer?.presidentName?.split('-')[1] : '-'}}</td>
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
-                                        <a class="text-decoration-none">{{talukaPer?._IMPLeaderDetailsState[0]?.leaderName ? talukaPer?._IMPLeaderDetailsState[0]?.leaderName : '-'}} <span *ngIf="talukaPer?._IMPLeaderDetailsState[0]?.mobileNo">({{talukaPer?._IMPLeaderDetailsState[0]?.mobileNo ? talukaPer?._IMPLeaderDetailsState[0]?.mobileNo : ''}})</span></a>
+                                        <a class="text-decoration-none">{{talukaPer?._IMPLeaderDetailsState[0]?.leaderName
+                                            ? talukaPer?._IMPLeaderDetailsState[0]?.leaderName : '-'}} <span
+                                                *ngIf="talukaPer?._IMPLeaderDetailsState[0]?.mobileNo">({{talukaPer?._IMPLeaderDetailsState[0]?.mobileNo
+                                                ? talukaPer?._IMPLeaderDetailsState[0]?.mobileNo : ''}})</span></a>
                                     </div>
                                 </td>
                                 <td>
-                                    <i class="fas fa-info-circle info" (click)="impLeadersData = talukaPer?._IMPLeaderDetailsState" data-bs-toggle="modal" data-bs-target="#viewDetailsImpLeaders"></i>
+                                    <i class="fas fa-info-circle info"
+                                        (click)="impLeadersData = talukaPer?._IMPLeaderDetailsState"
+                                        data-bs-toggle="modal" data-bs-target="#viewDetailsImpLeaders"></i>
                                 </td>
                             </tr>
                         </tbody>
@@ -426,8 +458,8 @@
                         <div class="alert alert-danger text-center py-2">No Results Found!
                         </div>
                     </div>
-                    <pagination-controls id="talukaPerImpLeaderId" *ngIf="talukaPresidentArray?.length != 0" previousLabel="" nextLabel=""
-                        (pageChange)="onClickPagintionTalukaPer($event)">
+                    <pagination-controls id="talukaPerImpLeaderId" *ngIf="talukaPresidentArray?.length != 0"
+                        previousLabel="" nextLabel="" (pageChange)="onClickPagintionTalukaPer($event)">
                     </pagination-controls>
                 </div>
             </div>
@@ -436,14 +468,15 @@
 </div>
 
 <!-- Modal viewDetailsImpLeaders -->
-<div class="modal fade" id="viewDetailsImpLeaders" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ImpLeaders" aria-hidden="true">
+<div class="modal fade" id="viewDetailsImpLeaders" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="ImpLeaders" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <p class="modal-title" id="ImpLeaders">Important Leaders</p>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" #ImpLeaders aria-label="Close"></button>
             </div>
-            <div class="modal-body mt-20 py-2"> 
+            <div class="modal-body mt-20 py-2">
 
                 <table class="dash-table mb-3">
                     <thead>
@@ -458,7 +491,9 @@
                         <tr *ngFor="let impObj of impLeadersData; let i = index">
                             <td>{{i + 1}}</td>
                             <td>
-                                <a class="text-decoration-none">{{impObj?.leaderName}} <span *ngIf="impObj?.mobileNo">({{impObj?.mobileNo ? impObj?.mobileNo : ''}})</span></a>
+                                <a class="text-decoration-none">{{impObj?.leaderName}} <span
+                                        *ngIf="impObj?.mobileNo">({{impObj?.mobileNo ? impObj?.mobileNo :
+                                        ''}})</span></a>
                             </td>
                             <td>{{impObj?.partyShortCode ? impObj?.partyShortCode : '-'}}</td>
                             <td>{{impObj?.designation ? impObj?.designation : '-'}}</td>
@@ -469,21 +504,23 @@
                     <div class="alert alert-danger text-center py-2">No Results Found!
                     </div>
                 </div>
-  
+
             </div>
         </div>
     </div>
 </div>
 
 <!-- Modal viewDetailAC_DC -->
-<div class="modal fade" id="MaptableDetailShow" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="MapSelectModalLabel1" aria-hidden="true">
+<div class="modal fade" id="MaptableDetailShow" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="MapSelectModalLabel1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <p class="modal-title" id="MapSelectModalLabel1">{{viewDetailAC_DCArray[0]?.electionName}}</p>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" #searchAddressModel aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" #searchAddressModel
+                    aria-label="Close"></button>
             </div>
-            <div class="modal-body mt-20 py-2"> 
+            <div class="modal-body mt-20 py-2">
 
                 <table class="dash-table mb-3">
                     <thead>
@@ -499,7 +536,8 @@
                         <tr *ngFor="let viewData of viewDetailAC_DCArray; let i = index">
                             <td>{{i + 1}}</td>
                             <td>
-                                <a class="text-decoration-none">{{viewData?.candidateName ? viewData?.candidateName : '-'}}</a>
+                                <a class="text-decoration-none">{{viewData?.candidateName ? viewData?.candidateName :
+                                    '-'}}</a>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
@@ -515,9 +553,8 @@
                     <div class="alert alert-danger text-center py-2">No Results Found!
                     </div>
                 </div>
-  
+
             </div>
         </div>
     </div>
 </div>
-

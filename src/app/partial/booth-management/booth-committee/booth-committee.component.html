@@ -8,39 +8,46 @@
             <form [formGroup]="filterForm">
                 <div class="row g-2 mb-2">
                     <div class="col-sm-2">
-                        <ngx-select [allowClear]="true" (remove)="clearFilter('state')" [items]="stateArray" formControlName="StateId"
-                            (select)="clearFilter('state');getDivision()" placeholder="Select State" optionValueField="id"
-                            optionTextField="stateName" [disabled]="stateArray?.length == 1">
+                        <ngx-select [allowClear]="true" (remove)="clearFilter('state')" [items]="stateArray"
+                            formControlName="StateId" (select)="clearFilter('state');getDivision()"
+                            placeholder="Select State" optionValueField="id" optionTextField="stateName"
+                            [disabled]="stateArray?.length == 1">
                         </ngx-select>
                     </div>
                     <div class="col-sm-2">
-                        <ngx-select [allowClear]="true" [items]="divisionArray" formControlName="DivisionId" [disabled]="divisionArray?.length == 1 || !f['StateId'].value"
-                        optionValueField="divisionId" optionTextField="divisionName" (select)="clearFilter('division');getDistrict()" 
-                        (remove)="clearFilter('division')" placeholder="Select Division">
+                        <ngx-select [allowClear]="true" [items]="divisionArray" formControlName="DivisionId"
+                            [disabled]="divisionArray?.length == 1 || !f['StateId'].value" optionValueField="divisionId"
+                            optionTextField="divisionName" (select)="clearFilter('division');getDistrict()"
+                            (remove)="clearFilter('division')" placeholder="Select Division">
                         </ngx-select>
                     </div>
                     <div class="col-sm-2">
-                        <ngx-select [allowClear]="true" [items]="districtArray" formControlName="DistrictId" [disabled]="districtArray?.length == 1 || !f['DivisionId'].value"
-                        optionValueField="districtId" optionTextField="districtName" (select)="clearFilter('district');getTaluka()" 
-                        (remove)="clearFilter('district')" placeholder="Select District">
+                        <ngx-select [allowClear]="true" [items]="districtArray" formControlName="DistrictId"
+                            [disabled]="districtArray?.length == 1 || !f['DivisionId'].value"
+                            optionValueField="districtId" optionTextField="districtName"
+                            (select)="clearFilter('district');getTaluka()" (remove)="clearFilter('district')"
+                            placeholder="Select District">
                         </ngx-select>
                     </div>
                     <div class="col-sm-2">
-                        <ngx-select [allowClear]="true" [items]="talkaArray" formControlName="TalukaId" [disabled]="talkaArray?.length == 1 || !f['DistrictId'].value"
-                        optionValueField="talukaId" optionTextField="talukaName" (select)="clearFilter('taluka');getVillage();getBooth();dataNotFound = true" 
-                        (remove)="clearFilter('taluka')" placeholder="Select Taluka">
+                        <ngx-select [allowClear]="true" [items]="talkaArray" formControlName="TalukaId"
+                            [disabled]="talkaArray?.length == 1 || !f['DistrictId'].value" optionValueField="talukaId"
+                            optionTextField="talukaName"
+                            (select)="clearFilter('taluka');getVillage();getBooth();dataNotFound = true"
+                            (remove)="clearFilter('taluka')" placeholder="Select Taluka">
                         </ngx-select>
                     </div>
                     <div class="col-sm-2">
-                        <ngx-select [allowClear]="true" [items]="villageArray" formControlName="VillageId" [disabled]="villageArray?.length == 1 || !f['TalukaId'].value"
-                        optionValueField="villageId" optionTextField="villageName" (select)="clearFilter('village');getBooth()" 
-                        (remove)="clearFilter('village');getBooth()" placeholder="Select Village">
+                        <ngx-select [allowClear]="true" [items]="villageArray" formControlName="VillageId"
+                            [disabled]="villageArray?.length == 1 || !f['TalukaId'].value" optionValueField="villageId"
+                            optionTextField="villageName" (select)="clearFilter('village');getBooth()"
+                            (remove)="clearFilter('village');getBooth()" placeholder="Select Village">
                         </ngx-select>
                     </div>
                     <div class="col-sm-2">
-                        <ngx-select [allowClear]="true" [items]="boothArray" formControlName="BoothId" [disabled]="!f['TalukaId'].value"
-                        optionValueField="boothId" optionTextField="boothNickName" (select)="clearFilter('booth')" 
-                        (remove)="clearFilter('booth')" placeholder="Select Booth">
+                        <ngx-select [allowClear]="true" [items]="boothArray" formControlName="BoothId"
+                            [disabled]="!f['TalukaId'].value" optionValueField="boothId" optionTextField="boothNickName"
+                            (select)="clearFilter('booth')" (remove)="clearFilter('booth')" placeholder="Select Booth">
                         </ngx-select>
                     </div>
                 </div>
@@ -127,7 +134,8 @@
                                                                 <td title="Sr. No" class="w-70">{{i+1}}</td>
                                                                 <td>
                                                                     <p class="mb-0 fw-bold">
-                                                                        {{generalBCMember?.voterName ? generalBCMember?.voterName : '-'}}
+                                                                        {{generalBCMember?.voterName ?
+                                                                        generalBCMember?.voterName : '-'}}
                                                                     </p>
                                                                     <span *ngIf="generalBCMember?.areaName"
                                                                         class="text-muted">({{generalBCMember?.areaName}})</span>
@@ -138,13 +146,13 @@
                                                                 <td class="w-170" title="Mobile No">
                                                                     {{generalBCMember?.mobileNo ?
                                                                     generalBCMember?.mobileNo
-                                                                    : '-'}}</td> 
-                                                                    <!-- <td class="w-70" title="Voter No">
+                                                                    : '-'}}</td>
+                                                                <!-- <td class="w-70" title="Voter No">
                                                                         {{generalBCMember?.voterNo ?
                                                                         generalBCMember?.voterNo : '-'}}</td>  -->
-                                                                    <td class="w-170" title="Designation Name">
-                                                                        {{generalBCMember?.designationName ?
-                                                                        generalBCMember?.designationName : '-'}}</td>
+                                                                <td class="w-170" title="Designation Name">
+                                                                    {{generalBCMember?.designationName ?
+                                                                    generalBCMember?.designationName : '-'}}</td>
                                                                 <td class="w-170" title="Total Assigned Voter">
                                                                     {{generalBCMember?.totalAssignedVoter ?
                                                                     generalBCMember?.totalAssignedVoter : '-'}}</td>
@@ -169,15 +177,22 @@
                                                     </table>
                                                 </div>
                                                 <div class="d-flex justify-content-end align-items-center">
-                                                    <button type="button" class="btn btn-light rounded text-dark  m-2 ms-2" title="Update Committee Member" data-bs-toggle="modal" 
-                                                    *ngIf="boothComityGenerl_Female?.boothcommitteeMembers?.length" (click)="updateBoothCommiteeMemberBtn(boothComityGenerl_Female)"
-                                                         data-bs-target="#AddBoothCommitteeModal"><i class="fas fa-edit"></i>
+                                                    <button type="button"
+                                                        class="btn btn-light rounded text-dark  m-2 ms-2"
+                                                        title="Update Committee Member" data-bs-toggle="modal"
+                                                        *ngIf="boothComityGenerl_Female?.boothcommitteeMembers?.length"
+                                                        (click)="updateBoothCommiteeMemberBtn(boothComityGenerl_Female)"
+                                                        data-bs-target="#AddBoothCommitteeModal"><i
+                                                            class="fas fa-edit"></i>
                                                     </button>
-                                                    
-                                                    <button type="button" class="btn btn-primary rounded m-2 ms-3" title="Add Committee Member"
-                                                    *ngIf="!boothComityGenerl_Female?.boothcommitteeMembers?.length"
-                                                        (click)="addBoothCommiteeMemberBtn(boothComityGenerl_Female)" data-bs-toggle="modal"
-                                                        data-bs-target="#AddBoothCommitteeModal"><i class="fas fa-plus"></i>
+
+                                                    <button type="button" class="btn btn-primary rounded m-2 ms-3"
+                                                        title="Add Committee Member"
+                                                        *ngIf="!boothComityGenerl_Female?.boothcommitteeMembers?.length"
+                                                        (click)="addBoothCommiteeMemberBtn(boothComityGenerl_Female)"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#AddBoothCommitteeModal"><i
+                                                            class="fas fa-plus"></i>
                                                     </button>
                                                 </div>
                                             </td>
@@ -189,8 +204,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <pagination-controls
-                                *ngIf="boothComtyMemberListArray?.length != 0 && getTotalPages > 1"
+                            <pagination-controls *ngIf="boothComtyMemberListArray?.length != 0 && getTotalPages > 1"
                                 previousLabel="" nextLabel="" (pageChange)="onClickPagintion($event)">
                             </pagination-controls>
                         </div>
@@ -206,223 +220,271 @@
     aria-labelledby="AddBoothCommitteeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
-                <div class="modal-header">
-                    <p class="modal-title mb-0" id="AddBoothCommitteeModalLabel">{{saveUpdateFlag == 'add' ?
-                        'Add Booth Committee Member' : 'Update Booth Committee Member'}}</p>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" #addCommitteeMemberModel
-                        aria-label="Close" (click)="removeBindData()"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-container">
-                                <div class="d-flex gap-2 align-items-center mb-1">
-                                    <div class="form-label mb-0">Booths :</div>
-                                    <div class="form-data">{{boothComityListObj?.boothName}} [{{boothComityListObj?.totalVoters ? boothComityListObj?.totalVoters : 0}}]</div>
+            <div class="modal-header">
+                <p class="modal-title mb-0" id="AddBoothCommitteeModalLabel">{{saveUpdateFlag == 'add' ?
+                    'Add Booth Committee Member' : 'Update Booth Committee Member'}}</p>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" #addCommitteeMemberModel
+                    aria-label="Close" (click)="removeBindData()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-container">
+                            <div class="d-flex gap-2 align-items-center mb-1">
+                                <div class="form-label mb-0">Booths :</div>
+                                <div class="form-data">{{boothComityListObj?.boothName}}
+                                    [{{boothComityListObj?.totalVoters ? boothComityListObj?.totalVoters : 0}}]</div>
+                            </div>
+                            <div class="d-flex gap-2 align-items-center mb-2">
+                                <div class="form-label mb-0">Area :</div>
+                                <div class="form-data">
+                                    <a class="text-main" *ngFor="let areaObj of voterAreaArray"
+                                        (click)="areaClick(areaObj)"><span
+                                            [ngClass]="{'text-secondary':areaObj?.areaId == areaObjforAdd?.areaId}"
+                                            *ngIf="areaObj.areaName">{{areaObj.areaName}},</span></a>
                                 </div>
-                                <div class="d-flex gap-2 align-items-center mb-2">
-                                    <div class="form-label mb-0">Area :</div>
-                                    <div class="form-data">
-                                            <a class="text-main" *ngFor="let areaObj of voterAreaArray"
-                                            (click)="areaClick(areaObj)"><span [ngClass]="{'text-secondary':areaObj?.areaId == areaObjforAdd?.areaId}" *ngIf="areaObj.areaName">{{areaObj.areaName}},</span></a>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-5">
-                                        <div class="card">
-                                            <div class="card-header bg-transparent">
-                                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                                    <div>
-                                                        Selected Area : <span class="fw-bold">{{areaObjforAdd?.areaName}}</span>
-                                                    </div>
-                                                    <div>
-                                                        <button type="button" class="btn btn-light border btn-sm"
-                                                            (click)="areaObjforAdd = '';clearBCForm();getSearchVoterBCGeneralAndFemale(boothIdforAdd)" *ngIf="areaObjforAdd?.areaName">
-                                                            <i class="fas fa-times"></i></button>
-                                                    </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <div class="card">
+                                        <div class="card-header bg-transparent">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <div>
+                                                    Selected Area : <span
+                                                        class="fw-bold">{{areaObjforAdd?.areaName}}</span>
                                                 </div>
-                                                <div class="input-group">
-                                                    <div class=" input-group">
-                                                        <input class="form-control" type="text" placeholder="Search Voter Name"
-                                                            [formControl]="voterSearch" (keyup)="onKeyUpSearchData()" />
-                                                        <button type="button" class="btn btn-light border btn-sm"
-                                                            (click)="voterSearch.setValue('');clearBCForm();getSearchVoterBCGeneralAndFemale(boothIdforAdd)" *ngIf="voterSearch.value">
-                                                            <i class="fas fa-times"></i></button>
-                                                        <button type="button" *ngIf="!voterSearch.value"
-                                                            class="btn btn-sm border btn-light"><i class="fas fa-search"></i></button>
-                                                    </div>
+                                                <div>
+                                                    <button type="button" class="btn btn-light border btn-sm"
+                                                        (click)="areaObjforAdd = '';clearBCForm();getSearchVoterBCGeneralAndFemale(boothIdforAdd)"
+                                                        *ngIf="areaObjforAdd?.areaName">
+                                                        <i class="fas fa-times"></i></button>
                                                 </div>
                                             </div>
-                                            <div class="card-body"> 
-                                                <!-- <div class="form-data text-end" (click)="addNewRecord()"> <a class="text-main" [ngClass]="{'text-secondary text-decoration-none': !disableBCFormValue}">Add New</a></div> -->
-                                                <div class="fixed-height1">
-                                                    <table class="table dashboard-table mb-0">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Sr. No.</th>
-                                                                <th>Voter No.</th>
-                                                                <th>Voter Name</th>
-                                                                <th>Action</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr *ngFor="let voterObj of boothComitySearchVoterArray; let i=index">
-                                                                <td>{{i+1}}</td>
-                                                                <td>{{voterObj?.voterNo}}</td>
-                                                                <td>{{voterObj?.englishName}}</td>
-                                                                <td><div class="btn-group">
-                                                                        <button type="button" class="btn btn-light rounded text-primary" [disabled]="voterObj?.disableFlag"
-                                                                        (click)="clearBCForm();AddVoterDetail(voterObj)" title="Add"><i class="fas fa-plus"></i></button>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="mt-2 text-end" *ngIf="boothComitySearchVoterArray?.length == 0">
-                                                    <div class="alert alert-danger text-center py-2">No Results Found!
-                                                    </div>
+                                            <div class="input-group">
+                                                <div class=" input-group">
+                                                    <input class="form-control" type="text"
+                                                        placeholder="Search Voter Name" [formControl]="voterSearch"
+                                                        (keyup)="onKeyUpSearchData()" />
+                                                    <button type="button" class="btn btn-light border btn-sm"
+                                                        (click)="voterSearch.setValue('');clearBCForm();getSearchVoterBCGeneralAndFemale(boothIdforAdd)"
+                                                        *ngIf="voterSearch.value">
+                                                        <i class="fas fa-times"></i></button>
+                                                    <button type="button" *ngIf="!voterSearch.value"
+                                                        class="btn btn-sm border btn-light"><i
+                                                            class="fas fa-search"></i></button>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-7">
-                                        <div class="card">
-                                            <div class="card-header bg-transparent">
-                                               <span> Selected Voter Details :</span>
-                                               <!-- <span class="float-end"><button type="button" class="btn btn-main" (click)="addNewRecord()" [disabled]="!disableBCFormValue">
-                                                Add New</button></span> -->
-                                            </div>
-                                            <div class="card-body">
-                                                <form [formGroup]="boothCommitteeForm">
-                                                <div>
-                                                <div class="row mb-3">
-                                                    <!-- <div class="col-sm-6">Name : {{voterClickObj?.englishName}}</div> 
-                                                    <div class="col-sm-3">VoterNo : {{voterClickObj?.voterNo}}</div>
-                                                    <div class="col-sm-3">Age : {{voterClickObj?.age}}</div> -->
-                                                    <div class="col-sm-3">
-                                                        <label class="form-label required-field">First Name</label>
-                                                        <input class="form-control" type="text" placeholder="First Name" maxlength="30"
-                                                            formControlName="fName" (keypress)="commonService.onlyAlphabets($event)" [ngClass]="{ 'is-invalid': submitted && b.fName.errors }">
-                                                        <div *ngIf="submitted && b.fName.errors" class="invalid-feedback">
-                                                            <span *ngIf="b.fName.errors.required">First Name is Required</span>
-                                                            <span *ngIf="b.fName.errors.pattern">Enter Valid First Name</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <label class="form-label">Middle Name</label>
-                                                        <input class="form-control" type="text" placeholder="Middle Name" maxlength="30"
-                                                            formControlName="mName" (keypress)="commonService.onlyAlphabets($event)"
-                                                            [ngClass]="{ 'is-invalid': submitted && b.mName.errors }">
-                                                        <div *ngIf="submitted && b.mName.errors" class="invalid-feedback">
-                                                            <span *ngIf="b.mName.errors.pattern">Enter Valid Middle Name</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <label class="form-label required-field">Last Name</label>
-                                                        <input class="form-control" type="text" placeholder="Last Name" maxlength="30"
-                                                            formControlName="lName" (keypress)="commonService.onlyAlphabets($event)"
-                                                            [ngClass]="{ 'is-invalid': submitted && b.lName.errors }">
-                                                        <div *ngIf="submitted && b.lName.errors" class="invalid-feedback">
-                                                            <span *ngIf="b.lName.errors.required">Last Name is Required</span>
-                                                            <span *ngIf="b.lName.errors.pattern">Enter Valid Last Name</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <label class="form-label required-field">Age</label>
-                                                        <input class="form-control" type="text" placeholder="Age"
-                                                            formControlName="age" (keypress)="commonService.acceptedOnlyNumbers($event)" maxlength="3"
-                                                            [ngClass]="{ 'is-invalid': submitted && b.age.errors }">
-                                                        <div *ngIf="submitted && b.age.errors" class="invalid-feedback">
-                                                            <span *ngIf="b.age.errors.required">Age is Required</span>
-                                                            <span *ngIf="b.age.errors.pattern">Enter Valid Age</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <div class="col-sm-4">
-                                                        <label class="form-label required-field">Gender</label>
-                                                        <div class="d-block">
-                                                            <div class="form-check form-check-inline" *ngFor="let genderObj of GenderArray">
-                                                                <input class="form-check-input" type="radio" formControlName="gender" [value]="genderObj.id" name="gender"
-                                                                [ngClass]="{ 'is-invalid': submitted && b.gender.errors }">
-                                                                <label class="form-check-label" for="rgender">{{genderObj.name}}</label>
-                                                            </div>
-                                                            <div *ngIf="submitted && b.gender.errors" class="invalid-feedback"> Gender is Required </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-sm-4">
-                                                        <!-- [readonly]="!voterClickObj"  -->
-                                                        <label class="form-label required-field">Mobile Number</label>
-                                                        <input type="text" class="form-control" placeholder="Mobile No."
-                                                            formControlName="mobileNo" 
-                                                            (keypress)="commonService.acceptedOnlyNumbers($event)" maxlength="10"
-                                                            [ngClass]="{ 'is-invalid': submitted && b.mobileNo.errors }">
-                                                        <div *ngIf="submitted && b.mobileNo.errors" class="invalid-feedback">
-                                                            <span *ngIf="b.mobileNo.errors.required">Mobile Number is required</span>
-                                                            <span *ngIf="b.mobileNo.errors.pattern">Enter valid 10-digit Mobile No.</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <!-- [disabled]="!voterClickObj" -->
-                                                        <label class="form-label required-field">Designation</label>
-                                                        <ngx-select [allowClear]="true" [items]="designationArray"
-                                                            formControlName="designationId" 
-                                                            optionValueField="id" optionTextField="designationName"
-                                                            placeholder="Select Designation"
-                                                            [ngClass]="{ 'is-invalid': submitted && b.designationId.errors }">
-                                                        </ngx-select>
-                                                        <div *ngIf="submitted && b.designationId.errors" class="invalid-feedback">
-                                                            Designation is required
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-sm-12 text-end mt-2">
-                                                        <button class="btn btn-secondary me-2" type="button" (click)="clearBCForm()">Clear</button>
-                                                        <button class="btn btn-main" type="submit" (click)="addBCMemberForm()">Add</button>
-                                                        <!-- [disabled]="!voterClickObj" -->
-                                                    </div>
-                                                </div>
-                                                </div>
-                                                </form>
-
+                                        <div class="card-body">
+                                            <!-- <div class="form-data text-end" (click)="addNewRecord()"> <a class="text-main" [ngClass]="{'text-secondary text-decoration-none': !disableBCFormValue}">Add New</a></div> -->
+                                            <div class="fixed-height1">
                                                 <table class="table dashboard-table mb-0">
                                                     <thead>
                                                         <tr>
-                                                            <!-- <th>Voter No.</th> -->
-                                                            <th>Name</th>
-                                                            <th>Designation</th>
-                                                            <th>Mobile No.</th>
+                                                            <th>Sr. No.</th>
+                                                            <th>Voter No.</th>
+                                                            <th>Voter Name</th>
                                                             <th>Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr *ngFor="let voterObj of pushVoterListArray; let i=index">
-                                                            <ng-container *ngIf="voterObj?.isdeleted != 1">
+                                                        <tr
+                                                            *ngFor="let voterObj of boothComitySearchVoterArray; let i=index">
+                                                            <td>{{i+1}}</td>
+                                                            <td>{{voterObj?.voterNo}}</td>
+                                                            <td>{{voterObj?.englishName}}</td>
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <button type="button"
+                                                                        class="btn btn-light rounded text-primary"
+                                                                        [disabled]="voterObj?.disableFlag"
+                                                                        (click)="clearBCForm();AddVoterDetail(voterObj)"
+                                                                        title="Add"><i class="fas fa-plus"></i></button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="mt-2 text-end" *ngIf="boothComitySearchVoterArray?.length == 0">
+                                                <div class="alert alert-danger text-center py-2">No Results Found!
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-7">
+                                    <div class="card">
+                                        <div class="card-header bg-transparent">
+                                            <span> Selected Voter Details :</span>
+                                            <!-- <span class="float-end"><button type="button" class="btn btn-main" (click)="addNewRecord()" [disabled]="!disableBCFormValue">
+                                                Add New</button></span> -->
+                                        </div>
+                                        <div class="card-body">
+                                            <form [formGroup]="boothCommitteeForm">
+                                                <div>
+                                                    <div class="row mb-3">
+                                                        <!-- <div class="col-sm-6">Name : {{voterClickObj?.englishName}}</div> 
+                                                    <div class="col-sm-3">VoterNo : {{voterClickObj?.voterNo}}</div>
+                                                    <div class="col-sm-3">Age : {{voterClickObj?.age}}</div> -->
+                                                        <div class="col-sm-3">
+                                                            <label class="form-label required-field">First Name</label>
+                                                            <input class="form-control" type="text"
+                                                                placeholder="First Name" maxlength="30"
+                                                                formControlName="fName"
+                                                                (keypress)="commonService.onlyAlphabets($event)"
+                                                                [ngClass]="{ 'is-invalid': submitted && b.fName.errors }">
+                                                            <div *ngIf="submitted && b.fName.errors"
+                                                                class="invalid-feedback">
+                                                                <span *ngIf="b.fName.errors.required">First Name is
+                                                                    Required</span>
+                                                                <span *ngIf="b.fName.errors.pattern">Enter Valid First
+                                                                    Name</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label class="form-label">Middle Name</label>
+                                                            <input class="form-control" type="text"
+                                                                placeholder="Middle Name" maxlength="30"
+                                                                formControlName="mName"
+                                                                (keypress)="commonService.onlyAlphabets($event)"
+                                                                [ngClass]="{ 'is-invalid': submitted && b.mName.errors }">
+                                                            <div *ngIf="submitted && b.mName.errors"
+                                                                class="invalid-feedback">
+                                                                <span *ngIf="b.mName.errors.pattern">Enter Valid Middle
+                                                                    Name</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label class="form-label required-field">Last Name</label>
+                                                            <input class="form-control" type="text"
+                                                                placeholder="Last Name" maxlength="30"
+                                                                formControlName="lName"
+                                                                (keypress)="commonService.onlyAlphabets($event)"
+                                                                [ngClass]="{ 'is-invalid': submitted && b.lName.errors }">
+                                                            <div *ngIf="submitted && b.lName.errors"
+                                                                class="invalid-feedback">
+                                                                <span *ngIf="b.lName.errors.required">Last Name is
+                                                                    Required</span>
+                                                                <span *ngIf="b.lName.errors.pattern">Enter Valid Last
+                                                                    Name</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label class="form-label required-field">Age</label>
+                                                            <input class="form-control" type="text" placeholder="Age"
+                                                                formControlName="age"
+                                                                (keypress)="commonService.acceptedOnlyNumbers($event)"
+                                                                maxlength="3"
+                                                                [ngClass]="{ 'is-invalid': submitted && b.age.errors }">
+                                                            <div *ngIf="submitted && b.age.errors"
+                                                                class="invalid-feedback">
+                                                                <span *ngIf="b.age.errors.required">Age is
+                                                                    Required</span>
+                                                                <span *ngIf="b.age.errors.pattern">Enter Valid
+                                                                    Age</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-sm-4">
+                                                            <label class="form-label required-field">Gender</label>
+                                                            <div class="d-block">
+                                                                <div class="form-check form-check-inline"
+                                                                    *ngFor="let genderObj of GenderArray">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        formControlName="gender" [value]="genderObj.id"
+                                                                        name="gender"
+                                                                        [ngClass]="{ 'is-invalid': submitted && b.gender.errors }">
+                                                                    <label class="form-check-label"
+                                                                        for="rgender">{{genderObj.name}}</label>
+                                                                </div>
+                                                                <div *ngIf="submitted && b.gender.errors"
+                                                                    class="invalid-feedback"> Gender is Required </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-4">
+                                                            <!-- [readonly]="!voterClickObj"  -->
+                                                            <label class="form-label required-field">Mobile
+                                                                Number</label>
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Mobile No." formControlName="mobileNo"
+                                                                (keypress)="commonService.acceptedOnlyNumbers($event)"
+                                                                maxlength="10"
+                                                                [ngClass]="{ 'is-invalid': submitted && b.mobileNo.errors }">
+                                                            <div *ngIf="submitted && b.mobileNo.errors"
+                                                                class="invalid-feedback">
+                                                                <span *ngIf="b.mobileNo.errors.required">Mobile Number
+                                                                    is required</span>
+                                                                <span *ngIf="b.mobileNo.errors.pattern">Enter valid
+                                                                    10-digit Mobile No.</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <!-- [disabled]="!voterClickObj" -->
+                                                            <label class="form-label required-field">Designation</label>
+                                                            <ngx-select [allowClear]="true" [items]="designationArray"
+                                                                formControlName="designationId" optionValueField="id"
+                                                                optionTextField="designationName"
+                                                                placeholder="Select Designation"
+                                                                [ngClass]="{ 'is-invalid': submitted && b.designationId.errors }">
+                                                            </ngx-select>
+                                                            <div *ngIf="submitted && b.designationId.errors"
+                                                                class="invalid-feedback">
+                                                                Designation is required
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-12 text-end mt-2">
+                                                            <button class="btn btn-secondary me-2" type="button"
+                                                                (click)="clearBCForm()">Clear</button>
+                                                            <button class="btn btn-main" type="submit"
+                                                                (click)="addBCMemberForm()">Add</button>
+                                                            <!-- [disabled]="!voterClickObj" -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                            <table class="table dashboard-table mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <!-- <th>Voter No.</th> -->
+                                                        <th>Name</th>
+                                                        <th>Designation</th>
+                                                        <th>Mobile No.</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let voterObj of pushVoterListArray; let i=index">
+                                                        <ng-container *ngIf="voterObj?.isdeleted != 1">
                                                             <!-- <td>{{voterObj?.voterNo ? voterObj?.voterNo : '-'}}</td> -->
                                                             <td>{{voterObj?.fullName ? voterObj?.fullName : '-'}}</td>
                                                             <td>
                                                                 <ng-container *ngFor="let design of designationArray">
-                                                                    <span *ngIf="design?.id == voterObj?.designationId">{{design?.designationName}}</span>
+                                                                    <span
+                                                                        *ngIf="design?.id == voterObj?.designationId">{{design?.designationName}}</span>
                                                                 </ng-container>
                                                             </td>
                                                             <td>{{voterObj?.mobileNo}}</td>
                                                             <td>
                                                                 <div class="btn-group">
-                                                                    <button type="button" title="Delete" (click)="deleteConfirmModel(i,voterObj)"
+                                                                    <button type="button" title="Delete"
+                                                                        (click)="deleteConfirmModel(i,voterObj)"
                                                                         class="btn btn-sm btn-light text-danger rounded">
                                                                         <i class="fas fa-trash-alt"></i>
                                                                     </button>
                                                                 </div>
                                                             </td>
                                                         </ng-container>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                                <div class="mt-2 text-end" *ngIf="pushVoterListArray?.length == 0 || voterAvailableOrNotinList() == false">
-                                                    <div class="alert alert-danger text-center py-2">No Results Found!
-                                                    </div>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="mt-2 text-end"
+                                                *ngIf="pushVoterListArray?.length == 0 || voterAvailableOrNotinList() == false">
+                                                <div class="alert alert-danger text-center py-2">No Results Found!
                                                 </div>
                                             </div>
                                         </div>
@@ -432,19 +494,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <div class="row w-100 gx-1">
-                        <div class="col-sm-10">Missing Areas : <small class="text-main" *ngFor="let areaObj of boothComityListObj?.boothcommitteeMissingArea"
-                            ><span *ngIf="areaObj?.hideAreaFlag != true">{{areaObj.areaName}},</span></small>
-                        </div> 
-                        <div class="col-sm-2">
-                            <div class="d-flex justify-content-between align-items-center float-end">
-                                <button type="button" [disabled]="!this.pushVoterListArray.length"
-                                    class="btn btn-main" (click)="onSubmitForm()">{{btnTextBoothComity}}</button>
-                            </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row w-100 gx-1">
+                    <div class="col-sm-10">Missing Areas : <small class="text-main"
+                            *ngFor="let areaObj of boothComityListObj?.boothcommitteeMissingArea"><span
+                                *ngIf="areaObj?.hideAreaFlag != true">{{areaObj.areaName}},</span></small>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="d-flex justify-content-between align-items-center float-end">
+                            <button type="button" [disabled]="!this.pushVoterListArray.length" class="btn btn-main"
+                                (click)="onSubmitForm()">{{btnTextBoothComity}}</button>
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
     </div>
 </div>
@@ -581,6 +645,3 @@
         </div>
     </div>
 </div> -->
-
-
-
