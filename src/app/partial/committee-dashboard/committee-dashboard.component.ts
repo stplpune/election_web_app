@@ -492,6 +492,7 @@ export class CommitteeDashboardComponent implements OnInit {
   svgVillageMapClick(status: string) {
     this.mapselected = 'tal';
     $(document).on('click', '#mapsvg2  path', (e: any) => {
+      this.topVilageName_MapClicked = e.target.dataset.name;
       let selectedTalId = ((e.currentTarget.id).split('d')[((e.currentTarget.id).split('d').length - 1)]);
       this.selectedTalId = selectedTalId;
       if (this.previousTalSelected != selectedTalId) { //constituenciesId == talukaId
@@ -499,7 +500,7 @@ export class CommitteeDashboardComponent implements OnInit {
         this.filteredTal = this.barChartBooths_vs_BoothcomityArray.filter((x: any) => x.constituenciesId == Number(selectedTalId));
         this.setSVGPath(this.selectedDistrictId, 'tal', this.filteredTal);
         this.callAllCommonApi('talukaClick');
-        this.topVilageName_MapClicked = this.filteredTal[0]?.constituencyName;
+        // this.topVilageName_MapClicked = this.filteredTal[0]?.constituencyName;
         this.columnChartHeadingName = this.filteredTal[0]?.constituencyName + ' ' + 'Booth Committee Formation progress';
         this.talukaCircle_MapClick(Number(selectedTalId));
       }

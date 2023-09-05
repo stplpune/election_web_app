@@ -207,7 +207,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                    <tr *ngFor="let localBodyObj of localBodyListArray  | paginate: {itemsPerPage: pageSize, 
+                                    <tr *ngFor="let localBodyObj of localBodyListArray  | paginate: {itemsPerPage: 10, 
                                         currentPage: paginationNo, totalItems:getTotal}; let i = index"
                                         [class.active]="localBodyObj?.id == editObjData?.id">
                                     <td>{{((paginationNo + 1) * 10 + i + 1)-20}}</td>

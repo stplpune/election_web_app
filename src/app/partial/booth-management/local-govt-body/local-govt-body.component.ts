@@ -300,7 +300,7 @@ export class LocalGovtBodyComponent implements OnInit {
   }
 
   getVillageCity(flag?:any,editObj?:any) { // vilage & City Api
-    let obj = (flag == 'filter' ? (this.f['talukaId'].value || 0) + '&DistrictId=' + this.f['districtId'].value + '&Istown=' + this.f['isRural'].value : (this.g['talukaId'].value || 2) + '&Istown=' + this.g['isRural'].value + '&DistrictId=' + this.g['districtId'].value);
+    let obj = (flag == 'filter' ? (this.f['talukaId'].value || 0) + '&DistrictId=' + this.f['districtId'].value + '&Istown=' + this.f['isRural'].value : (this.g['talukaId'].value || 0) + '&Istown=' + this.g['isRural'].value + '&DistrictId=' + this.g['districtId'].value);
     this.callAPIService.setHttp('get', 'Filter/GetVillageList?TalukaId=' + obj, false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
