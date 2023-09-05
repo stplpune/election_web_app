@@ -154,7 +154,7 @@
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
-                        <div class="card card-body shadow-none border py-2 px-3 mb-2 mem-list"
+                        <div class="card border-outline card-body shadow-none border py-2 px-3 mb-2 mem-list"
                             *ngFor="let designatedMembers of allDesignatedMembers">
                             <div class="mb-0 fw-bold mt-1 text-danger" *ngIf="designatedMembers.MemberName == ''">
                                 <p class="mem-name">No Member Assigned</p>
@@ -170,7 +170,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-7">
                                     <div *ngIf="designatedMembers.MemberName != ''">
                                         <p class="mem-name text-primary"><a
                                                 (click)="redToMemberProfile(designatedMembers.UserId, designatedMembers.MemberName)">{{designatedMembers?.MemberName}}
@@ -190,7 +190,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="col-sm-12 text-end">
                                         <div class="btn-group btn-group-sm" role="group" aria-label="Action Buttons">
                                             <button *ngIf="designatedMembers.MemberName"
