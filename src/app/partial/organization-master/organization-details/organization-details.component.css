@@ -1,3 +1,81 @@
+.mem-list .btn {
+    font-size: 0.8rem;}
+
+#stats {
+    padding-inline: 30px;
+}
+
+#stats h3,
+#stats p {
+    margin-bottom: 0px;
+}
+
+#stats .primary {
+    border: solid 1px #2E5EE1;
+    border-radius: 10px;
+    position: relative;
+    padding-inline: 35px;
+}
+
+#stats .primary i {
+    background-color: #2E5EE1;
+
+}
+
+#stats .primary i,
+#stats .velvet i,
+#stats .green i,
+#stats .red i {
+    position: absolute;
+    color: white;
+    padding: 13px;
+    border-radius: 10px;
+    left: -22px;
+    top: 23px;
+}
+
+/* voilet */
+#stats .velvet {
+    border: solid 1px #463AFD;
+    border-radius: 10px;
+    position: relative;
+    padding-inline: 35px;
+}
+
+#stats .velvet i {
+    background-color: #463AFD;
+}
+
+
+/* orange */
+#stats .green {
+    border: solid 1px #6D7E00;
+    border-radius: 10px;
+    padding-inline: 35px;
+    position: relative;
+}
+
+#stats .green i {
+    background-color: #6D7E00;
+}
+
+/* blue */
+#stats .red {
+    border: solid 1px #FE5656;
+    border-radius: 10px;
+    position: relative;
+    padding-inline: 35px;
+}
+
+#stats .red i {
+    background-color: #FE5656;
+}
+
+.commitee-list ol li {
+    line-height: 2rem;
+}
+
+
 agm-map {
     height: 300px;
 }
