@@ -972,6 +972,6 @@ export class CommitteeDashboardComponent implements OnInit {
 }
 
 //  constituenciesId = districtId , constituencyName = districtName , totalBooths = boothCommittee
-
+// IsPc == 0 PC  && 1 is AC
 //  Api name Resp :: BoothCommitteeDashboard/GetPastElectionName ==>  electionTypeId == 3 is PC 2 Is AC
 
