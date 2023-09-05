@@ -118,19 +118,22 @@
                         <div class="card-header border-bottom bg-transparent text-center">
                             <i class="fas fa-users"></i>
                              Total Members
-                             <span class="form-data">2</span>
+                             <span class="form-data">{{TotalWorkAndIosCount?.IndividualTotalExecutives ?
+                                TotalWorkAndIosCount?.IndividualTotalExecutives : '0'}}</span>
                         </div>
                         <div class="card-body p-3 texxt-center p-0">
                             <div class="row text-center">
                                 <div class="col-sm-6 border-end">
                                     <i class="fas fa-user-check"></i>
                                      Active Members 
-                                     <span class="form-data">2</span>
+                                     <span class="form-data">{{TotalWorkAndIosCount?._IndiActiveMember ?
+                                        TotalWorkAndIosCount?._IndiActiveMember : '0'}}</span>
                                 </div>
                                 <div class="col-sm-6">
                                     <i class="fas fa-user-times"></i>
                                      In-Active Members
-                                     <span class="form-data">2</span>
+                                     <span class="form-data">{{TotalWorkAndIosCount?._IndiInActiveMember ?
+                                        TotalWorkAndIosCount?._IndiInActiveMember : '0'}}</span>
                                 </div>
                             </div>
                         </div>
