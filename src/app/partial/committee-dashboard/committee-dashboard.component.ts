@@ -373,7 +373,7 @@ export class CommitteeDashboardComponent implements OnInit {
     setTimeout(() => {
       this.bCFormationCountArray?.find((element: any) => {
         $('#mapsvg1  path[id="' + element.constituenciesId + '"]').addClass('clicked');
-        $('#mapsvg1  #' + element.constituencyName).text(element.totalBooths)
+        $('#mapsvg1  #' + element.constituencyName).text(element.totalBoothCommittee)
       });
     }, 500);
   }
@@ -604,7 +604,7 @@ export class CommitteeDashboardComponent implements OnInit {
     setTimeout(() => {
       arr.find((element: any) => { //talukaId
         $('#mapsvg2  path[id="' + element?.constituenciesId + '"]').addClass('clicked');
-        $('#mapsvg2  #' + element?.constituenciesId).text(element?.totalBooths)
+        $('#mapsvg2  #' + element?.constituenciesId).text(element?.totalBoothCommittee)
       });
     }, 500);
   }
