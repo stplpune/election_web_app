@@ -1,0 +1,594 @@
+<div class="container-fluid">
+  <div class="row mx-0 px-0" id="pageheader">
+    <div class="col-sm-auto">
+      <span class="page-name">Local Government Body </span>
+    </div>
+  </div>
+
+  <div class="row chartbox">
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-header">Add Local Government Body</div>
+        <div class="card-body pt-0">
+          <form [formGroup]="localGovBodyForm">
+            <div class="form-container">
+              <div class="mb-2">
+                <label for="" class="form-label required-field"
+                  >Constituency Name</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Constituency Name"
+                  formControlName="constituencyName"
+                  (keypress)="
+                    commonService.noFirstSpaceAllow($event);
+                    commonService.alphaNumericWithSpaces($event)
+                  "
+                  maxlength="50"
+                  [ngClass]="{
+                    'is-invalid': submitted && g.constituencyName.errors
+                  }"
+                />
+                <div
+                  *ngIf="submitted && g.constituencyName.errors"
+                  class="invalid-feedback"
+                >
+                  <span *ngIf="g.constituencyName.errors.required"
+                    >Constituency Name is Required</span
+                  >
+                  <span *ngIf="g.constituencyName.errors.pattern"
+                    >Please Enter Valid Constituency Name</span
+                  >
+                </div>
+              </div>
+              <div class="mb-2">
+                <label for="" class="form-label required-field">Category</label>
+                <ngx-select
+                  [allowClear]="true"
+                  [items]="categoryArray"
+                  formControlName="categoryId"
+                  optionValueField="id"
+                  optionTextField="categoryType"
+                  placeholder="Select Category"
+                  [ngClass]="{ 'is-invalid': submitted && g.categoryId.errors }"
+                >
+                </ngx-select>
+                <div
+                  *ngIf="submitted && g.categoryId.errors"
+                  class="invalid-feedback"
+                >
+                  Category is Required
+                </div>
+              </div>
+              <div class="mb-2">
+                <label for="" class="form-label required-field">Type</label>
+                <div class="d-flex gap-3">
+                  <div
+                    class="form-check"
+                    *ngFor="let array of urbanRuralTypeArray"
+                  >
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      [value]="array.id"
+                      (change)="selectionType(array.id)"
+                      formControlName="isRural"
+                    />
+                    <label class="form-check-label">{{ array?.name }}</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row gx-2 mb-2">
+                <div class="col-sm-6">
+                  <label class="form-label required-field">State</label>
+                  <ngx-select
+                    [allowClear]="true"
+                    (remove)="clearLGBFilterForm('state')"
+                    [items]="stateArray"
+                    formControlName="stateId"
+                    [disabled]="stateArray?.length == 1"
+                    (select)="clearLGBFilterForm('state'); getDivision('govt')"
+                    placeholder="Select State"
+                    optionValueField="id"
+                    optionTextField="stateName"
+                    [ngClass]="{ 'is-invalid': submitted && g.stateId.errors }"
+                  >
+                  </ngx-select>
+                  <div
+                    *ngIf="submitted && g.stateId.errors"
+                    class="invalid-feedback"
+                  >
+                    State is Required
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <label for="" class="form-label" required-field
+                    >Division</label
+                  >
+                  <ngx-select
+                    [allowClear]="true"
+                    [items]="divisionGovtArray"
+                    formControlName="divisionId"
+                    [disabled]="
+                      divisionGovtArray?.length == 1 || !g['stateId'].value
+                    "
+                    optionValueField="divisionId"
+                    optionTextField="divisionName"
+                    (select)="
+                      clearLGBFilterForm('division'); getDistrict('govt')
+                    "
+                    (remove)="clearLGBFilterForm('division')"
+                    placeholder="Select Division"
+                    [ngClass]="{
+                      'is-invalid': submitted && g.divisionId.errors
+                    }"
+                  >
+                  </ngx-select>
+                  <div
+                    *ngIf="submitted && g.divisionId.errors"
+                    class="invalid-feedback"
+                  >
+                    Division is Required
+                  </div>
+                </div>
+              </div>
+
+              <div class="row gx-2 mb-2">
+                <div class="col-sm-6">
+                  <label for="" class="form-label required-field"
+                    >District</label
+                  >
+                  <ngx-select
+                    [allowClear]="true"
+                    [items]="districtGovtArray"
+                    formControlName="districtId"
+                    [disabled]="
+                      districtGovtArray?.length == 1 || !g['divisionId'].value
+                    "
+                    optionValueField="districtId"
+                    optionTextField="districtName"
+                    (select)="
+                      clearLGBFilterForm('district'); districtSelect('govt')
+                    "
+                    (remove)="clearLGBFilterForm('district')"
+                    placeholder="Select District"
+                    [ngClass]="{
+                      'is-invalid': submitted && g.districtId.errors
+                    }"
+                  >
+                  </ngx-select>
+                  <div
+                    *ngIf="submitted && g.districtId.errors"
+                    class="invalid-feedback"
+                  >
+                    District is Required
+                  </div>
+                </div>
+                <div class="col-sm-6" *ngIf="g['isRural'].value != 1">
+                  <label for="" class="form-label required-field">Taluka</label>
+                  <ngx-select
+                    [allowClear]="true"
+                    [items]="talukaGovtArray"
+                    formControlName="talukaId"
+                    [disabled]="
+                      talukaGovtArray?.length == 1 || !g['districtId'].value
+                    "
+                    optionValueField="talukaId"
+                    optionTextField="talukaName"
+                    (select)="
+                      clearLGBFilterForm('taluka'); getVillageCity('govt')
+                    "
+                    (remove)="clearLGBFilterForm('taluka')"
+                    placeholder="Select Taluka"
+                    [ngClass]="{ 'is-invalid': submitted && g.talukaId.errors }"
+                  >
+                  </ngx-select>
+                  <div
+                    *ngIf="submitted && g.talukaId.errors"
+                    class="invalid-feedback"
+                  >
+                    Taluka is Required
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="txtSearchAssembly" class="form-label required-field"
+                  >Village / City</label
+                >
+                <div class="card border shadow-none">
+                  <div
+                    class="card-header d-flex justify-content-between w-100 border-bottom p-0 py-1"
+                  >
+                    <input
+                      type="text"
+                      formControlName="village_CityId"
+                      [readOnly]="
+                        (g['isRural'].value == 0 && !g['talukaId'].value) ||
+                        (g['isRural'].value == 1 && !g['districtId'].value)
+                      "
+                      [(ngModel)]="villageGovtObj"
+                      placeholder="Search Village / City"
+                      class="form-control form-control-sm border-0"
+                    />
+                  </div>
+                  <ng-container
+                    *ngIf="
+                      (g['isRural'].value == 0 && g['talukaId'].value) ||
+                      (g['isRural'].value == 1 && g['districtId'].value)
+                    "
+                  >
+                    <div
+                      class="card-body py-2 form-height ChekBox"
+                      *ngIf="
+                        villageCityGovtArray
+                          | filter : villageGovtObj as villageGovtResult
+                      "
+                    >
+                      <div
+                        class="form-check"
+                        *ngFor="let villageObj of villageGovtResult"
+                      >
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          (change)="onClickCheckBox($event, villageObj)"
+                          [checked]="villageObj.checked == true"
+                        />
+                        <label class="form-check-label" for="flexCheckDefault">
+                          {{ villageObj.villageName }}
+                        </label>
+                      </div>
+                      <div *ngIf="villageGovtResult.length === 0">
+                        <div class="alert alert-danger text-center py-2">
+                          No Results Found!
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="d-flex justify-content-between">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  (click)="clearForm()"
+                >
+                  Clear
+                </button>
+                <button type="submit" class="btn btn-main" (click)="onSubmit()">
+                  {{ g["id"].value == 0 ? "Add" : "Update" }} Local Body
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-8">
+      <div class="card">
+        <div class="card-header">
+          <form [formGroup]="filterForm">
+            <div class="row g-2 mb-2">
+              <div class="col-sm-3">
+                <ngx-select
+                  [allowClear]="true"
+                  [items]="urbanRuralTypeArray"
+                  formControlName="isRural"
+                  optionValueField="id"
+                  optionTextField="name"
+                  (select)="
+                    clearFilter('state'); getConstituencymastercommittee()
+                  "
+                  (remove)="f['isRural'].setValue(2); clearFilter('state')"
+                  placeholder="Select Type"
+                >
+                </ngx-select>
+              </div>
+              <div class="col-sm-3">
+                <ngx-select
+                  [allowClear]="true"
+                  (remove)="clearFilter('state')"
+                  [items]="stateArray"
+                  formControlName="stateId"
+                  [disabled]="stateArray?.length == 1"
+                  (select)="clearFilter('state'); getDivision('filter')"
+                  placeholder="Select State"
+                  optionValueField="id"
+                  optionTextField="stateName"
+                >
+                </ngx-select>
+              </div>
+              <div class="col-sm-3">
+                <ngx-select
+                  [allowClear]="true"
+                  [items]="divisionFilterArray"
+                  formControlName="divisionId"
+                  [disabled]="
+                    divisionFilterArray?.length == 1 || !f['stateId'].value
+                  "
+                  optionValueField="divisionId"
+                  optionTextField="divisionName"
+                  (select)="clearFilter('division'); getDistrict('filter')"
+                  (remove)="clearFilter('division')"
+                  placeholder="Select Division"
+                >
+                </ngx-select>
+              </div>
+              <div class="col-sm-3">
+                <ngx-select
+                  [allowClear]="true"
+                  [items]="districtFilterArray"
+                  formControlName="districtId"
+                  [disabled]="
+                    districtFilterArray?.length == 1 || !f['divisionId'].value
+                  "
+                  optionValueField="districtId"
+                  optionTextField="districtName"
+                  (select)="clearFilter('district'); districtSelect('filter')"
+                  (remove)="clearFilter('district')"
+                  placeholder="Select District"
+                >
+                </ngx-select>
+              </div>
+            </div>
+
+            <div class="row g-2 mb-2">
+              <div class="col-sm-3" *ngIf="f['isRural'].value == 0">
+                <ngx-select
+                  [allowClear]="true"
+                  [items]="talukaFilterArray"
+                  formControlName="talukaId"
+                  [disabled]="
+                    talukaFilterArray?.length == 1 || !f['districtId'].value
+                  "
+                  optionValueField="talukaId"
+                  optionTextField="talukaName"
+                  (select)="clearFilter('taluka'); getVillageCity('filter')"
+                  (remove)="clearFilter('taluka')"
+                  placeholder="Select Taluka"
+                >
+                </ngx-select>
+              </div>
+              <div class="col-sm-3">
+                <ngx-select
+                  [allowClear]="true"
+                  [items]="villageCityFilterArray"
+                  formControlName="villageId"
+                  [disabled]="
+                    (f['isRural'].value == 0 && !f['talukaId'].value) ||
+                    (f['isRural'].value == 1 && !f['districtId'].value)
+                  "
+                  optionTextField="villageName"
+                  (select)="clearFilter('village')"
+                  (remove)="clearFilter('village')"
+                  optionValueField="villageId"
+                  placeholder="Select Village"
+                >
+                </ngx-select>
+              </div>
+              <div class="col-sm-3">
+                <ngx-select
+                  [allowClear]="true"
+                  [items]="categoryArray"
+                  formControlName="categoryId"
+                  optionValueField="id"
+                  optionTextField="categoryType"
+                  (select)="clearFilter()"
+                  (remove)="clearFilter()"
+                  placeholder="Select Category"
+                >
+                </ngx-select>
+              </div>
+              <div class="col-sm-3">
+                <div class="input-group">
+                  <div class="input-group">
+                    <input
+                      class="form-control"
+                      type="text"
+                      placeholder="Search..."
+                      formControlName="SearchText"
+                      (keyup)="onKeyUpSearchData()"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-light border btn-sm"
+                      (click)="clearFilter('search')"
+                      *ngIf="filterForm.value.SearchText"
+                    >
+                      <i class="fas fa-times"></i>
+                    </button>
+                    <button
+                      type="button"
+                      *ngIf="!filterForm.value.SearchText"
+                      class="btn btn-sm border btn-light"
+                    >
+                      <i class="fas fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="card-body pt-0">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Sr. No.</th>
+                  <!-- Consitution/Assembly Name -->
+                  <th>Constituency Name</th>
+                  <th>Category</th>
+                  <th>Type</th>
+                  <th>District</th>
+                  <th *ngIf="f['isRural'].value == 0">Taluka</th>
+                  <th>Village/City Count</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let localBodyObj of localBodyListArray
+                      | paginate
+                        : {
+                            itemsPerPage: 10,
+                            currentPage: paginationNo,
+                            totalItems: getTotal
+                          };
+                    let i = index
+                  "
+                  [class.active]="localBodyObj?.id == editObjData?.id"
+                >
+                  <td>{{ (paginationNo + 1) * 10 + i + 1 - 20 }}</td>
+                  <td>
+                    {{
+                      localBodyObj?.constituencyName
+                        ? localBodyObj?.constituencyName
+                        : "-"
+                    }}
+                  </td>
+                  <td>
+                    {{
+                      localBodyObj?.categoryType
+                        ? localBodyObj.categoryType
+                        : "-"
+                    }}
+                  </td>
+                  <td>{{ localBodyObj?.isRural == 0 ? "Rural" : "Urban" }}</td>
+                  <td>
+                    {{
+                      localBodyObj
+                        ?.getAssignVillagestoConstituencyCommitteeList[0]
+                        ?.districtName
+                        ? localBodyObj
+                            ?.getAssignVillagestoConstituencyCommitteeList[0]
+                            ?.districtName
+                        : "-"
+                    }}
+                  </td>
+                  <td *ngIf="f['isRural'].value == 0">
+                    {{
+                      localBodyObj
+                        ?.getAssignVillagestoConstituencyCommitteeList[0]
+                        ?.talukaName
+                        ? localBodyObj
+                            ?.getAssignVillagestoConstituencyCommitteeList[0]
+                            ?.talukaName
+                        : "-"
+                    }}
+                  </td>
+                  <td>
+                    <a
+                      class="text-main"
+                      data-bs-toggle="modal"
+                      data-bs-target="#exampleModal"
+                      *ngIf="
+                        localBodyObj
+                          ?.getAssignVillagestoConstituencyCommitteeList?.length
+                      "
+                      (click)="
+                        showVillageTalukaList(
+                          localBodyObj?.getAssignVillagestoConstituencyCommitteeList
+                        )
+                      "
+                      >{{
+                        localBodyObj
+                          ?.getAssignVillagestoConstituencyCommitteeList?.length
+                      }}</a
+                    >
+                    <span
+                      *ngIf="
+                        !localBodyObj
+                          ?.getAssignVillagestoConstituencyCommitteeList?.length
+                      "
+                      >0</span
+                    >
+                    <!-- <span>
+                                            <button type="button" title="show details" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                (click)="showVillageTalukaList(localBodyObj?.getAssignVillagestoConstituencyCommitteeList)"
+                                                class="btn btn-sm btn-light text-edit me-1 rounded">
+                                                <i class="far fa-eye"></i>
+                                            </button>
+                                        </span> -->
+                  </td>
+                  <td>
+                    <div class="btn-group">
+                      <button
+                        type="button"
+                        title="Edit Constituency"
+                        (click)="patchFormData(localBodyObj)"
+                        class="btn btn-sm btn-light text-edit me-1 rounded"
+                      >
+                        <i class="far fa-edit"></i>
+                      </button>
+                      <button
+                        type="button"
+                        title="Delete Constituency"
+                        class="btn btn-sm btn-light text-danger rounded"
+                        (click)="deleteConfirmModel(localBodyObj?.id)"
+                      >
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-2 text-end" *ngIf="localBodyListArray?.length == 0">
+            <div class="alert alert-danger text-center py-2">
+              No Results Found!
+            </div>
+          </div>
+          <pagination-controls
+            *ngIf="localBodyListArray?.length != 0"
+            previousLabel=""
+            nextLabel=""
+            (pageChange)="onClickPagintion($event)"
+          >
+          </pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Talulka/Village Name</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <ul>
+          <li *ngFor="let details of villageTalukaDetailsList">
+            {{ details?.villageName }}
+          </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

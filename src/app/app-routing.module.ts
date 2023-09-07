@@ -68,11 +68,12 @@ const routes: Routes = [
       { path: 'assign-taluka-to-assembly', loadChildren: () => import('./partial/booth-management/assign-taluka-to-assembly/assign-taluka-to-assembly.module').then(m => m.AssignTalukaToAssemblyModule), data: { title: 'Assign Taluka to Assembly', allowedRoles: ['1', '2', '7', '8'] } },
 
       { path: 'leader-details/:id', loadChildren: () => import('./partial/committee-dashboard/leader-details/leader-details.module').then(m => m.LeaderDetailsModule), data: { title: 'Important Leader Details', allowedRoles: ['1', '2', '7', '8'] }  },
-      { path: 'past-election-result', loadChildren: () => import('./partial/booth-management/past-election-result/past-election-result.module').then(m => m.PastElectionResultModule), data: { title: 'Important Leader Details', allowedRoles: ['1', '2', '7', '8']}},
+      { path: 'past-election-result', loadChildren: () => import('./partial/booth-management/past-election-result/past-election-result.module').then(m => m.PastElectionResultModule), data: { title: 'Past Election Result', allowedRoles: ['1', '2', '7', '8']}},
+
+      { path: 'constituency-master-committee', loadChildren: () => import('./partial/booth-management/constituency-master-committee/constituency-master-committee.module').then(m => m.ConstituencyMasterCommitteeModule), data: { title: 'Constituency Master Committee', allowedRoles: ['1', '2', '7', '8']} },
     ]
   },
   { path: '500', component: ServerErrorComponent },
-
   { path: '**', component: PageNotFoundComponent },
 ];
 
