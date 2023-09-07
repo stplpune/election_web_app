@@ -339,6 +339,11 @@ export class CommonService {
         } 
     }
 
+    alphaNumericWithSpaces(event: any) {
+        const maskSeperator = new RegExp('^([a-zA-Z0-9 ])', 'g');
+        return maskSeperator.test(event.key);
+    }
+
     mapRegions(): Observable<any> {
         this.regions_m = {
             'path3109': {
