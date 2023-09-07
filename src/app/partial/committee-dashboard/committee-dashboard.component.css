@@ -60,7 +60,15 @@
 #topheader .warning {
   color: #E26011;
 }
-
+#topheader{
+  position: sticky !important;
+  width: calc(100% + 25px);
+  top: 56px !important;
+  z-index: 2;
+  background-color: #f0f2fb;
+  padding: 8px 0;
+  margin-inline: -15px;
+}
 #stats {
   box-shadow: 2px 2px 20px #00000024;
   border-radius: 10px;
