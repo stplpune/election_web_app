@@ -35,6 +35,7 @@ import { ActivityDetailsComponent } from './partial/dialogs/activity-details/act
 import { RecentPostDetailsComponent } from './partial/dialogs/recent-post-details/recent-post-details.component';
 import { AddCommitteeComponent } from './partial/dialogs/add-committee/add-committee.component';
 import { LightboxModule } from '@ngx-gallery/lightbox';
+import { ConstituencyMasterCommitteeComponent } from './constituency-master-committee/constituency-master-committee.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { LightboxModule } from '@ngx-gallery/lightbox';
     ActivityDetailsComponent,
     RecentPostDetailsComponent,
     AddCommitteeComponent,
-    GeoFanceComponent
+    GeoFanceComponent,
+    ConstituencyMasterCommitteeComponent
   ],
   imports: [
     BrowserModule,
