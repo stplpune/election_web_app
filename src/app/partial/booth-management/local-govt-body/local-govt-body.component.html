@@ -18,7 +18,7 @@
                         <div class="mb-2">
                             <label for="" class="form-label required-field">Constituency Name</label>
                             <input type="text" class="form-control" placeholder="Constituency Name" formControlName="constituencyName"
-                            (keypress)="commonService.noFirstSpaceAllow($event)" maxlength="50"
+                            (keypress)="commonService.noFirstSpaceAllow($event);commonService.alphaNumericWithSpaces($event)" maxlength="50"
                             [ngClass]="{ 'is-invalid': submitted && g.constituencyName.errors }">
                         <div *ngIf="submitted && g.constituencyName.errors" class="invalid-feedback">
                             <span *ngIf="g.constituencyName.errors.required">Constituency Name is Required</span>
