@@ -93,7 +93,7 @@
                                 <label for="txtBodyName" class="form-label required-field">Committee Name</label>
                                 <input type="text" class="form-control" id="txtBodyName" placeholder="Committee Name"
                                     formControlName="BodyOrgCellName"
-                                    (keypress)="commonService.noFirstSpaceAllow($event)"
+                                    (keypress)="commonService.noFirstSpaceAllow($event);commonService.alphaNumericWithSpaces($event)"
                                     [ngClass]="{ 'is-invalid': submitted && f.BodyOrgCellName.errors }">
                                 <div *ngIf="submitted && f.BodyOrgCellName.errors" class="invalid-feedback">
                                     <div *ngIf="f.BodyOrgCellName.errors.required">Committee name is required</div>
