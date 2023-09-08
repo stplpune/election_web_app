@@ -74,6 +74,8 @@ const routes: Routes = [
     ]
   },
   { path: '500', component: ServerErrorComponent },
+  { path: 'ac-to-pc', loadChildren: () => import('./partial/booth-management/ac-to-pc/ac-to-pc.module').then(m => m.AcToPcModule) },
+  { path: 'booth-list', loadChildren: () => import('./partial/booth-management/booth-list/booth-list.module').then(m => m.BoothListModule) },
   { path: '**', component: PageNotFoundComponent },
 ];
 
