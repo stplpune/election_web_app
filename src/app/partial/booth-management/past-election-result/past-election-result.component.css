@@ -1,0 +1,21 @@
+/* .dash-table,
+.modal-table {
+  border: 1px solid #1809f1fe !important;
+} */
+.dash-table thead th,
+.modal-table thead th{
+  background-color: #463AFD21 !important;
+  border-bottom: none !important;
+}
+
+.resultfilter{
+  border: 1px solid #463AFD !important;
+}
+
+.btnsave{
+  background-color: #463AFD !important;
+}
+.btncancel{
+  border: 1px solid #463AFD !important;
+  color: #463AFD !important;
+}
