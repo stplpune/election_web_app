@@ -28,7 +28,7 @@ export class BoothCommitteeComponent implements OnInit {
   dataNotFound: boolean = false;
   missingAreaData: any;
   assignVoterObj: any;
-  filterForm!: FormGroup;
+  filterForm!: FormGroup | any;
   stateArray: any;
   divisionArray: any;
   districtArray: any;
@@ -47,6 +47,8 @@ export class BoothCommitteeComponent implements OnInit {
   boothComitySearchVoterArray: any;
   designationArray: any;
   urlCommityDashboardData:any;
+
+  onChange_Assembly_VillageArray = [{ id: 1, name: "Taluka" }, { id: 2, name: "Assembly" }];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -95,7 +97,12 @@ export class BoothCommitteeComponent implements OnInit {
       TalukaId: [''],
       VillageId: [''],
       BoothId: [''],
+      isAssemblyVillage: [''],
     })
+  }
+
+  onChangeAss_Village(){
+    
   }
 
   getState() {
@@ -136,7 +143,8 @@ export class BoothCommitteeComponent implements OnInit {
   }
 
   getTaluka() {
-    this.callAPIService.setHttp('get', 'Filter/GetAllTaluka?DistrictId=' + (this.f['DistrictId'].value || 0) + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionMicroServiceForWeb');
+    this.callAPIService.setHttp('get', 'Filter/GetAllTaluka_1_0?DistrictId=' + (this.f['DistrictId'].value || 0) + '&UserId=' + this.commonService.loggedInUserId()
+   +'&IsHaveTaluka=' + (this.f['isAssemblyVillage'].value || 0), false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.talkaArray = res.responseData;
@@ -148,7 +156,8 @@ export class BoothCommitteeComponent implements OnInit {
   }
 
   getVillage() {
-    this.callAPIService.setHttp('get', 'Filter/GetAllVillages?TalukaId=' + (this.f['TalukaId'].value || 0) + '&UserId=' + this.commonService.loggedInUserId(), false, false, false, 'electionMicroServiceForWeb');
+    this.callAPIService.setHttp('get', 'Filter/GetAllVillages_1_0?TalukaId=' + (this.f['TalukaId'].value || 0) + '&UserId=' + this.commonService.loggedInUserId()
+    + '&IsHaveTaluka=' + (this.f['isAssemblyVillage'].value || 0), false, false, false, 'electionMicroServiceForWeb');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.villageArray = res.responseData;
@@ -160,8 +169,8 @@ export class BoothCommitteeComponent implements OnInit {
   }
 
   getBooth() {
-    let obj = '&ClientId=' + this.localStorageData?.ClientId + '&VillageId=' + (this.f['VillageId'].value || 0);
-    this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/GetBoothDetailsMaterState?TalukaId=' + (this.f['TalukaId'].value || 0) + '&UserId=' + this.commonService.loggedInUserId() + obj, false, false, false, 'electionMicroSerApp');
+    let obj = '&ClientId=' + this.localStorageData?.ClientId + '&VillageId=' + (this.f['VillageId'].value || 0) +'&IsHaveTaluka=' + (this.f['isAssemblyVillage'].value || 0);
+    this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/GetBoothDetailsMaterState_1_0?TalukaId=' + (this.f['TalukaId'].value || 0) + '&UserId=' + this.commonService.loggedInUserId() + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.boothArray = res.responseData;
@@ -179,14 +188,22 @@ export class BoothCommitteeComponent implements OnInit {
       this.f['TalukaId'].setValue('');
       this.f['VillageId'].setValue('');
       this.f['BoothId'].setValue('');
+      this.f['isAssemblyVillage'].setValue('');
       this.dataNotFound = false;
     } else if (flag == 'division') {
       this.f['DistrictId'].setValue('');
       this.f['TalukaId'].setValue('');
       this.f['VillageId'].setValue('');
       this.f['BoothId'].setValue('');
+      this.f['isAssemblyVillage'].setValue('');
       this.dataNotFound = false;
     } else if (flag == 'district') {
+      this.f['TalukaId'].setValue('');
+      this.f['VillageId'].setValue('');
+      this.f['BoothId'].setValue('');
+      this.f['isAssemblyVillage'].setValue('');
+      this.dataNotFound = false;
+    } else if (flag == 'isAssemblyVillage') {
       this.f['TalukaId'].setValue('');
       this.f['VillageId'].setValue('');
       this.f['BoothId'].setValue('');
@@ -221,7 +238,8 @@ export class BoothCommitteeComponent implements OnInit {
     let obj = this.localStorageData?.ClientId + '&TalukaId=' + (this.filterForm.value.TalukaId || 0)
       + '&VillageId=' + (this.filterForm.value.VillageId || 0) + '&BoothId=' + (this.filterForm.value.BoothId || 0) + '&AreaId=' + 0
       + '&IsPresident=' + 0 + '&CommitteeTypeId=' + this.boothCommitteeType + '&pageno=' + this.paginationNo + '&pagesize=' + this.pageSize
-    this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/GetBoothWiseCommitteMemberCommitteeTypewiseState_1_0?ClientId=' + obj, false, false, false, 'electionMicroSerApp');
+      +'&IsHaveTaluka=' + (this.f['isAssemblyVillage'].value || 0);
+    this.callAPIService.setHttp('get', 'ClientMasterApp/BoothCommittee/GetBoothWiseCommitteMemberCommitteeTypewiseState_2_0?ClientId=' + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
@@ -763,4 +781,5 @@ export class BoothCommitteeComponent implements OnInit {
   }
 }
 
+// onChange_Assembly_VillageArray  ==>>  1 is Village & 2 is Assembly
 

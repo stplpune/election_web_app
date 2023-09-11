@@ -7,44 +7,56 @@
         <div class="col-sm text-end">
             <form [formGroup]="filterForm">
                 <div class="row g-2 mb-2">
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <ngx-select [allowClear]="true" (remove)="clearFilter('state')" [items]="stateArray"
                             formControlName="StateId" (select)="clearFilter('state');getDivision()"
                             placeholder="Select State" optionValueField="id" optionTextField="stateName"
                             [disabled]="stateArray?.length == 1">
                         </ngx-select>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <ngx-select [allowClear]="true" [items]="divisionArray" formControlName="DivisionId"
                             [disabled]="divisionArray?.length == 1 || !f['StateId'].value" optionValueField="divisionId"
                             optionTextField="divisionName" (select)="clearFilter('division');getDistrict()"
                             (remove)="clearFilter('division')" placeholder="Select Division">
                         </ngx-select>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <ngx-select [allowClear]="true" [items]="districtArray" formControlName="DistrictId"
                             [disabled]="districtArray?.length == 1 || !f['DivisionId'].value"
                             optionValueField="districtId" optionTextField="districtName"
-                            (select)="clearFilter('district');getTaluka()" (remove)="clearFilter('district')"
+                            (select)="clearFilter('district')" (remove)="clearFilter('district')"
                             placeholder="Select District">
                         </ngx-select>
                     </div>
-                    <div class="col-sm-2">
+
+                    <div class="col-sm-3 align-self-center">
+                        <div class="d-block text-start ps-2">
+                            <div class="form-check form-check-inline"
+                                *ngFor="let assblyVillage of onChange_Assembly_VillageArray">
+                                <input class="form-check-input" type="radio" [ngClass]="!f['DistrictId'].value ? f['isAssemblyVillage']?.disable() : f['isAssemblyVillage']?.enable()"
+                                  (change)="clearFilter('isAssemblyVillage');getTaluka()"  formControlName="isAssemblyVillage" [value]="assblyVillage.id" name="isAssemblyVillage">
+                                <label class="form-check-label" for="rgender">{{assblyVillage.name}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
                         <ngx-select [allowClear]="true" [items]="talkaArray" formControlName="TalukaId"
-                            [disabled]="talkaArray?.length == 1 || !f['DistrictId'].value" optionValueField="talukaId"
+                            [disabled]="talkaArray?.length == 1 || !f['isAssemblyVillage'].value" optionValueField="talukaId"
                             optionTextField="talukaName"
                             (select)="clearFilter('taluka');getVillage();getBooth();dataNotFound = true"
-                            (remove)="clearFilter('taluka')" placeholder="Select Taluka">
+                            (remove)="clearFilter('taluka')" [placeholder]="f['isAssemblyVillage'].value == 1 ? 'Select Taluka' : 'Select Assembly'">
                         </ngx-select>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <ngx-select [allowClear]="true" [items]="villageArray" formControlName="VillageId"
                             [disabled]="villageArray?.length == 1 || !f['TalukaId'].value" optionValueField="villageId"
                             optionTextField="villageName" (select)="clearFilter('village');getBooth()"
                             (remove)="clearFilter('village');getBooth()" placeholder="Select Village">
                         </ngx-select>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <ngx-select [allowClear]="true" [items]="boothArray" formControlName="BoothId"
                             [disabled]="!f['TalukaId'].value" optionValueField="boothId" optionTextField="boothNickName"
                             (select)="clearFilter('booth')" (remove)="clearFilter('booth')" placeholder="Select Booth">
