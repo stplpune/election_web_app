@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <div class="row mx-1" id="pageheader">
+    <div class="row align-items-start  mx-1" id="pageheader">
         <div class="col-sm-6">
             <span class="page-name">Booth List</span>
         </div>
@@ -27,6 +27,7 @@
     <div class="row">
         <div class="col-sm-12 chartbox">
             <div class="card">
+                
                 <div class="card-body ">
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -156,10 +157,10 @@
 </div>
 <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
 aria-labelledby="staticBackdropLabel" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
+<div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
   <div class="modal-content">
     <div class="modal-header">
-      <h1 class="modal-title fs-5" id="staticBackdropLabel">Upload Past Election Result</h1>
+      <h1 class="modal-title fs-5" id="staticBackdropLabel">Upload Booth List</h1>
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body chartbox form-container">
@@ -168,7 +169,7 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="col-sm-3">
             <div class="input-group mb-3">
               <select class="form-select" id="inputGroupSelect02">
-                <option selected>Select Cunseltancy</option>
+                <option selected>Select District</option>
                 <option value="1">One</option>
                 <option value="2">Two</option>
                 <option value="3">Three</option>
@@ -178,14 +179,28 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div class="col-sm-3">
             <div class="input-group mb-3">
               <select class="form-select" id="inputGroupSelect02">
-                <option selected>Select Election</option>
+                <option selected>Select Assembly</option>
                 <option value="1">One</option>
                 <option value="2">Two</option>
                 <option value="3">Three</option>
               </select>
             </div>
           </div>
-          <div class="col-sm-6">
+          <div class="col-sm-3">
+          <div class="d-flex gap-2">
+            <input type="file" accept="image/*" #fileInputFrancisizeIcon formControlName="francisizeLogo"
+              class="form-control" >
+
+            <div class="d-flex" >
+              <div class="uploaded-images">
+                <button class="btn bg-danger-10 text-danger" >
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="col-sm-3">
           <div class="d-flex gap-2">
             <input type="file" accept="image/*" #fileInputFrancisizeIcon formControlName="francisizeLogo"
               class="form-control" >
@@ -208,38 +223,49 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="card-body pt-0">
         <div class="table-responsive">
             <table class="table  table-hover">
-              <thead>
-                <tr>
-                  <th>Sr. No.</th>
-                  <th>Candidate Name</th>
-                  <th>Party</th>
-                  <th>Total Votes</th>
-                  <th>Winning Margin</th>
+                <thead>
+                    <tr>
+                        <th>Booth. No.</th>
+                        <th>Booth Name Marathi</th>
+                        <th>Booth Name English</th>
+                        <th>List Of Pooling Status Marathi</th>
+                        <th>List Of Pooling Status English</th>
 
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td><a href="">Ramesh Gavade</a></td>
-                  <td>BJP</td>
-                  <td>1,78,458</td>
-                  <td>21,690</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>श्रीपालवण</td>
+                        <td>Shripalavan</td>
+                        <td>जि.प.शाळा,श्रीपालवण, पूर्वेकडील खोली क्र 1</td>
+                        <td>Z. P Shala Shripalavan Room No 1 Form East Side</td>
 
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td><a href="">Sagar Patil</a></td>
-                    <td>NCP</td>
-                    <td>40,654</td>
-                    <td>1,59,494</td>
-  
-                  </tr>
-                
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>मोगराळे</td>
+                        <td>Mogarale</td>
+                        <td>जि.प.शाळा, मोगराळे, पश्चिमेकडील खोली क्र 1</td>
+                        <td>Z. P Shala Mogarale West Side Room No.1</td>
 
-              </tbody>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>शिंगणापूर</td>
+                        <td>Shinganapur</td>
+                        <td>
+                            जि.प.शाळा शिंगणापूर पूर्वेकडील खोली क्र 1
+                        </td>
+                        <td>
+                            Z. P Shala Shinganapur East Side Room No.1
+                        </td>
+
+                    </tr>
+
+                </tbody>
             </table>
-          </div>
+        </div>
     </div>
    </div>
     </div>
