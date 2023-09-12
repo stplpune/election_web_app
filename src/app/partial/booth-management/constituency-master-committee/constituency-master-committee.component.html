@@ -41,6 +41,9 @@
                   optionValueField="constituenciesId" optionTextField="constituencyName" (remove)="clearBoothArray()"
                   (select)="getBoothsUnderAssemblies()" placeholder="Select Constituency Assembly">
                 </ngx-select>
+                <div *ngIf="submitted && g.assemblyId.errors" class="invalid-feedback">
+                  Assembly is Required
+                </div>
               </div>
               <label for="txtSearchAssembly" class="form-label required-field">Select Booths Under Constituencies</label>
               <mat-card class="border">
