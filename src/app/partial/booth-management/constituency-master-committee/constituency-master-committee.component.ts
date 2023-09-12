@@ -379,7 +379,7 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
       '&pageSize=' +
       this.pageSize +
       '&AssemblyId=' +
-      '0' +
+      (this.filterForm?.value?.assemblyId || 0) +
       '&CategoryId=' +
       (this.f['categoryId'].value || 0) +
       '&Search=' +

@@ -106,7 +106,7 @@
               </div>
               <div class="col-sm-4">
                 <ngx-select [allowClear]="true" [items]="assemblyArray" formControlName="assemblyId"
-                  optionValueField="constituenciesId" optionTextField="constituencyName"
+                  optionValueField="constituenciesId" optionTextField="constituencyName" (select)="clearFilter()" (remove)="clearFilter()"
                   placeholder="Select Constituency Assembly">
                 </ngx-select>
               </div>
