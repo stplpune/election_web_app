@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
 
 import { ConstituencyMasterCommitteeRoutingModule } from './constituency-master-committee-routing.module';
 import { ConstituencyMasterCommitteeComponent } from './constituency-master-committee.component';
@@ -18,13 +19,14 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
   ],
   imports: [
     CommonModule,
+    MatCardModule,
     ConstituencyMasterCommitteeRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     NgxSelectModule,
     NgxPaginationModule,
     TooltipModule,
-    Ng2SearchPipeModule
+    Ng2SearchPipeModule,
   ]
 })
 export class ConstituencyMasterCommitteeModule { }
