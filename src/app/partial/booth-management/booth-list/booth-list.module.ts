@@ -3,6 +3,10 @@ import { CommonModule } from '@angular/common';
 
 import { BoothListRoutingModule } from './booth-list-routing.module';
 import { BoothListComponent } from './booth-list.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { NgxSelectModule } from 'ngx-select-ex';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 
 @NgModule({
@@ -11,7 +15,12 @@ import { BoothListComponent } from './booth-list.component';
   ],
   imports: [
     CommonModule,
-    BoothListRoutingModule
+    BoothListRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxPaginationModule,
+    NgxSelectModule,
+    Ng2SearchPipeModule
   ]
 })
 export class BoothListModule { }

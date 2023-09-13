@@ -1,98 +1,85 @@
 <div class="container-fluid">
-    <div class="row align-items-start  mx-1" id="pageheader">
-        <div class="col-sm-6">
-            <span class="page-name">Booth List</span>
-        </div>
-        <div class="col-sm-3">
-            <div class="input-group mb-3">
-                <select class="form-select" id="inputGroupSelect02">
-                    <option selected>Select District</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
+    <form [formGroup]="filterForm">
+        <div class="row align-items-start  mx-1" id="pageheader">
+            <div class="col-sm-6">
+                <span class="page-name">Booth List</span>
+            </div>
+            <div class="col-sm-3">
+                <ngx-select [allowClear]="true" [items]="districtArray" formControlName="DistrictId"
+                    (select)="getAssemblyList();paginationNo = 1;getAssemblyTable()"
+                    (remove)="paginationNo = 1;getAssemblyTable()" optionValueField="districtId"
+                    optionTextField="districtName" placeholder="Select District">
+                </ngx-select>
+            </div>
+            <div class="col-sm-3">
+                <ngx-select [allowClear]="true" [items]="assemblyListArray" formControlName="assemblyId"
+                    [disabled]="!filterForm.value.DistrictId" (select)="paginationNo = 1;getAssemblyTable()"
+                    (remove)="paginationNo = 1;getAssemblyTable()" optionValueField="assemblyId"
+                    optionTextField="assemblyName" placeholder="Select Assembly">
+                </ngx-select>
             </div>
         </div>
-        <div class="col-sm-3">
-            <div class="input-group mb-3">
-                <select class="form-select" id="inputGroupSelect02">
-                    <option selected>Select Assembly</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
-            </div>
-        </div>
-    </div>
+    </form>
     <div class="row">
         <div class="col-sm-12 chartbox">
             <div class="card">
-                
+
                 <div class="card-body ">
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover table-bordered">
                             <thead>
                                 <tr>
                                     <th>Sr.No.</th>
-                                    <th>Assembly Name</th>
                                     <th>District Name</th>
+                                    <th>Assembly Name</th>
                                     <th>No. of Booth</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td rowspan="3">1<br /><br /></td>
-                                    <td rowspan="3">A<br /><br /></td>
-                                    <td>satara</td>
-                                    <td>23</td>
-                                    <td><i class="fa-solid fa-upload"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>Pune</td>
-                                    <td>12</td>
-                                    <td><i class="fa-solid fa-upload"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>Wai</td>
-                                    <td>23</td>
-                                    <td><i class="fa-solid fa-upload"></i></td>
-                                </tr>
-                                <tr>
-                                    <td rowspan="3">1<br /><br /></td>
-                                    <td rowspan="3">A<br /><br /></td>
-                                    <td>satara</td>
-                                    <td>23</td>
-                                    <td><i class="fa-solid fa-upload"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>Pune</td>
-                                    <td>12</td>
-                                    <td><i class="fa-solid fa-upload"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>Wai</td>
-                                    <td> <a href="" title="Edit Details" data-bs-toggle="modal"
-                                            data-bs-target="#staticBackdrop">23 </a></td>
-                                    <td>
-                                        <button class="btn btn-light text-dark rounded" title="Edit Details"
-                                            data-bs-toggle="modal" data-bs-target="#staticBackdrop1">
-                                            <i class="fa fa-upload" aria-hidden="true"></i>
-                                        </button>
-
-                                    </td>
-                                </tr>
+                                <ng-container *ngFor="let assemblyData of assemblyTableArray | paginate: {itemsPerPage: pageSize, 
+                                currentPage: paginationNo, totalItems:getTotal}; let i = index">
+                                    <tr>
+                                        <td [attr.rowspan]="assemblyData?.constituencyList?.length + 1">{{((paginationNo
+                                            + 1) * 10 + i + 1)-20}}<br /><br /></td>
+                                        <td [attr.rowspan]="assemblyData?.constituencyList?.length + 1">
+                                            {{assemblyData?.districtName ? assemblyData?.districtName :
+                                            '-'}}<br /><br /></td>
+                                    </tr>
+                                    <tr *ngFor="let consti_List of assemblyTableArray[i]?.constituencyList">
+                                        <td>{{consti_List?.assemblyName}}</td>
+                                        <td> <a href="" title="Edit Details" data-bs-toggle="modal"
+                                                (click)="getBoothDetail(consti_List?.assemblyId)"
+                                                data-bs-target="#staticBackdrop">{{consti_List?.noOfBooths}}</a></td>
+                                        <td>
+                                            <button class="btn btn-light text-dark rounded" title="Edit Details"
+                                                data-bs-toggle="modal" data-bs-target="#staticBackdrop1"
+                                                (click)="patchboothModel(assemblyData?.districtId,consti_List?.assemblyId)">
+                                                <i class="fa fa-upload" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
                             </tbody>
                         </table>
+                        <div class="mt-2 text-end" *ngIf="assemblyTableArray?.length == 0">
+                            <div class="alert alert-danger text-center py-2">No Results Found!
+                            </div>
+                        </div>
+                        <pagination-controls *ngIf="assemblyTableArray?.length != 0" previousLabel="" nextLabel=""
+                            (pageChange)="onClickPagintion($event)">
+                        </pagination-controls>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- booth Details Count List Model -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">255 - Phaltan (SC) Booth List</h1>
@@ -100,7 +87,7 @@
             </div>
             <div class="modal-body form-container">
                 <div class="table-responsive">
-                    <table class="table  table-hover">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>Booth. No.</th>
@@ -108,168 +95,146 @@
                                 <th>Booth Name English</th>
                                 <th>List Of Pooling Status Marathi</th>
                                 <th>List Of Pooling Status English</th>
-
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>श्रीपालवण</td>
-                                <td>Shripalavan</td>
-                                <td>जि.प.शाळा,श्रीपालवण, पूर्वेकडील खोली क्र 1</td>
-                                <td>Z. P Shala Shripalavan Room No 1 Form East Side</td>
-
+                            <tr *ngFor="let boothDet of boothDetailArray">
+                                <td>{{boothDet?.boothListNumber}}</td>
+                                <td>{{boothDet?.boothName ? boothDet?.boothName : '-'}}</td>
+                                <td>{{boothDet?.boothEnglishName ? boothDet?.boothEnglishName : '-'}}</td>
+                                <td>{{boothDet?.poolingStationNameM ? boothDet?.poolingStationNameM : '-'}}</td>
+                                <td>{{boothDet?.poolingStationNameE ? boothDet?.poolingStationNameE : '-'}}</td>
                             </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>मोगराळे</td>
-                                <td>Mogarale</td>
-                                <td>जि.प.शाळा, मोगराळे, पश्चिमेकडील खोली क्र 1</td>
-                                <td>Z. P Shala Mogarale West Side Room No.1</td>
-
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>शिंगणापूर</td>
-                                <td>Shinganapur</td>
-                                <td>
-                                    जि.प.शाळा शिंगणापूर पूर्वेकडील खोली क्र 1
-                                </td>
-                                <td>
-                                    Z. P Shala Shinganapur East Side Room No.1
-                                </td>
-
-                            </tr>
-
                         </tbody>
                     </table>
+                    <div class="mt-2 text-end" *ngIf="boothDetailArray?.length == 0">
+                        <div class="alert alert-danger text-center py-2">No Results Found!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Upload Booth List</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" #closeBoothModel aria-label="Close"></button>
+            </div>
+            <div class="modal-body chartbox form-container">
+                <div class="card card-body pb-0 border-outline">
+                    <form [formGroup]="filterModelForm">
+                        <div class="row gx-2 mb-2">
+                            <div class="col-sm-4">
+                                <ngx-select [items]="districtArray" formControlName="DistrictId" [disabled]="true"
+                                    optionValueField="districtId" optionTextField="districtName"
+                                    placeholder="Select District">
+                                </ngx-select>
+                            </div>
+                           
+                            <div class="col-sm-5">
+                                <div class="d-flex ms-2 text-main align-items-center gap-2 mb-2">
+                                    <!-- <div class="upload-btn-wrapper">
+                                        <button type="button" class="btn btn-upload btn-main ms-2">Upload a file</button>
+                                        <input type="file" #marathiInput [title]="m['marathiFile'].value ? '' : 'Upload Marathi File'"
+                                        formControlName="marathiFile" accept=".xlsx, .xls, .XLSX, .XLS"
+                                        (change)="uploadExcel($event,'marathi');marathiInput.value = ''" class="form-control">
+                                    </div> -->
+                                    Marathi
+                                    <input type="file" #marathiInput
+                                        [title]="m['marathiFile'].value ? '' : 'Upload Marathi File'"
+                                        formControlName="marathiFile" accept=".xlsx, .xls, .XLSX, .XLS"
+                                        (change)="uploadExcel($event,'marathi');marathiInput.value = ''"
+                                        class="form-control">
+
+                                        <a class="text-main mt-2" href="../../../../assets/sample Excel/marathi.xlsx" target="_blank">
+                                            <div class="d-flex align-items-center gap-2">
+                                        Sample <i class="fas fa-download"></i>
+                                        <!-- <button class="btn btn-light text-dark" *ngIf="m['marathiFile'].value"> <i class="fas fa-right"></i></button> -->
+                                        <!-- <button class="btn bg-danger-10 text-danger"> <i class="fas fa-trash-alt"></i></button> -->
+                                    </div>
+                                </a>
+                                </div>
+                            </div>
+                        </div>
+                          <div class="row gx-2 align-items-center mb-2">
+                            <div class="col-sm-4">
+                                <ngx-select [items]="assemblyListUpdateArray" formControlName="assemblyId"
+                                    [disabled]="true" optionValueField="assemblyId" optionTextField="assemblyName"
+                                    placeholder="Select Assembly">
+                                </ngx-select>
+                            </div>
+                            <div class="col-sm-5">
+
+                                <div class="d-flex align-items-center text-main ms-2 gap-2">
+                                    English
+                                    <input type="file" #englishInput
+                                        [title]="m['englishFile'].value ? '' : 'Upload English File'"
+                                        formControlName="englishFile" accept=".xlsx, .xls, .XLSX, .XLS"
+                                        (change)="uploadExcel($event,'english');englishInput.value = ''"
+                                        class="form-control">
+ 
+                                    <a class="text-main mt-2" href="../../../../assets/sample Excel/english.xlsx" target="_blank">
+                                        <div class="d-flex gap-2 align-items-center">
+                                            Sample
+                                            <i class="fas fa-download"></i>
+                                            <!-- <button class="btn btn-light text-dark" *ngIf="m['englishFile'].value"><i class="fas fa-right" ></i></button> -->
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 text-end">
+                                <button type="button" class="btn btn-secondary"
+                                    (click)="clearModelForm()">Clear</button>
+                                <button type="button" class="btn btn-main ms-2"
+                                    (click)="ApplyExcelData()">Apply</button>
+                            </div>
+                          </div>
+                         
+                    </form>
+
+                </div>
+                <div class="card pb-0">
+                    <div class="card-body pt-0">
+                        <div class="table-responsive">
+                            <table class="table  table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Booth. No.</th>
+                                        <th>Booth Name Marathi</th>
+                                        <th>Booth Name English</th>
+                                        <th>List Of Pooling Status Marathi</th>
+                                        <th>List Of Pooling Status English</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let mergeData of mergeMarathiEnglishArray">
+                                        <td>{{mergeData?.boothListNumber ? mergeData?.boothListNumber : '-'}}</td>
+                                        <td>{{mergeData?.boothName ? mergeData?.boothName : '-'}}</td>
+                                        <td>{{mergeData?.boothEnglishName ? mergeData?.boothEnglishName : "-"}}</td>
+                                        <td>{{mergeData?.poolingStationNameM ? mergeData?.poolingStationNameM : '-'}}
+                                        </td>
+                                        <td>{{mergeData?.poolingStationNameE ? mergeData?.poolingStationNameE : '-'}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="mt-2 text-end" *ngIf="mergeMarathiEnglishArray?.length == 0">
+                                <div class="alert alert-danger text-center py-2">No Results Found!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-main">Save</button>
+                <button type="button" class="btn btn-main" (click)="onSubmit()">Save</button>
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-aria-labelledby="staticBackdropLabel" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h1 class="modal-title fs-5" id="staticBackdropLabel">Upload Booth List</h1>
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <div class="modal-body chartbox form-container">
-   <div class="card card-body pb-0 border-outline">
-    <div class="row gx-2 mb-2">
-        <div class="col-sm-3">
-            <div class="input-group mb-3">
-              <select class="form-select" id="inputGroupSelect02">
-                <option selected>Select District</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="input-group mb-3">
-              <select class="form-select" id="inputGroupSelect02">
-                <option selected>Select Assembly</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-sm-3">
-          <div class="d-flex gap-2">
-            <input type="file" accept="image/*" #fileInputFrancisizeIcon formControlName="francisizeLogo"
-              class="form-control" >
-
-            <div class="d-flex" >
-              <div class="uploaded-images">
-                <button class="btn bg-danger-10 text-danger" >
-                  <i class="fas fa-trash-alt"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-          </div>
-          <div class="col-sm-3">
-          <div class="d-flex gap-2">
-            <input type="file" accept="image/*" #fileInputFrancisizeIcon formControlName="francisizeLogo"
-              class="form-control" >
-
-            <div class="d-flex" >
-              <div class="uploaded-images">
-                <button class="btn bg-danger-10 text-danger" >
-                  <i class="fas fa-trash-alt"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-          </div>
-    </div>
-   </div>
-   <div class="card pb-0">
-    <div class="card-header">
-        <span class="text-main">Satara Election Result 2019</span>
-    </div>
-    <div class="card-body pt-0">
-        <div class="table-responsive">
-            <table class="table  table-hover">
-                <thead>
-                    <tr>
-                        <th>Booth. No.</th>
-                        <th>Booth Name Marathi</th>
-                        <th>Booth Name English</th>
-                        <th>List Of Pooling Status Marathi</th>
-                        <th>List Of Pooling Status English</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>श्रीपालवण</td>
-                        <td>Shripalavan</td>
-                        <td>जि.प.शाळा,श्रीपालवण, पूर्वेकडील खोली क्र 1</td>
-                        <td>Z. P Shala Shripalavan Room No 1 Form East Side</td>
-
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>मोगराळे</td>
-                        <td>Mogarale</td>
-                        <td>जि.प.शाळा, मोगराळे, पश्चिमेकडील खोली क्र 1</td>
-                        <td>Z. P Shala Mogarale West Side Room No.1</td>
-
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>शिंगणापूर</td>
-                        <td>Shinganapur</td>
-                        <td>
-                            जि.प.शाळा शिंगणापूर पूर्वेकडील खोली क्र 1
-                        </td>
-                        <td>
-                            Z. P Shala Shinganapur East Side Room No.1
-                        </td>
-
-                    </tr>
-
-                </tbody>
-            </table>
-        </div>
-    </div>
-   </div>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-      <button type="button" class="btn btn-main">Save</button>
-    </div>
-  </div>
-</div>
 </div>
