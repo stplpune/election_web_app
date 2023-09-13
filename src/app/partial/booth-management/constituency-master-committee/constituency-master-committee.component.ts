@@ -9,41 +9,48 @@ import { CallAPIService } from 'src/app/services/call-api.service';
 import { CommonService } from 'src/app/services/common.service';
 import { DeleteComponent } from '../../dialogs/delete/delete.component';
 import { MatDialog } from '@angular/material/dialog';
+import { log } from 'console';
 
 @Component({
   selector: 'app-constituency-master-committee',
   templateUrl: './constituency-master-committee.component.html',
-  styleUrls: ['./constituency-master-committee.component.css']
+  styleUrls: ['./constituency-master-committee.component.css'],
 })
 export class ConstituencyMasterCommitteeComponent implements OnInit {
-
-  filterForm!:FormGroup;
-  localGovBodyForm!:FormGroup;
+  filterForm!: FormGroup;
+  localGovBodyForm!: FormGroup;
   stateArray: any;
-  divisionGovtArray :any;
-  divisionFilterArray :any;
-  districtGovtArray :any;
-  districtFilterArray :any;
-  talukaGovtArray :any;
-  talukaFilterArray :any;
-  villageCityFilterArray :any;
-  localBodyListArray :any;
-  categoryArray :any;
+  divisionGovtArray: any;
+  divisionFilterArray: any;
+  districtGovtArray: any;
+  districtFilterArray: any;
+  talukaGovtArray: any;
+  talukaFilterArray: any;
+  villageCityFilterArray: any;
+  localBodyListArray: any;
+  categoryArray: any;
   getTotal: any;
-  paginationNo: number = 1; 
-  pageSize: number = 10; 
-  villageTalukaDetailsList :any;
-  resultVillageOrCity :any;
+  paginationNo: number = 1;
+  pageSize: number = 10;
+  villageTalukaDetailsList: any;
+  resultVillageOrCity: any;
   userId = this.commonService.loggedInUserId();
-  urbanRuralTypeArray = [{ id: 0, name: 'Rural' }, { id: 1, name: 'Urban' }]
+  localStorageData = this.commonService.getlocalStorageData();
+  urbanRuralTypeArray = [
+    { id: 0, name: 'Rural' },
+    { id: 1, name: 'Urban' },
+  ];
   villageCityGovtArray: any;
   cityFilterArray: any;
   cityGovtArray: any;
   subject: Subject<any> = new Subject();
   villageGovtObj = '';
-  submitted:boolean = false;
-  editObjData:any;
-
+  submitted: boolean = false;
+  editObjData: any;
+  assemblyArray = new Array();
+  boothArray = new Array();
+  boothUnderConstituencyArr: any[] = [];
+  boothlistDisplay:any[]=[];
 
   constructor(
     private callAPIService: CallAPIService,
@@ -51,109 +58,172 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private tosterService:ToastrService,
+    private tosterService: ToastrService,
     private spinner: NgxSpinnerService,
-    public dialog: MatDialog,
-  ) { }
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
-    this.getState();
     this.getCategory();
     this.defaultFilterForm();
     this.localGovBody_Form();
+    this.getAssemblyConstituency();
     this.searchData();
+    this.getConstituencymastercommittee();
   }
 
-    // ....................local GovBody Form Code Start Here ....................... //
-  
-    get g(){ return this.localGovBodyForm.controls };
+  // ....................local GovBody Form Code Start Here ....................... //
 
-    localGovBody_Form(){
-      this.localGovBodyForm = this.fb.group({
-        id:[0],
-        constituencyName:['',[Validators.required]],
-        isRural:[0],
-        stateId: ['',[Validators.required]],
-        divisionId: ['',[Validators.required]],
-        districtId: ['',[Validators.required]],
-        talukaId: [''],
-        village_CityId: [''],
-        categoryId:['',[Validators.required]],
-      });
-      this.addRemoveTalukaVali();
-    }
-
-    selectionType(flag?:any){
-      this.clearLGBFilterForm('state');
-      this.villageCityGovtArray = [];
-      this.constituencyComityModelArray = [];
-      this.getState('govt');
-      this.addRemoveTalukaVali();
-    }
-
-    onClickCheckBox(event: any, eleObj: any) {
-        this.villageCityGovtArray.map((ele:any)=>{
-          if(eleObj?.villageId == ele?.villageId){
-             ele['checked'] = event.target.checked;
-             return ele;
-          }
-        })
-        this.onClickUpdateComityModel();
-    }
-
-  districtSelect(flag: any) {
-    flag == 'govt' ? this.g['isRural'].value != 1 ? this.getTaluka('govt') : this.getVillageCity('govt') :
-      this.f['isRural'].value != 1 ? this.getTaluka('filter') : this.getVillageCity('filter');
+  get g() {
+    return this.localGovBodyForm.controls;
   }
 
-    constituencyComityModelArray:any[] = [];
-    onClickUpdateComityModel() { // push checked obj in new Array 
-      this.constituencyComityModelArray = [];
+  localGovBody_Form() {
+    this.localGovBodyForm = this.fb.group({
+      id: [0],
+      constituencyName: ['', [Validators.required]],
+      categoryId: ['', [Validators.required]],
+      assemblyId: ['', [Validators.required]],
+    });
+  }
+
+  selectionType(flag?: any) {
+    this.constituencyComityModelArray = [];
+  }
+
+  onClickCheckBox(event: any, eleObj: any) {
+    this.villageCityGovtArray.map((ele: any) => {
+      if (eleObj?.villageId == ele?.villageId) {
+        ele['checked'] = event.target.checked;
+        return ele;
+      }
+    });
+    this.onClickUpdateComityModel();
+  }
+
+  onClickCheckBox1(event?: any, data?: any) {
+    console.log(data);
+    var index = this.boothArray.findIndex(
+      (x: any) => x.boothId == data.boothId);
+    // If checked then push
+    if (event.target.checked) {
+      let obj = {
+        id: 0,
+        committeeConstituencyId: 0,
+        assemblyId: data.assemblyId,
+        boothId: data.boothId,
+      };
+      // Pushing the object into array
+      this.boothUnderConstituencyArr.push(obj);
+    } else {
+      this.boothUnderConstituencyArr.splice(index, 1);
+    }
+  }
+
+  constituencyComityModelArray: any[] = [];
+  onClickUpdateComityModel() {
+    // push checked obj in new Array
+    this.constituencyComityModelArray = [];
+    let formData = this.localGovBodyForm.value;
+    this.villageCityGovtArray.map((ele: any) => {
+      let obj = {
+        id: 0,
+        committeeConstituencyId: 0,
+        stateId: formData.stateId,
+        divisionId: formData.divisionId || 0,
+        districtId: formData.districtId || 0,
+        talukaId: formData.talukaId || 0,
+        villageId: ele.villageId || 0,
+        isTown: formData.isRural == 0 ? false : true,
+        createdBy: this.userId,
+      };
+      if (ele?.checked == true) {
+        this.constituencyComityModelArray.push(obj);
+      }
+    });
+  }
+
+  clearBoothArray() {
+    this.boothArray = [];
+  }
+
+  patchFormData(obj: any) {
+    this.editObjData = obj;
+    
+    console.log(this.editObjData?.getAssignBoothstoConstituencyCommitteeModel,'ppp');
+    
+    this.localGovBodyForm.patchValue({
+      id: obj?.id,
+      constituencyName: obj?.constituencyName,
+      categoryId: obj?.typeId,
+      assemblyId: obj?.getAssignBoothstoConstituencyCommitteeModel[0]?.assemblyId,
+    });
+    this.editObjData?.getAssignBoothstoConstituencyCommitteeModel?.length
+      ? this.getBoothsUnderAssemblies(
+          this.editObjData?.getAssignBoothstoConstituencyCommitteeModel
+        ) : this.boothArray = [];
+  }
+
+  onSubmit() {
+    this.submitted = true;
+    if (this.localGovBodyForm.invalid) {
+      this.spinner.hide();
+      return;
+    }
+    // if (
+    //   !this.villageCityGovtArray?.some((ele: any) => {
+    //     return ele.checked === true;
+    //   })
+    // )
+    //  {
+    //   this.tosterService.error('Village / City Feild is Requird');
+    //   return;
+    // }
+    else {
+      
+      this.spinner.show();
       let formData = this.localGovBodyForm.value;
-      this.villageCityGovtArray.map((ele:any)=>{
-        let obj = {
-          "id": 0,
-          "committeeConstituencyId": 0,
-          "stateId": formData.stateId,
-          "divisionId": formData.divisionId || 0,
-          "districtId": formData.districtId || 0,
-          "talukaId": formData.talukaId || 0,
-          "villageId": ele.villageId || 0,
-          "isTown": formData.isRural == 0 ? false : true,
-          "createdBy": this.userId
-        }
-        if(ele?.checked == true) {
-          this.constituencyComityModelArray.push(obj);
-        }
-      })
-    }
+      let obj = {
+        id: formData.id || this.editObjData.id,
+        constituencyName: formData.constituencyName || this.editObjData.constituencyName,
+        typeId: formData.categoryId || this.editObjData.typeId,
+        // isRural: formData.isRural,
+        createdBy: this.userId,
+        boothstoConstituencyCommitteeModelList: (formData.id == 0) ? this.boothUnderConstituencyArr : this.editObjData?.getAssignBoothstoConstituencyCommitteeModel,
+      };
 
-    onSubmit(){
-      this.submitted = true;
-      if (this.localGovBodyForm.invalid) {
-        this.spinner.hide();
-        return;
-      } if(!this.villageCityGovtArray?.some((ele: any) => { return ele.checked === true })){
-        this.tosterService.error('Village / City Feild is Requird');
-        return;
-      } else {
-        this.spinner.show();
-        let formData = this.localGovBodyForm.value;
-        let obj = {
-          "id": formData.id,
-          "constituencyName": formData.constituencyName,
-          "typeId": formData.categoryId,
-          "isRural": formData.isRural,
-          "createdBy": this.userId,
-          "constituencyCommitteeModelList": this.constituencyComityModelArray
-        }
+      // {
+      //   "id": 0,
+      //   "constituencyName": "string",
+      //   "typeId": 0,
+      //   "createdBy": 0,
+      //   "boothstoConstituencyCommitteeModelList": [
+      //     {
+      //       "id": 0,
+      //       "committeeConstituencyId": 0,
+      //       "assemblyId": 0,
+      //       "boothId": 0
+      //     }
+      //   ]
+      // }
 
-        let urlType = formData.id == 0 ? 'Constituency/ConstituenctCommittee/Create' : 'Constituency/ConstituenctCommittee/Update';
-        let apiType = formData.id == 0 ? 'POST' : 'PUT';
-        
-        this.callAPIService.setHttp(apiType, urlType, false, obj, false, 'electionMicroSerApp');
-        this.callAPIService.getHttp().subscribe((res: any) => {
-          if (res.responseData != null && res.statusCode == "200") {
+      let urlType =
+        formData.id == 0
+          ? 'Constituency/ConstituenctCommittee/Create_1_0'
+          : 'Constituency/ConstituenctCommittee/Update_1_0';
+      let apiType = formData.id == 0 ? 'POST' : 'PUT';
+
+      this.callAPIService.setHttp(
+        apiType,
+        urlType,
+        false,
+        obj,
+        false,
+        'electionMicroSerApp'
+      );
+      this.callAPIService.getHttp().subscribe(
+        (res: any) => {
+          if (res.responseData != null && res.statusCode == '200') {
             this.spinner.hide();
             this.tosterService.success(res.statusMessage);
             this.getConstituencymastercommittee();
@@ -163,202 +233,181 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
             this.spinner.hide();
             this.tosterService.error(res.statusMessage);
           }
-        }, (error: any) => {
+        },
+        (error: any) => {
           this.spinner.hide();
           this.router.navigate(['../500'], { relativeTo: this.route });
-        })
-      }
+        }
+      );
     }
+  }
 
-    clearForm(){
-      this.submitted = false;
-      this.villageCityGovtArray = [];
-      this.editObjData = '';
-      this.constituencyComityModelArray = [];
-      this.localGovBody_Form();
-      this.getState('govt');
+  displayBoothsAssiged(boothArr?:any){
+    for (let index = 0; index < boothArr.length; index++) {
+      this.boothlistDisplay.push(boothArr[index].boothName);
     }
+  }
 
-    patchFormData(obj:any){
-      this.editObjData = obj;
-      this.localGovBodyForm.patchValue({
-        id: obj?.id,
-        constituencyName: obj?.constituencyName,
-        isRural: obj?.isRural,
-        stateId: obj?.getAssignVillagestoConstituencyCommitteeList[0]?.stateId,
-        divisionId: obj?.getAssignVillagestoConstituencyCommitteeList[0]?.divisionId,
-        districtId: obj?.getAssignVillagestoConstituencyCommitteeList[0]?.districtId,
-        talukaId: obj?.getAssignVillagestoConstituencyCommitteeList[0]?.talukaId,
-        categoryId: obj?.typeId,
-      })
-      this.addRemoveTalukaVali();
-      this.getDistrict('govt');
-      this.getTaluka('govt');
-      this.getVillageCity('govt', obj);
-    }
+  clearForm() {
+    this.submitted = false;
+    this.villageCityGovtArray = [];
+    this.editObjData = '';
+    this.boothArray = [];
+    this.constituencyComityModelArray = [];
+    this.localGovBody_Form();
+  }
 
-    addRemoveTalukaVali() {
-      if (this.g['isRural'].value == 0) {
-        this.g["talukaId"].setValidators([Validators.required]);
-        this.g["talukaId"].updateValueAndValidity();
-      } else {
-        this.g['talukaId'].setValue('');
-        this.g['talukaId'].clearValidators();
-        this.g['talukaId'].updateValueAndValidity();
-      }
-    }
+  // ....................local GovBody Form Code End Here ....................... //
 
-    clearLGBFilterForm(flag?: any){
-      if (flag == 'state') {
-        this.g['divisionId'].setValue('');
-        this.g['districtId'].setValue('');
-        this.g['talukaId'].setValue('');
-        this.g['village_CityId'].setValue('');
-      } else if (flag == 'division') {
-        this.g['districtId'].setValue('');
-        this.g['talukaId'].setValue('');
-        this.g['village_CityId'].setValue('');
-      } else if (flag == 'district') {
-        this.g['talukaId'].setValue('');
-        this.g['village_CityId'].setValue('');
-      } else if (flag == 'taluka') {
-        this.g['village_CityId'].setValue('');
-      }
-    }
+  // ....................Filter Form Code Start Here ....................... //
 
-        // ....................local GovBody Form Code End Here ....................... //
-
-        // ....................Filter Form Code Start Here ....................... //
-
-
-  get f(){ return this.filterForm.controls };
+  get f() {
+    return this.filterForm.controls;
+  }
   defaultFilterForm() {
     this.filterForm = this.fb.group({
-      stateId: [''],
-      isRural:[2], 
-      divisionId: [''],
-      districtId: [''],
-      talukaId: [''],
-      villageId: [''],
-      categoryId:[''],
-      SearchText:['']
-    })
+      categoryId: [''],
+      assemblyId: [''],
+      SearchText: [''],
+    });
   }
 
-  getState(flag?:any) {
-    this.callAPIService.setHttp('get', 'Filter/GetAllState?UserId=' + this.userId, false, false, false, 'electionMicroServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != null && res.statusCode == "200") {
-        this.stateArray = res.responseData;
-        this.stateArray?.length == 1 ? (this.f['stateId'].setValue(this.stateArray[0]?.id),this.g['stateId'].setValue(this.stateArray[0]?.id), this.getDivision('filter'),this.getDivision('govt')) : '';
-        flag == 'govt' ? '' : this.getConstituencymastercommittee();
-      } else {
-        this.stateArray = [];
-      }
-    }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
-  }
-
-  getDivision(flag?:any) { 
-    let obj =  (flag == 'filter' ? this.f['stateId'].value :  this.g['stateId'].value);
-    this.callAPIService.setHttp('get', 'Filter/GetAllDivision?UserId=' + this.userId + '&stateId=' + obj, false, false, false, 'electionMicroServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != null && res.statusCode == "200") {
-        (flag == 'filter') ? (this.divisionFilterArray = res.responseData) : (this.divisionGovtArray = res.responseData);
-        // this.divisionGovtArray?.length == 1 ? (this.f['divisionId'].setValue(this.divisionGovtArray[0]?.divisionId), this.getDistrict()) : '';
-      } else {
-        flag == 'filter' ? this.divisionFilterArray = [] : this.divisionGovtArray = [];
-      }
-    }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
-  }
-
-  getDistrict(flag?:any) { 
-    let obj = flag == 'filter' ? (this.f['stateId'].value + '&divisionId=' + this.f['divisionId'].value) :  (this.g['stateId'].value + '&divisionId=' + this.g['divisionId'].value);
-    this.callAPIService.setHttp('get', 'Filter/GetAllDistricts?UserId=' + this.userId + '&stateId=' + obj, false, false, false, 'electionMicroServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != null && res.statusCode == "200") {
-        (flag == 'filter') ? (this.districtFilterArray = res.responseData) : (this.districtGovtArray = res.responseData);
-        // this.districtGovtArray?.length == 1 ? (this.f['districtId'].setValue(this.districtGovtArray[0]?.districtId), this.getTaluka()) : '';  
-        // this.getTaluka();
-      } else {
-        flag == 'filter' ? (this.districtFilterArray = []) : (this.districtGovtArray = []);
-      }
-    }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
-  }
-
-  getTaluka(flag?:any) {
-    let obj = (flag == 'filter' ? this.f['districtId'].value : this.g['districtId'].value);
-    this.callAPIService.setHttp('get', 'Filter/GetAllTaluka?UserId=' + this.userId + '&districtId=' + obj, false, false, false, 'electionMicroServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != null && res.statusCode == "200") {
-        flag == 'filter' ? (this.talukaFilterArray = res.responseData) : (this.talukaGovtArray = res.responseData);
-        // this.talukaGovtArray?.length == 1 ? (this.f['talukaId'].setValue(this.talukaGovtArray[0]?.talukaId), this.getVillageCity()) : '';
-      } else {
-        flag == 'filter' ? this.talukaFilterArray = [] : this.talukaGovtArray = [];
-      }
-    }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
-  }
-
-  getVillageCity(flag?:any,editObj?:any) { // vilage & City Api
-    let obj = (flag == 'filter' ? (this.f['talukaId'].value || 0) + '&DistrictId=' + this.f['districtId'].value + '&Istown=' + this.f['isRural'].value : (this.g['talukaId'].value || 0) + '&Istown=' + this.g['isRural'].value + '&DistrictId=' + this.g['districtId'].value);
-    this.callAPIService.setHttp('get', 'Filter/GetVillageList?TalukaId=' + obj, false, false, false, 'electionMicroServiceForWeb');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != null && res.statusCode == "200") {
-        flag == 'filter' ? (this.villageCityFilterArray = res.responseData) : (this.villageCityGovtArray = res.responseData?.map((ele:any)=>{ele['checked'] = false; return ele}));
-        
-        if(editObj && flag == 'govt'){
-          editObj?.getAssignVillagestoConstituencyCommitteeList?.map((ele:any)=>{
-            res.responseData.map((ele1:any)=>{
-              if(ele?.villageId == ele1?.villageId){ ele1['checked'] = true; return ele1;}
-            })
-          });
-          this.onClickUpdateComityModel(); // old object assign to constituencyComityModelArray
+  getCategory() {
+    // Api for Category
+    this.callAPIService.setHttp(
+      'get',
+      'Constituency/ConstituenctCommittee/GetAllConstituencyCategory',
+      false,
+      false,
+      false,
+      'electionMicroSerApp'
+    );
+    this.callAPIService.getHttp().subscribe(
+      (res: any) => {
+        if (res.responseData != null && res.statusCode == '200') {
+          this.categoryArray = res.responseData;
+          // this.categoryArray?.length == 1 ? this.f['categoryId'].setValue(this.categoryArray[0]?.categoryId) : '';
+        } else {
+          this.categoryArray = [];
         }
-        // this.villageFilterArray?.length == 1 ? this.f['villageId'].setValue(this.villageFilterArray[0]?.villageId) : '';
-      } else {
-        flag == 'filter' ? this.villageCityFilterArray = [] : this.villageCityGovtArray = [];
+      },
+      (error: any) => {
+        if (error.status == 500) {
+          this.router.navigate(['../../500'], { relativeTo: this.route });
+        }
       }
-    }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
+    );
   }
 
-  // getCity(flag: any) {
-  //   let obj = (flag == 'filter' ? this.f['districtId'].value : this.g['districtId'].value);
-  //   this.callAPIService.setHttp('get', 'Web_GetCity_1_0?DistrictId=' + obj, false, false, false, 'electionServiceForWeb');
-  //   this.callAPIService.getHttp().subscribe((res: any) => {
-  //     if (res.data == '0') {
-  //       flag == 'filter' ? (this.cityFilterArray = res.data1) : (this.cityGovtArray = res.data1);
-  //     } else {
-  //       flag == 'filter' ? this.cityFilterArray = []: this.cityGovtArray = [];
-  //     }
-  //   }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
-  // }
-  
-  getCategory() { 
-    this.callAPIService.setHttp('get', 'Constituency/ConstituenctCommittee/GetAllConstituencyCategory', false, false, false, 'electionMicroSerApp');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != null && res.statusCode == "200") {
-        this.categoryArray = res.responseData;
-        // this.categoryArray?.length == 1 ? this.f['categoryId'].setValue(this.categoryArray[0]?.categoryId) : '';
-      } else {
-        this.categoryArray = [];
+  getAssemblyConstituency() {
+    // Api for Assembly Consituceny
+    let obj =
+      '&ClientId=' +
+      this.localStorageData?.ClientId +
+      '&StateId=' +
+      this.localStorageData?.StateId +
+      '&FilterTypeId=2';
+    this.callAPIService.setHttp(
+      'get',
+      'api/BoothCommitteeDashboard/BoothCommitteeFormation_Map_ConsituencyDropdown?UserId=' +
+        this.commonService.loggedInUserId() +
+        obj,
+      false,
+      false,
+      false,
+      'electionMicroSerApp'
+    );
+    this.callAPIService.getHttp().subscribe(
+      (res: any) => {
+        if (res.responseData != null && res.statusCode == '200') {
+          this.assemblyArray = res.responseData;
+        } else {
+          this.assemblyArray = [];
+        }
+      },
+      (error: any) => {
+        if (error.status == 500) {
+          this.router.navigate(['../../500'], { relativeTo: this.route });
+        }
       }
-    }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
+    );
   }
 
-  getConstituencymastercommittee() {  // Main Api For Table
+  getBoothsUnderAssemblies(updateData?: any) {
+    this.callAPIService.setHttp(
+      'get',
+      'api/BoothCommitteeDashboard/Web_GetBoothList_Boothcommittee?UserId=' +
+        this.userId +
+        '&ConstituencyId=' +
+        (this.localGovBodyForm.value.assemblyId || 0),
+      false,
+      false,
+      false,
+      'electionMicroSerApp'
+    );
+    this.callAPIService.getHttp().subscribe(
+      (res: any) => {
+        if (res.responseData != null && res.statusCode == '200') {
+          this.boothArray = res.responseData;
+          if (updateData) {
+            this.boothArray?.map((boothele: any) => {
+              updateData.map((ele: any) => {
+                ele.boothId == boothele.boothId
+                  ? (boothele['checked'] = true)
+                  : '';
+              });
+            });
+          }
+        } else {
+          this.boothArray = [];
+        }
+      },
+      (error: any) => {
+        if (error.status == 500) {
+          this.router.navigate(['../../500'], { relativeTo: this.route });
+        }
+      }
+    );
+  }
+
+  getConstituencymastercommittee() {
+    // Main Api For Table
     this.spinner.show();
-    let obj = 'pageNo=' + this.paginationNo + '&pageSize=' + this.pageSize + '&StateId=' + (this.f['stateId'].value || 0) + '&DivisionId=' + (this.f['divisionId'].value || 0) + '&DistrictId='+ (this.f['districtId'].value || 0) +'&TalukaId=' + (this.f['talukaId'].value || 0) + '&CategoryId=' + (this.f['categoryId'].value || 0) +
-     '&Search=' + (this.f['SearchText'].value || '') + '&IsRural=' + (this.f['isRural'].value) + '&VillageId=' + (this.f['villageId'].value || 0);
-    this.callAPIService.setHttp('get', 'Constituency/ConstituenctCommittee/GetAll?' + obj, false, false, false, 'electionMicroSerApp');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != null && res.statusCode == "200") {
+    let obj =
+      'pageNo=' +
+      this.paginationNo +
+      '&pageSize=' +
+      this.pageSize +
+      '&AssemblyId=' +
+      (this.filterForm?.value?.assemblyId || 0) +
+      '&CategoryId=' +
+      (this.f['categoryId'].value || 0) +
+      '&Search=' +
+      (this.f['SearchText'].value || '');
+    this.callAPIService.setHttp(
+      'get',
+      'Constituency/ConstituenctCommittee/GetAll_1_0?' + obj,
+      false,
+      false,
+      false,
+      'electionMicroSerApp'
+    );
+    this.callAPIService.getHttp().subscribe(
+      (res: any) => {
+        if (res.responseData != null && res.statusCode == '200') {
+          this.spinner.hide();
+          this.localBodyListArray = res.responseData;
+          this.getTotal = res.responseData1.totalPages * this.pageSize;
+        } else {
+          this.spinner.hide();
+          this.localBodyListArray = [];
+        }
+      },
+      (error: any) => {
         this.spinner.hide();
-        this.localBodyListArray = res.responseData;
-        this.getTotal = res.responseData1.totalPages * this.pageSize;
-      } else {
-        this.spinner.hide();
-        this.localBodyListArray = [];
+        this.router.navigate(['../500'], { relativeTo: this.route });
       }
-    }, (error: any) => { this.spinner.hide(); this.router.navigate(['../500'], { relativeTo: this.route }) })
+    );
   }
 
   onClickPagintion(pageNo: number) {
@@ -367,21 +416,23 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
     this.clearForm();
   }
 
-  onKeyUpSearchData() { this.subject.next()}
+  onKeyUpSearchData() {
+    this.subject.next();
+  }
 
   searchData() {
     this.subject.pipe(debounceTime(700)).subscribe(() => {
-        this.filterForm.value.SearchText
-        this.paginationNo = 1;
-        this.getConstituencymastercommittee();
-      });
+      this.filterForm.value.SearchText;
+      this.paginationNo = 1;
+      this.getConstituencymastercommittee();
+    });
   }
 
-  showVillageTalukaList(data?:any){
+  showVillageTalukaList(data?: any) {
     this.villageTalukaDetailsList = data;
   }
 
-  clearFilter(flag?: any) {     
+  clearFilter(flag?: any) {
     if (flag == 'state') {
       this.f['divisionId'].setValue('');
       this.f['districtId'].setValue('');
@@ -404,43 +455,51 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
       // this.f['categoryId'].setValue('');
     } else if (flag == 'search') {
       this.f['SearchText'].setValue('');
-    } else if( flag == 'isRural'){
+    } else if (flag == 'isRural') {
       this.f['isRural'].setValue(2);
       this.f['villageId'].setValue('');
     }
     this.getConstituencymastercommittee();
   }
 
-          // ....................Filter Form Code End Here ....................... //
+  // ....................Filter Form Code End Here ....................... //
 
-            //.......................................  Delete Supervisor Code End Here .................................//
+  //.......................................  Delete Supervisor Code End Here .................................//
 
-  deleteConfirmModel(delId:any) {
+  deleteConfirmModel(delId: any) {
     const dialogRef = this.dialog.open(DeleteComponent, { disableClose: true });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result == 'Yes') {
         this.deleteTableData(delId);
       }
     });
   }
 
-  deleteTableData(delId:any) {
+  deleteTableData(delId: any) {
     let obj = {
-      "id": delId,
-      "deletedBy": this.userId
-    }
-    this.callAPIService.setHttp('DELETE', 'Constituency/ConstituenctCommittee/Delete', false, obj, false, 'electionMicroSerApp');
-    this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.statusCode == "200") {
-        this.tosterService.success(res.statusMessage); 
-        this.clearForm();
-        this.getConstituencymastercommittee();
-      } else {
+      id: delId,
+      deletedBy: this.userId,
+    };
+    this.callAPIService.setHttp(
+      'DELETE',
+      'Constituency/ConstituenctCommittee/Delete_1_0',
+      false,
+      obj,
+      false,
+      'electionMicroSerApp'
+    );
+    this.callAPIService.getHttp().subscribe(
+      (res: any) => {
+        if (res.statusCode == '200') {
+          this.tosterService.success(res.statusMessage);
+          this.clearForm();
+          this.getConstituencymastercommittee();
+        } else {
+        }
+      },
+      (error: any) => {
+        this.router.navigate(['../500'], { relativeTo: this.route });
       }
-    }, (error: any) => {
-      this.router.navigate(['../500'], { relativeTo: this.route });
-    })
+    );
   }
-
-
 }
