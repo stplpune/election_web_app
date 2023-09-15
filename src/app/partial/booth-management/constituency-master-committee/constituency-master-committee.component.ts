@@ -285,6 +285,10 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
       (res: any) => {
         if (res.responseData != null && res.statusCode == '200') {
           this.categoryArray = res.responseData;
+          this.categoryArray.unshift({
+            "id": 0,
+            "categoryType": "All"
+        })
           // this.categoryArray?.length == 1 ? this.f['categoryId'].setValue(this.categoryArray[0]?.categoryId) : '';
         } else {
           this.categoryArray = [];
