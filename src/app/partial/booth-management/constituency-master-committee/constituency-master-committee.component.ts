@@ -101,26 +101,27 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
     this.onClickUpdateComityModel();
   }
 
+  constituencyComityModelArray: any[] = [];
   onClickCheckBox1(event?: any, data?: any) {
-    console.log(data);
-    var index = this.boothArray.findIndex(
-      (x: any) => x.boothId == data.boothId);
-    // If checked then push
-    if (event.target.checked) {
-      let obj = {
-        id: 0,
-        committeeConstituencyId: 0,
-        assemblyId: data.assemblyId,
-        boothId: data.boothId,
-      };
-      // Pushing the object into array
-      this.boothUnderConstituencyArr.push(obj);
-    } else {
-      this.boothUnderConstituencyArr.splice(index, 1);
-    }
+    this.boothArray.map((ele:any)=>{
+      if(data.boothId == ele.boothId){
+        ele['checked'] = event.target.checked;
+        return ele;
+      }
+    })
+    this.updateTestMethod();
   }
 
-  constituencyComityModelArray: any[] = [];
+  updateTestMethod(){
+    this.constituencyComityModelArray = [];
+    this.boothArray.map((ele1:any)=>{
+      if(ele1.checked == true){
+        this.constituencyComityModelArray.push(ele1)
+      }
+    })
+  }
+
+  
   onClickUpdateComityModel() {
     // push checked obj in new Array
     this.constituencyComityModelArray = [];
@@ -138,7 +139,7 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
         createdBy: this.userId,
       };
       if (ele?.checked == true) {
-        this.constituencyComityModelArray.push(obj);
+        // this.constituencyComityModelArray.push(obj);
       }
     });
   }
@@ -149,9 +150,6 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
 
   patchFormData(obj: any) {
     this.editObjData = obj;
-    
-    console.log(this.editObjData?.getAssignBoothstoConstituencyCommitteeModel,'ppp');
-    
     this.localGovBodyForm.patchValue({
       id: obj?.id,
       constituencyName: obj?.constituencyName,
@@ -159,15 +157,16 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
       assemblyId: obj?.getAssignBoothstoConstituencyCommitteeModel[0]?.assemblyId,
     });
     this.editObjData?.getAssignBoothstoConstituencyCommitteeModel?.length
-      ? this.getBoothsUnderAssemblies(
-          this.editObjData?.getAssignBoothstoConstituencyCommitteeModel
-        ) : this.boothArray = [];
+      ? this.getBoothsUnderAssemblies(this.editObjData?.getAssignBoothstoConstituencyCommitteeModel) : this.boothArray = [];
   }
 
   onSubmit() {
     this.submitted = true;
     if (this.localGovBodyForm.invalid) {
       this.spinner.hide();
+      return;
+    }else if(!this.constituencyComityModelArray?.length){
+      this.tosterService.error('Please Select at least One Booth');
       return;
     }
     // if (
@@ -184,12 +183,12 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
       this.spinner.show();
       let formData = this.localGovBodyForm.value;
       let obj = {
-        id: formData.id || this.editObjData.id,
+        id: formData?.id || this.editObjData?.id,
         constituencyName: formData.constituencyName || this.editObjData.constituencyName,
         typeId: formData.categoryId || this.editObjData.typeId,
         // isRural: formData.isRural,
         createdBy: this.userId,
-        boothstoConstituencyCommitteeModelList: (formData.id == 0) ? this.boothUnderConstituencyArr : this.editObjData?.getAssignBoothstoConstituencyCommitteeModel,
+        boothstoConstituencyCommitteeModelList: this.constituencyComityModelArray,
       };
 
       // {
