@@ -19,6 +19,7 @@ export class AssignTalukaToAssemblyComponent implements OnInit {
   assemblyArray =new Array();
   stateArray = new Array();
   districtArray = new Array();
+  
   talukaArray = new Array();
   talukaobjResult='';
   submitted:boolean=false;
