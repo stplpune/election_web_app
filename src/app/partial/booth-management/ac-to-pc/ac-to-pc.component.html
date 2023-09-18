@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <div class="row justify-content-between align-items-start mx-1" id="pageheader">
+    <!-- <div class="row justify-content-between align-items-start mx-1" id="pageheader">
         <div class="col-sm-6">
             <span class="page-name">Assign Assembly Constituency to Parliamentary Constituency</span>
         </div>
@@ -14,59 +14,50 @@
                 </select>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="row">
         <div class="col-sm-12 chartbox">
             <div class="card">
                 <div class="card-header">
                     <span class="text-main"> Assign Assembly Constituency to Parliamentary Constituency</span>
                 </div>
-                <div class="card-body ">
+                <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover" >
+                           <ng-container >
                             <thead>
-                                <tr>
-                                    <th>Sr.No.</th>
-                                    <th>Parlimentry Consistunsy</th>
-                                    <th>District Name</th>
-                                    <th>Assembly Consistunsy</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td rowspan="3">1<br /><br /></td>
-                                    <td rowspan="3">A<br /><br /></td>
-                                    <td>satara</td>
-                                    <td><i class="fa-solid fa-upload"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>Pune</td>
-                                    <td>12</td>
-                                </tr>
-                                <tr>
-                                    <td>Wai</td>
-                                    <td>23</td>
-                                </tr>
-
-                                <tr>
-                                    <td>Pune</td>
-                                    <td>12</td>
-                                    <td>12</td>
-                                    <td>12</td>
-                                </tr>
-                                <tr>
-                                    <td>Wai</td>
-                                    <td>23</td>
-                                    <td>23</td>
-                                    <td>
-                                        <button class="btn btn-light text-dark rounded" title="Edit Details"
-                                            data-bs-toggle="modal" data-bs-target="#staticBackdrop1">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                    </td>
-                                </tr>
-                            </tbody>
+                              <tr>
+                                  <th>Sr.No.</th>
+                                  <th>Parlimentry Constituency </th>
+                                  <th>District Name</th>
+                                  <th>Assembly Constituency </th>
+                                  <th>Action</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <tr *ngFor="let list of tableDataArray;let i=index">
+                                  <td>{{i+1}}<br /><br /></td>
+                                  <!-- <td><i class="fa-solid fa-upload"></i></td> -->
+                                  
+                                <td >{{list?.parliamentaryconstituenciesId}} - {{list?.parliamentaryConstituencies}}<br /><br /></td>
+                                <td>
+                                  <ul *ngFor="let item of list.assemblyList">
+                                    <li>{{item?.districtName}}</li>
+                                  </ul>
+                                </td>
+                                <td>
+                                  <ul *ngFor="let item of list.assemblyList">
+                                    <li>{{item?.assemblyId}} - {{item?.assemblyName}}</li>
+                                  </ul>
+                                <td>
+                                  <button type="button" class="btn btn-light text-dark rounded" title="Edit Details"
+                                      data-bs-toggle="modal" data-bs-target="#staticBackdrop1" (click)="getDatatoBind(list)">
+                                      <i class="fas fa-edit"></i>
+                                  </button>
+                              </td>
+                              </tr>
+                          </tbody>
+                           </ng-container>
                         </table>
                     </div>
                 </div>
@@ -76,24 +67,28 @@
 </div>
 
 <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+    <form [formGroup]="mainForm">
+      <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="staticBackdropLabel">Assign AC to PC</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="clearData()"></button>
             </div>
             <div class="modal-body form-container">
               <div class="row gy-2">
                 <div class="col-sm-6">
                   <label for="exampleFormControlInput1" class="form-label">Parliamentary Constituency</label>
-                  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Assembly Name">
+                  <input type="text" class="form-control" formControlName="parliamentaryConstituencies" id="exampleFormControlInput1" placeholder="Assembly Name" readonly>
                 </div>
                 <div class="col-sm-6">
                   <label for="exampleFormControlInput1" class="form-label">Select District</label>
-                  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="District Name">
+                    <ngx-select [items]="districtArray" formControlName="districtId"
+                        optionValueField="districtId" optionTextField="districtName"
+                        placeholder="Select District"(select)="getAssembly()">
+                    </ngx-select>
                 </div>
-                <div class="col-sm-12">
+                <!-- <div class="col-sm-12">
                   <label for="exampleFormControlInput1" class="form-label">Assign AC</label>
                   <select class="form-select" aria-label="Default select example">
                     <option selected>Assign AC</option>
@@ -101,43 +96,27 @@
                     <option value="2">Two</option>
                     <option value="3">Three</option>
                   </select>
-                </div>
+                </div> -->
                 <div class="col-sm-12">
-                  <div class="card mb-2 card-body">
-                    <div class="row">
-                    <div class="col-sm-3">
-                      <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                        <label class="form-check-label" for="inlineCheckbox1">AC 1</label>
+                  <mat-card class="border">
+                    <mat-card-content>
+                      <div class="mb-3">
+                        <div class="mb-2 form-check" *ngFor="let boothsUnderA of assemblArray">
+                          <input class="form-check-input" type="checkbox" [checked]="boothsUnderA?.checked == true"
+                            (change)="onClickCheckBox1($event,boothsUnderA)" />
+                          <label class="form-check-label" for="flexCheckDefault">
+                            {{ boothsUnderA?.assemblyName }}
+                          </label>
+                        </div>
+                        <div *ngIf="assemblArray.length === 0">
+                          <div class="alert alert-danger text-center py-2">
+                            No Results Found!
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div class="col-sm-3">
-                      <div class="form-check mx-0 form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                        <label class="form-check-label" for="inlineCheckbox2"> AC 2</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-3">
-                      <div class="form-check mx-0 form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" >
-                        <label class="form-check-label" for="inlineCheckbox3">AC 3</label>
-                      </div>
-                    </div>
-                   <div class="col-sm-3">
-                    <div class="form-check mx-0 form-check-inline">
-                      <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option4" >
-                      <label class="form-check-label" for="inlineCheckbox4">AC 4</label>
-                    </div>
-                   </div>
-                    <div class="col-sm-3">
-                      <div class="form-check mx-0 form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="option5" >
-                        <label class="form-check-label" for="inlineCheckbox5">AC 5</label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <button type="submit" class="btn btn-main float-end">Add</button>
+                    </mat-card-content>
+                  </mat-card>
+                <button type="button" class="btn btn-main mt-2 float-end" (click)="addItem()">Add</button>
               </div>
               <div class="col-sm-12">
                <div class="table-responsive chartbox">
@@ -150,10 +129,17 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td >255 - Phaltan (SC)</td>
-                      <td>Satara</td>
-                      <td>Taluka 1</td>
+                    <tr *ngFor="let assemblyItems of itemAray;let i=index">
+                      <td >{{parliamentaryconstituenciesId}}</td>
+                      <td>{{assemblyItems?.districtName}}</td>
+                      <td>
+                        <ul *ngFor="let items of assemblyItems.assemblyArr">
+                          <li>{{items?.assemblyName}}</li>
+                        </ul>
+                        <!-- <ul>
+                          <li>{{assemblyItems?.assemblyArr[i]?.assemblyName}}</li>
+                        </ul> -->
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -162,9 +148,10 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-main">Save</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="clearData()">Cancel</button>
+              <button type="button" class="btn btn-main" (click)="onSubmit()">Save</button>
             </div>
           </div>
     </div>
+    </form>
 </div>
