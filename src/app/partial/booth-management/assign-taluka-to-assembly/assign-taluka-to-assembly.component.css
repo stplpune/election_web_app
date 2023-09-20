@@ -96,3 +96,8 @@
   table,td,tr{
     border: solid 1px black;
   } */
+
+  .ChekBox{
+    height: 200px;
+    overflow: scroll;
+}
