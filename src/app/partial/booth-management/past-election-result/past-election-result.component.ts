@@ -25,7 +25,8 @@ export class PastElectionResultComponent implements OnInit {
   selectedCandidateDetails: any
   localStorageData = this.commonService.getlocalStorageData();
   pageNo: number = 1;
-
+  pageSize: number = 10;
+  getTotalPages: any;
   filterExcleDataArray: any = [];
   excleDataArray: any = [];
   isConstituencyDisabled = false;
@@ -69,12 +70,14 @@ export class PastElectionResultComponent implements OnInit {
   }
 
   bindElection() {
+    this.electionResultArray = [];
+    let id = this.filterForm.value.constituencyType == 1 ? 2:3
     let url = `UserId=${this.localStorageData.Id}&ClientId=${this.localStorageData.ClientId}&StateId=${this.localStorageData.StateId}`
 
     this.callAPIService.setHttp('get', 'api/BoothCommitteeDashboard/GetPastElectionName?' + url, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != null && res.statusCode == "200") {
-        this.electionArray = res.responseData;
+      if (res.responseData != null && res.statusCode == "200" && res.responseData.length ) {
+        this.electionArray = res.responseData.filter((res:any)=> res.electionTypeId == id);
       } else {
         this.electionArray = [];
       }
@@ -82,11 +85,12 @@ export class PastElectionResultComponent implements OnInit {
   }
 
   bindConstituency() {
+    this.constituencyArray = [];
     let url = `UserId=${this.localStorageData.Id}&ClientId=${this.localStorageData.ClientId}&StateId=${this.localStorageData.StateId}&FilterTypeId=${this.filterForm.value.constituencyType}`
 
     this.callAPIService.setHttp('get', 'api/BoothCommitteeDashboard/BoothCommitteeFormation_Map_ConsituencyDropdown?' + url, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != null && res.statusCode == "200") {
+      if (res.responseData != null && res.statusCode == "200" && res.responseData?.length) {
         this.constituencyArray = res.responseData;
       } else {
         this.constituencyArray = [];
@@ -97,17 +101,26 @@ export class PastElectionResultComponent implements OnInit {
 
   getTableData() {
     let formdata = this.filterForm.value;
-    if (!formdata.electionId) {this.toastrService.error('Please Select Election'); return }
-    let url = `flag=${formdata.constituencyType}&AssemblyId=${formdata.constituencyId || 0}&ElectionId=${formdata.electionId}`
+    if (!formdata.electionId) {this.toastrService.error('Please Select Election'); return };
+    this.spinner.show();
+    let url = `flag=${formdata.constituencyType}&AssemblyId=${formdata.constituencyId || 0}&ElectionId=${formdata.electionId}&pageNo=${this.pageNo}&pageSize=${this.pageSize}`
 
     this.callAPIService.setHttp('get', 'api/ElectionResultDetails/GetAllDistinctList?' + url, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData.responseData1 != null && res.statusCode == "200") {
+      if (res.responseData.responseData1 != null && res.statusCode == "200" && res.responseData.responseData1.length) {
         this.electionResultArray = res.responseData.responseData1;
+        this.getTotalPages = res.responseData.responseData2.totalCount;
+        this.spinner.hide();
       } else {
+        this.spinner.hide();
         this.electionResultArray = [];
       }
-    }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
+    }, (error: any) => {this.spinner.hide(); if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
+  }
+
+  onClickPagintion(pageNo: number) {
+    this.pageNo = pageNo;
+    this.getTableData();
   }
 
   onRemoveElection() {
@@ -118,10 +131,10 @@ export class PastElectionResultComponent implements OnInit {
   
   viewCandidatesDetails(obj: any) {
     this.selectedCandidateDetails = obj;
-    let url = `ElectionId=${obj.electionId}&ConstituencyId=${obj.constituencyId}`;
+    let url = `ElectionId=${this.filterForm.value.electionId}&ConstituencyId=${obj.constituencyId}`;
     this.callAPIService.setHttp('get', 'api/ElectionResultDetails/GetElectionResultDetailsById?' + url, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
-      if (res.responseData != null && res.statusCode == "200") {
+      if (res.responseData != null && res.statusCode == "200" && res.responseData?.length) {
         this.candidatesDetailsArray = res.responseData;
       } else {
         this.candidatesDetailsArray = [];
@@ -132,8 +145,8 @@ export class PastElectionResultComponent implements OnInit {
 
   onAction() {
     this.uploadElectionForm.controls['electionId'].setValue(this.filterForm.value.electionId);
-    this.uploadElectionForm.controls['constituencyId'].setValue(this.filterForm.value.constituencyId);
-    this.uploadElectionForm.value.constituencyId ? this.isConstituencyDisabled = true :this.isConstituencyDisabled = false;
+    //this.uploadElectionForm.controls['constituencyId'].setValue(this.filterForm.value.constituencyId);
+   // this.uploadElectionForm.value.constituencyId ? this.isConstituencyDisabled = true :this.isConstituencyDisabled = false;
     this.electionName = this.electionArray.find((res:any)=> res.electionId == this.uploadElectionForm.value.electionId).electionName   
   }
 
@@ -155,7 +168,7 @@ export class PastElectionResultComponent implements OnInit {
         var first_sheet_name = workbook.SheetNames[0];
         var worksheet = workbook.Sheets[first_sheet_name];
         this.excleDataArray = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-        console.log(this.excleDataArray);
+        console.log(this.excleDataArray);        
         let validExcel = true;
         let keynames = ['Candidate Name','SL.No','Total Vote']
         this.excleDataArray.map((res:any)=>{
@@ -170,8 +183,10 @@ export class PastElectionResultComponent implements OnInit {
         })
         if(!validExcel){
           this.toastrService.error('Upload Valid Excle');
-          this.onClearElection()
+          this.onClearElection();
+          return
         }
+        this.filterExcelData()
       };
       fileReader.readAsArrayBuffer(event.target.files[0]);
     } else {
@@ -186,16 +201,21 @@ export class PastElectionResultComponent implements OnInit {
       if (noOfKeys.length == 1) {
         constituency_Name = res['SL.No'];
       } else {
+       // debugger
+        let from = res['Candidate Name']?.lastIndexOf('(');
+        let to = res['Candidate Name']?.lastIndexOf(')')
         let obj = {
           srNo: res['SL.No'],
           candidateName: res['Candidate Name'],
           constituencyName: constituency_Name,
-          totalVote: res['Total Vote']
+          totalVote: res['Total Vote'],
+          partyName :res['Candidate Name']?.substring(from+1,to),
+          constituencyId :constituency_Name?.split('-')[0]
         }       
         if (res['Candidate Name'] != 'Total') { this.filterExcleDataArray.push(obj) }
       }
     })
-    this.filterExcleDataArray.sort((res:any, ele:any)=> ele.totalVote - res.totalVote)
+  //  this.filterExcleDataArray.sort((res:any, ele:any)=> ele.totalVote - res.totalVote)
   }
 
   onClearElection() {
@@ -206,19 +226,23 @@ export class PastElectionResultComponent implements OnInit {
   }
 
   saveElection(){
+    if(!this.filterExcleDataArray.length){
+      this.toastrService.error('Please Upload Excel');
+      return
+    }
     this.spinner.show();
     let submitArray:any=[];
       this.filterExcleDataArray.map((res:any)=>{
         let obj={
           id: 0,
           candidateName: res.candidateName,
-          partyName: "",
+          partyName: res.partyName,
           partyId: 0,
           totalVotes: +res.totalVote,
           isWinner: 0,
           winningMargin: 0,
           electionId: +this.uploadElectionForm.value.electionId,
-          constituencyId: +this.uploadElectionForm.value.constituencyId,
+          constituencyId: +res.constituencyId,
           createdBy: this.localStorageData.Id
         }
         submitArray.push(obj)
@@ -230,6 +254,8 @@ export class PastElectionResultComponent implements OnInit {
           this.spinner.hide();
           this.toastrService.success(res.statusMessage);
           this.closeElectionModel.nativeElement.click();
+          this.pageNo=1;
+          this.getTableData();
         } else { this.spinner.hide();this.toastrService.error(res.statusMessage); }
       }, (error: any) => {
         this.spinner.hide();
