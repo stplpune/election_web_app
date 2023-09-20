@@ -35,7 +35,7 @@
                               </tr>
                           </thead>
                           <tbody>
-                              <tr *ngFor="let list of tableDataArray;let i=index">
+                              <tr *ngFor="let list of tableDataArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:getTotal} ;let i=index">
                                   <td>{{i+1}}<br /><br /></td>
                                   <!-- <td><i class="fa-solid fa-upload"></i></td> -->
                                   
@@ -51,7 +51,7 @@
                                   </ul>
                                 <td>
                                   <button type="button" class="btn btn-light text-dark rounded" title="Edit Details"
-                                      data-bs-toggle="modal" data-bs-target="#staticBackdrop1" (click)="getDatatoBind(list)">
+                                      data-bs-toggle="modal" data-bs-target="#staticBackdrop1" (click)="patchFormData(list)">
                                       <i class="fas fa-edit"></i>
                                   </button>
                               </td>
@@ -59,6 +59,13 @@
                           </tbody>
                            </ng-container>
                         </table>
+                        <div class="mt-2 text-end" *ngIf="!tableDataArray?.length">
+                          <div class="alert alert-danger text-center py-2">No Results Found!
+                          </div>
+                      </div>
+                  <pagination-controls *ngIf="tableDataArray?.length != 0 && getTotal > 1"
+                      previousLabel="" nextLabel="" (pageChange)="onClickPagintion($event)">
+                  </pagination-controls>
                     </div>
                 </div>
             </div>
@@ -73,7 +80,7 @@
         <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="staticBackdropLabel">Assign AC to PC</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="clearData()"></button>
+              <button type="button" #closeModal class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="clearData()"></button>
             </div>
             <div class="modal-body form-container">
               <div class="row gy-2">
@@ -126,11 +133,12 @@
                       <th>PC Name</th>
                       <th>District Name</th>
                       <th>Assigned AC</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let assemblyItems of itemAray;let i=index">
-                      <td >{{parliamentaryconstituenciesId}}</td>
+                    <tr *ngFor="let assemblyItems of itemArray;let i=index">
+                      <td>{{parliamentaryconstituenciesId}}</td>
                       <td>{{assemblyItems?.districtName}}</td>
                       <td>
                         <ul *ngFor="let items of assemblyItems.assemblyArr">
@@ -139,6 +147,11 @@
                         <!-- <ul>
                           <li>{{assemblyItems?.assemblyArr[i]?.assemblyName}}</li>
                         </ul> -->
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-light text-danger rounded" title="Delete Details" (click)="deleteListData(i)">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
                       </td>
                     </tr>
                   </tbody>
