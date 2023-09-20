@@ -135,7 +135,7 @@
                                         <tr
                                             *ngFor="let boothComityGenerl_Female of boothComtyMemberListArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:getTotal}; let i = index">
                                             <td>{{((paginationNo + 1) * 10 + i + 1)-20}}</td>
-                                            <td>{{boothComityGenerl_Female?.boothId}}-{{boothComityGenerl_Female?.boothName}}
+                                            <td>{{boothComityGenerl_Female?.boothListNumber}}-{{boothComityGenerl_Female?.boothName}}
                                             </td>
                                             <td class="p-0">
                                                 <div class="fixed-height1">

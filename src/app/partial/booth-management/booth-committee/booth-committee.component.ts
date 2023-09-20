@@ -213,14 +213,17 @@ export class BoothCommitteeComponent implements OnInit {
       this.f['BoothId'].setValue('');
       this.dataNotFound = false;
       this.boothCommitteeType = 1;
+      this.paginationNo = 1;
       this.getCommitteMemberTypewise();
       this.clearBCDetail();
     } else if (flag == 'village') {
+      this.paginationNo = 1;
       this.f['BoothId'].setValue('');
       this.boothCommitteeType = 1;
       this.getCommitteMemberTypewise();
       this.clearBCDetail();
     } else if (flag == 'booth') {
+      this.paginationNo = 1;
       this.boothCommitteeType = 1;
       this.getCommitteMemberTypewise();
       this.clearBCDetail();
