@@ -5,8 +5,8 @@
       <div class="card-header bg-transparent p-1">
         <div class="d-flex gap-3">
           <div class="form-check" *ngFor="let obj of ConstituencyTypeArray">
-            <input class="form-check-input" type="radio" name="constituencyType" id="constituencyType" [value]="obj.id"
-              formControlName="constituencyType" (change)="getTableData()">
+            <input class="form-check-input" type="radio" [value]="obj.id"
+              formControlName="constituencyType" (change)="bindElection();bindConstituency()">
             <label class="form-check-label form-label" for="constituencyType">
               {{obj.name}}
             </label>
@@ -21,8 +21,8 @@
                 <div class="col-sm-4">
                   <div class="mb-3">
                     <ngx-select [allowClear]="true" [items]="electionArray" formControlName="electionId"
-                      (remove)="pageNo=1;onRemoveElection()" (select)="pageNo=1;getTableData();" optionValueField="electionId"
-                      optionTextField="electionName" placeholder="Select Election">
+                      (remove)="pageNo=1;onRemoveElection()" (select)="pageNo=1;getTableData();"
+                      optionValueField="electionId" optionTextField="electionName" placeholder="Select Election">
                     </ngx-select>
                   </div>
                 </div>
@@ -50,6 +50,8 @@
   </div>
   <div class="card card-body chartbox">
     <ng-container *ngIf="electionResultArray.length">
+      <div class="d-flex justify-content-end mb-2"><button type="button" class="btn  btn-main" data-bs-toggle="modal"
+          data-bs-target="#electionresultmodal" (click)="onAction()">Upload Excel</button></div>
       <div class="table-responsive">
         <table class="table dash-table mb-3">
           <thead>
@@ -59,11 +61,12 @@
               <th scope="col" *ngIf="filterForm.value.constituencyType == 2">District Name</th>
               <th scope="col" *ngIf="filterForm.value.constituencyType == 2">Assembly Name</th>
               <th scope="col">No. of Candidates</th>
-              <th scope="col">Actions</th>
+              <!-- <th scope="col">Actions</th> -->
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of electionResultArray; let i = index">
+            <tr *ngFor="let data of electionResultArray | paginate: {itemsPerPage: pageSize, 
+              currentPage: pageNo, totalItems:getTotalPages}; let i = index">
               <td>{{((pageNo + 1) * 10 + i + 1)-20}}</td>
               <td *ngIf="filterForm.value.constituencyType == 1">{{data.constituencyName || '-'}}</td>
               <td *ngIf="filterForm.value.constituencyType == 2">{{data.districtName || '-'}}</td>
@@ -73,17 +76,17 @@
                 <a href="" data-bs-toggle="modal" data-bs-target="#candidateModal"
                   (click)="viewCandidatesDetails(data)">{{data.noOfCandidates || '0'}}</a>
               </td>
-              <td>
+              <!-- <td>
                 <a data-bs-toggle="modal" data-bs-target="#electionresultmodal" (click)="onAction()">
                   <i class="fa fa-upload" aria-hidden="true"></i>
                 </a>
-                <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#electionresultmodal">
-              Launch demo modal
-            </button> -->
-              </td>
+              </td> -->
             </tr>
           </tbody>
         </table>
+        <pagination-controls previousLabel="" nextLabel=""
+          (pageChange)="onClickPagintion($event)">
+        </pagination-controls>
       </div>
     </ng-container>
     <div class="mt-2 text-end" *ngIf="electionResultArray?.length == 0">
@@ -97,12 +100,12 @@
 
 <!-- No of candiates modal -->
 <!-- Modal -->
-<div class="modal fade" id="candidateModal" tabindex="-1" aria-labelledby="candidateModalLabel" aria-hidden="true" data-bs-backdrop="static">
+<div class="modal fade" id="candidateModal" tabindex="-1" aria-labelledby="candidateModalLabel" aria-hidden="true"
+  data-bs-backdrop="static">
   <div class="modal-dialog modal-dialog-scrollable modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="candidateModalLabel">{{(selectedCandidateDetails?.constituencyName ||'') +'(SC)
-          Election Result'}}</h1>
+        <h1 class="modal-title fs-5" id="candidateModalLabel">{{(selectedCandidateDetails?.constituencyName ||'') +' Election Result'}}</h1>
         <a class="btn-close" data-bs-dismiss="modal" aria-label="Close"></a>
       </div>
       <div class="modal-body">
@@ -117,19 +120,22 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of candidatesDetailsArray;let i = index">
-              <td>{{1+i}}</td>
-              <td>
-                <a href="#">{{data.candidateName}}</a>
-              </td>
-              <td>{{data.partyName}}</td>
-              <td>
-                {{data.totalVotes}}
-              </td>
-              <td>
-                {{data.winningMargin}}
-              </td>
-            </tr>
+            <ng-container *ngIf="candidatesDetailsArray.length">
+              <tr *ngFor="let data of candidatesDetailsArray;let i = index">
+                <td>{{1+i}}</td>
+                <td> {{data.candidateName}}</td>
+                <td>{{data.partyName}}</td>
+                <td> {{data.totalVotes}}</td>
+                <td>{{data.winningMargin}} </td>
+              </tr>
+            </ng-container>
+            <ng-container *ngIf="candidatesDetailsArray.length == 0">
+              <tr>
+                <td class="mt-2 text-end" colspan="12">
+                  <div class="alert alert-danger text-center py-2">No Results Found!</div>
+                </td>
+              </tr>
+            </ng-container>
           </tbody>
         </table>
       </div>
@@ -153,7 +159,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="electionresultmodalLabel">Upload Past Election Result</h1>
-        <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close" #closeElectionModel (click)="onClearElection()"></button>
+        <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"
+          #closeElectionModel (click)="onClearElection()"></button>
       </div>
       <div class="modal-body">
         <div class="card card-body pb-0 mb-4 resultfilter">
@@ -161,61 +168,72 @@
             <div class="row gx-1">
               <div class="col-sm-3">
                 <div class="mb-3">
-                  <ngx-select [items]="electionArray" formControlName="electionId"
-                     optionValueField="electionId" [disabled]="true"
-                    optionTextField="electionName" placeholder="Select Election">
+                  <ngx-select [items]="electionArray" formControlName="electionId" optionValueField="electionId"
+                    [disabled]="true" optionTextField="electionName" placeholder="Select Election">
                   </ngx-select>
                 </div>
               </div>
-              <div class="col-sm-3">
+              <!-- <div class="col-sm-3">
                 <div class="mb-3">
                   <ngx-select [allowClear]="true" [items]="constituencyArray" formControlName="constituencyId"
-                      optionValueField="constituenciesId" optionTextField="constituencyName" 
-                      [disabled]="isConstituencyDisabled" placeholder="All Constituency">
-                    </ngx-select>
+                    optionValueField="constituenciesId" optionTextField="constituencyName"
+                    [disabled]="isConstituencyDisabled" placeholder="All Constituency">
+                  </ngx-select>
                 </div>
-              </div>
+              </div> -->
               <div class="col-sm-4">
                 <div class="mb-3">
                   <input class="form-control" type="file" id="formFileDisabled" formControlName="excleData"
-                  accept=".xlsx, .xls, .XLSX, .XLS" (change)="uploadExcel($event)" #excleUpload>
+                    accept=".xlsx, .xls, .XLSX, .XLS" (change)="uploadExcel($event)" #excleUpload>
                   <!-- <label for="formFileDisabled" class="form-label">Browse</label> -->
                 </div>
               </div>
               <div class="col-sm-2">
-                <div class="d-flex gap-2">
+                <div class="d-flex gap-2" *ngIf="filterExcleDataArray.length">
                   <button type="button" class="btn btncancel" (click)="onClearElection()">Clear</button>
-                  <button type="button" class="btn  btn-main" (click)="filterExcelData()">Apply</button>
+                  <!-- <button type="button" class="btn  btn-main" (click)="filterExcelData()">Apply</button> -->
                 </div>
               </div>
             </div>
           </form>
         </div>
-        <div *ngIf="filterExcleDataArray.length" class="text-main">{{electionName}}</div>
-        <div class="table-responsive" *ngIf="filterExcleDataArray.length">
+        <div class="text-main">{{electionName}}</div>
+        <div class="table-responsive">
           <table class="table dash-table modal-table mb-3">
             <thead>
               <tr>
                 <th scope="col">Sr. No.</th>
                 <th scope="col">Candidate Name</th>
+                <th scope="col">Party Name</th>
+                <th scope="col">Constituency Id</th>
                 <th scope="col">Constituency Name</th>
                 <th scope="col">Total Votes</th>
-                <!-- <th scope="col">Winnning Margins</th> -->
+                
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let data of filterExcleDataArray;let i = index">
-                <td>{{i+1}}</td>
-                <td> {{data.candidateName}}</td>
-                <td>{{data.constituencyName}}</td>
-                <td> {{data.totalVote}} </td>
-                <!-- <td> 558 </td> -->
+              <ng-container *ngIf="filterExcleDataArray?.length">
+                <tr *ngFor="let data of filterExcleDataArray;let i = index">
+                  <td>{{i+1}}</td>
+                  <td> {{data.candidateName}}</td>
+                  <td> {{data.partyName}}</td>
+                  <td> {{data.constituencyId}}</td>
+                  <td>{{data.constituencyName}}</td>
+                  <td> {{data.totalVote}} </td>
+                  <!-- <td> 558 </td> -->
+                </tr>
+              </ng-container>
+              <tr *ngIf="filterExcleDataArray?.length == 0">
+                <td class="mt-2 text-end" colspan="12">
+                  <div class="alert alert-danger text-center py-2">No Results Found!</div>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div class="d-flex gap-2 align-items-center justify-content-end my-3" *ngIf="filterExcleDataArray.length">
-          <button type="button" class="btn btncancel" data-bs-dismiss="modal" (click)="onClearElection()">Cancel</button>
+        <div class="d-flex gap-2 align-items-center justify-content-end my-3">
+          <button type="button" class="btn btncancel" data-bs-dismiss="modal"
+            (click)="onClearElection()">Cancel</button>
           <button type="button" class="btn btn-main" (click)="saveElection()">Save </button>
         </div>
       </div>
