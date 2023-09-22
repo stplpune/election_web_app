@@ -35,6 +35,7 @@ export class AcToPcComponent implements OnInit {
   testArray = new Array();
   parliamentaryconstituenciesId!: any;
   dId!: any;
+  searchAssembly = '';
   checkArrLength=new Array();
   @ViewChild('closeModal') closebutton: any;
 
@@ -48,6 +49,7 @@ export class AcToPcComponent implements OnInit {
     this.mainForm = this.fb.group({
       parliamentaryConstituencies: [''],
       districtId: [''],
+      assembly:['']
     });
   }
 
@@ -166,6 +168,7 @@ export class AcToPcComponent implements OnInit {
     this.controlForm();
     this.assemblArray = [];
     this.itemArray = [];
+    this.searchAssembly = '';
   }
 
   constituencyComityModelArray: any[] = [];
@@ -260,7 +263,12 @@ export class AcToPcComponent implements OnInit {
     if (this.mainForm.invalid) {
       this.spinner.hide();
       return;
-    } else {
+    }else if(!this.itemArray.length){
+      this.spinner.hide();
+      this.tosterService.error('Add at least one Assembly/Booth');
+      return;
+    } 
+    else {
       this.spinner.show();
       let finalArrayOfObj = {};
       let formArr:any[]=[] 
