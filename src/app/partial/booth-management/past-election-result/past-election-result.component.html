@@ -5,8 +5,8 @@
       <div class="card-header bg-transparent p-1">
         <div class="d-flex gap-3">
           <div class="form-check" *ngFor="let obj of ConstituencyTypeArray">
-            <input class="form-check-input" type="radio" [value]="obj.id"
-              formControlName="constituencyType" (change)="bindElection();bindConstituency()">
+            <input class="form-check-input" type="radio" [value]="obj.id" formControlName="constituencyType"
+              (change)="onConstituencyChange()">
             <label class="form-check-label form-label" for="constituencyType">
               {{obj.name}}
             </label>
@@ -84,8 +84,7 @@
             </tr>
           </tbody>
         </table>
-        <pagination-controls previousLabel="" nextLabel=""
-          (pageChange)="onClickPagintion($event)">
+        <pagination-controls previousLabel="" nextLabel="" (pageChange)="onClickPagintion($event)">
         </pagination-controls>
       </div>
     </ng-container>
@@ -105,7 +104,8 @@
   <div class="modal-dialog modal-dialog-scrollable modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="candidateModalLabel">{{(selectedCandidateDetails?.constituencyName ||'') +' Election Result'}}</h1>
+        <h1 class="modal-title fs-5" id="candidateModalLabel">{{(selectedCandidateDetails?.constituencyName ||'') +'
+          Election Result'}}</h1>
         <a class="btn-close" data-bs-dismiss="modal" aria-label="Close"></a>
       </div>
       <div class="modal-body">
@@ -189,11 +189,19 @@
                 </div>
               </div>
               <div class="col-sm-2">
+                <a class="text-main mt-2" href="{{excelSampleFileName}}" target="_blank">
+                  <div class="d-flex align-items-center gap-2 p-2">
+                    Sample <i class="fas fa-download"></i>
+                  </div>
+                </a>
+              </div>
+              <div class="col-sm-2">
                 <div class="d-flex gap-2" *ngIf="filterExcleDataArray.length">
                   <button type="button" class="btn btncancel" (click)="onClearElection()">Clear</button>
                   <!-- <button type="button" class="btn  btn-main" (click)="filterExcelData()">Apply</button> -->
                 </div>
               </div>
+              
             </div>
           </form>
         </div>
@@ -205,10 +213,10 @@
                 <th scope="col">Sr. No.</th>
                 <th scope="col">Candidate Name</th>
                 <th scope="col">Party Name</th>
-                <th scope="col">Constituency Id</th>
+                <th scope="col">Constituency No</th>
                 <th scope="col">Constituency Name</th>
                 <th scope="col">Total Votes</th>
-                
+
               </tr>
             </thead>
             <tbody>
@@ -217,7 +225,7 @@
                   <td>{{i+1}}</td>
                   <td> {{data.candidateName}}</td>
                   <td> {{data.partyName}}</td>
-                  <td> {{data.constituencyId}}</td>
+                  <td> {{data.constituencyNo}}</td>
                   <td>{{data.constituencyName}}</td>
                   <td> {{data.totalVote}} </td>
                   <!-- <td> 558 </td> -->
