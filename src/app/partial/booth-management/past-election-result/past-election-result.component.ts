@@ -32,7 +32,8 @@ export class PastElectionResultComponent implements OnInit {
   isConstituencyDisabled = false;
 
   electionName: any;
-  excelSampleFileName = '../../../../assets/sample Excel/sampleForParlimentaryConstituency.xlsx'
+  excelSampleFileName = '../../../../assets/sample Excel/sampleForParlimentaryConstituency.xlsx';
+  noDataFoundMsg = 'Select above filters to View data!'
 
   @ViewChild('excleUpload') excleUpload!: ElementRef;
   @ViewChild('closeElectionModel') closeElectionModel!: ElementRef;
@@ -112,10 +113,11 @@ export class PastElectionResultComponent implements OnInit {
       if (res.responseData?.responseData1 != null && res.statusCode == "200" && res.responseData?.responseData1?.length) {
         this.spinner.hide();
         this.electionResultArray = res.responseData?.responseData1;
-        this.getTotalPages = res.responseData?.responseData2?.totalCount;
+        this.getTotalPages = res.responseData?.responseData2?.totalCount;       
       } else {
         this.spinner.hide();
         this.electionResultArray = [];
+        this.noDataFoundMsg = 'No Results Found!';
       }
     }, (error: any) => { this.spinner.hide(); if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
   }
@@ -125,6 +127,7 @@ export class PastElectionResultComponent implements OnInit {
     this.getTableData();
   }
   onConstituencyChange() {
+    this.noDataFoundMsg = 'Select above filters to View data!'
     this.bindElection();
     this.bindConstituency();
     if(this.filterForm.value.constituencyType == 1){
@@ -134,6 +137,7 @@ export class PastElectionResultComponent implements OnInit {
     }
   }
   onRemoveElection() {
+    this.noDataFoundMsg = 'Select above filters to View data!'
     this.filterForm.controls['constituencyId'].setValue('');
     this.electionResultArray = [];
     this.getTableData();
