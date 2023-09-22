@@ -23,7 +23,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover" >
+                        <table class="table table-bordered table-hover">
                            <ng-container >
                             <thead>
                               <tr>
@@ -36,19 +36,21 @@
                           </thead>
                           <tbody>
                               <tr *ngFor="let list of tableDataArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:getTotal} ;let i=index">
-                                  <td>{{i+1}}<br /><br /></td>
+                                  <td>{{ (paginationNo + 1) * 10 + i + 1 - 20 }}<br /><br /></td>
                                   <!-- <td><i class="fa-solid fa-upload"></i></td> -->
                                   
                                 <td >{{list?.parliamentaryconstituenciesId}} - {{list?.parliamentaryConstituencies}}<br /><br /></td>
                                 <td>
                                   <ul *ngFor="let item of list.assemblyList">
-                                    <li>{{item?.districtName}}</li>
+                                    <li>{{item.districtName ? item.districtName : '-'}}</li>
                                   </ul>
                                 </td>
                                 <td>
-                                  <ul *ngFor="let item of list.assemblyList">
+                                  <span *ngFor="let listData of list.assemblyList; let i = index">  
+                                    <ul *ngFor="let item of listData.AssemblyArray">
                                     <li>{{item?.assemblyId}} - {{item?.assemblyName}}</li>
-                                  </ul>
+                                    </ul>
+                                  </span>
                                 <td>
                                   <button type="button" class="btn btn-light text-dark rounded" title="Edit Details"
                                       data-bs-toggle="modal" data-bs-target="#staticBackdrop1" (click)="patchFormData(list)">
@@ -141,8 +143,8 @@
                       <td>{{parliamentaryconstituenciesId}}</td>
                       <td>{{assemblyItems?.districtName}}</td>
                       <td>
-                        <ul *ngFor="let items of assemblyItems.assemblyArr">
-                          <li>{{items?.assemblyName}}</li>
+                        <ul>
+                          <li>{{assemblyItems?.assemblyName}}</li>
                         </ul>
                         <!-- <ul>
                           <li>{{assemblyItems?.assemblyArr[i]?.assemblyName}}</li>

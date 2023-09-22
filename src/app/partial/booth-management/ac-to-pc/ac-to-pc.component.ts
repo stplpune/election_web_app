@@ -35,7 +35,7 @@ export class AcToPcComponent implements OnInit {
   testArray = new Array();
   parliamentaryconstituenciesId!: any;
   dId!: any;
-  editFlag: boolean = false;
+  checkArrLength=new Array();
   @ViewChild('closeModal') closebutton: any;
 
   ngOnInit(): void {
@@ -58,66 +58,8 @@ export class AcToPcComponent implements OnInit {
   //   this.mainForm.controls['parliamentaryConstituencies'].setValue(val.parliamentaryConstituencies)
   // }
 
-  patchFormData(obj?: any) {
-    this.editFlag = true;
-    console.log(obj, 'ooo');
-    this.parliamentaryconstituenciesId = obj?.parliamentaryconstituenciesId;
-    // this.editObjData = obj;
-    this.mainForm.patchValue({
-      // id: obj?.id,
-      parliamentaryConstituencies: obj?.parliamentaryConstituencies,
-      createdBy: this.userId,
-      // assemblyId: obj?.getAssignBoothstoConstituencyCommitteeModel[0]?.assemblyId,
-    });
-    this.getDistrict();
-
-    console.log(obj?.assemblyList, 'length');
-
-    let editobj;
-    obj?.assemblyList.forEach((items?: any) => {
-      editobj = {
-        id: 0,
-        parliamentaryconstituenciesId: obj?.parliamentaryconstituenciesId,
-        // assemblyId: this.itemArray[i]?.assemblyArr[j]?.assemblyId,
-        assemblyArr: [
-          {
-            assemblyId: items?.assemblyId,
-            //"assemblyName": "28 - Akot",
-            // "constituencyNo": "28",
-            checked: true,
-          },
-        ],
-        // assemblyNameArr: ,
-        districtName: items?.districtName,
-        createdBy: this.commonService.loggedInUserId(),
-      };
-      if (this.itemArray.length) {
-        let index = this.itemArray.findIndex(
-          (res: any) => res.districtName == items.districtName
-        );
-        if (index != -1) {
-          this.itemArray[index].assemblyArr.push({
-            assemblyId: items?.assemblyId,
-            //"assemblyName": "28 - Akot",
-            // "constituencyNo": "28",
-            checked: true,
-          });
-        } else {
-          this.itemArray.push(editobj);
-        }
-      } else {
-        this.itemArray.push(editobj);
-      }
-    });
-    console.log(this.itemArray, 'itemArr');
-
-    // this.editObjData?.getAssignBoothstoConstituencyCommitteeModel?.length
-    //   ? this.getBoothsUnderAssemblies(this.editObjData?.getAssignBoothstoConstituencyCommitteeModel) : this.boothArray = [];
-  }
-
   deleteListData(id?: any) {
     this.itemArray.splice(id, 1);
-    console.log(this.itemArray, 'checkAfterDelete');
   }
 
   getDistrict() {
@@ -154,9 +96,6 @@ export class AcToPcComponent implements OnInit {
         this.dId = e.districtName;
       }
     });
-
-    console.log(this.dId, 'diddid');
-
     this.callAPIService.setHttp(
       'get',
       'api/BoothDetailsAsync/GetDistrictwiseAssembly?DistrictId=' +
@@ -168,7 +107,6 @@ export class AcToPcComponent implements OnInit {
     );
     this.callAPIService.getHttp().subscribe(
       (res: any) => {
-        console.log(res);
         if (res.statusCode == '200') {
           this.assemblArray = res.responseData;
         } else {
@@ -186,16 +124,30 @@ export class AcToPcComponent implements OnInit {
   getTableData() {
     // Main Api For Table
     this.spinner.show();
-    this.callAPIService.setHttp('get','AssignAcToPc/GetParlimentoryConstituencyData?UserId=' + this.userId +'&pageno=' +this.paginationNo +
+    this.callAPIService.setHttp('get','AssignAcToPc/GetParlimentoryConstituencyData?StateId=1&UserId=' + this.userId +'&pageno=' +this.paginationNo +
         '&pagesize=' +this.pageSize +'&TextSearch=',false,false,false,'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe(
       (res: any) => {
         if (res.responseData != null && res.statusCode == '200') {
           this.spinner.hide();
-          this.tableDataArray = res?.responseData.responseData1;
-          console.log(this.tableDataArray);
+          let oldArray = res?.responseData.responseData1;
+          this.tableDataArray = JSON.parse(JSON.stringify(oldArray));
+          this.tableDataArray.map((ele: any) => { ele.assemblyList = Object.values(ele.assemblyList.reduce((acc: any, cur: any) => Object.assign(acc, { [cur.districtId]: cur }), {}))})
+      
+          this.tableDataArray.map((ele1: any) => {
+            oldArray.map((ele: any) => {
+              ele1.assemblyList.find((res1: any) => { let AssemblyArray: any[] = [];
+                ele.assemblyList.find((res: any) => {
+                  if (res.districtId == res1.districtId) { 
+                    AssemblyArray.push(res);
+                    res1['AssemblyArray'] = AssemblyArray;
+                  }
+                })
+              })
+            })
+          })
 
-          this.getTotal = res.responseData2?.totalPages * this.pageSize;
+          this.getTotal = res.responseData.responseData2?.totalCount;
         } else {
           this.spinner.hide();
           this.tableDataArray = [];
@@ -216,8 +168,6 @@ export class AcToPcComponent implements OnInit {
 
   constituencyComityModelArray: any[] = [];
   onClickCheckBox1(event: any, booths: any) {
-    console.log(booths, 'booths');
-    // return
     this.assemblArray.map((ele: any) => {
       // return
       if (booths?.assemblyId == ele?.assemblyId) {
@@ -236,58 +186,110 @@ export class AcToPcComponent implements OnInit {
       }
     });
 
-    console.log(this.constituencyComityModelArray, 'final');
+    console.log(this.constituencyComityModelArray,'ppp');
+    
   }
 
+  
   itemArray: any[] = [];
+  patchFormData(obj?: any) {
+    console.log(obj,'obj');
+    console.log(obj?.assemblyList,'objlist');
+    
+    this.mainForm.patchValue({
+      parliamentaryConstituencies: obj?.parliamentaryConstituencies,
+      createdBy: obj?.createdBy,
+      // assemblyList:obj?.assemblyList
+    })
+
+    if(obj?.assemblyList.length){
+    obj?.assemblyList.forEach((ele:any) => {
+
+
+      ele?.AssemblyArray.forEach((ele:any) => { 
+        this.itemArray.push(ele)
+      })
+     
+    })}
+    // else{
+    //   this.itemArray.push({
+    //     id: 0,
+    //     createdBy: this.userId,
+    //     assemblyId: obj?.assemblyList?.assemblyId,
+    //     checked: true,
+    //   })
+    // }
+
+    console.log(this.itemArray,'ite,Arr');
+    
+  }
+
+  arrayAfterClickAdd:any[]=[];
   addItem() {
     if (!this.constituencyComityModelArray?.length) {
       this.tosterService.error('Please Select at least One Booth');
       return;
     } else {
-      let obj = {
-        id: 0,
-        // parliamentaryconstituenciesId:this.parliamentaryconstituenciesId,
-        districtName: this.dId,
-        assemblyArr: this.constituencyComityModelArray,
-      };
-      this.itemArray.push(obj);
+      console.log(this.constituencyComityModelArray,'arrayAddToBe');
+      // return
 
+      if(this.itemArray.length){
+        for(let j=0;j<this.itemArray.length;j++){
+          this.arrayAfterClickAdd.push(this.itemArray[j])
+        }
+      }
+
+      this.arrayAfterClickAdd.push(this.constituencyComityModelArray)
+
+      // this.arrayAfterClickAdd = []
+
+
+      // this.arrayAfterClickAdd = [this.constituencyComityModelArray,...this.itemArray]
       this.assemblArray = [];
       this.dId = '';
       // this.constituencyComityModelArray=[];
       this.mainForm.controls['districtId'].setValue('');
-
-      console.log(this.itemArray, 'a');
     }
+
+    console.log(this.arrayAfterClickAdd,'aarayAfterAddCklick');
+    
   }
 
   onSubmit() {
+    console.log(this.itemArray,'checkLength');
+    
     if (this.mainForm.invalid) {
       this.spinner.hide();
       return;
     } else {
       this.spinner.show();
-      let finalArrayOfObj: any[] = [];
-      console.log(this.itemArray, 'hffh');
-
-      for (let i = 0; i < this.itemArray.length; i++) {
-        for (let j = 0; j < this.itemArray[i].assemblyArr?.length; j++) {
-          finalArrayOfObj.push({
-            id: 0,
-            parliamentaryconstituenciesId: this.parliamentaryconstituenciesId,
-            assemblyId: this.itemArray[i]?.assemblyArr[j]?.assemblyId,
-            createdBy: this.commonService.loggedInUserId(),
-          });
-        }
+      let finalArrayOfObj = {};
+      let formArr:any[]=[] 
+      for(let i=0;i<this.constituencyComityModelArray.length;i++){
+        formArr.push( {
+          id: 0,
+          assemblyId: this.constituencyComityModelArray[i].assemblyId,
+          createdBy: this.userId
+        })
+      }
+      finalArrayOfObj = {
+        parliamentaryconstituenciesId: this.parliamentaryconstituenciesId,
+        createdBy: this.userId,
+        assemblyList: formArr
+        // this.constituencyComityModelArray
+        // [
+        //   {
+        //     id: 0,
+        //     "assemblyId": 0,
+        //     "createdBy": 0
+        //   }
+        // ]
       }
 
-      console.log(finalArrayOfObj, 'finalArray');
-
-      let urlType = !this.editFlag
-        ? 'AssignAcToPc/Saveassignassemblytopc'
-        : 'AssignAcToPc/Updateassignassemblytopc';
-      let apiType = !this.editFlag ? 'POST' : 'PUT';
+      console.log(finalArrayOfObj,'finalArrObj');
+      // return
+      let urlType = !this.checkArrLength ? 'AssignAcToPc/Saveassignassemblytopc' : 'AssignAcToPc/Updateassignassemblytopc';
+      let apiType = !this.checkArrLength ? 'POST' : 'PUT';
 
       this.callAPIService.setHttp(
         apiType,
@@ -308,7 +310,6 @@ export class AcToPcComponent implements OnInit {
             // this.getConstituencymastercommittee();
             // this.clearForm();
             // this.submitted = false;
-            this.editFlag = false;
           } else {
             this.spinner.hide();
             this.tosterService.error(res.statusMessage);
@@ -324,5 +325,6 @@ export class AcToPcComponent implements OnInit {
 
   onClickPagintion(pageNo: any) {
     this.paginationNo = pageNo;
+    this.getTableData();
   }
 }
