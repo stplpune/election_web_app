@@ -138,9 +138,11 @@ export class AcToPcComponent implements OnInit {
             oldArray.map((ele: any) => {
               ele1.assemblyList.find((res1: any) => { let AssemblyArray: any[] = [];
                 ele.assemblyList.find((res: any) => {
-                  if (res.districtId == res1.districtId) { 
-                    AssemblyArray.push(res);
-                    res1['AssemblyArray'] = AssemblyArray;
+                  if(ele.parliamentaryconstituenciesId == ele1.parliamentaryconstituenciesId){
+                    if (res.districtId == res1.districtId) { 
+                      AssemblyArray.push(res);
+                      res1['AssemblyArray'] = AssemblyArray;
+                    }
                   }
                 })
               })
@@ -192,10 +194,12 @@ export class AcToPcComponent implements OnInit {
 
   
   itemArray: any[] = [];
+  parliamentaryConstituencies:any;
   patchFormData(obj?: any) {
     console.log(obj,'obj');
     console.log(obj?.assemblyList,'objlist');
-    
+    this.parliamentaryConstituencies = obj.parliamentaryConstituencies;
+    this.parliamentaryconstituenciesId = obj.parliamentaryconstituenciesId;
     this.mainForm.patchValue({
       parliamentaryConstituencies: obj?.parliamentaryConstituencies,
       createdBy: obj?.createdBy,
@@ -204,12 +208,9 @@ export class AcToPcComponent implements OnInit {
 
     if(obj?.assemblyList.length){
     obj?.assemblyList.forEach((ele:any) => {
-
-
       ele?.AssemblyArray.forEach((ele:any) => { 
         this.itemArray.push(ele)
       })
-     
     })}
     // else{
     //   this.itemArray.push({
@@ -233,11 +234,9 @@ export class AcToPcComponent implements OnInit {
       console.log(this.constituencyComityModelArray,'arrayAddToBe');
       // return
 
-      if(this.itemArray.length){
-        for(let j=0;j<this.itemArray.length;j++){
-          this.arrayAfterClickAdd.push(this.itemArray[j])
-        }
-      }
+     for (let index = 0; index < this.constituencyComityModelArray.length; index++) {
+      this.itemArray.push(this.constituencyComityModelArray[index])
+     }
 
       this.arrayAfterClickAdd.push(this.constituencyComityModelArray)
 
@@ -251,7 +250,7 @@ export class AcToPcComponent implements OnInit {
       this.mainForm.controls['districtId'].setValue('');
     }
 
-    console.log(this.arrayAfterClickAdd,'aarayAfterAddCklick');
+    console.log(this.itemArray,'aarayAfterAddCklick');
     
   }
 
@@ -265,13 +264,16 @@ export class AcToPcComponent implements OnInit {
       this.spinner.show();
       let finalArrayOfObj = {};
       let formArr:any[]=[] 
-      for(let i=0;i<this.constituencyComityModelArray.length;i++){
+      for(let i=0;i<this.itemArray.length;i++){
         formArr.push( {
           id: 0,
-          assemblyId: this.constituencyComityModelArray[i].assemblyId,
+          assemblyId: this.itemArray[i].assemblyId,
           createdBy: this.userId
         })
       }
+
+      console.log(formArr,'ooooo');
+      // return
       finalArrayOfObj = {
         parliamentaryconstituenciesId: this.parliamentaryconstituenciesId,
         createdBy: this.userId,
