@@ -138,27 +138,28 @@
                       <th>Action</th>
                     </tr>
                   </thead>
-                  <tbody *ngFor="let assemblyItems of itemArray;let i=index">
-                    <tr>
-                      <td>{{parliamentaryConstituencies}}</td>
-                      <td>{{assemblyItems?.districtName}}</td>
-                      <td>
-                          {{assemblyItems?.assemblyName}}
-                      </td>
-                      <td>
-                        <button type="button" class="btn btn-light text-danger rounded" title="Delete Details" (click)="deleteListData(i)">
-                          <i class="fas fa-trash-alt"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <!-- {{itemArray?.length}}
-                    <div class="mt-2 text-end" *ngIf="!itemArray?.length">
-                      <div class="alert alert-danger text-center py-2">
-                        No Results Found!
-                      </div>
-                  </div> -->
+                  <tbody>
+                    <ng-container *ngFor="let assemblyItems of itemArray;let i=index">
+                      <tr>
+                        <td>{{parliamentaryConstituencies}}</td>
+                        <td>{{assemblyItems?.districtName}}</td>
+                        <td>
+                            {{assemblyItems?.assemblyName}}
+                        </td>
+                        <td>
+                          <button type="button" class="btn btn-light text-danger rounded" title="Delete Details" (click)="deleteListData(i)">
+                            <i class="fas fa-trash-alt"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </ng-container>
                   </tbody>
                 </table>
+                <ng-container *ngIf="!itemArray.length">
+                  <div class="alert alert-danger text-center py-2 mt-2 text-center">
+                    No Results Found!
+                  </div>
+                </ng-container>
                </div>
               </div>
               </div>
