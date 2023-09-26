@@ -804,9 +804,7 @@ input::-ms-clear {
     border: 1px solid var(--main-color) !important;
     border-radius: 10px;
 }
-#mapsvg2{
-    background-color: transparent !important;
-}
+
 .committeesonmap2 .mapsvg svg {
     /* width: 500px; */
     width: 450px;
@@ -827,6 +825,14 @@ input::-ms-clear {
     .committeesonmap2>div:last-child {
         top: 210px;
     }
+}
+
+#mapsvg svg {
+    transform: scale(1) !important;
+}
+
+#mapsvg2{
+    background-color: transparent !important;
 }
 
 #mapsvg1 svg {

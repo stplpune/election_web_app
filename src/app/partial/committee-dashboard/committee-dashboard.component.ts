@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -18,7 +18,7 @@ declare var $: any;
   styleUrls: ['./committee-dashboard.component.css'],
   providers: [DatePipe]
 })
-export class CommitteeDashboardComponent implements OnInit {
+export class CommitteeDashboardComponent implements OnInit, OnDestroy, AfterViewInit  {
 
   localStorageData = this.commonService.getlocalStorageData();
   selectedDistrictId: any;
@@ -354,11 +354,11 @@ export class CommitteeDashboardComponent implements OnInit {
     this.getPast_AC(this.electionIdAC, this.electionTypeIdAC);
   }
 
-  svgMapColorReset() { $('#mapsvg1 path').css('fill', '#7289da') }
+  svgMapColorReset() { $('#mapsvg path').css('fill', '#7289da') }
 
   ngAfterViewInit() {
     this.callSVGMap() // default call SVG MAP
-    $(document).on('click', '#mapsvg1  path', (e: any) => { // add on SVG Map
+    $(document).on('click', '#mapsvg  path', (e: any) => { // add on SVG Map
       let getClickedId = e.currentTarget;
       let distrctId = $(getClickedId).attr('id');
       this.selectedDistrictId = distrctId;
@@ -369,18 +369,18 @@ export class CommitteeDashboardComponent implements OnInit {
   callSVGMap() { this.showSvgMap(this.commonService.mapRegions()) }
 
   addClasscommitteeWise() {
-    $('#mapsvg1  path').addClass('notClicked');
+    $('#mapsvg  path').addClass('notClicked');
     setTimeout(() => {
       this.bCFormationCountArray?.find((element: any) => {
-        $('#mapsvg1  path[id="' + element.constituenciesId + '"]').addClass('clicked');
-        $('#mapsvg1  #' + element.constituencyName).text(element.totalBoothCommittee)
+        $('#mapsvg  path[id="' + element.constituenciesId + '"]').addClass('clicked');
+        $('#mapsvg  #' + element.constituencyName).text(element.totalBoothCommittee)
       });
     }, 500);
   }
 
   toggleClassActive(distrctId: any) {
-    let checksvgDistrictActive = $('#mapsvg1  path').hasClass("svgDistrictActive");
-    checksvgDistrictActive == true ? ($('#mapsvg1  path').removeClass('svgDistrictActive'), $('#mapsvg1  path#' + distrctId).addClass('svgDistrictActive')) : $('#mapsvg1  path#' + distrctId).addClass('svgDistrictActive');
+    let checksvgDistrictActive = $('#mapsvg  path').hasClass("svgDistrictActive");
+    checksvgDistrictActive == true ? ($('#mapsvg  path').removeClass('svgDistrictActive'), $('#mapsvg  path#' + distrctId).addClass('svgDistrictActive')) : $('#mapsvg  path#' + distrctId).addClass('svgDistrictActive');
   }
 
   ngOnDestroy() {
@@ -392,7 +392,7 @@ export class CommitteeDashboardComponent implements OnInit {
     if (this.graphInstance) {
       this.graphInstance.destroy();
     }
-    this.graphInstance = $("#mapsvg1").mapSvg({
+    this.graphInstance = $("#mapsvg").mapSvg({
       width: 450,
       height: 430,
       colors: {
@@ -475,7 +475,7 @@ export class CommitteeDashboardComponent implements OnInit {
     this.filteredTal = [];
     this.previousTalSelected = '';
     this.selectedTalId = 0;
-    $(document).on('click', '#mapsvg1  path', (e: any) => {
+    $(document).on('click', '#mapsvg  path', (e: any) => {
       if (this.previousDistSelected != e.currentTarget.id || this.mapselected != 'dist') {
         this.mapselected = 'dist';
         this.selectedDistrictId = e.currentTarget.id;
