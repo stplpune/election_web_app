@@ -62,6 +62,8 @@ export class AcToPcComponent implements OnInit {
 
   deleteListData(id?: any) {
     this.itemArray.splice(id, 1);
+    this.mainForm.controls['districtId'].setValue('')
+    this.assemblArray = [];
   }
 
   getDistrict() {
@@ -112,8 +114,25 @@ export class AcToPcComponent implements OnInit {
       (res: any) => {
         if (res.statusCode == '200') {
           this.assemblArray = res.responseData;
-          console.log(this.assemblArray,'ass array');
-          
+          // for(let i=0;i<this.editObj.assemblyList[0].AssemblyArray.length;i++){
+      //   console.log(this.editObj.assemblyList[0].AssemblyArray[i].checked,'oooo - ' ,booths.assemblyId);
+      //   // return
+      //   if(booths.assemblyId == this.editObj.assemblyList[0].AssemblyArray[i].assemblyId){
+      //     this.tosterService.error('Assembly/Booth already exits');
+      //     return;
+      //   }
+      //   else{
+      //     this.updateTestMethod();
+      //   }
+      // }
+          for(let i=0;i<this.itemArray.length;i++){
+            this.assemblArray.forEach((ele:any)=>{
+              if(this.itemArray[i].assemblyId == ele.assemblyId){
+                ele['disabledFlag'] = true;
+                return ele;
+              }
+            }) 
+          }
         } else {
           this.assemblArray = [];
         }
@@ -128,11 +147,7 @@ export class AcToPcComponent implements OnInit {
 
   checkBoxFlag:boolean=false;
   checkBoothsAvail(val?:any){
-
-    console.log(val,'val');
-    
     this.assemblArray.map((ele:any)=>{
-      console.log(ele,'ele');
       if(ele.assemblyName.toLowerCase() != val.toLowerCase()){
         this.checkBoxFlag = true;
       }else{
@@ -198,7 +213,19 @@ export class AcToPcComponent implements OnInit {
         return ele;
       }
     });
-    this.updateTestMethod();
+
+      // for(let i=0;i<this.editObj.assemblyList[0].AssemblyArray.length;i++){
+      //   console.log(this.editObj.assemblyList[0].AssemblyArray[i].checked,'oooo - ' ,booths.assemblyId);
+      //   // return
+      //   if(booths.assemblyId == this.editObj.assemblyList[0].AssemblyArray[i].assemblyId){
+      //     this.tosterService.error('Assembly/Booth already exits');
+      //     return;
+      //   }
+      //   else{
+      //     this.updateTestMethod();
+      //   }
+      // }
+      this.updateTestMethod();
   }
 
   updateTestMethod() {
@@ -208,17 +235,14 @@ export class AcToPcComponent implements OnInit {
         this.constituencyComityModelArray.push(ele1);
       }
     });
-
-    console.log(this.constituencyComityModelArray,'ppp');
-    
   }
 
   
   itemArray: any[] = [];
   parliamentaryConstituencies:any;
+  editObj:any;
   patchFormData(obj?: any) {
-    console.log(obj,'obj');
-    console.log(obj?.assemblyList,'objlist');
+    this.editObj = obj;
     this.parliamentaryConstituencies = obj.parliamentaryConstituencies;
     this.parliamentaryconstituenciesId = obj.parliamentaryconstituenciesId;
     this.mainForm.patchValue({
@@ -241,9 +265,6 @@ export class AcToPcComponent implements OnInit {
     //     checked: true,
     //   })
     // }
-
-    console.log(this.itemArray,'ite,Arr');
-    
   }
 
   arrayAfterClickAdd:any[]=[];
@@ -252,13 +273,9 @@ export class AcToPcComponent implements OnInit {
       this.tosterService.error('Please Select at least One Booth');
       return;
     } else {
-      console.log(this.constituencyComityModelArray,'arrayAddToBe');
-      // return
-
      for (let index = 0; index < this.constituencyComityModelArray.length; index++) {
       this.itemArray.push(this.constituencyComityModelArray[index])
      }
-
       this.arrayAfterClickAdd.push(this.constituencyComityModelArray)
 
       // this.arrayAfterClickAdd = []
@@ -270,14 +287,9 @@ export class AcToPcComponent implements OnInit {
       // this.constituencyComityModelArray=[];
       this.mainForm.controls['districtId'].setValue('');
     }
-
-    console.log(this.itemArray,'aarayAfterAddCklick');
-    
   }
 
   onSubmit() {
-    console.log(this.itemArray,'checkLength');
-    
     if (this.mainForm.invalid) {
       this.spinner.hide();
       return;
@@ -297,8 +309,6 @@ export class AcToPcComponent implements OnInit {
           createdBy: this.userId
         })
       }
-
-      console.log(formArr,'ooooo');
       // return
       finalArrayOfObj = {
         parliamentaryconstituenciesId: this.parliamentaryconstituenciesId,
@@ -313,8 +323,6 @@ export class AcToPcComponent implements OnInit {
         //   }
         // ]
       }
-
-      console.log(finalArrayOfObj,'finalArrObj');
       // return
       let urlType = !this.checkArrLength ? 'AssignAcToPc/Saveassignassemblytopc' : 'AssignAcToPc/Updateassignassemblytopc';
       let apiType = !this.checkArrLength ? 'POST' : 'PUT';
