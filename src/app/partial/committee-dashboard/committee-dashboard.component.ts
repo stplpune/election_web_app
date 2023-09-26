@@ -271,6 +271,8 @@ export class CommitteeDashboardComponent implements OnInit, OnDestroy, AfterView
   }
 
   getBarChartApi_Booths_vs_Boothcommittee() { // barChartApi & villageMap Inside Count Api
+ console.log('asdadsada');
+ 
     let formData = this.topFilter.value;
     let obj = '&ClientId=' + this.localStorageData?.ClientId + '&StateId=' + this.localStorageData?.StateId
       + '&FilterTypeId=' + formData?.FilterTypeId + '&FilterId=' + (formData?.FilterId || 0)
@@ -516,7 +518,7 @@ export class CommitteeDashboardComponent implements OnInit, OnDestroy, AfterView
   }
 
   showTalukaSvgMap(regions_m: any, svgPath: any) {
-    this.getBarChartApi_Booths_vs_Boothcommittee();
+    // this.getBarChartApi_Booths_vs_Boothcommittee();   ////  comment for Repeate Call
     if (this.graphInstance1) {
       this.graphInstance1.destroy();
     }
