@@ -92,6 +92,7 @@ export class AcToPcComponent implements OnInit {
   }
 
   getAssembly() {
+    this.searchAssembly = '';
     // Api for Category
     this.districtArray.map((e: any) => {
       if (this.mainForm.value.districtId == e.districtId) {
@@ -111,6 +112,8 @@ export class AcToPcComponent implements OnInit {
       (res: any) => {
         if (res.statusCode == '200') {
           this.assemblArray = res.responseData;
+          console.log(this.assemblArray,'ass array');
+          
         } else {
           this.assemblArray = [];
         }
@@ -121,6 +124,21 @@ export class AcToPcComponent implements OnInit {
         }
       }
     );
+  }
+
+  checkBoxFlag:boolean=false;
+  checkBoothsAvail(val?:any){
+
+    console.log(val,'val');
+    
+    this.assemblArray.map((ele:any)=>{
+      console.log(ele,'ele');
+      if(ele.assemblyName.toLowerCase() != val.toLowerCase()){
+        this.checkBoxFlag = true;
+      }else{
+        this.checkBoxFlag = false;
+      }
+    })
   }
 
   getTableData() {
