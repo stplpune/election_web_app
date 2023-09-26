@@ -65,7 +65,6 @@ export class BoothDashboardComponent implements OnInit {
       if (res.responseData != null && res.statusCode == "200") {
         this.spinner.hide();
         this.electionNameArray = res.responseData;
-        console.log(this.electionNameArray);
         this.electionId = this.electionNameArray.length > 0 ? this.electionNameArray[0].electionId : undefined;
         if (this.electionId != null && this.electionId != undefined) {
           this.getConstituencyName();

@@ -8,6 +8,7 @@
           <div class="col-sm-6">
             <div class="form-label">Election Name</div>
             <select class="form-select"  (change)="changeElection($event)">
+                <option value="" disabled selected>Select Election Name</option>
               <option *ngFor="let item of electionNameArray;let i=index;" [value]="item.electionId"
                 [attr.selected]='item.electionId==electionId ? "selected" : null'>
                 {{item.electionName}}</option>
@@ -16,6 +17,7 @@
           <div class="col-sm-6">
             <div class="form-label">Constituency Name</div>
             <select class="form-select" (change)="changeConstituency($event)">
+                <option value="" disabled selected>Select Constituency Name</option>
               <option *ngFor="let item of constituencyNameArray;let i=index;" [value]="item.constituencyId"
                 [attr.selected]='item.constituencyId==constitusionId ? "selected" : null'>
                 {{item.constituencyName}}</option>
