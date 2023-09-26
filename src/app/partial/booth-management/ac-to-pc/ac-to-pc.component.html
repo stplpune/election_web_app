@@ -143,12 +143,7 @@
                       <td>{{parliamentaryConstituencies}}</td>
                       <td>{{assemblyItems?.districtName}}</td>
                       <td>
-                        <ul>
-                          <li>{{assemblyItems?.assemblyName}}</li>
-                        </ul>
-                        <!-- <ul>
-                          <li>{{assemblyItems?.assemblyArr[i]?.assemblyName}}</li>
-                        </ul> -->
+                          {{assemblyItems?.assemblyName}}
                       </td>
                       <td>
                         <button type="button" class="btn btn-light text-danger rounded" title="Delete Details" (click)="deleteListData(i)">
