@@ -99,7 +99,7 @@
                 </div>
 
                 <div class="col-sm-12">
-                  <mat-card class="border">
+                  <!-- <mat-card class="border"> -->
                     <mat-card-content>
                       <div class="card border shadow-none">
                       <div class="card-header border-bottom p-0 py-1">
@@ -111,7 +111,7 @@
                           <input class="form-check-input" type="checkbox" [checked]="boothsUnderA?.checked == true"
                             (change)="onClickCheckBox1($event,boothsUnderA)" [attr.disabled]="boothsUnderA.disabledFlag" />
                           <label class="form-check-label" for="flexCheckDefault">
-                            {{ boothsUnderA?.assemblyName }} - {{mainForm.value.assembly}}
+                            {{ boothsUnderA?.assemblyName }} {{mainForm.value.assembly}}
                           </label>
                         </div>
                         <!-- {{assemblArray.length}} - {{mainForm.value.assembly}} -->
@@ -124,7 +124,7 @@
                       </div>
                       </div>
                     </mat-card-content>
-                  </mat-card>
+                  <!-- </mat-card> -->
                 <button type="button" class="btn btn-main mt-2 float-end" (click)="addItem()">Add</button>
               </div>
               <div class="col-sm-12">
