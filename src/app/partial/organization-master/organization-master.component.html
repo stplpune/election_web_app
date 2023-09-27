@@ -287,11 +287,11 @@
                                         </button> </td>
                                     <td>{{result?.AllottedDesignation}}</td>
                                     <td>
+                                        <!-- data-bs-toggle="modal" data-bs-target="#AddNewCommittee"-->
                                         <div class="btn-group">
                                             <button type="button"
                                                 [disabled]="(getCommiteeDetails?.CommiteeId == result?.Id) ?  true : ''"
-                                                title="Edit Committee" data-bs-toggle="modal"
-                                                data-bs-target="#AddNewCommittee"
+                                                title="Edit Committee" 
                                                 class="btn btn-light text-edit me-2 rounded"
                                                 (click)="editOrganization(result.Id)"><i
                                                     class="far fa-edit"></i></button>

@@ -738,7 +738,7 @@ export class OrganizationMasterComponent implements OnInit {
   }
 
   editOrganization(BodyId: any) {
-    this.clearForm();
+    // this.clearForm();
     this.btnText = "Update Committee";
     //this.spinner.show();
     this.callAPIService.setHttp('get', 'Web_Getbodycellorgmaster_1_0?BodyId=' + BodyId, false, false, false, 'electionServiceForWeb');
@@ -906,7 +906,9 @@ export class OrganizationMasterComponent implements OnInit {
   }
 
   onClickPagintion(pageNo: number) {
-    // this.clearForm();
+    // console.log(pageNo,'page');
+    
+    this.clearForm();
     this.paginationNo = pageNo;
     this.getOrganizationList();
   }
