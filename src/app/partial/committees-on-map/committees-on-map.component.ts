@@ -215,7 +215,7 @@ export class CommitteesOnMapComponent implements OnInit, OnDestroy, AfterViewIni
    }, 500);
   }
 
-  getOrganizationByDistrictId(id: any) {
+  getOrganizationByDistrictId(id?: any) {
     this.spinner.show();
     //this.CheckBoxLevelArray = this.CheckBoxLevelArray.join();
     let ids = id == undefined || id == "" || id == null ? 0 : id;
@@ -289,6 +289,7 @@ export class CommitteesOnMapComponent implements OnInit, OnDestroy, AfterViewIni
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.data == 0) {
         this.allLevels = res.data1;
+        this.allLevels = this.allLevels.filter((item:any)=> (item.Id !== 10 && item.Id !== 8 && item.Id !== 9))
         this.spinner.hide();
       } else {
         this.spinner.hide();
@@ -314,7 +315,7 @@ export class CommitteesOnMapComponent implements OnInit, OnDestroy, AfterViewIni
         this.comActiveClass(1)
         this.spinner.hide();
         this.selCommitteeName = committeeName;
-       
+        this.getOrganizationByDistrictId();
         this.resultOrganizationMember = res.data1;
       } else {
         this.comActiveClass(1)
