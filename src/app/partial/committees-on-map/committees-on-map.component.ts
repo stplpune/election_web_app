@@ -341,7 +341,7 @@ export class CommitteesOnMapComponent implements OnInit, OnDestroy, AfterViewIni
     console.log(memberId,'-',FullName);
     let obj = {'memberId':memberId, 'FullName':FullName}
     sessionStorage.setItem('memberId', JSON.stringify(obj));
-    this.router.navigate(['/my-profile'], {relativeTo:this.route})
+    // this.router.navigate(['/add-member'], {relativeTo:this.route})
   }
 
   comActiveClass(flag: any) { // 0 - false 1 - true

@@ -128,9 +128,9 @@
                                             *ngIf="resOrganizationMember?.MobileNo !='' && resOrganizationMember?.MobileNo != null">{{resOrganizationMember?.MobileNo}}</small> -->
                                     </div>
                                     <div>
-                                        <a class="mem-name text-main"
+                                        <p class="mem-name text-main"
                                             (click)="redToMemberProfile(resOrganizationMember?.MemberId,resOrganizationMember?.MemberName)">{{resOrganizationMember?.MemberName
-                                            | titlecase}}</a>
+                                            | titlecase}}</p>
                                         <div class="mem-no">{{resOrganizationMember?.MobileNo}}</div>
                                         <p class="mem-desi">{{resOrganizationMember?.DesignationName}}</p>
                                         <div class="mem-act">
