@@ -276,16 +276,19 @@ export class AcToPcComponent implements OnInit {
      for (let index = 0; index < this.constituencyComityModelArray.length; index++) {
       this.itemArray.push(this.constituencyComityModelArray[index])
      }
+
+     
       this.arrayAfterClickAdd.push(this.constituencyComityModelArray)
 
-      // this.arrayAfterClickAdd = []
-
-
+      // console.log(this.constituencyComityModelArray,'sss');
       // this.arrayAfterClickAdd = [this.constituencyComityModelArray,...this.itemArray]
       this.assemblArray = [];
       this.dId = '';
       // this.constituencyComityModelArray=[];
       this.mainForm.controls['districtId'].setValue('');
+      if(!this.mainForm.value.distrctId){
+        this.constituencyComityModelArray=[];
+      }
     }
   }
 
