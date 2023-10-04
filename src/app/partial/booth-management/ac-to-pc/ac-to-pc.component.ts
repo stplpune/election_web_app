@@ -279,8 +279,11 @@ export class AcToPcComponent implements OnInit {
 
   arrayAfterClickAdd:any[]=[];
   addItem() {
-    if (!this.constituencyComityModelArray?.length) {
-      this.tosterService.error('Please Select at least One Booth');
+    if(!this.mainForm.value?.districtId){
+      this.tosterService.error('Please Select District First')
+    }
+    else if (!this.constituencyComityModelArray?.length) {
+      this.tosterService.error('Please Select at least One Assembly');
       return;
     } else {
      for (let index = 0; index < this.constituencyComityModelArray.length; index++) {
