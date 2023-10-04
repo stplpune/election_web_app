@@ -134,7 +134,7 @@
                       </label>
                     </div>
                     <!-- {{assemblArray.length}} - {{mainForm.value.assembly}} -->
-                    <div *ngIf="!assemblArray?.length" class="alert alert-danger text-center py-2">
+                    <div *ngIf="!assemblArray?.length || !assemblyResult.length" class="alert alert-danger text-center py-2">
                       No Results Found!
                     </div>
                     <!-- <div *ngIf="checkBoxFlag" class="alert alert-danger text-center py-2">
