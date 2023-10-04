@@ -16,168 +16,179 @@
       </div>
   </div> -->
   <div class="row">
-      <div class="col-sm-12 chartbox">
-          <div class="card">
-              <div class="card-header">
-                  <span class="text-main"> Assign Assembly Constituency to Parliamentary Constituency</span>
-              </div>
-              <div class="card-body">
-                  <div class="table-responsive">
-                      <table class="table table-bordered table-hover">
-                         <ng-container >
-                          <thead>
-                            <tr>
-                                <th>Sr.No.</th>
-                                <th>Parlimentry Constituency </th>
-                                <th>District Name</th>
-                                <th>Assembly Constituency </th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                          <ng-container *ngFor="let list of tableDataArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:getTotal} ;let i=index">
-                              
-                              
-                            <tr >
-                              
-                              <td [attr.rowspan]="list.assemblyList.length+1">{{ (paginationNo + 1) * 10 + i + 1 - 20 }}<br /><br /></td>
-                              <td [attr.rowspan]="list.assemblyList.length+1">{{list?.parliamentaryconstituenciesId}} - {{list?.parliamentaryConstituencies}}<br /><br /></td>
-                            </tr>
-
-                            <tr *ngFor="let item of list.assemblyList">
-                             
-                              <td>
-                                <ul >
-                                  <li>{{item.districtName ? item.districtName : '-'}}</li>
-                                </ul>
-                              </td>
-                              <td>
-                                <span >  
-                                  <ul *ngFor="let item of item.AssemblyArray">
-                                  <li>{{item?.assemblyId}} - {{item?.assemblyName}}</li>
-                                  </ul>
-                                </span>
-                                </td>
-                              <td>
-                                <button type="button" class="btn btn-light text-dark rounded" title="Edit Details"
-                                    data-bs-toggle="modal" data-bs-target="#staticBackdrop1" (click)="patchFormData(list)">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                            </td>
-
-                          </tr>
-                        </ng-container>
-                        </tbody>
-                         </ng-container>
-                      </table>
-                      <div class="mt-2 text-end" *ngIf="!tableDataArray?.length">
-                        <div class="alert alert-danger text-center py-2">No Results Found!
-                        </div>
-                    </div>
-                <pagination-controls *ngIf="tableDataArray?.length != 0 && getTotal > 1"
-                    previousLabel="" nextLabel="" (pageChange)="onClickPagintion($event)">
-                </pagination-controls>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
-</div>
-
-<div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true" >
-  <form [formGroup]="mainForm">
-    <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
-      <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Assign AC to PC</h1>
-            <button type="button" #closeModal class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="clearData()"></button>
-          </div>
-          <div class="modal-body form-container">
-            <div class="row gy-2">
-              <div class="col-sm-6">
-                <label for="exampleFormControlInput1" class="form-label">Parliamentary Constituency</label>
-                <input type="text" class="form-control" formControlName="parliamentaryConstituencies" id="exampleFormControlInput1" placeholder="Assembly Name" readonly>
-              </div>
-              <div class="col-sm-6">
-                <label for="exampleFormControlInput1" class="form-label">Select District</label>
-                  <ngx-select [items]="districtArray" formControlName="districtId"
-                      optionValueField="districtId" optionTextField="districtName"
-                      placeholder="Select District"(select)="getAssembly()">
-                  </ngx-select>
-              </div>
-
-              <div class="col-sm-12">
-                <!-- <mat-card class="border"> -->
-                  <mat-card-content>
-                    <div class="card border shadow-none">
-                    <div class="card-header border-bottom p-0 py-1">
-                      <input type="text" formControlName="assembly" [(ngModel)]="searchAssembly" placeholder="Search Assemblies"
-                       class="form-control form-control-sm border-0">
-                     </div>
-                    <div class="mb-3 card-body py-2 ChekBox" *ngIf="( assemblArray | filter:searchAssembly ) as assemblyResult">
-                      <div class="mb-2 form-check" *ngFor="let boothsUnderA of assemblyResult">
-                        <input class="form-check-input" type="checkbox" [checked]="boothsUnderA?.checked == true"
-                          (change)="onClickCheckBox1($event,boothsUnderA)" [attr.disabled]="boothsUnderA.disabledFlag" />
-                        <label class="form-check-label" for="flexCheckDefault">
-                          {{ boothsUnderA?.assemblyName }} {{mainForm.value.assembly}}
-                        </label>
-                      </div>
-                      <!-- {{assemblArray.length}} - {{mainForm.value.assembly}} -->
-                        <div *ngIf="!assemblArray.length" class="alert alert-danger text-center py-2">
-                          No Results Found!
-                        </div>
-                        <!-- <div *ngIf="checkBoxFlag" class="alert alert-danger text-center py-2">
-                          No Results Found!
-                        </div> -->
-                    </div>
-                    </div>
-                  </mat-card-content>
-                <!-- </mat-card> -->
-              <button type="button" class="btn btn-main mt-2 float-end" (click)="addItem()">Add</button>
-            </div>
-            <div class="col-sm-12">
-             <div class="table-responsive chartbox">
-              <table class="table table-hover">
+    <div class="col-sm-12 chartbox">
+      <div class="card">
+        <div class="card-header">
+          <span class="text-main"> Assign Assembly Constituency to Parliamentary Constituency</span>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <ng-container>
                 <thead>
                   <tr>
-                    <th>PC Name</th>
+                    <th>Sr.No.</th>
+                    <th>Parlimentry Constituency </th>
                     <th>District Name</th>
-                    <th>Assigned AC</th>
+                    <th>Assembly Constituency </th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <ng-container *ngFor="let assemblyItems of itemArray;let i=index">
+                  <ng-container
+                    *ngFor="let list of tableDataArray | paginate: { itemsPerPage: 10, currentPage: paginationNo, totalItems:getTotal} ;let i=index">
                     <tr>
-                      <td>{{parliamentaryConstituencies}}</td>
-                      <td>{{assemblyItems?.districtName}}</td>
+                      <td [attr.rowspan]="list.assemblyList?.length+1">{{ (paginationNo + 1) * 10 + i + 1 - 20 }}</td>
+                      <td [attr.rowspan]="list.assemblyList?.length+1">{{list?.parliamentaryconstituenciesId}} -
+                        {{list?.parliamentaryConstituencies}}<br /><br /></td>
+
+                      <ng-container *ngIf="!list?.assemblyList?.length">
+                        <td></td>
+                        <td></td>
+                        <td *ngIf="!list?.assemblyList?.length">
+                          <button type="button" class="btn btn-light text-dark rounded" title="Edit Details"
+                            data-bs-toggle="modal" data-bs-target="#staticBackdrop1" (click)="patchFormData(list)">
+                            <i class="fas fa-edit"></i>
+                          </button>
+                        </td>
+                      </ng-container>
+                    </tr>
+
+                    <tr *ngFor="let item of list?.assemblyList;let j = index">
                       <td>
-                          {{assemblyItems?.assemblyName}}
+                        {{item.districtName ? item.districtName : '-'}}
                       </td>
                       <td>
-                        <button type="button" class="btn btn-light text-danger rounded" title="Delete Details" (click)="deleteListData(i)">
-                          <i class="fas fa-trash-alt"></i>
+                        <span>
+                          <ul *ngFor="let item of item.AssemblyArray">
+                            <li>{{item?.assemblyId}} - {{item?.assemblyName}}</li>
+                          </ul>
+                        </span>
+                      </td>
+
+                      <td *ngIf="j==0 && list?.assemblyList" [attr.rowspan]="list.assemblyList?.length">
+                        <button type="button" class="btn btn-light text-dark rounded" title="Edit Details"
+                          data-bs-toggle="modal" data-bs-target="#staticBackdrop1" (click)="patchFormData(list)">
+                          <i class="fas fa-edit"></i>
                         </button>
                       </td>
                     </tr>
+
                   </ng-container>
                 </tbody>
-              </table>
-              <ng-container *ngIf="!itemArray.length">
-                <div class="alert alert-danger text-center py-2 mt-2 text-center">
-                  No Results Found!
-                </div>
               </ng-container>
-             </div>
+            </table>
+            <div class="mt-2 text-end" *ngIf="!tableDataArray?.length">
+              <div class="alert alert-danger text-center py-2">No Results Found!
+              </div>
             </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="clearData()">Cancel</button>
-            <button type="button" class="btn btn-main" (click)="onSubmit()">Save</button>
+            <pagination-controls *ngIf="tableDataArray?.length != 0 && getTotal > 1" previousLabel="" nextLabel=""
+              (pageChange)="onClickPagintion($event)">
+            </pagination-controls>
           </div>
         </div>
+      </div>
+    </div>
   </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <form [formGroup]="mainForm">
+    <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Assign AC to PC</h1>
+          <button type="button" #closeModal class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="clearData()"></button>
+        </div>
+        <div class="modal-body form-container">
+          <div class="row gy-2">
+            <div class="col-sm-6">
+              <label for="exampleFormControlInput1" class="form-label">Parliamentary Constituency</label>
+              <input type="text" class="form-control" formControlName="parliamentaryConstituencies"
+                id="exampleFormControlInput1" placeholder="Assembly Name" readonly>
+            </div>
+            <div class="col-sm-6">
+              <label for="exampleFormControlInput1" class="form-label">Select District</label>
+              <ngx-select [items]="districtArray" formControlName="districtId" optionValueField="districtId"
+                optionTextField="districtName" placeholder="Select District" (select)="getAssembly()">
+              </ngx-select>
+            </div>
+
+            <div class="col-sm-12">
+              <!-- <mat-card class="border"> -->
+              <mat-card-content>
+                <div class="card border shadow-none">
+                  <div class="card-header border-bottom p-0 py-1">
+                    <input type="text" formControlName="assembly" [(ngModel)]="searchAssembly"
+                      placeholder="Search Assemblies" class="form-control form-control-sm border-0">
+                  </div>
+                  <div class="mb-3 card-body py-2 ChekBox"
+                    *ngIf="( assemblArray | filter:searchAssembly ) as assemblyResult">
+                    <div class="mb-2 form-check" *ngFor="let boothsUnderA of assemblyResult">
+                      <input class="form-check-input" type="checkbox" [checked]="boothsUnderA?.checked == true"
+                        (change)="onClickCheckBox1($event,boothsUnderA)" [attr.disabled]="boothsUnderA.disabledFlag" />
+                      <label class="form-check-label" for="flexCheckDefault">
+                        {{ boothsUnderA?.assemblyName }} {{mainForm.value.assembly}}
+                      </label>
+                    </div>
+                    <!-- {{assemblArray.length}} - {{mainForm.value.assembly}} -->
+                    <div *ngIf="!assemblArray?.length" class="alert alert-danger text-center py-2">
+                      No Results Found!
+                    </div>
+                    <!-- <div *ngIf="checkBoxFlag" class="alert alert-danger text-center py-2">
+                          No Results Found!
+                        </div> -->
+                  </div>
+                </div>
+              </mat-card-content>
+              <!-- </mat-card> -->
+              <button type="button" class="btn btn-main mt-2 float-end" (click)="addItem()">Add</button>
+            </div>
+            <div class="col-sm-12">
+              <div class="table-responsive chartbox">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>PC Name</th>
+                      <th>District Name</th>
+                      <th>Assigned AC</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let assemblyItems of itemArray;let i=index">
+                      <tr>
+                        <td>{{parliamentaryConstituencies}}</td>
+                        <td>{{assemblyItems?.districtName}}</td>
+                        <td>
+                          {{assemblyItems?.assemblyName}}
+                        </td>
+                        <td>
+                          <button type="button" class="btn btn-light text-danger rounded" title="Delete Details"
+                            (click)="deleteListData(i)">
+                            <i class="fas fa-trash-alt"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+                <ng-container *ngIf="!itemArray?.length">
+                  <div class="alert alert-danger text-center py-2 mt-2 text-center">
+                    No Results Found!
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="clearData()">Cancel</button>
+          <button type="button" class="btn btn-main" (click)="onSubmit()">Save</button>
+        </div>
+      </div>
+    </div>
   </form>
 </div>
