@@ -6,6 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { CallAPIService } from 'src/app/services/call-api.service';
 import { CommonService } from 'src/app/services/common.service';
+import { DeleteComponent } from '../../dialogs/delete/delete.component';
 
 @Component({
   selector: 'app-ac-to-pc',
@@ -59,6 +60,15 @@ export class AcToPcComponent implements OnInit {
   //   this.mainForm.controls['parliamentaryConstituencies'].setValue(val.parliamentaryConstituencies)
   //   this.mainForm.controls['parliamentaryConstituencies'].setValue(val.parliamentaryConstituencies)
   // }
+
+  deleteConfirmModel(id?:any){
+    const dialogRef = this.dialog.open(DeleteComponent, { disableClose: true });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == 'Yes') {
+        this.deleteListData(id);
+      }
+    });
+  }
 
   deleteListData(id?: any) {
     this.itemArray.splice(id, 1);
