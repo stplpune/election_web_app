@@ -165,7 +165,8 @@
                                 <div class="col-md-2" >
                                     <div class="flex-shrink-0" *ngIf="designatedMembers.MemberName != ''">
                                         <div class="image-bg">
-                                            <img class="company" [src]="designatedMembers?.ProfilePhoto" alt="photo" srcset="">
+                                            <img *ngIf="designatedMembers?.ProfilePhoto" class="company" [src]="designatedMembers?.ProfilePhoto" srcset="">
+                                            <img *ngIf="!designatedMembers?.ProfilePhoto" class="rounded" alt="photo" src="../../../../assets/images/user.png" srcset="">
                                         </div>
                                     </div>
                                 </div>
