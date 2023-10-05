@@ -51,6 +51,7 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
   boothArray = new Array();
   boothUnderConstituencyArr: any[] = [];
   boothlistDisplay:any[]=[];
+  searchBooths = '';
 
   constructor(
     private callAPIService: CallAPIService,
@@ -84,6 +85,7 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
       constituencyName: ['', [Validators.required]],
       categoryId: ['', [Validators.required]],
       assemblyId: ['', [Validators.required]],
+      booth:['']
     });
   }
 
@@ -352,6 +354,8 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
       (res: any) => {
         if (res.responseData != null && res.statusCode == '200') {
           this.boothArray = res.responseData;
+          console.log(this.boothArray,'barray');
+          
           if (updateData) {
             this.boothArray?.map((boothele: any) => {
               updateData.map((ele: any) => {
