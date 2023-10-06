@@ -453,7 +453,7 @@ export class BoothCommitteeComponent implements OnInit {
       this.b['age'].setValue(''),this.toastrService.error('Please Enter Valid Age');
       return;
     } else if (this.checkPersidantAvail() == true) {
-      this.toastrService.error('You Select Only One Persident Please Select Different');
+      this.toastrService.error('You Can Select Only One Persident as Designation, Please Select Different Designation');
       return;
     } 
     else {
