@@ -21,12 +21,12 @@
                 <div class="col-sm-4">
                   <div class="mb-3">
                     <ngx-select [allowClear]="true" [items]="electionArray" formControlName="electionId"
-                      (remove)="pageNo=1;onRemoveElection()" (select)="pageNo=1;getTableData();"
+                      (remove)="pageNo=1;onRemoveElection()" (select)="pageNo=1;bindConstituency();getTableData();"
                       optionValueField="electionId" optionTextField="electionName" placeholder="Select Election">
                     </ngx-select>
                   </div>
                 </div>
-                <div class="col-sm-4" *ngIf="filterForm.value.electionId">
+                <div class="col-sm-4">
                   <div class="mb-3">
                     <ngx-select [allowClear]="true" [items]="constituencyArray" formControlName="constituencyId"
                       (remove)="pageNo=1;getTableData()" (select)="pageNo=1;getTableData()"
