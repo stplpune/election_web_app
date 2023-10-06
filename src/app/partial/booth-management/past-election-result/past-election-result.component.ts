@@ -33,7 +33,7 @@ export class PastElectionResultComponent implements OnInit {
 
   electionName: any;
   excelSampleFileName = '../../../../assets/sample Excel/sampleForParlimentaryConstituency.xlsx';
-  noDataFoundMsg = 'Select above filters to View data!'
+  noDataFoundMsg = 'Select Above Filters To View Data!'
 
   @ViewChild('excleUpload') excleUpload!: ElementRef;
   @ViewChild('closeElectionModel') closeElectionModel!: ElementRef;
@@ -127,7 +127,7 @@ export class PastElectionResultComponent implements OnInit {
     this.getTableData();
   }
   onConstituencyChange() {
-    this.noDataFoundMsg = 'Select above filters to View data!'
+    this.noDataFoundMsg = 'Select Above Filters To View Data!'
     this.bindElection();
     this.bindConstituency();
     if(this.filterForm.value.constituencyType == 1){
@@ -137,7 +137,7 @@ export class PastElectionResultComponent implements OnInit {
     }
   }
   onRemoveElection() {
-    this.noDataFoundMsg = 'Select above filters to View data!'
+    this.noDataFoundMsg = 'Select Above Filters To View Data!'
     this.filterForm.controls['constituencyId'].setValue('');
     this.electionResultArray = [];
     this.getTableData();
@@ -222,16 +222,18 @@ export class PastElectionResultComponent implements OnInit {
   }
 
   filterExcelDataPC() {
+    console.log(this.excleDataArray);
+    
     this.excleDataArray.map((res: any, i: any) => {
       let noOfKeys = Object.keys(res);
       if (noOfKeys.length == 15 && i != 1) {
         let obj = {
           //  srNo: count,
-          candidateName: res.__EMPTY_1,
-          constituencyName: res.__EMPTY,
-          totalVote: res.__EMPTY_9,
+          candidateName: res.__EMPTY_2,
+          constituencyName: res.__EMPTY_1,
+          totalVote: res.__EMPTY_10,
           partyName: res.__EMPTY_6,
-          constituencyNo: res.__EMPTY_13
+          constituencyNo: res.__EMPTY
         }
         this.filterExcleDataArray.push(obj);
       }
