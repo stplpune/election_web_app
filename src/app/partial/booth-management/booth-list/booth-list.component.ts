@@ -29,6 +29,7 @@ export class BoothListComponent implements OnInit {
   boothModelObj: any;
   mergeMarathiEnglishArray: any[] = [];
   constituencyNo:any;
+  assemNameTitle?:String;
   @ViewChild('closeBoothModel') closeBoothModel: any;
 
   constructor(
@@ -99,11 +100,12 @@ export class BoothListComponent implements OnInit {
     this.getAssemblyTable();
   }
 
-  getBoothDetail(assemblyId: any) {
+  getBoothDetail(assemblyId: any,assemblyName?:any) {
     this.callAPIService.setHttp('get', 'api/BoothDetailsAsync/GetBoothDetails?AssemblyId=' + assemblyId, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
         this.boothDetailArray = res.responseData;
+        this.assemNameTitle = assemblyName;
       } else {
         this.boothDetailArray = [];
       }

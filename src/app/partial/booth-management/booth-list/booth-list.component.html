@@ -7,7 +7,7 @@
             <div class="col-sm-3">
                 <ngx-select [allowClear]="true" [items]="districtArray" formControlName="DistrictId"
                     (select)="getAssemblyList();paginationNo = 1;getAssemblyTable()"
-                    (remove)="paginationNo = 1;getAssemblyTable()" optionValueField="districtId"
+                    (remove)="filterForm.controls['assemblyId'].setValue('');paginationNo = 1;getAssemblyTable()" optionValueField="districtId"
                     optionTextField="districtName" placeholder="Select District">
                 </ngx-select>
             </div>
@@ -49,7 +49,7 @@
                                     <tr *ngFor="let consti_List of assemblyTableArray[i]?.constituencyList">
                                         <td>{{consti_List?.assemblyName}}</td>
                                         <td> <a href="" title="Edit Details" data-bs-toggle="modal"
-                                                (click)="getBoothDetail(consti_List?.assemblyId)"
+                                                (click)="getBoothDetail(consti_List?.assemblyId,consti_List?.assemblyName)"
                                                 data-bs-target="#staticBackdrop">{{consti_List?.noOfBooths}}</a></td>
                                         <td>
                                             <button class="btn btn-light text-dark rounded" title="Edit Details"
@@ -82,7 +82,7 @@
     <div class="modal-dialog modal-dialog-centered  modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">255 - Phaltan (SC) Booth List</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">{{assemNameTitle}}</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body form-container">
