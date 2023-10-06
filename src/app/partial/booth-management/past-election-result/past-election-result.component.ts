@@ -16,7 +16,7 @@ export class PastElectionResultComponent implements OnInit {
 
   filterForm!: FormGroup;
   uploadElectionForm!: FormGroup;
-  ConstituencyTypeArray = [{ id: 1, name: 'Parlimentary Constituency' }, { id: 2, name: 'Assembly Constituency' }]
+  ConstituencyTypeArray = [{ id: 1, name: 'Parliamentary Constituency' }, { id: 2, name: 'Assembly Constituency' }]
 
   electionArray: any = [];
   constituencyArray: any = [];
@@ -183,8 +183,9 @@ export class PastElectionResultComponent implements OnInit {
         var worksheet = workbook.Sheets[first_sheet_name];
         this.excleDataArray = XLSX.utils.sheet_to_json(worksheet, { raw: true });
         let keysOfPC: any = [];
-        if (this.filterForm.value.constituencyType == 1) {
-          keysOfPC = Object.values(this.excleDataArray[1])
+        if (this.filterForm.value.constituencyType == 1) {     
+          let index = this.excleDataArray.length > 1 ? 1:0     
+          keysOfPC = Object.values(this.excleDataArray[index])
         }
         let validExcel = true;
         let keynames = this.filterForm.value.constituencyType == 2 ? ['Candidate Name', 'SL.No', 'Total Vote'] : ['State Name', 'PC NAME', 'CANDIDATES NAME', 'SEX', 'AGE', 'CATEGORY', 'PARTY NAME', 'PARTY SYMBOL', 'GENERAL', 'POSTAL', 'TOTAL', 'OVER TOTAL ELECTORS IN CONSTITUENCY', 'OVER TOTAL VOTES POLLED IN CONSTITUENCY', 'Total Electors', 'Constitiency No']
@@ -222,14 +223,13 @@ export class PastElectionResultComponent implements OnInit {
   }
 
   filterExcelDataPC() {
-    console.log(this.excleDataArray);
-    
     this.excleDataArray.map((res: any, i: any) => {
       let noOfKeys = Object.keys(res);
+     // let keyForValue = this.excleDataArray[1]
       if (noOfKeys.length == 15 && i != 1) {
         let obj = {
           //  srNo: count,
-          candidateName: res.__EMPTY_2,
+          candidateName:  res.__EMPTY_2,
           constituencyName: res.__EMPTY_1,
           totalVote: res.__EMPTY_10,
           partyName: res.__EMPTY_6,
