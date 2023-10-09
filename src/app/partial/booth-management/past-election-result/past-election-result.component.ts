@@ -140,6 +140,7 @@ export class PastElectionResultComponent implements OnInit {
     this.noDataFoundMsg = 'Select Above Filters To View Data!'
     this.filterForm.controls['constituencyId'].setValue('');
     this.electionResultArray = [];
+    this.constituencyArray= [];
     this.getTableData();
   }
 
