@@ -246,7 +246,7 @@ export class PastElectionResultComponent implements OnInit {
     this.excleDataArray.map((res: any) => {
       let noOfKeys = Object.keys(res);
       if (noOfKeys.length == 1) {
-        constituency_Name = res['SL.No'];
+        constituency_Name = res['Sr.No.'];
       } else {
         // debugger
         let from = res['Candidate Name']?.lastIndexOf('(');
