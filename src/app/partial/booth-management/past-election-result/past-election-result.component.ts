@@ -224,6 +224,7 @@ export class PastElectionResultComponent implements OnInit {
   }
 
   filterExcelDataPC() {
+    console.log(this.excleDataArray);    
     this.excleDataArray.map((res: any, i: any) => {
       let noOfKeys = Object.keys(res);
      // let keyForValue = this.excleDataArray[1]
@@ -242,6 +243,7 @@ export class PastElectionResultComponent implements OnInit {
   }
 
   filterExcelDataAC() {
+    console.log(this.excleDataArray); 
     let constituency_Name = '';
     this.excleDataArray.map((res: any) => {
       let noOfKeys = Object.keys(res);
