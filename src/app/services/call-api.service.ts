@@ -15,21 +15,32 @@ export class CallAPIService {
   getBaseurl(url: string) {
     switch (url) {
     
-  // Live server base url 
+                                       // Live server base url 
     //case 'electionServiceForWeb': return 'http://electionwservice.erpguru.in/service.asmx/'; 
 
-  // live server base url  MicroServices
+                                       // live server base url  MicroServices
       // case 'electionMicroServiceForWeb': return 'http://electionclientapp.erpguru.in/ClientMasterWebApi/'; break;
       // case 'electionMicroSerApp': return 'http://electionclientapp.erpguru.in/'; break;
       // default: return ''; break;
 
-  // development server base url 
+
+                                        // development server base url
        case 'electionServiceForWeb': return 'http://demoeelection.erpguru.in/Service.asmx/'; break;
 
-  // development server base url MicroServices
+                                        // development server base url MicroServices
       case 'electionMicroServiceForWeb': return 'http://demoelectionclientapp.eanifarm.com/ClientMasterWebApi/'; break;
       case 'electionMicroSerApp': return 'http://demoelectionclientapp.eanifarm.com/'; break;
       default: return ''; break;
+
+
+                                         // development server base url For New Server
+      // case 'electionServiceForWeb': return 'http://webboothmgtapi.erpguru.in/Service.asmx/'; break;  // Soap Service
+
+                                        // development server base url MicroServices For New Server
+      // case 'electionMicroServiceForWeb': return 'http://Appboothmgtapi.erpguru.in/ClientMasterWebApi/'; break;
+      // case 'electionMicroSerApp': return 'http://Appboothmgtapi.erpguru.in/'; break;
+      // default: return ''; break;
+
     }
   }
   private httpObj: any = {
