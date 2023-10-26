@@ -271,8 +271,6 @@ export class CommitteeDashboardComponent implements OnInit, OnDestroy, AfterView
   }
 
   getBarChartApi_Booths_vs_Boothcommittee() { // barChartApi & villageMap Inside Count Api
- console.log('asdadsada');
- 
     let formData = this.topFilter.value;
     let obj = '&ClientId=' + this.localStorageData?.ClientId + '&StateId=' + this.localStorageData?.StateId
       + '&FilterTypeId=' + formData?.FilterTypeId + '&FilterId=' + (formData?.FilterId || 0)
@@ -287,7 +285,7 @@ export class CommitteeDashboardComponent implements OnInit, OnDestroy, AfterView
         if (this.topFilter.value.FilterTypeId == 2 && this.topFilter.value.FilterId) {
           this.AssemblyPieChartCheck(this.barChartBooths_vs_BoothcomityArray); // pass Data For Assembly Pie Chart
         } else {
-          const barchartBoothDataObj = this.barChartBooths_vs_BoothcomityArray.find((x: any) => x.totalBooths > 1 || x.totalBoothCommittee > 1) // Bar Chart
+          const barchartBoothDataObj = this.barChartBooths_vs_BoothcomityArray.find((x: any) => x.totalBooths >= 1 || x.totalBoothCommittee >= 1) // Bar Chart
           this.barChartShow = barchartBoothDataObj ? true : false;
           this.constructBarChart(this.barChartBooths_vs_BoothcomityArray);
         }
@@ -305,7 +303,7 @@ export class CommitteeDashboardComponent implements OnInit, OnDestroy, AfterView
       if (res?.responseData && res?.responseData.length != 0) {
         this.talukaWiseBoothCommitteArray = res.responseData;
 
-        const barchartBoothDataObj = this.talukaWiseBoothCommitteArray.find((x: any) => x.totalBooths > 1 || x.totalBoothCommittee > 1) // Bar Chart
+        const barchartBoothDataObj = this.talukaWiseBoothCommitteArray.find((x: any) => x.totalBooths >= 1 || x.totalBoothCommittee >= 1) // Bar Chart
         this.barChartShow = barchartBoothDataObj ? true : false;
         this.constructBarChart(this.talukaWiseBoothCommitteArray);
       } else {
@@ -615,7 +613,7 @@ export class CommitteeDashboardComponent implements OnInit, OnDestroy, AfterView
 
 
   constructPieChart(obj: any) {
-    this.pieChartShow = (obj?.totalBoothCommittee > 1 || obj?.totalBooths > 1) ? true : false;
+    this.pieChartShow = (obj?.totalBoothCommittee >= 1 || obj?.totalBooths >= 1) ? true : false;
     this.chartOptions = {
       series: [obj?.totalBoothCommittee, obj?.totalBooths],
       chart: {
