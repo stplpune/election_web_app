@@ -93,15 +93,15 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
     this.constituencyComityModelArray = [];
   }
 
-  onClickCheckBox(event: any, eleObj: any) {
-    this.villageCityGovtArray.map((ele: any) => {
-      if (eleObj?.villageId == ele?.villageId) {
-        ele['checked'] = event.target.checked;
-        return ele;
-      }
-    });
-    this.onClickUpdateComityModel();
-  }
+  // onClickCheckBox(event: any, eleObj: any) {
+  //   this.villageCityGovtArray.map((ele: any) => {
+  //     if (eleObj?.villageId == ele?.villageId) {
+  //       ele['checked'] = event.target.checked;
+  //       return ele;
+  //     }
+  //   });
+  //   this.onClickUpdateComityModel();
+  // }
 
   constituencyComityModelArray: any[] = [];
   onClickCheckBox1(event?: any, data?: any) {
@@ -124,27 +124,27 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
   }
 
   
-  onClickUpdateComityModel() {
-    // push checked obj in new Array
-    this.constituencyComityModelArray = [];
-    let formData = this.localGovBodyForm.value;
-    this.villageCityGovtArray.map((ele: any) => {
-      let obj = {
-        id: 0,
-        committeeConstituencyId: 0,
-        stateId: formData.stateId,
-        divisionId: formData.divisionId || 0,
-        districtId: formData.districtId || 0,
-        talukaId: formData.talukaId || 0,
-        villageId: ele.villageId || 0,
-        isTown: formData.isRural == 0 ? false : true,
-        createdBy: this.userId,
-      };
-      if (ele?.checked == true) {
-        // this.constituencyComityModelArray.push(obj);
-      }
-    });
-  }
+  // onClickUpdateComityModel() {
+  //   // push checked obj in new Array
+  //   this.constituencyComityModelArray = [];
+  //   let formData = this.localGovBodyForm.value;
+  //   this.villageCityGovtArray.map((ele: any) => {
+  //     let obj = {
+  //       id: 0,
+  //       committeeConstituencyId: 0,
+  //       stateId: formData.stateId,
+  //       divisionId: formData.divisionId || 0,
+  //       districtId: formData.districtId || 0,
+  //       talukaId: formData.talukaId || 0,
+  //       villageId: ele.villageId || 0,
+  //       isTown: formData.isRural == 0 ? false : true,
+  //       createdBy: this.userId,
+  //     };
+  //     if (ele?.checked == true) {
+  //       // this.constituencyComityModelArray.push(obj);
+  //     }
+  //   });
+  // }
 
   clearBoothArray() {
     this.boothArray = [];
@@ -171,17 +171,7 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
       this.tosterService.error('Please Select at least One Booth');
       return;
     }
-    // if (
-    //   !this.villageCityGovtArray?.some((ele: any) => {
-    //     return ele.checked === true;
-    //   })
-    // )
-    //  {
-    //   this.tosterService.error('Village / City Feild is Requird');
-    //   return;
-    // }
     else {
-      
       this.spinner.show();
       let formData = this.localGovBodyForm.value;
       let obj = {
@@ -192,21 +182,6 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
         createdBy: this.userId,
         boothstoConstituencyCommitteeModelList: this.constituencyComityModelArray,
       };
-
-      // {
-      //   "id": 0,
-      //   "constituencyName": "string",
-      //   "typeId": 0,
-      //   "createdBy": 0,
-      //   "boothstoConstituencyCommitteeModelList": [
-      //     {
-      //       "id": 0,
-      //       "committeeConstituencyId": 0,
-      //       "assemblyId": 0,
-      //       "boothId": 0
-      //     }
-      //   ]
-      // }
 
       let urlType =
         formData.id == 0
@@ -339,6 +314,7 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
   }
 
   getBoothsUnderAssemblies(updateData?: any) {
+    this.constituencyComityModelArray = [];
     this.callAPIService.setHttp(
       'get',
       'api/BoothCommitteeDashboard/Web_GetBoothList_Boothcommittee?UserId=' +
@@ -359,9 +335,7 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
           if (updateData) {
             this.boothArray?.map((boothele: any) => {
               updateData.map((ele: any) => {
-                ele.boothId == boothele.boothId
-                  ? (boothele['checked'] = true)
-                  : '';
+                ele.boothId == boothele.boothId ? (boothele['checked'] = true , this.constituencyComityModelArray.push(boothele)) : '';
               });
             });
           }

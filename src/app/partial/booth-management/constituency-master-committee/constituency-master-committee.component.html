@@ -38,8 +38,8 @@
               <div class="mb-2">
                 <label for="" class="form-label required-field">Assembly</label>
                 <ngx-select [allowClear]="true" [items]="assemblyArray" formControlName="assemblyId"
-                  optionValueField="constituenciesId" optionTextField="constituencyName" (remove)="clearBoothArray()"
-                  (select)="getBoothsUnderAssemblies()" placeholder="Select Constituency Assembly">
+                  optionValueField="constituenciesId" optionTextField="constituencyName" (remove)="g['booth'].setValue('');clearBoothArray()"
+                  (select)=" g['booth'].setValue('');getBoothsUnderAssemblies()" placeholder="Select Constituency Assembly">
                 </ngx-select>
                 <div *ngIf="submitted && g.assemblyId.errors" class="invalid-feedback">
                   Assembly is Required
