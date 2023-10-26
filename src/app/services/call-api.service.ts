@@ -25,21 +25,21 @@ export class CallAPIService {
 
 
                                         // development server base url For New Server http://demoboothmgt.eanifarm.com/ (13.233.243.62) new server
-      //  case 'electionServiceForWeb': return 'http://demoeelection.erpguru.in/Service.asmx/'; break;
+       case 'electionServiceForWeb': return 'http://demoeelection.erpguru.in/Service.asmx/'; break;
 
                                         // development server base url MicroServices For New Server
-      // case 'electionMicroServiceForWeb': return 'http://demoelectionclientapp.eanifarm.com/ClientMasterWebApi/'; break;
-      // case 'electionMicroSerApp': return 'http://demoelectionclientapp.eanifarm.com/'; break;
-      // default: return ''; break;
+      case 'electionMicroServiceForWeb': return 'http://demoelectionclientapp.eanifarm.com/ClientMasterWebApi/'; break;
+      case 'electionMicroSerApp': return 'http://demoelectionclientapp.eanifarm.com/'; break;
+      default: return ''; break;
 
 
                                          // live server base url http://boothmgt.erpguru.in/ (13.235.1.165) old server
-      case 'electionServiceForWeb': return 'http://webboothmgtapi.erpguru.in/Service.asmx/'; break;  // Soap Service
+      // case 'electionServiceForWeb': return 'http://webboothmgtapi.erpguru.in/Service.asmx/'; break;  // Soap Service
 
                                         // live server base url MicroServices
-      case 'electionMicroServiceForWeb': return 'http://Appboothmgtapi.erpguru.in/ClientMasterWebApi/'; break;
-      case 'electionMicroSerApp': return 'http://Appboothmgtapi.erpguru.in/'; break;
-      default: return ''; break;
+      // case 'electionMicroServiceForWeb': return 'http://Appboothmgtapi.erpguru.in/ClientMasterWebApi/'; break;
+      // case 'electionMicroSerApp': return 'http://Appboothmgtapi.erpguru.in/'; break;
+      // default: return ''; break;
 
     }
   }
