@@ -501,7 +501,7 @@ export class CommitteeDashboardComponent implements OnInit, OnDestroy, AfterView
         this.setSVGPath(this.selectedDistrictId, 'tal', this.filteredTal);
         this.callAllCommonApi('talukaClick');
         // this.topVilageName_MapClicked = this.filteredTal[0]?.constituencyName;
-        this.columnChartHeadingName = this.filteredTal[0]?.constituencyName + ' ' + 'Booth Committee Formation progress';
+        this.columnChartHeadingName = this.filteredTal[0]?.constituencyName ? (this.filteredTal[0]?.constituencyName + ' ' + 'Booth Committee Formation progress') : 'Booth Committee Formation progress';
         this.talukaCircle_MapClick(Number(selectedTalId));
       }
     })
@@ -731,7 +731,7 @@ export class CommitteeDashboardComponent implements OnInit, OnDestroy, AfterView
 
   assemblyVillagePieChart(obj: any) {
     this.selectedTalId = '';
-    this.columnChartHeadingName = obj?.constituencyName + ' ' + 'Booth Committee Formation progress';
+    this.columnChartHeadingName = obj?.constituencyName ? (obj?.constituencyName + ' ' + 'Booth Committee Formation progress') : 'Booth Committee Formation progress';
     this.HighlightRowAssemblyPieList = obj?.constituenciesId;
     this.talukaCircle_MapClick(this.HighlightRowAssemblyPieList);
     this.selectedTalId = obj?.constituenciesId; this.getTalukaPresident();
