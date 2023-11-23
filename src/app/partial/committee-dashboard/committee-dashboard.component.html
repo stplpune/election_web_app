@@ -194,7 +194,7 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="card-height">
-                                <div class="d-flex align-items-center leader"
+                                <div type="button" class="d-flex align-items-center leader"
                                     *ngFor="let impLeader of importantLeadersArray"
                                     (click)="redirectToleaderDetailsPage(impLeader?.leaderId)"
                                     [class.active]="impLeader?.leaderId == impLeader_Highlight">
