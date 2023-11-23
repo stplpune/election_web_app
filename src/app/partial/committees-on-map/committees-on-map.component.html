@@ -79,14 +79,14 @@
                             </div>
                             <div class="card-body p-0 fix-height">
                                 <div class="list-group list-group-flush">
-                                    <a (click)="committeeNameByOrganizationMember(resCommittes.Id, resCommittes.BodyOrgCellName); this.commiteeObj = resCommittes; this.hideComityGraph = false "
+                                    <a type="button" (click)="committeeNameByOrganizationMember(resCommittes.Id, resCommittes.BodyOrgCellName); this.commiteeObj = resCommittes; this.hideComityGraph = false "
                                         [class.active]="resCommittes.Id == activeRow"
                                         class="list-group-item list-group-item-action border-0 border-bottom px-2"
                                         aria-current="true" *ngFor="let resCommittes of resultCommittees">
                                         <p class="mb-0 fw-bold mt-1">{{resCommittes.BodyOrgCellName | titlecase}} <span
                                                 class="badge rounded-pill bg-light text-dark float-end text-center"
                                                 [appTooltip]
-                                                title="Member Count">{{resCommittes?.AllottedDesignation}}</span> </p>
+                                                title="Member Count"><strong>{{resCommittes?.AllottedDesignation}}</strong></span> </p>
                                         <span class="small">{{resCommittes.Area | titlecase}}</span>
                                     </a>
 

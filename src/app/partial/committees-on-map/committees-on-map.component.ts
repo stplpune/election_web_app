@@ -315,7 +315,7 @@ export class CommitteesOnMapComponent implements OnInit, OnDestroy, AfterViewIni
         this.comActiveClass(1)
         this.spinner.hide();
         this.selCommitteeName = committeeName;
-        this.getOrganizationByDistrictId();
+        // this.getOrganizationByDistrictId();
         this.resultOrganizationMember = res.data1;
       } else {
         this.comActiveClass(1)
