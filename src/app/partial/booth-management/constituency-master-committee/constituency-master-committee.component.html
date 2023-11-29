@@ -63,10 +63,10 @@
                   <div class="card-body py-2 ChekBox" *ngIf="( boothArray | filter:searchBooths ) as boothsResult">
                     <div class="mb-2 form-check" *ngFor="let boothsUnderA of boothsResult">
                       <input class="form-check-input" type="checkbox" [checked]="boothsUnderA?.checked == true"
-                       [disabled]="boothsUnderA?.assignedId > 0 && boothsUnderA?.selfCheck != true" (change)="onClickCheckBox1($event,boothsUnderA)" />
+                       [disabled]="boothsUnderA?.assignedId > 0 && boothsUnderA?.assignedId != editObjData?.id" (change)="onClickCheckBox1($event,boothsUnderA)" />
                       <label class="form-check-label" for="flexCheckDefault">
-                        {{ boothsUnderA?.boothEnglishName ? (boothsUnderA?.politicalUnit && boothsUnderA?.selfCheck != true ? boothsUnderA?.boothEnglishName +' ('+ boothsUnderA?.politicalUnit +')' : boothsUnderA?.boothEnglishName) : 
-                        (boothsUnderA?.politicalUnit && boothsUnderA?.selfCheck != true ? boothsUnderA?.boothNickName +' ('+ boothsUnderA?.politicalUnit +')' : boothsUnderA?.boothNickName)}}
+                        {{ boothsUnderA?.boothEnglishName ? (boothsUnderA?.politicalUnit && boothsUnderA?.assignedId != editObjData?.id ? boothsUnderA?.boothEnglishName +' ('+ boothsUnderA?.politicalUnit +')' : boothsUnderA?.boothEnglishName) : 
+                        (boothsUnderA?.politicalUnit && boothsUnderA?.assignedId != editObjData?.id ? boothsUnderA?.boothNickName +' ('+ boothsUnderA?.politicalUnit +')' : boothsUnderA?.boothNickName)}}
                       </label>
                     </div>
                       <div *ngIf="!boothArray.length || !boothsResult.length">

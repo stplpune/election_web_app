@@ -119,18 +119,20 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
     this.boothArray = [];
   }
 
-  patchFormData(obj: any) {
+  patchFormData(obj: any) {  
     this.editObjData = obj;
     this.localGovBodyForm.patchValue({
       id: obj?.id,
       constituencyName: obj?.constituencyName,
       categoryId: obj?.typeId,
-      talukaId: obj?.talukaId,
+      // talukaId: obj?.talukaId,
       assemblyId: obj?.getAssignBoothstoConstituencyCommitteeModel[0]?.assemblyId,
     });
+    setTimeout(() => {this.g['talukaId'].setValue(obj?.talukaId);}, 100);
+    this.getTaluka();
+
     this.editObjData?.getAssignBoothstoConstituencyCommitteeModel?.length
       ? this.getBoothsUnderAssemblies(this.editObjData?.getAssignBoothstoConstituencyCommitteeModel) : this.boothArray = [];
-      this.getTaluka();
   }
 
   onSubmit() {
@@ -159,8 +161,8 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
 
       let obj = {
         id: formData?.id || this.editObjData?.id,
-        constituencyName: formData.constituencyName || this.editObjData.constituencyName,
-        typeId: formData.categoryId || this.editObjData?.typeId || 0,
+        constituencyName: formData.constituencyName || this.editObjData?.constituencyName,
+        typeId: formData.categoryId || this.editObjData?.typeId,
         talukaId: formData.talukaId,
         createdBy: this.userId,
         boothstoConstituencyCommitteeModelList: constituencyComityArray,
@@ -285,7 +287,7 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
           if (updateData) {
             this.boothArray?.map((boothele: any) => {
               updateData.map((ele: any) => {
-                ele.boothId == boothele.boothId ? (boothele['checked'] = true,boothele['selfCheck'] = true, this.constituencyComityModelArray.push(boothele)) : '';
+                ele.boothId == boothele.boothId ? (boothele['checked'] = true, this.constituencyComityModelArray.push(boothele)) : '';
               });
             });
           }
