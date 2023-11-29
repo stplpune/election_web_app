@@ -38,19 +38,50 @@
               <div class="mb-2">
                 <label for="" class="form-label required-field">Assembly</label>
                 <ngx-select [allowClear]="true" [items]="assemblyArray" formControlName="assemblyId"
-                  optionValueField="constituenciesId" optionTextField="constituencyName" (remove)="g['booth'].setValue('');clearBoothArray()"
-                  (select)=" g['booth'].setValue('');getBoothsUnderAssemblies()" placeholder="Select Constituency Assembly">
+                  optionValueField="constituenciesId" optionTextField="constituencyName" (remove)="g['talukaId'].setValue('');g['booth'].setValue('');clearBoothArray()"
+                  (select)="g['booth'].setValue('');g['talukaId'].setValue('');getTaluka();getBoothsUnderAssemblies()" placeholder="Select Constituency Assembly"
+                  [ngClass]="{ 'is-invalid': submitted && g.assemblyId.errors }">
                 </ngx-select>
-                <div *ngIf="submitted && g.assemblyId.errors" class="invalid-feedback">
-                  Assembly is Required
-                </div>
+                <div *ngIf="submitted && g.assemblyId.errors" class="invalid-feedback"> Assembly is Required </div>
               </div>
+
+              <div class="mb-2">
+                <label for="" class="form-label required-field">Taluka</label>
+                <ngx-select [allowClear]="true" [items]="talkaArray" formControlName="talukaId"
+                    [disabled]="!g['assemblyId'].value" optionValueField="talukaId" optionTextField="talukaName" 
+                    placeholder="Select Taluka" [ngClass]="{ 'is-invalid': submitted && g.talukaId.errors }">
+                </ngx-select>
+                <div *ngIf="submitted && g.talukaId.errors" class="invalid-feedback"> Taluka is Required </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="txtSearchAssembly" class="form-label required-field">Select Booths Under Constituencies</label>
+              <div class="card border shadow-none">
+                  <div class="card-header border-bottom p-0 py-1">
+                    <input type="text" formControlName="booth" [readOnly]="!g['assemblyId'].value" [(ngModel)]="searchBooths" placeholder="Search Booths" class="form-control form-control-sm border-0">
+                  </div>
+                  <div class="card-body py-2 ChekBox" *ngIf="( boothArray | filter:searchBooths ) as boothsResult">
+                    <div class="mb-2 form-check" *ngFor="let boothsUnderA of boothsResult">
+                      <input class="form-check-input" type="checkbox" [checked]="boothsUnderA?.checked == true"
+                       [disabled]="boothsUnderA?.assignedId > 0 && boothsUnderA?.selfCheck != true" (change)="onClickCheckBox1($event,boothsUnderA)" />
+                      <label class="form-check-label" for="flexCheckDefault">
+                        {{ boothsUnderA?.boothEnglishName ? (boothsUnderA?.politicalUnit && boothsUnderA?.selfCheck != true ? boothsUnderA?.boothEnglishName +' ('+ boothsUnderA?.politicalUnit +')' : boothsUnderA?.boothEnglishName) : 
+                        (boothsUnderA?.politicalUnit && boothsUnderA?.selfCheck != true ? boothsUnderA?.boothNickName +' ('+ boothsUnderA?.politicalUnit +')' : boothsUnderA?.boothNickName)}}
+                      </label>
+                    </div>
+                      <div *ngIf="!boothArray.length || !boothsResult.length">
+                        <div class="alert alert-danger text-center py-2"> No Results Found!</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+<!-- 
               <label for="txtSearchAssembly" class="form-label required-field">Select Booths Under Constituencies</label>
               <mat-card class="border">
                 <mat-card-content>
                   <div class="card-header border-bottom p-0 py-1">
-                    <input type="text" formControlName="booth" [(ngModel)]="searchBooths"
-                      placeholder="Search Booths" class="form-control form-control-sm border-0">
+                    <input type="text" formControlName="booth" [(ngModel)]="searchBooths" placeholder="Search Booths" class="form-control form-control-sm border-0">
                   </div>
                   <div class="mb-3">
                     <div class="mb-3 card-body py-2 ChekBox"
@@ -70,26 +101,8 @@
                   </div>
                  </div>
                 </mat-card-content>
-              </mat-card>
+              </mat-card> -->
 
-              <!-- <div class="mb-2">
-                <label for="" class="form-label required-field">Type</label>
-                <div class="d-flex gap-3">
-                  <div
-                    class="form-check"
-                    *ngFor="let array of urbanRuralTypeArray"
-                  >
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      [value]="array.id"
-                      (change)="selectionType(array.id)"
-                      formControlName="isRural"
-                    />
-                    <label class="form-check-label">{{ array?.name }}</label>
-                  </div>
-                </div>
-              </div> -->
               <div class="d-flex justify-content-between mt-2">
                 <button type="button" class="btn btn-secondary" (click)="clearForm()">
                   Clear

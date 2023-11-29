@@ -50,8 +50,9 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
   assemblyArray = new Array();
   boothArray = new Array();
   boothUnderConstituencyArr: any[] = [];
-  boothlistDisplay:any[]=[];
+  boothlistDisplay: any[] = [];
   searchBooths = '';
+  talkaArray: any;
 
   constructor(
     private callAPIService: CallAPIService,
@@ -62,7 +63,7 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
     private tosterService: ToastrService,
     private spinner: NgxSpinnerService,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getCategory();
@@ -85,7 +86,8 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
       constituencyName: ['', [Validators.required]],
       categoryId: ['', [Validators.required]],
       assemblyId: ['', [Validators.required]],
-      booth:['']
+      talukaId: ['', [Validators.required]],
+      booth: ['']
     });
   }
 
@@ -93,20 +95,10 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
     this.constituencyComityModelArray = [];
   }
 
-  // onClickCheckBox(event: any, eleObj: any) {
-  //   this.villageCityGovtArray.map((ele: any) => {
-  //     if (eleObj?.villageId == ele?.villageId) {
-  //       ele['checked'] = event.target.checked;
-  //       return ele;
-  //     }
-  //   });
-  //   this.onClickUpdateComityModel();
-  // }
-
   constituencyComityModelArray: any[] = [];
   onClickCheckBox1(event?: any, data?: any) {
-    this.boothArray.map((ele:any)=>{
-      if(data.boothId == ele.boothId){
+    this.boothArray.map((ele: any) => {
+      if (data.boothId == ele.boothId) {
         ele['checked'] = event.target.checked;
         return ele;
       }
@@ -114,37 +106,14 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
     this.updateTestMethod();
   }
 
-  updateTestMethod(){
+  updateTestMethod() {
     this.constituencyComityModelArray = [];
-    this.boothArray.map((ele1:any)=>{
-      if(ele1.checked == true){
+    this.boothArray.map((ele1: any) => {
+      if (ele1.checked == true) {
         this.constituencyComityModelArray.push(ele1)
       }
     })
   }
-
-  
-  // onClickUpdateComityModel() {
-  //   // push checked obj in new Array
-  //   this.constituencyComityModelArray = [];
-  //   let formData = this.localGovBodyForm.value;
-  //   this.villageCityGovtArray.map((ele: any) => {
-  //     let obj = {
-  //       id: 0,
-  //       committeeConstituencyId: 0,
-  //       stateId: formData.stateId,
-  //       divisionId: formData.divisionId || 0,
-  //       districtId: formData.districtId || 0,
-  //       talukaId: formData.talukaId || 0,
-  //       villageId: ele.villageId || 0,
-  //       isTown: formData.isRural == 0 ? false : true,
-  //       createdBy: this.userId,
-  //     };
-  //     if (ele?.checked == true) {
-  //       // this.constituencyComityModelArray.push(obj);
-  //     }
-  //   });
-  // }
 
   clearBoothArray() {
     this.boothArray = [];
@@ -156,10 +125,12 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
       id: obj?.id,
       constituencyName: obj?.constituencyName,
       categoryId: obj?.typeId,
+      talukaId: obj?.talukaId,
       assemblyId: obj?.getAssignBoothstoConstituencyCommitteeModel[0]?.assemblyId,
     });
     this.editObjData?.getAssignBoothstoConstituencyCommitteeModel?.length
       ? this.getBoothsUnderAssemblies(this.editObjData?.getAssignBoothstoConstituencyCommitteeModel) : this.boothArray = [];
+      this.getTaluka();
   }
 
   onSubmit() {
@@ -167,36 +138,38 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
     if (this.localGovBodyForm.invalid) {
       this.spinner.hide();
       return;
-    }else if(!this.constituencyComityModelArray?.length){
+    } else if (!this.constituencyComityModelArray?.length) {
       this.tosterService.error('Please Select at least One Booth');
       return;
     }
     else {
       this.spinner.show();
       let formData = this.localGovBodyForm.value;
+
+      let constituencyComityArray:any[] = [];
+      constituencyComityArray = this.constituencyComityModelArray.map((ele:any)=>{
+        let data = {
+          "id": 0,
+          "committeeConstituencyId": 0,
+          "assemblyId": this.localGovBodyForm.value.assemblyId,
+          "boothId": ele.boothId
+        }
+        return data;
+      })
+
       let obj = {
         id: formData?.id || this.editObjData?.id,
         constituencyName: formData.constituencyName || this.editObjData.constituencyName,
-        typeId: formData.categoryId || this.editObjData.typeId,
-        // isRural: formData.isRural,
+        typeId: formData.categoryId || this.editObjData?.typeId || 0,
+        talukaId: formData.talukaId,
         createdBy: this.userId,
-        boothstoConstituencyCommitteeModelList: this.constituencyComityModelArray,
+        boothstoConstituencyCommitteeModelList: constituencyComityArray,
       };
 
-      let urlType =
-        formData.id == 0
-          ? 'Constituency/ConstituenctCommittee/Create_1_0'
-          : 'Constituency/ConstituenctCommittee/Update_1_0';
+      let urlType = formData.id == 0 ? 'Constituency/ConstituenctCommittee/Create_1_0' : 'Constituency/ConstituenctCommittee/Update_1_0';
       let apiType = formData.id == 0 ? 'POST' : 'PUT';
 
-      this.callAPIService.setHttp(
-        apiType,
-        urlType,
-        false,
-        obj,
-        false,
-        'electionMicroSerApp'
-      );
+      this.callAPIService.setHttp(apiType, urlType, false, obj, false, 'electionMicroSerApp');
       this.callAPIService.getHttp().subscribe(
         (res: any) => {
           if (res.responseData != null && res.statusCode == '200') {
@@ -218,7 +191,7 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
     }
   }
 
-  displayBoothsAssiged(boothArr?:any){
+  displayBoothsAssiged(boothArr?: any) {
     for (let index = 0; index < boothArr.length; index++) {
       this.boothlistDisplay.push(boothArr[index].boothName);
     }
@@ -231,6 +204,7 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
     this.boothArray = [];
     this.constituencyComityModelArray = [];
     this.localGovBody_Form();
+    this.editObjData = '';
   }
 
   // ....................local GovBody Form Code End Here ....................... //
@@ -250,23 +224,11 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
 
   getCategory() {
     // Api for Category
-    this.callAPIService.setHttp(
-      'get',
-      'Constituency/ConstituenctCommittee/GetAllConstituencyCategory',
-      false,
-      false,
-      false,
-      'electionMicroSerApp'
-    );
+    this.callAPIService.setHttp('get', 'Constituency/ConstituenctCommittee/GetAllConstituencyCategory', false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe(
       (res: any) => {
         if (res.responseData != null && res.statusCode == '200') {
           this.categoryArray = res.responseData;
-          this.categoryArray.unshift({
-            "id": 0,
-            "categoryType": "All"
-        })
-          // this.categoryArray?.length == 1 ? this.f['categoryId'].setValue(this.categoryArray[0]?.categoryId) : '';
         } else {
           this.categoryArray = [];
         }
@@ -281,22 +243,9 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
 
   getAssemblyConstituency() {
     // Api for Assembly Consituceny
-    let obj =
-      '&ClientId=' +
-      this.localStorageData?.ClientId +
-      '&StateId=' +
-      this.localStorageData?.StateId +
-      '&FilterTypeId=2';
-    this.callAPIService.setHttp(
-      'get',
-      'api/BoothCommitteeDashboard/BoothCommitteeFormation_Map_ConsituencyDropdown?UserId=' +
-        this.commonService.loggedInUserId() +
-        obj,
-      false,
-      false,
-      false,
-      'electionMicroSerApp'
-    );
+    let obj = '&ClientId=' + this.localStorageData?.ClientId + '&StateId=' + this.localStorageData?.StateId + '&FilterTypeId=2';
+    this.callAPIService.setHttp('get', 'api/BoothCommitteeDashboard/BoothCommitteeFormation_Map_ConsituencyDropdown?UserId=' +
+      this.commonService.loggedInUserId() + obj, false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe(
       (res: any) => {
         if (res.responseData != null && res.statusCode == '200') {
@@ -313,29 +262,30 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
     );
   }
 
+  getTaluka() {
+    this.callAPIService.setHttp('get', 'Filter/GetTalukalist_From_Assembly?AssemblyId=' + (this.localGovBodyForm.value.assemblyId || 0), false, false, false, 'electionMicroServiceForWeb');
+    this.callAPIService.getHttp().subscribe((res: any) => {
+      if (res.responseData != null && res.statusCode == "200") {
+        this.talkaArray = res.responseData;
+        // this.talkaArray?.length == 1 ? (this.f['TalukaId'].setValue(this.talkaArray[0]?.talukaId), this.getVillage()) : '';
+      } else {
+        this.talkaArray = [];
+      }
+    }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } })
+  }
+
   getBoothsUnderAssemblies(updateData?: any) {
     this.constituencyComityModelArray = [];
-    this.callAPIService.setHttp(
-      'get',
-      'api/BoothCommitteeDashboard/Web_GetBoothList_Boothcommittee?UserId=' +
-        this.userId +
-        '&ConstituencyId=' +
-        (this.localGovBodyForm.value.assemblyId || 0),
-      false,
-      false,
-      false,
-      'electionMicroSerApp'
-    );
+    this.callAPIService.setHttp('get', 'api/BoothCommitteeDashboard/Web_GetBoothList_Boothcommittee_with_PoliticalUnit?UserId=' +
+      this.userId + '&ConstituencyId=' + (this.localGovBodyForm.value.assemblyId || 0), false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe(
       (res: any) => {
         if (res.responseData != null && res.statusCode == '200') {
           this.boothArray = res.responseData;
-          console.log(this.boothArray,'barray');
-          
           if (updateData) {
             this.boothArray?.map((boothele: any) => {
               updateData.map((ele: any) => {
-                ele.boothId == boothele.boothId ? (boothele['checked'] = true , this.constituencyComityModelArray.push(boothele)) : '';
+                ele.boothId == boothele.boothId ? (boothele['checked'] = true,boothele['selfCheck'] = true, this.constituencyComityModelArray.push(boothele)) : '';
               });
             });
           }
@@ -354,25 +304,10 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
   getConstituencymastercommittee() {
     // Main Api For Table
     this.spinner.show();
-    let obj =
-      'pageNo=' +
-      this.paginationNo +
-      '&pageSize=' +
-      this.pageSize +
-      '&AssemblyId=' +
-      (this.filterForm?.value?.assemblyId || 0) +
-      '&CategoryId=' +
-      (this.f['categoryId'].value || 0) +
-      '&Search=' +
-      (this.f['SearchText'].value || '');
-    this.callAPIService.setHttp(
-      'get',
-      'Constituency/ConstituenctCommittee/GetAll_1_0?' + obj,
-      false,
-      false,
-      false,
-      'electionMicroSerApp'
-    );
+    let obj = 'pageNo=' + this.paginationNo + '&pageSize=' + this.pageSize + '&AssemblyId=' + (this.filterForm?.value?.assemblyId || 0) +
+      '&CategoryId=' + (this.f['categoryId'].value || 0) + '&Search=' + (this.f['SearchText'].value || '');
+    this.callAPIService.setHttp('get', 'Constituency/ConstituenctCommittee/GetAll_1_0?' + obj,
+      false, false, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe(
       (res: any) => {
         if (res.responseData != null && res.statusCode == '200') {
@@ -461,22 +396,14 @@ export class ConstituencyMasterCommitteeComponent implements OnInit {
       id: delId,
       deletedBy: this.userId,
     };
-    this.callAPIService.setHttp(
-      'DELETE',
-      'Constituency/ConstituenctCommittee/Delete_1_0',
-      false,
-      obj,
-      false,
-      'electionMicroSerApp'
-    );
+    this.callAPIService.setHttp('DELETE', 'Constituency/ConstituenctCommittee/Delete_1_0', false, obj, false, 'electionMicroSerApp');
     this.callAPIService.getHttp().subscribe(
       (res: any) => {
         if (res.statusCode == '200') {
           this.tosterService.success(res.statusMessage);
           this.clearForm();
           this.getConstituencymastercommittee();
-        } else {
-        }
+        } else { }
       },
       (error: any) => {
         this.router.navigate(['../500'], { relativeTo: this.route });
