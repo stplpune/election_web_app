@@ -112,7 +112,7 @@ export class AssignTalukaToAssemblyComponent implements OnInit {
 
   getAssemblyDetails(data: any) {
     this.searchTalukaList = '';
-    this.editFlag = true;
+    data?.talukadetailsList?.length ? this.editFlag = true : this.editFlag = false;
     this.editObj = JSON.parse(JSON.stringify(data))
     this.assignTalukaForm.patchValue({
       districtId: data.districtId,
