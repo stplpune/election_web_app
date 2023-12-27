@@ -6,6 +6,7 @@ import { CommonService } from 'src/app/services/common.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { log } from 'console';
 @Component({
   selector: 'app-assign-taluka-to-assembly',
   templateUrl: './assign-taluka-to-assembly.component.html',
@@ -83,7 +84,7 @@ export class AssignTalukaToAssemblyComponent implements OnInit {
     }, (error: any) => { if (error.status == 500) { this.router.navigate(['../../500'], { relativeTo: this.route }) } });
   }
 
-  getAssemblyNames(aseblyid?:any) {
+  getAssemblyNames(aseblyid?: any) {
     this.apiService.setHttp('GET', 'api/BoothDetailsAsync/GetDistrictwiseAssembly?DistrictId=' + this.assignTalukaForm.getRawValue().districtId, false, false, false, 'electionMicroSerApp');
     this.apiService.getHttp().subscribe((res: any) => {
       if (res.responseData != null && res.statusCode == "200") {
@@ -116,35 +117,20 @@ export class AssignTalukaToAssemblyComponent implements OnInit {
     this.editObj = JSON.parse(JSON.stringify(data))
     this.assignTalukaForm.patchValue({
       districtId: data.districtId,
-      // assemblyId: data.id
     })
-    this.getAssemblyNames(data.id); 
+    this.getAssemblyNames(data.id);
     this.getTaluka();
   }
 
   onCheckTaluka(event: any, talId: any) {
     if (event.target.checked == true) {
-      if (this.checkedTalukas.length) {
-        let index = this.checkedTalukas.findIndex((ele: any) => ele == talId);
-        if (index != -1) {
-          let obj = { talukaId: talId }
-          this.checkedTalukas[index] = obj;
-        }
-        else {
-          let obj = { talukaId: talId }
-          this.checkedTalukas.push(obj);
-        }
-      }
-      else {
-        let obj = { talukaId: talId }
-        this.checkedTalukas.push(obj);
-      }
+      let obj = { talukaId: talId }
+      this.checkedTalukas.push(obj);
     } else {
-      let index = this.checkedTalukas.findIndex((ele: any) => ele == talId);
+      let index = this.checkedTalukas.findIndex((ele: any) => ele.talukaId == talId);
       this.checkedTalukas.splice(index, 1);
     }
   }
-
 
   onSubmit() {
     let saveObj = []
@@ -167,7 +153,7 @@ export class AssignTalukaToAssemblyComponent implements OnInit {
       return;
     }
 
-    let apiType = this.editFlag == true ? 'PUT' : 'POST' ;
+    let apiType = this.editFlag == true ? 'PUT' : 'POST';
     let url = this.editFlag == true ? 'api/AssignTalukatoAssembly/Update' : 'api/AssignTalukatoAssembly/Create'
     this.apiService.setHttp(apiType, url, false, saveObj, false, 'electionMicroSerApp');
     this.apiService.getHttp().subscribe((res: any) => {
