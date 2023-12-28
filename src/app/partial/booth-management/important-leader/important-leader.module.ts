@@ -3,6 +3,12 @@ import { CommonModule } from '@angular/common';
 
 import { ImportantLeaderRoutingModule } from './important-leader-routing.module';
 import { ImportantLeaderComponent } from './important-leader.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { NgxSelectModule } from 'ngx-select-ex';
+import { TooltipModule } from 'src/app/directives/tooltip.module';
 
 
 @NgModule({
@@ -11,7 +17,14 @@ import { ImportantLeaderComponent } from './important-leader.component';
   ],
   imports: [
     CommonModule,
-    ImportantLeaderRoutingModule
+    ImportantLeaderRoutingModule,
+    MatCardModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxSelectModule,
+    NgxPaginationModule,
+    TooltipModule,
+    Ng2SearchPipeModule,
   ]
 })
 export class ImportantLeaderModule { }
