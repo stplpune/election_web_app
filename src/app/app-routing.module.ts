@@ -70,7 +70,8 @@ const routes: Routes = [
       { path: 'past-election-result', loadChildren: () => import('./partial/booth-management/past-election-result/past-election-result.module').then(m => m.PastElectionResultModule), data: { title: 'Past Election Result', allowedRoles: ['1', '2', '7', '8']}},
       { path: 'constituency-master-committee', loadChildren: () => import('./partial/booth-management/constituency-master-committee/constituency-master-committee.module').then(m => m.ConstituencyMasterCommitteeModule), data: { title: 'Constituency Master Committee', allowedRoles: ['1', '2', '7', '8']} },
       { path: 'ac-to-pc', loadChildren: () => import('./partial/booth-management/ac-to-pc/ac-to-pc.module').then(m => m.AcToPcModule), data: { title: 'AC to PC', allowedRoles: ['1', '2', '7', '8']} },
-  { path: 'booth-list', loadChildren: () => import('./partial/booth-management/booth-list/booth-list.module').then(m => m.BoothListModule), data: { title: 'Booth List', allowedRoles: ['1', '2', '7', '8']} },
+      { path: 'important-leader', loadChildren: () => import('./partial/booth-management/important-leader/important-leader.module').then(m => m.ImportantLeaderModule), data: { title: 'Important Leader', allowedRoles: ['1', '2', '7', '8']} },
+      { path: 'booth-list', loadChildren: () => import('./partial/booth-management/booth-list/booth-list.module').then(m => m.BoothListModule), data: { title: 'Booth List', allowedRoles: ['1', '2', '7', '8']} },
     ]
   },
   { path: '500', component: ServerErrorComponent },
