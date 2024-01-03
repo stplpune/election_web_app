@@ -27,9 +27,9 @@
                                 <div class="col-sm-6">
                                     <label for="" class="form-label required-field">Mobile Number</label>
                                     <input type="text" class="form-control" placeholder="Mobile Number"
-                                        formControlName="mobileNo"
-                                        (keypress)="commonService.noFirstSpaceAllow($event);commonService.alphaNumericWithSpaces($event)"
-                                        maxlength="50" [ngClass]="{'is-invalid': submitted && fc.mobileNo.errors}" />
+                                        formControlName="mobileNo" maxlength="10"
+                                        (keypress)="commonService.noFirstSpaceAllow($event);commonService.acceptedOnlyNumbers($event)"
+                                         [ngClass]="{'is-invalid': submitted && fc.mobileNo.errors}" />
                                     <div *ngIf="submitted && fc.mobileNo.errors" class="invalid-feedback">
                                         <span *ngIf="fc.mobileNo.errors.required">Mobile No. is Required</span>
                                         <span *ngIf="fc.mobileNo.errors.pattern">Please Enter Valid Mobile No.</span>
@@ -52,7 +52,6 @@
                                 <div class="col-sm-6">
                                     <label class="form-label required-field">Leader Level</label>
                                     <ngx-select [allowClear]="true" (remove)="selectLevelClear()" [items]="leaderLevelArray"
-                                        
                                         formControlName="levelId" placeholder="Select Leader Level" optionValueField="id"
                                         optionTextField="levelName"
                                         [ngClass]="{ 'is-invalid': submitted && fc.levelId.errors }">
@@ -63,8 +62,6 @@
                                 </div>
                             </div>
                             
-                            
-                           
                             <div class="row mb-3">
                                 <div class="col-sm-6">
                                     <label class="form-label required-field">Party</label>
@@ -130,7 +127,7 @@
                                         <div *ngIf="fc.villageId.errors.required">Village/Town is required</div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-6" *ngIf="fc['levelId'].value == 8">
                                     <label class="form-label required-field"> Political Unit</label>
                                     <ngx-select [allowClear]="true" [items]="polliticalUnitArray"
                                         
@@ -158,7 +155,7 @@
                             <div class="mb-2">
                                 <label for="" class="form-label required-field">Remark</label>
                                 <textarea class="form-control" placeholder="Remark"
-                                formControlName="address" (keypress)="commonService.noFirstSpaceAllow($event);commonService.alphaNumericWithSpaces($event)"
+                                formControlName="remark" (keypress)="commonService.noFirstSpaceAllow($event);commonService.alphaNumericWithSpaces($event)"
                                 maxlength="50" [ngClass]="{'is-invalid': submitted && fc.remark.errors}"></textarea>
                                 <!-- <input type="text"  /> -->
                                 <div *ngIf="submitted && fc.remark.errors" class="invalid-feedback">
@@ -166,15 +163,36 @@
                                     <!-- <span *ngIf="fc.address.errors.pattern">Please Enter Valid Address</span> -->
                                 </div>
                             </div>
-                            <div class="mb-2">
+                            <div class="mb-3">
                                 <label for="" class="form-label required-field">Leader Importance</label>
-
+                                <input type="text" class="form-control" placeholder="Leader Importance"
+                                formControlName="leaderImportance"
+                                (keypress)="commonService.noFirstSpaceAllow($event);commonService.acceptedOnlyNumbers($event)"
+                                maxlength="1" [ngClass]="{'is-invalid': submitted && fc.leaderImportance.errors}" />
+                                <div *ngIf="submitted && fc.leaderImportance.errors" class="invalid-feedback">
+                                    <span *ngIf="fc.leaderImportance.errors.required">Leader Importance is Required</span>
+                                    <span *ngIf="fc.leaderImportance.errors.pattern">Please Enter Valid Rating</span>
+                                </div>
                             </div>
-                            <div class="mb-2">
-                                <label for="" class="form-label required-field">Photo</label>
-                                <input type="file" #marathiInput
-                                        title="Upload Profile Photo"
-                                        formControlName="profilePhoto" accept=".jpg, .png, .jpeg" class="form-control">
+                            <div class="col-sm-6 center mb-3">
+                                <label for="" class="form-label required-field">Profile Photo</label>
+
+                                <div class="position-relative">
+                                    <a class="update-photo" (click)="myInput.click()">
+                                        <i class="fas fa-camera"></i>
+                                    </a>
+                                    <a class="update-photo" *ngIf="profilePhoto"
+                                        (click)="deleteImg();">
+                                        <i class="fas fa-times"></i>
+                                    </a>
+                                    <input type="file" id="my_file" #myInput class="d-none"
+                                        (change)="uploadImage($event)" #fileInput>
+                                    <img src="assets/images/Profile-Photo.jpg" *ngIf="!profilePhoto"
+                                        class="img-fluid img-thumbnail profile-photo">
+                                    <img *ngIf="profilePhoto" src="{{profilePhoto}}"
+                                        class="img-fluid img-thumbnail profile-photo">
+                                </div>
+
                             </div>
 
                             <div class="d-flex justify-content-between mt-2">
@@ -197,13 +215,13 @@
                         <div class="row g-2 mb-2">
                             <div class="col-sm-3">
                                 <ngx-select [allowClear]="true" [items]="filterLevelArray" formControlName="levelId"
-                                    optionValueField="levelId" optionTextField="levelName"
+                                    optionValueField="id" optionTextField="levelName"
                                     (remove)="selectLevelClear('filterlevel')" placeholder="All Leaders">
                                 </ngx-select>
                             </div>
                             <div class="col-sm-3">
                                 <ngx-select [allowClear]="true" [items]="filterPartyDetailsArray" formControlName="partyId"
-                                    optionValueField="partyName" optionTextField="constituencyName" (remove)="selectLevelClear('filterparty')"
+                                    optionValueField="partyId" optionTextField="partyName" (remove)="selectLevelClear('filterparty')"
                                     placeholder="All Party">
                                 </ngx-select>
                             </div>
@@ -242,7 +260,7 @@
                                             (click)="selectLevelClear('search')" *ngIf="filterForm.value.searchText">
                                             <i class="fas fa-times"></i>
                                         </button>
-                                        <button type="button" *ngIf="!filterForm.value.searchText"
+                                        <button type="button"  (click)="getTableData()"
                                             class="btn btn-sm border btn-light">
                                             <i class="fas fa-search"></i>
                                         </button>
@@ -262,12 +280,13 @@
                       <th>Leader Name</th>
                       <th>Mobile No.</th>
                       <th>Designtion</th>
+                      <th>Party Name</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <!-- <tr *ngFor="
-                        let localBodyObj of localBodyListArray
+                    <tr *ngFor="
+                        let data of tableData
                           | paginate
                             : {
                                 itemsPerPage: 10,
@@ -275,41 +294,29 @@
                                 totalItems: getTotal
                               };
                         let i = index
-                      " [class.active]="localBodyObj?.id == editObjData?.id">
-                      <td>{{ (paginationNo + 1) * 10 + i + 1 - 20 }}</td>
-                      <td>
-                        {{
-                        localBodyObj?.constituencyName
-                        ? localBodyObj?.constituencyName
-                        : "-"
-                        }}
-                      </td>
-                      <td>
-                        {{
-                        localBodyObj?.categoryType
-                        ? localBodyObj.categoryType
-                        : "-"
-                        }}
-                      </td>
-                      <td><a data-bs-toggle="modal" style="cursor: pointer;" class="text-primary" data-bs-target="#exampleModal" (click)="displayBoothsAssiged(localBodyObj?.getAssignBoothstoConstituencyCommitteeModel)">{{localBodyObj?.getAssignBoothstoConstituencyCommitteeModel.length || 0}}</a></td>
-                    
+                      " [class.active]="data?.id == editObj?.id">
+                      <td>{{(paginationNo*10)+i+1}}</td>
+                      <td>{{data.leaderName || '-'}} </td>
+                      <td> {{data.mobileNo || '-'}} </td>
+                      <td>{{data.designation || '-'}}</td>
+                      <td>{{data.partyName || '-'}}</td>
                       <td>
                         <div class="btn-group">
-                          <button type="button" title="Edit Constituency" (click)="patchFormData(localBodyObj)"
+                          <button type="button" title="Edit Constituency" (click)="patchFormData(data)"
                             class="btn btn-sm btn-light text-edit me-1 rounded">
                             <i class="far fa-edit"></i>
                           </button>
                           <button type="button" title="Delete Constituency" class="btn btn-sm btn-light text-danger rounded"
-                            (click)="deleteConfirmModel(localBodyObj?.id)">
+                            (click)="deleteConfirmModel(data?.id)">
                             <i class="fas fa-trash-alt"></i>
                           </button>
                         </div>
                       </td>
-                    </tr> -->
+                    </tr>
                   </tbody>
                 </table>
               </div>
-              <div class="mt-2 text-end" *ngIf="tableData?.length == 0">
+              <div class="text-end" *ngIf="tableData?.length == 0">
                 <div class="alert alert-danger text-center py-2">
                   No Results Found!
                 </div>

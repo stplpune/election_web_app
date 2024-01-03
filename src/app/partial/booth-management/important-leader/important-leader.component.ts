@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { CallAPIService } from 'src/app/services/call-api.service';
 import { CommonService } from 'src/app/services/common.service';
+import { DeleteComponent } from '../../dialogs/delete/delete.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-important-leader',
   templateUrl: './important-leader.component.html',
@@ -28,8 +31,13 @@ export class ImportantLeaderComponent implements OnInit {
   polliticalUnitArray = new Array();
   tableData = new Array();
   profilePhoto: any;
+  editObj: any;
+  getTotal: number = 0;
+  paginationNo: number = 0;
+  @ViewChild('fileInput') fileInput!: ElementRef;
+
   constructor(public commonService: CommonService, private formBuilder: FormBuilder,
-    private apiService: CallAPIService) { }
+    public dialog: MatDialog, private apiService: CallAPIService, private toastrService: ToastrService,) { }
 
   ngOnInit(): void {
     this.defaultForm();
@@ -38,25 +46,27 @@ export class ImportantLeaderComponent implements OnInit {
     this.getParty();
     this.getState();
     this.getDistrict();
+    this.getTableData()
+    let userData = this.commonService.getLoggedUserStateData();
+    console.log(userData);
   }
 
   defaultForm() {
     this.impLeaderForm = this.formBuilder.group({
       "id": 0,
-      "leaderName": [""],
-      "mobileNo": [""],
-      "partyId": 0,
-      "leaderImportance": 0,
-      "districtId": 0,
-      "talukaId": 0,
-      "remark": [""],
-      "designation": [""],
+      "leaderName": ["", Validators.required],
+      "mobileNo": ["", [Validators.required, Validators.pattern('^[6-9]{1}[0-9]{9}$')]],
+      "partyId": ["", Validators.required],
+      "leaderImportance": ["", [Validators.required, Validators.pattern('^[0-5]{1}$')]],
+      "districtId": ["", Validators.required],
+      "talukaId": ["", Validators.required],
+      "remark": ["", Validators.required],
+      "designation": ["", Validators.required],
       "stateId": 1,
-      "address": [""],
-      "levelId": 0,
-      "politicalUnitId": 0,
-      "villageId": 0,
-      "profilePhoto": [""]
+      "address": ["", Validators.required],
+      "levelId": ["", Validators.required],
+      "politicalUnitId": ["", Validators.required],
+      "villageId": ["", Validators.required]
     })
   }
 
@@ -75,7 +85,45 @@ export class ImportantLeaderComponent implements OnInit {
   get fc() { return this.impLeaderForm.controls }
   get fcc() { return this.filterForm.controls }
 
-  clearForm() { }
+  clearForm() {
+    this.submitted = false;
+    this.defaultForm();
+    this.profilePhoto ? this.deleteImg() : '';
+  }
+
+  uploadImage(event: any) {
+    let selResult = event.target.value.split('.');
+    let getImgExt = selResult.pop();
+    getImgExt.toLowerCase();
+    if (getImgExt == "jpg" || getImgExt == "jpeg") {
+      if (event.target.files && event.target.files[0]) {
+        const file = event.target.files[0];
+        if (file.size > 10485760) {
+          this.toastrService.error("Required file size should be less than 10 MB.");
+        }
+        else {
+          const reader: any = new FileReader();
+          reader.onload = () => {
+            const formData = new FormData();
+            formData.append('DirName', 'boothissue');
+            formData.append('files', file);
+            this.apiService.setHttp('POST', 'ClientMasterApp/BoothIssue/UploadPhotos', false, formData, false, 'electionMicroSerApp');
+            this.apiService.getHttp().subscribe({
+              next: (res: any) => {
+                this.profilePhoto = res.filePath
+                this.commonService.checkDataType(res.statusMessage) == false ? this.toastrService.success("Image Uploaded Successfully...") : this.toastrService.error(res.statusMessage);
+              },
+              error: ((_error: any) => { })
+            })
+          }
+          reader.readAsDataURL(event.target.files[0]);
+        }
+      }
+    }
+    else {
+      this.toastrService.error('Only Supported file Types... png, jpg, jfif, jpeg');
+    }
+  }
 
   //#region  -----------------------Drop Down Start ---------------------------------------------------------//
   getLeaderLevel() {
@@ -84,7 +132,7 @@ export class ImportantLeaderComponent implements OnInit {
       next: (res: any) => {
         res.statusCode == 200 ? (this.leaderLevelArray = res.responseData, this.filterLevelArray = res.responseData) : (this.leaderLevelArray = [], this.filterLevelArray = []);
       },
-      error: () => { this.leaderLevelArray = []; this.filterLevelArray =[]; }
+      error: () => { this.leaderLevelArray = []; this.filterLevelArray = []; }
     })
   }
 
@@ -94,7 +142,7 @@ export class ImportantLeaderComponent implements OnInit {
       next: (res: any) => {
         res.statusCode == 200 ? (this.partyDetailsArray = res.responseData, this.filterPartyDetailsArray = res.responseData) : (this.partyDetailsArray = [], this.filterPartyDetailsArray = []);
       },
-      error: () => { this.partyDetailsArray = []; this.filterPartyDetailsArray =[]; }
+      error: () => { this.partyDetailsArray = []; this.filterPartyDetailsArray = []; }
     })
   }
 
@@ -104,7 +152,7 @@ export class ImportantLeaderComponent implements OnInit {
       next: (res: any) => {
         res.statusCode == 200 ? (this.stateArray = res.responseData, this.filterStateArray = res.responseData) : (this.stateArray = [], this.filterStateArray = []);
       },
-      error: () => { this.stateArray = []; this.filterStateArray =[]; }
+      error: () => { this.stateArray = []; this.filterStateArray = []; }
     })
   }
 
@@ -114,7 +162,7 @@ export class ImportantLeaderComponent implements OnInit {
       next: (res: any) => {
         res.statusCode == 200 ? (this.districtArray = res.responseData, this.filterDistrictArray = res.responseData) : (this.districtArray = [], this.filterDistrictArray = []);
       },
-      error: () => { this.districtArray = []; this.filterDistrictArray =[]; }
+      error: () => { this.districtArray = []; this.filterDistrictArray = []; }
     })
   }
 
@@ -132,7 +180,7 @@ export class ImportantLeaderComponent implements OnInit {
           this.talukaArray = []; this.filterTalukaArray = [];
         }
       },
-      error: () => { this.talukaArray = []; this.filterTalukaArray=[]; }
+      error: () => { this.talukaArray = []; this.filterTalukaArray = []; }
     })
   }
 
@@ -150,12 +198,12 @@ export class ImportantLeaderComponent implements OnInit {
           this.villageArray = []; this.filterVillageArray = [];
         }
       },
-      error: () => { this.villageArray = []; this.filterVillageArray =[]; }
+      error: () => { this.villageArray = []; this.filterVillageArray = []; }
     })
   }
 
   getPoliticalUnit() {
-    let str = `api/BoothCommitteeDashboard/GetTalukawise_PolitalUnit?UserId=${this.userId}&ClientId=${this.clientId}&DistrictId=${this.fc['districtId'].value}&TalukaId=${this.fc['talukaId'].value}`;
+    let str = `api/BoothCommitteeDashboard/GetTalukawise_PolitalUnit?UserId=${this.userId}&ClientId=${this.clientId}`; //&DistrictId=${this.fc['districtId'].value}&TalukaId=${this.fc['talukaId'].value}
     this.apiService.setHttp('GET', str, false, false, false, 'electionMicroSerApp');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
@@ -188,12 +236,96 @@ export class ImportantLeaderComponent implements OnInit {
       this.fcc["villageId"].setValue("");
     }
     else if (flag == 'search') {
-      this.defaultFilterForm();
+      this.fcc['searchText'].setValue("");
+      this.getTableData();
     }
   }
 
-  getTableData() { }
+  deleteImg() {
+    this.fileInput.nativeElement.value = "";
+    this.profilePhoto = "";
+  }
 
-  onSubmit() { }
+  getTableData() {
+    let filterFormVal = this.filterForm.getRawValue();
+    let strUrl = `ClientMasterApp/ProminentLeader/GetAll_Web_1_0?ClientId=${this.clientId}${filterFormVal.searchText ? '&Search=' + filterFormVal.searchText : ''}${filterFormVal.levelId ? '&LevelId=' + filterFormVal.levelId : ''}&StateId=${filterFormVal.stateId}`;
+    strUrl += `${filterFormVal.districtId ? '&DistrictId=' + filterFormVal.districtId : ''}${filterFormVal.talukaId ? '&TalukaId=' + filterFormVal.talukaId : ''}${filterFormVal.villageId ? '&VillageId=' + filterFormVal.villageId : ''}${filterFormVal.partyId ? '&PartyId=' + filterFormVal.partyId : ''}&pageno=${this.paginationNo + 1}&pagesize=10`;
+    this.apiService.setHttp('GET', strUrl, false, false, false, 'electionMicroSerApp');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        res.statusCode == 200 ? (this.tableData = res.responseData.responseData1, this.getTotal = res.responseData.responseData2.totalCount) : this.tableData = [];
+      },
+      error: () => { this.tableData = [] }
+    })
+  }
 
+  patchFormData(data: any) {
+    this.editObj = data;
+    this.impLeaderForm.patchValue(data);
+    this.getTaluka();
+    this.getVillage();
+    this.getPoliticalUnit();
+    this.profilePhoto = data.profilePhoto;
+  }
+
+  deleteConfirmModel(id?: any) {
+    const dialogRef = this.dialog.open(DeleteComponent, { disableClose: true });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == 'Yes') {
+        this.deleteListData(id);
+      }
+    });
+  }
+
+  deleteListData(id?: any) {
+    let obj = { id: id, "deletedBy": this.userId }
+    this.apiService.setHttp('DELETE', 'ClientMasterApp/ProminentLeader/Delete_1_0', false, obj, false, 'electionMicroSerApp');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        res.statusCode == 200 ? (this.toastrService.success(res.statusMessage), this.getTableData()) : this.toastrService.error(res.statusMessage);
+      },
+      error: () => { }
+    })
+  }
+
+  onSubmit() {
+    this.submitted = true;
+    this.fc['levelId'].value != 8 ? (this.fc['politicalUnitId'].setValidators([]), this.fc['politicalUnitId'].updateValueAndValidity(), this.fc['politicalUnitId'].setValue(0)) : '';
+    let formval = this.impLeaderForm.getRawValue();
+    let postObj = {
+      ...formval,
+      "id": this.editObj ? this.editObj.id : 0,
+      "electionId": 0,
+      "constituencyId": 0,
+      "clientId": this.clientId,
+      "createdBy": this.userId,
+      "partyName": "",
+      "electionName": "",
+      "constituencyName": "",
+      "districtName": "",
+      "talukaName": "",
+      "villageName": "",
+      "politicalUnitName": "",
+      "partyShortCode": "",
+      "partyIconImage": "",
+      "levelName": "",
+      "localGatId": 0,
+      "localGatName": "",
+      "profilePhoto": this.profilePhoto
+    }
+    if (this.impLeaderForm.invalid) {
+      return;
+    } else if (!this.profilePhoto) {
+      this.toastrService.error("Please Upload Profile Photo");
+      return;
+    } else {
+      this.apiService.setHttp(postObj.id == 0 ? 'POST' : 'PUT', `ClientMasterApp/ProminentLeader/${postObj.id == 0 ? 'Create_1_0' : 'Update_1_0'}`, false, postObj, false, 'electionMicroSerApp');
+      this.apiService.getHttp().subscribe({
+        next: (res: any) => {
+          res.statusCode == 200 ? (this.toastrService.success(res.statusMessage), this.clearForm(), this.getTableData()) : this.toastrService.error(res.statusMessage);
+        },
+        error: () => { }
+      })
+    }
+  }
 }
