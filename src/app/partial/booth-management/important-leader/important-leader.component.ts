@@ -35,6 +35,9 @@ export class ImportantLeaderComponent implements OnInit {
   getTotal: number = 0;
   paginationNo: number = 0;
   @ViewChild('fileInput') fileInput!: ElementRef;
+  totalstar: number = 5;
+  starvalue: number = 0;
+  gold: string = 'gold';
 
   constructor(public commonService: CommonService, private formBuilder: FormBuilder,
     public dialog: MatDialog, private apiService: CallAPIService, private toastrService: ToastrService,) { }
@@ -57,7 +60,7 @@ export class ImportantLeaderComponent implements OnInit {
       "leaderName": ["", Validators.required],
       "mobileNo": ["", [Validators.required, Validators.pattern('^[6-9]{1}[0-9]{9}$')]],
       "partyId": ["", Validators.required],
-      "leaderImportance": ["", [Validators.required, Validators.pattern('^[0-5]{1}$')]],
+      "leaderImportance": ["", Validators.required],
       "districtId": ["", Validators.required],
       "talukaId": ["", Validators.required],
       "remark": ["", Validators.required],
@@ -88,14 +91,21 @@ export class ImportantLeaderComponent implements OnInit {
   clearForm() {
     this.submitted = false;
     this.defaultForm();
+    this.starvalue = 0;
+    this.gold = 'gray';
     this.profilePhoto ? this.deleteImg() : '';
+  }
+
+  onRate(event: any) {
+    this.gold = 'gold';
+    this.fc['leaderImportance']?.setValue(event.newValue);
   }
 
   uploadImage(event: any) {
     let selResult = event.target.value.split('.');
     let getImgExt = selResult.pop();
     getImgExt.toLowerCase();
-    if (getImgExt == "jpg" || getImgExt == "jpeg") {
+    if (getImgExt == 'png' || getImgExt == "jpg" || getImgExt == "jpeg") {
       if (event.target.files && event.target.files[0]) {
         const file = event.target.files[0];
         if (file.size > 10485760) {
@@ -123,6 +133,11 @@ export class ImportantLeaderComponent implements OnInit {
     else {
       this.toastrService.error('Only Supported file Types... png, jpg, jfif, jpeg');
     }
+  }
+
+  deleteImg() {
+    this.fileInput.nativeElement.value = "";
+    this.profilePhoto = "";
   }
 
   //#region  -----------------------Drop Down Start ---------------------------------------------------------//
@@ -175,6 +190,7 @@ export class ImportantLeaderComponent implements OnInit {
             this.filterTalukaArray = res.responseData;
           } else {
             this.talukaArray = res.responseData;
+            this.editObj ? this.fc['talukaId'].setValue(this.editObj.talukaId) : '';
           }
         } else {
           this.talukaArray = []; this.filterTalukaArray = [];
@@ -193,6 +209,7 @@ export class ImportantLeaderComponent implements OnInit {
             this.filterVillageArray = res.responseData;
           } else {
             this.villageArray = res.responseData;
+            this.editObj ? this.fc['villageId'].setValue(this.editObj.villageId) : '';
           }
         } else {
           this.villageArray = []; this.filterVillageArray = [];
@@ -241,13 +258,9 @@ export class ImportantLeaderComponent implements OnInit {
     }
   }
 
-  deleteImg() {
-    this.fileInput.nativeElement.value = "";
-    this.profilePhoto = "";
-  }
-
-  getTableData() {
+  getTableData(flag?:any) {
     let filterFormVal = this.filterForm.getRawValue();
+    flag ? this.paginationNo = 0 :'';
     let strUrl = `ClientMasterApp/ProminentLeader/GetAll_Web_1_0?ClientId=${this.clientId}${filterFormVal.searchText ? '&Search=' + filterFormVal.searchText : ''}${filterFormVal.levelId ? '&LevelId=' + filterFormVal.levelId : ''}&StateId=${filterFormVal.stateId}`;
     strUrl += `${filterFormVal.districtId ? '&DistrictId=' + filterFormVal.districtId : ''}${filterFormVal.talukaId ? '&TalukaId=' + filterFormVal.talukaId : ''}${filterFormVal.villageId ? '&VillageId=' + filterFormVal.villageId : ''}${filterFormVal.partyId ? '&PartyId=' + filterFormVal.partyId : ''}&pageno=${this.paginationNo + 1}&pagesize=10`;
     this.apiService.setHttp('GET', strUrl, false, false, false, 'electionMicroSerApp');
@@ -259,6 +272,11 @@ export class ImportantLeaderComponent implements OnInit {
     })
   }
 
+  onClickPagintion(event:any){
+    this.paginationNo = event;
+    this.getTableData();
+  }
+
   patchFormData(data: any) {
     this.editObj = data;
     this.impLeaderForm.patchValue(data);
@@ -266,6 +284,9 @@ export class ImportantLeaderComponent implements OnInit {
     this.getVillage();
     this.getPoliticalUnit();
     this.profilePhoto = data.profilePhoto;
+    this.starvalue = data.leaderImportance;
+    this.gold = 'gold';
+    this.fc['leaderImportance']?.setValue(data.leaderImportance);
   }
 
   deleteConfirmModel(id?: any) {
@@ -313,6 +334,7 @@ export class ImportantLeaderComponent implements OnInit {
       "localGatName": "",
       "profilePhoto": this.profilePhoto
     }
+
     if (this.impLeaderForm.invalid) {
       return;
     } else if (!this.profilePhoto) {

@@ -152,7 +152,7 @@
                                     <!-- <span *ngIf="fc.address.errors.pattern">Please Enter Valid Address</span> -->
                                 </div>
                             </div>
-                            <div class="mb-2">
+                            <div class="mb-3">
                                 <label for="" class="form-label required-field">Remark</label>
                                 <textarea class="form-control" placeholder="Remark"
                                 formControlName="remark" (keypress)="commonService.noFirstSpaceAllow($event);commonService.alphaNumericWithSpaces($event)"
@@ -164,15 +164,10 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label for="" class="form-label required-field">Leader Importance</label>
-                                <input type="text" class="form-control" placeholder="Leader Importance"
-                                formControlName="leaderImportance"
-                                (keypress)="commonService.noFirstSpaceAllow($event);commonService.acceptedOnlyNumbers($event)"
-                                maxlength="1" [ngClass]="{'is-invalid': submitted && fc.leaderImportance.errors}" />
-                                <div *ngIf="submitted && fc.leaderImportance.errors" class="invalid-feedback">
-                                    <span *ngIf="fc.leaderImportance.errors.required">Leader Importance is Required</span>
-                                    <span *ngIf="fc.leaderImportance.errors.pattern">Please Enter Valid Rating</span>
-                                </div>
+                                <label class="form-label required-field">Rating</label>
+                                <star-rating name="leaderImportance" [value]="starvalue" [totalstars]="totalstar" size="25px" [checkedcolor]="gold"
+                                    uncheckedcolor="gray" (rate)="onRate($event)"></star-rating>
+                                <div *ngIf="submitted && fc.leaderImportance.errors" class="invalid-feedback">Rating is required</div>
                             </div>
                             <div class="col-sm-6 center mb-3">
                                 <label for="" class="form-label required-field">Profile Photo</label>
@@ -260,7 +255,7 @@
                                             (click)="selectLevelClear('search')" *ngIf="filterForm.value.searchText">
                                             <i class="fas fa-times"></i>
                                         </button>
-                                        <button type="button"  (click)="getTableData()"
+                                        <button type="button"  (click)="getTableData('filter')"
                                             class="btn btn-sm border btn-light">
                                             <i class="fas fa-search"></i>
                                         </button>
@@ -321,9 +316,9 @@
                   No Results Found!
                 </div>
               </div>
-              <!-- <pagination-controls *ngIf="localBodyListArray?.length != 0" previousLabel="" nextLabel=""
+              <pagination-controls *ngIf="tableData?.length != 0" previousLabel="" nextLabel=""
                 (pageChange)="onClickPagintion($event)">
-              </pagination-controls> -->
+              </pagination-controls>
             </div> 
             </div>
         </div>
