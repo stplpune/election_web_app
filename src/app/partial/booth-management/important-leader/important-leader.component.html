@@ -211,12 +211,12 @@
                             <div class="col-sm-3">
                                 <ngx-select [allowClear]="true" [items]="filterLevelArray" formControlName="levelId"
                                     optionValueField="id" optionTextField="levelName"
-                                    (remove)="selectLevelClear('filterlevel')" placeholder="All Leaders">
+                                    (remove)="selectLevelClear('filterlevel');getTableData('filter');" placeholder="All Leaders">
                                 </ngx-select>
                             </div>
                             <div class="col-sm-3">
                                 <ngx-select [allowClear]="true" [items]="filterPartyDetailsArray" formControlName="partyId"
-                                    optionValueField="partyId" optionTextField="partyName" (remove)="selectLevelClear('filterparty')"
+                                    optionValueField="partyId" optionTextField="partyName" (remove)="selectLevelClear('filterparty');getTableData('filter');;"
                                     placeholder="All Party">
                                 </ngx-select>
                             </div>
@@ -229,14 +229,14 @@
                             <div class="col-sm-3">
                                 <ngx-select [allowClear]="true" [items]="filterDistrictArray" formControlName="districtId"
                                     optionValueField="districtId" optionTextField="districtName"
-                                    (select)="selectLevelClear('filterdist');getTaluka('filter')" (remove)="selectLevelClear('filterdist')"
+                                    (select)="selectLevelClear('filterdist');getTaluka('filter')" (remove)="selectLevelClear('filterdist');getTableData('filter');"
                                     placeholder="All District">
                                 </ngx-select>
                             </div>
                             <div class="col-sm-3">
                                 <ngx-select [allowClear]="true" [items]="filterTalukaArray" formControlName="talukaId"
                                     optionValueField="talukaId" optionTextField="talukaName"
-                                    (select)="selectLevelClear('filtertaluka');getVillage('filter')" (remove)="selectLevelClear('filtertaluka')"
+                                    (select)="selectLevelClear('filtertaluka');getVillage('filter')" (remove)="selectLevelClear('filtertaluka');getTableData('filter');"
                                     placeholder="All Taluka" [disabled]="!filterForm.value.districtId">
                                 </ngx-select>
                             </div>
