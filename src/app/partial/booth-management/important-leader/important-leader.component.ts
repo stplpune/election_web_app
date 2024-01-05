@@ -38,6 +38,8 @@ export class ImportantLeaderComponent implements OnInit {
   totalstar: number = 5;
   starvalue: number = 0;
   gold: string = 'gold';
+  userLevel = this.commonService.getLoggedUserStateData()?.BodyLevel;
+  // userLevel = 3;
 
   constructor(public commonService: CommonService, private formBuilder: FormBuilder,
     public dialog: MatDialog, private apiService: CallAPIService, private toastrService: ToastrService,) { }
@@ -50,8 +52,6 @@ export class ImportantLeaderComponent implements OnInit {
     this.getState();
     this.getDistrict();
     this.getTableData()
-    let userData = this.commonService.getLoggedUserStateData();
-    console.log(userData);
   }
 
   defaultForm() {
@@ -176,6 +176,7 @@ export class ImportantLeaderComponent implements OnInit {
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         res.statusCode == 200 ? (this.districtArray = res.responseData, this.filterDistrictArray = res.responseData) : (this.districtArray = [], this.filterDistrictArray = []);
+        this.userLevel ==3 ? (this.fc['districtId'].setValue(this.commonService.getLoggedUserStateData()?.districtId),this.getTaluka()) : ''
       },
       error: () => { this.districtArray = []; this.filterDistrictArray = []; }
     })
@@ -190,7 +191,8 @@ export class ImportantLeaderComponent implements OnInit {
             this.filterTalukaArray = res.responseData;
           } else {
             this.talukaArray = res.responseData;
-            this.editObj ? this.fc['talukaId'].setValue(this.editObj.talukaId) : '';
+        this.userLevel ==3 ? (this.fc['talukaId'].setValue(this.commonService.getLoggedUserStateData()?.talukaId),this.getVillage()) : ''
+        this.editObj ? this.fc['talukaId'].setValue(this.editObj.talukaId) :  '';
           }
         } else {
           this.talukaArray = []; this.filterTalukaArray = [];

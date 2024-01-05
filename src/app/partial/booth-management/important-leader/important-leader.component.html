@@ -75,7 +75,7 @@
                                         <div *ngIf="fc.levelId.errors.required">Party is required</div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-6" [ngClass]="{'d-none' : userLevel!=2}">
                                     <label class="form-label required-field"> State</label>
                                     <ngx-select [allowClear]="true" (remove)="selectLevelClear('state')" [items]="stateArray"
                                     (select)="getDistrict()"
@@ -89,7 +89,7 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col-sm-6">
+                                <div class="col-sm-6" [ngClass]="{'d-none' : userLevel ==3}">
                                     <label class="form-label required-field">District</label>
                                     <ngx-select [allowClear]="true" (remove)="selectLevelClear('district')" [items]="districtArray"
                                     (select)="selectLevelClear('district');getTaluka();"
@@ -101,7 +101,7 @@
                                         <div *ngIf="fc.districtId.errors.required">District is required</div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-6" [ngClass]="{'d-none' : userLevel ==4}">
                                     <label class="form-label required-field"> Taluka</label>
                                     <ngx-select [allowClear]="true" (remove)="selectLevelClear('taluka')" [items]="talukaArray"
                                     (select)="selectLevelClear('taluka');getVillage();getPoliticalUnit();"

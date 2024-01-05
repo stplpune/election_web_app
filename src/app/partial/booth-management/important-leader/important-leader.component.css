@@ -37,6 +37,7 @@
     top: -10px;
     z-index: 9;
     object-fit: cover;
+    cursor: pointer;
 }
 @media screen and (max-width:478px) {
     .update-photo{
